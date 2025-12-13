@@ -57,6 +57,7 @@
   - [Evaluation Loops](04-evaluation/04-evaluation-loops.md)
   - [Best Practices](04-evaluation/05-best-practices.md)
   - [Structured Prompting](04-evaluation/07-structured-prompting.md)
+  - [LLM-as-a-Judge](04-evaluation/08-llm-as-a-judge.md)
   - [Exercises](04-evaluation/06-exercises.md)
 
 - [Chapter 5: Optimizers and Compilation](05-optimizers/00-chapter-intro.md)

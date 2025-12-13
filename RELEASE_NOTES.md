@@ -4,21 +4,25 @@
 
 ### Overview
 
-This major release incorporates comprehensive coverage of 12 foundational DSPy research papers including the latest GEPA framework (ArXiv 2512.01452), Structured Prompting methodology (ArXiv 2511.20836), and State-Space Search optimization (ArXiv 2511.18619), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
+This major release incorporates comprehensive coverage of 13 foundational DSPy research papers including the latest GEPA framework (ArXiv 2512.01452), Structured Prompting methodology (ArXiv 2511.20836), State-Space Search optimization (ArXiv 2511.18619), and LLM-as-a-Judge evaluation framework (ArXiv 2511.16544), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
 
 ### What's New
 
-#### 📚 New Content (26 New Files)
+#### 📚 New Content (27 New Files)
 
 **Chapter 3: Modules**
 - `TypedPredictor` - Type-safe prediction patterns
 - `Assertions` - Runtime validation and self-refining pipelines
 
-**Chapter 4: Evaluation (1 New Section)**
+**Chapter 4: Evaluation (2 New Sections)**
 - **Structured Prompting** - Systematic methodology for robust evaluation
-- Template-based prompt generation
-- Modular prompt components
-- Best practices for consistent evaluation
+  - Template-based prompt generation
+  - Modular prompt components
+  - Best practices for consistent evaluation
+- **LLM-as-a-Judge** - Context-sensitive domain evaluation
+  - Clinical impact assessment framework
+  - GEPA-optimized judges
+  - Bias mitigation and ensemble approaches
 
 **Chapter 5: Optimizers (16 New Sections)**
 - Constraint-Driven Optimization
@@ -100,6 +104,12 @@ This major release incorporates comprehensive coverage of 12 foundational DSPy r
    - Prompt transformation operators
    - Quantitative analysis of prompt techniques
 
+8. **LLM-as-a-Judge Framework** (NEW!)
+   - Context-sensitive evaluation beyond traditional metrics
+   - Domain-specific impact assessment (clinical, code quality, etc.)
+   - GEPA-optimized judges with human-comparable accuracy
+   - Ensemble approaches and bias mitigation
+
 ### Papers Integrated
 
 1. **Assisting in Writing Wikipedia-like Articles** - STORM system
@@ -114,6 +124,7 @@ This major release incorporates comprehensive coverage of 12 foundational DSPy r
 10. **AUTOMATED RISK-OF-BIAS ASSESSMENT: A GEPA-TRAINED FRAMEWORK** - Genetic-Pareto optimization (ArXiv:2512.01452)
 11. **STRUCTURED PROMPTING ENABLES MORE ROBUST EVALUATION** - Systematic evaluation methodology (ArXiv:2511.20836)
 12. **PROMPT OPTIMIZATION AS A STATE-SPACE SEARCH PROBLEM** - Graph-based prompt optimization (ArXiv:2511.18619)
+13. **WER IS UNAWARE: ASSESSING ASR ERRORS IN CLINICAL DIALOGUE** - LLM-as-a-Judge framework (ArXiv:2511.16544)
 
 ### Performance Highlights
 

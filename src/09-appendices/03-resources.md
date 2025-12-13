@@ -51,6 +51,63 @@ This page curates essential resources to deepen your DSPy knowledge and connect 
    - Explores instruction optimization and MIPRO
    - https://arxiv.org/abs/2406.11695
 
+### Integrated Research Papers (2024-2025)
+
+The DSPy ebook integrates findings from these cutting-edge papers:
+
+#### Optimization Techniques
+
+4. **"Reflective Prompt Evolution Can Outperform Reinforcement Learning"** (2023)
+   - Authors: Lakshya A. Agrawal, et al.
+   - ArXiv: https://arxiv.org/abs/2507.19457
+   - Introduces RPE and GEPA optimization frameworks
+   - Gradient-free evolutionary optimization for prompts
+
+5. **"Prompt Optimization as a State-Space Search Problem"** (2024)
+   - Author: Maanas Taneja
+   - ArXiv: https://arxiv.org/abs/2511.18619
+   - Treats prompt optimization as classical AI search
+   - Systematic exploration of prompt transformations
+
+#### Evaluation Methodologies
+
+6. **"Structured Prompting Enables More Robust Evaluation of Language Models"** (2024)
+   - Authors: Asad Aali, Muhammad Ahmed Mohsin, et al.
+   - ArXiv: https://arxiv.org/abs/2511.20836
+   - Systematic methodology for creating evaluation prompts
+   - Template-based and modular prompt components
+
+7. **"WER is Unaware: Assessing How ASR Errors Distort Clinical Understanding"** (2024)
+   - Authors: Zachary Ellis, Jared Joselowitz, et al.
+   - ArXiv: https://arxiv.org/abs/2511.16544
+   - LLM-as-a-Judge framework for domain-specific evaluation
+   - Demonstrates limitations of traditional metrics
+
+#### Advanced Applications
+
+8. **"Assisting in Writing Wikipedia-like Articles From Scratch with Large Language Models"** (2022)
+   - Introduces STORM system for perspective-driven writing
+   - Foundation for multi-agent collaboration
+
+9. **"COMPILING DECLARATIVE LANGUAGE MODEL CALLS INTO SELF-IMPROVING PIPELINES"** (2023)
+   - TypedPredictor and COPRO frameworks
+   - Declarative compilation concepts
+
+10. **"Demonstrate-Search-Predict: Composing retrieval and language models for knowledge-intensive NLP"** (2022)
+    - Three-stage architecture for knowledge-intensive tasks
+
+11. **"Fine-Tuning and Prompt Optimization: Two Great Steps that Work Better Together"** (2023)
+    - COPA method for joint optimization
+    - 2-26x performance improvements
+
+12. **"In-Context Learning for Extreme Multi-Label Classification"** (2023)
+    - Extreme multi-label classification techniques
+    - Efficient learning from few examples
+
+13. **"Optimizing Instructions and Demonstrations for Multi-Stage Language Model Programs"** (2024)
+    - Multi-stage optimization theory
+    - Instruction-demonstration interactions
+
 ### Related LLM Research
 
 1. **"Language Models are Unsupervised Multitask Learners"** (2019)
