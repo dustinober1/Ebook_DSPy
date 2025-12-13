@@ -110,6 +110,7 @@
   - [LingVarBench: Synthetic Healthcare Transcript Generation](06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.md)
   - [Scientific Figure Caption Generation with DSPy](06-real-world-applications/14-scientific-figure-caption-generation.md)
   - [Retrieval-Augmented Guardrails for AI Systems](06-real-world-applications/15-retrieval-augmented-guardrails.md)
+  - [GraphRAG from Wikipedia with TiDB](06-real-world-applications/16-graphrag-wikipedia-tidb-tutorial.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
 
 - [Chapter 7: Advanced Topics](07-advanced-topics/00-chapter-intro.md)
@@ -137,6 +138,7 @@
   - [Replit Code Repair with DSPy](08-case-studies/08-replit-code-repair-dspy.md)
   - [Databricks Platform Integration](08-case-studies/09-databricks-dspy-platform-integration.md)
   - [DDI Behavioral Simulation Automation](08-case-studies/10-ddi-behavioral-simulation-automation.md)
+  - [Salomatic Medical Report Generation](08-case-studies/11-salomatic-medical-report-generation.md)
   - [Exercises](08-case-studies/05-exercises.md)
 
 ---

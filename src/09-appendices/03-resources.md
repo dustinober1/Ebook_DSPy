@@ -171,6 +171,18 @@ The DSPy ebook integrates findings from these cutting-edge papers:
    - LLMs can optimize their own prompts better than humans
    - Surprising "Star Trek" prompts improve math reasoning by 40%
 
+27. **Salomatic: Medical Report Generation with DSPy** (2024)
+   - Authors: Salomatic Development Team, Langtrace
+   - Case Study: https://www.langtrace.ai/blog/case-study-how-salomatic-used-langtrace-to-build-a-reliable-medical-report-generation-system
+   - 87.5% reduction in manual corrections using DSPy
+   - Transforms medical notes into patient-friendly consultations
+
+28. **TiDB: GraphRAG from Wikipedia with DSPy** (2024)
+   - Authors: TiDB Engineering Team
+   - Tutorial: https://www.pingcap.com/article/building-a-graphrag-from-wikipedia-page-using-dspy-openai-and-tidb-vector-database/
+   - Knowledge Graph-based RAG implementation
+   - 23.6% improvement in answer accuracy over traditional RAG
+
 ### Related LLM Research
 
 1. **"Language Models are Unsupervised Multitask Learners"** (2019)
