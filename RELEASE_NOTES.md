@@ -4,15 +4,21 @@
 
 ### Overview
 
-This major release incorporates comprehensive coverage of 9 foundational DSPy research papers plus the latest GEPA framework (ArXiv 2512.01452), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
+This major release incorporates comprehensive coverage of 11 foundational DSPy research papers including the latest GEPA framework (ArXiv 2512.01452) and Structured Prompting methodology (ArXiv 2511.20836), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
 
 ### What's New
 
-#### 📚 New Content (24 New Files)
+#### 📚 New Content (25 New Files)
 
 **Chapter 3: Modules**
 - `TypedPredictor` - Type-safe prediction patterns
 - `Assertions` - Runtime validation and self-refining pipelines
+
+**Chapter 4: Evaluation (1 New Section)**
+- **Structured Prompting** - Systematic methodology for robust evaluation
+- Template-based prompt generation
+- Modular prompt components
+- Best practices for consistent evaluation
 
 **Chapter 5: Optimizers (15 New Sections)**
 - Constraint-Driven Optimization
@@ -81,6 +87,12 @@ This major release incorporates comprehensive coverage of 9 foundational DSPy re
    - Genetic algorithms for prompt evolution
    - Trade-off visualization and analysis
 
+6. **Structured Prompting Framework** (NEW!)
+   - Systematic evaluation methodology
+   - Template-based prompt generation
+   - Modular prompt components
+   - Consistent and reproducible evaluation
+
 ### Papers Integrated
 
 1. **Assisting in Writing Wikipedia-like Articles** - STORM system
@@ -93,6 +105,7 @@ This major release incorporates comprehensive coverage of 9 foundational DSPy re
 8. **Prompts as Auto-Optimized Training Hyperparameters** - 10-example training
 9. **REFLECTIVE PROMPT EVOLUTION** - Evolutionary prompt optimization
 10. **AUTOMATED RISK-OF-BIAS ASSESSMENT: A GEPA-TRAINED FRAMEWORK** - Genetic-Pareto optimization (ArXiv:2512.01452)
+11. **STRUCTURED PROMPTING ENABLES MORE ROBUST EVALUATION** - Systematic evaluation methodology (ArXiv:2511.20836)
 
 ### Performance Highlights
 
