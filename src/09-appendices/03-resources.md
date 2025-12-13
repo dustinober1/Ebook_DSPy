@@ -291,6 +291,18 @@ The DSPy ebook integrates findings from these cutting-edge papers:
   - Guidelines for choosing between frameworks
   - Integration possibilities with vector databases
 
+- **[Explosion AI: "Engineering a human-aligned LLM evaluation workflow with Prodigy and DSPy"](https://explosion.ai/blog/human-aligned-llm-evaluation-dspy)** (Dec 2025)
+  - Human-in-the-loop evaluation for clinical summarization
+  - LLM-as-a-judge achieving 2x better correlation with human judgment
+  - Prodigy-DSPy plugin for systematic feedback collection
+  - 26% improvement in human-aligned metric after optimization
+
+- **[Statsig: "DSPy vs prompt engineering: Systematic vs manual tuning"](https://www.statsig.com/perspectives/dspy-vs-prompt-tuning)** (Oct 2025)
+  - Metric-driven prompt engineering workflows
+  - Treating prompts like code with version control
+  - Automated refinement loops replacing guesswork
+  - Production deployment strategies with feature gates
+
 ## Language Model Providers
 
 ### Major LLM Providers
