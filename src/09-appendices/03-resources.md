@@ -303,6 +303,24 @@ The DSPy ebook integrates findings from these cutting-edge papers:
   - Automated refinement loops replacing guesswork
   - Production deployment strategies with feature gates
 
+- **[AIMultiple: "RAG Frameworks: LangChain vs LangGraph vs LlamaIndex vs Haystack vs DSPy"](https://research.aimultiple.com/rag-frameworks/)** (2025)
+  - Comprehensive benchmark of 5 RAG frameworks with controlled comparison
+  - DSPy achieved lowest framework overhead (~3.53ms) and efficient token usage (2.03k)
+  - Fair comparison methodology with standardized components
+  - Developer experience analysis for each framework
+
+- **[ArXiv: "A Comparative Study of DSPy Teleprompter Algorithms for Aligning Large Language Models Evaluation Metrics to Human Evaluation"](https://arxiv.org/html/2412.15298v1)** (2024)
+  - Systematic evaluation of 5 DSPy teleprompters on hallucination detection
+  - MIPROv2 achieved best Weighted F1 score (0.8248) on HaluBench dataset
+  - Demonstrates teleprompters can align LLM evaluation with human judgment
+  - Insights on optimization strategies and dataset-specific considerations
+
+- **[Medium: "Building and Optimizing Multi-Agent RAG Systems with DSPy and GEPA"](https://kargarisaac.medium.com/building-and-optimizing-multi-agent-rag-systems-with-dspy-and-gepa-2b88b5838ce2)** (Sep 2025)
+  - Complete implementation of multi-agent medical RAG system
+  - GEPA optimization improved performance: Diabetes 90.72%→98.9%, COPD 89.44%→94.22%
+  - Architecture: Expert sub-agents with vector search tools orchestrated by lead agent
+  - GEPA's student/judge/teacher optimization process explained with code examples
+
 ## Language Model Providers
 
 ### Major LLM Providers

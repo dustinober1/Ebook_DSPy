@@ -113,6 +113,7 @@
   - [Retrieval-Augmented Guardrails for AI Systems](06-real-world-applications/15-retrieval-augmented-guardrails.md)
   - [GraphRAG from Wikipedia with TiDB](06-real-world-applications/16-graphrag-wikipedia-tidb-tutorial.md)
   - [Framework Comparisons in the DSPy Ecosystem](06-real-world-applications/17-framework-comparisons-dspy-ecosystem.md)
+  - [Multi-Agent RAG Systems](06-real-world-applications/18-multi-agent-rag-systems.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
 
 - [Chapter 7: Advanced Topics](07-advanced-topics/00-chapter-intro.md)
