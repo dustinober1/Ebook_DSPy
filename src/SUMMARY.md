@@ -85,6 +85,8 @@
   - [Minimal Data Training Pipelines](05-optimizers/21-minimal-data-pipelines.md)
   - [GEPA: Genetic-Pareto Optimization](05-optimizers/22-gepa-genetic-pareto-optimization.md)
   - [State-Space Search for Prompt Optimization](05-optimizers/23-state-space-prompt-optimization.md)
+  - [InPars+: Advanced Synthetic Data Generation for Information Retrieval](05-optimizers/24-inpars-plus-synthetic-data-ir.md)
+  - [CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization](05-optimizers/25-custom-mipro-enhanced-optimization.md)
   - [Exercises](05-optimizers/07-exercises.md)
 
 ---
@@ -104,6 +106,7 @@
   - [Outline Generation](06-real-world-applications/09-outline-generation.md)
   - [Extreme Few-Shot Learning: Training with 10 Gold Labels](06-real-world-applications/11-extreme-few-shot-learning.md)
   - [IR Model Training from Scratch](06-real-world-applications/12-ir-model-training-scratch.md)
+  - [LingVarBench: Synthetic Healthcare Transcript Generation](06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
 
 - [Chapter 7: Advanced Topics](07-advanced-topics/00-chapter-intro.md)

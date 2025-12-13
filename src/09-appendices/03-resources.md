@@ -108,6 +108,24 @@ The DSPy ebook integrates findings from these cutting-edge papers:
     - Multi-stage optimization theory
     - Instruction-demonstration interactions
 
+14. **"LingVarBench: Benchmarking LLM for Automated Named Entity Recognition in Structured Synthetic Spoken Transcriptions"** (2025)
+   - Authors: Healthcare NLP Research Team
+   - ArXiv: https://arxiv.org/abs/2508.15801
+   - Synthetic healthcare transcript generation with DSPy SIMBA optimizer
+   - HIPAA-compliant data generation achieving 90%+ accuracy on real data
+
+15. **"InPars+: Supercharging Synthetic Data Generation for Information Retrieval Systems"** (2025)
+   - Authors: Information Retrieval Research Team
+   - ArXiv: https://arxiv.org/abs/2508.13930
+   - CPO fine-tuning for improved query generation
+   - DSPy-based dynamic prompt optimization with 60% filtering reduction
+
+16. **"Is It Time To Treat Prompts As Code? A Multi-Use Case Study For Prompt Optimization Using DSPy"** (2025)
+   - Authors: Francisca Lemos, Victor Alves, Filipa Ferraz
+   - ArXiv: https://arxiv.org/abs/2507.03620
+   - CustomMIPROv2 optimizer with two-stage optimization
+   - Multi-domain evaluation across 5 real-world use cases
+
 ### Related LLM Research
 
 1. **"Language Models are Unsupervised Multitask Learners"** (2019)

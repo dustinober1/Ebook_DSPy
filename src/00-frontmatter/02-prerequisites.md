@@ -81,8 +81,8 @@ python my_script.py
 Chapter 1 covers everything you need to know about LLMs in the context of DSPy. However, if you want a head start:
 
 **Recommended reading**:
-- [OpenAI's GPT-4 Documentation](https://platform.openai.com/docs/)
-- [Anthropic's Claude Documentation](https://docs.anthropic.com/)
+- [OpenAI API Documentation](https://platform.openai.com/docs/guides/gpt)
+- [Anthropic's Claude Documentation](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)
 - [Prompt Engineering Guide](https://www.promptingguide.ai/)
 
 ---
