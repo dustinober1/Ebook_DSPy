@@ -243,11 +243,11 @@ result = github_agent(
 class ResearchAgent(dspy.Signature):
     """Conduct comprehensive research on a topic."""
     research_topic = dspy.InputField(desc="Topic to research", type=str)
-    research_depth = dspy.InputField(desc("How deep to research", type=str)
-    findings = dspy.OutputField(desc("Key findings from research", type=str)
-    sources = dspy.OutputField(desc("Sources used", type=str)
-    gaps = dspy.OutputField(desc("Information gaps identified", type=str)
-    next_steps = dspy.OutputField(desc("Suggested further research", type=str)
+    research_depth = dspy.InputField(desc="How deep to research", type=str)
+    findings = dspy.OutputField(desc="Key findings from research", type=str)
+    sources = dspy.OutputField(desc="Sources used", type=str)
+    gaps = dspy.OutputField(desc="Information gaps identified", type=str)
+    next_steps = dspy.OutputField(desc="Suggested further research", type=str)
 
 # Enhanced research agent
 researcher = dspy.ReAct(
@@ -275,11 +275,11 @@ print(f"Sources: {result.sources}")
 class DataAnalysisAgent(dspy.Signature):
     """Analyze data and generate insights."""
     dataset_description = dspy.InputField(desc="Description of dataset", type=str)
-    analysis_goal = dspy.InputField(desc("What to learn from data", type=str)
-    data_exploration = dspy.OutputField(desc("Steps taken to explore data", type=str)
-    insights = dspy.OutputField(desc("Key insights discovered", type=str)
-    visualizations = dspy.OutputField(desc("Suggested visualizations", type=str)
-    limitations = dspy.OutputField(desc("Analysis limitations", type.str)
+    analysis_goal = dspy.InputField(desc="What to learn from data", type=str)
+    data_exploration = dspy.OutputField(desc="Steps taken to explore data", type=str)
+    insights = dspy.OutputField(desc="Key insights discovered", type=str)
+    visualizations = dspy.OutputField(desc="Suggested visualizations", type=str)
+    limitations = dspy.OutputField(desc="Analysis limitations", type=str)
 
 # Data analysis agent with programming capability
 data_analyst = dspy.ReAct(
@@ -335,8 +335,8 @@ class OrchestratorAgent(dspy.Signature):
     task = dspy.InputField(desc("Complex task to complete", type=str)
     subtasks = dspy.OutputField(desc("Identified subtasks", type=str)
     agent_assignments = dspy.OutputField(desc("Which agent handles each subtask", type=str)
-    coordination = dspy.OutputField(desc("How agents coordinate", type.str)
-    final_result = dspy.OutputField(desc("Combined result from all agents", type.str)
+    coordination = dspy.OutputField(desc="How agents coordinate", type=str)
+    final_result = dspy.OutputField(desc="Combined result from all agents", type=str)
 
 # Specialized agents
 researcher = dspy.ReAct(
