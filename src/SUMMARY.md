@@ -68,7 +68,6 @@
   - [Constraint-Driven Optimization](05-optimizers/07-constraint-driven-optimization.md)
   - [Reflective Prompt Evolution](05-optimizers/08-reflective-prompt-evolution.md)
   - [COPA Method](05-optimizers/09-copa-method.md)
-  - [COPA Optimizer](05-optimizers/09-copa-optimizer.md)
   - [Joint Optimization](05-optimizers/10-joint-optimization.md)
   - [Monte Carlo Optimization](05-optimizers/11-monte-carlo-optimization.md)
   - [Bayesian Optimization](05-optimizers/12-bayesian-optimization.md)

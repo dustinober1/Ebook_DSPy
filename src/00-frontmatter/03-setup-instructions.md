@@ -45,23 +45,62 @@ Python 3.11.5
 
 Create a dedicated folder for your DSPy projects.
 
+### On macOS/Linux
+
 ```bash
 # Create a directory for DSPy projects
 mkdir ~/dspy-learning
 cd ~/dspy-learning
 ```
 
+### On Windows (Command Prompt)
+
+```cmd
+# Create a directory for DSPy projects
+mkdir %USERPROFILE%\dspy-learning
+cd %USERPROFILE%\dspy-learning
+```
+
+### On Windows (PowerShell)
+
+```powershell
+# Create a directory for DSPy projects
+New-Item -ItemType Directory -Path "$env:USERPROFILE\dspy-learning" -Force
+Set-Location "$env:USERPROFILE\dspy-learning"
+```
+
 > **Tip**: You can create this directory anywhere you like. Just remember its location!
 
 **Verify you're in the right directory**:
 
+### macOS/Linux
 ```bash
 pwd
 ```
 
-**Expected output** (path will vary):
+**Expected output**:
 ```
 /Users/yourname/dspy-learning
+```
+
+### Windows (Command Prompt)
+```cmd
+cd
+```
+
+**Expected output**:
+```
+C:\Users\yourname\dspy-learning
+```
+
+### Windows (PowerShell)
+```powershell
+Get-Location
+```
+
+**Expected output**:
+```
+C:\Users\yourname\dspy-learning
 ```
 
 ---
