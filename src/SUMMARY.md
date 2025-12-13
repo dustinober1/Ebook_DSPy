@@ -150,4 +150,5 @@
   - [Troubleshooting](09-appendices/02-troubleshooting.md)
   - [Additional Resources](09-appendices/03-resources.md)
   - [Glossary](09-appendices/04-glossary.md)
+  - [Community Resources](09-appendices/05-community-resources.md)
 
