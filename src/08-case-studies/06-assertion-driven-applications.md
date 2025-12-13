@@ -310,9 +310,9 @@ class FinancialReportSignature(dspy.Signature):
     report_type = dspy.InputField(desc="Type of financial report (10-K, 10-Q, etc.)", type=str)
 
     financial_statements = dspy.OutputField(desc="Complete financial statements", type=str)
-    calculations = dspy.OutputField(desc("Detailed calculations showing work", type=str)
+    calculations = dspy.OutputField(desc="Detailed calculations showing work", type=str)
     notes = dspy.OutputField(desc="Explanatory notes", type=str)
-    compliance_statement = dspy.OutputField(desc("Regulatory compliance statement", type=str)
+    compliance_statement = dspy.OutputField(desc="Regulatory compliance statement", type=str)
 
 def validate_financial_calculations(example, pred, trace=None):
     """Validate all financial calculations."""

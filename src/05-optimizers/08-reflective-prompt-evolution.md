@@ -39,6 +39,19 @@ class ComplexReasoning(dspy.Module):
         )
 
 # 2. Define evaluation metric
+def evaluate_reasoning(reasoning_text):
+    """Simple reasoning quality evaluator."""
+    # Basic heuristic: longer reasoning with more steps gets higher score
+    if not reasoning_text:
+        return 0.0
+
+    # Count reasoning indicators
+    reasoning_indicators = ["because", "therefore", "since", "thus", "hence", "step", "first", "second"]
+    score = sum(1 for indicator in reasoning_indicators if indicator in reasoning_text.lower())
+
+    # Normalize to 0-1 range
+    return min(score / len(reasoning_indicators), 1.0)
+
 def reasoning_accuracy(example, pred, trace=None):
     """Evaluate both answer correctness and reasoning quality."""
     answer_correct = example.answer.lower() == pred.answer.lower()
@@ -390,6 +403,36 @@ def rephrase(text):
 ```python
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+
+def get_program_embedding(program):
+    """Generate embedding for a program based on its instruction and demonstrations."""
+    # Simple embedding based on text features
+    # In a real implementation, you'd use a proper language model
+    text_features = []
+
+    # Add instruction to features
+    if hasattr(program, 'instruction') and program.instruction:
+        text_features.append(program.instruction)
+
+    # Add demonstrations to features
+    if hasattr(program, 'demonstrations') and program.demonstrations:
+        for demo in program.demonstrations:
+            if isinstance(demo, str):
+                text_features.append(demo)
+            elif hasattr(demo, 'instruction'):
+                text_features.append(demo.instruction)
+
+    # Create simple embedding (tf-idf like)
+    all_text = ' '.join(text_features)
+
+    # Simple character-based embedding for demonstration
+    embedding = np.zeros(100)  # Fixed-size embedding
+    if all_text:
+        # Use character frequency as simple features
+        for i, char in enumerate(all_text[:100]):
+            embedding[i] = ord(char) / 255.0  # Normalize
+
+    return embedding
 
 def calculate_diversity(population):
     """Calculate diversity metrics for the population."""

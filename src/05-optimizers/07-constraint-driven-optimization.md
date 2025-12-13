@@ -638,6 +638,8 @@ class CodeConstraintOptimizer:
 Track and analyze constraint violations during optimization:
 
 ```python
+import datetime
+
 class ConstraintAnalyzer:
     """Analyze constraint violations in optimization."""
 

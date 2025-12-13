@@ -503,8 +503,8 @@ class LogicalReasoning(dspy.Signature):
     """Solve logic puzzles with step-by-step reasoning."""
     puzzle = dspy.InputField(desc="Logic puzzle", type=str)
     reasoning = dspy.OutputField(desc="Step-by-step logical reasoning", type=str)
-    conclusion = dspy.OutputField(desc("Final conclusion", type=str)
-    confidence = dspy.OutputField(desc("Confidence level (1-10)", type=int)
+    conclusion = dspy.OutputField(desc="Final conclusion", type=str)
+    confidence = dspy.OutputField(desc="Confidence level (1-10)", type=int)
 
 reasoner = dspy.ChainOfThought(LogicalReasoning)
 
@@ -585,6 +585,9 @@ result = researcher(query="Impact of AI on job markets")
 Create specialized assertion handlers for complex scenarios:
 
 ```python
+import datetime
+import time
+
 class AssertionHandler:
     """Custom handler for complex assertion scenarios."""
 

@@ -85,8 +85,47 @@ Writing comprehensive, encyclopedic articles requires:
 
 ```python
 import dspy
+import asyncio
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Helper classes for STORM implementation
+class ParallelProcessor:
+    """Simple parallel processing helper."""
+    def __init__(self, max_workers: int = 4):
+        self.max_workers = max_workers
+
+    def process_parallel(self, tasks: List, function):
+        """Process tasks in parallel."""
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            futures = [executor.submit(function, task) for task in tasks]
+            return [future.result() for future in as_completed(futures)]
+
+class BatchRetriever:
+    """Batch retrieval helper for efficient document retrieval."""
+    def __init__(self, batch_size: int = 10):
+        self.batch_size = batch_size
+
+    def retrieve_batch(self, queries: List[str]):
+        """Retrieve documents for multiple queries."""
+        # This would integrate with dspy.Retrieve or similar
+        results = []
+        for query in queries:
+            # Simulate retrieval
+            results.append([f"Document for {query}"])
+        return results
+
+class RateLimiter:
+    """Simple rate limiter for API calls."""
+    def __init__(self, requests_per_minute: int = 10):
+        self.requests_per_minute = requests_per_minute
+        self.requests = []
+
+    async def acquire(self, user_id: str):
+        """Acquire rate limit slot."""
+        # Simple implementation - in production use proper rate limiting
+        await asyncio.sleep(60 / self.requests_per_minute)
 
 @dataclass
 class StormConfig:
@@ -106,7 +145,7 @@ class StormWritingAssistant(dspy.Module):
         self.config = config or StormConfig()
 
         # Stage 1: Pre-writing components
-        self.perspective_generator = PerspectiveBasedResearch()
+        self.perspective_generator = PerspectiveDrivenResearch()
         self.outline_generator = ArticleOutlineGenerator()
         self.research_synthesizer = ResearchSynthesizer()
 

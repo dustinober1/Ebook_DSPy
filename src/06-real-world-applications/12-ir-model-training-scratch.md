@@ -95,7 +95,7 @@ class IRModelTrainer:
             self.model_components['document_encoder'] = dspy.Predict(
                 "document -> document_embedding"
             )
-            self.model_components('similarity_calculator') = dspy.Predict(
+            self.model_components['similarity_calculator'] = dspy.Predict(
                 "query_embedding, document_embedding -> similarity_score"
             )
 
