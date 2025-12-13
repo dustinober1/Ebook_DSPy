@@ -38,6 +38,13 @@ DSPy optimization techniques have demonstrated significant improvements across v
 - **Error Reduction**: 60-80% fewer factual errors in generated content
 - **Reliability**: Consistent performance across different domains
 
+### 6. GEPA (Genetic-Pareto Optimization)
+- **Source**: Automated Risk-of-Bias Assessment: A GEPA-Trained Framework (2025)
+- **Key Finding**: Multi-objective optimization outperforms single-objective approaches
+- **Performance**: 25-35% improvement in balanced accuracy across multiple metrics
+- **Efficiency**: Pareto front reduces need for multiple optimization runs
+- **Specialization**: Excels at tasks with conflicting objectives
+
 ## Task-Specific Benchmarks
 
 ### Question Answering
@@ -98,28 +105,33 @@ DSPy optimization techniques have demonstrated significant improvements across v
 
 ### Quick Reference
 ```
-Task Type                    | Recommended Optimizer
-----------------------------|----------------------
-Simple classification       | BootstrapFewShot
-Multi-step reasoning        | MIPRO or RPE
-Code generation            | COPA or Fine-tuning
-Domain-specific tasks       | Fine-tuning
-Resource-constrained       | BootstrapFewShot or RPE
-Maximum performance needed | COPA
+Task Type                              | Recommended Optimizer
+--------------------------------------|----------------------
+Simple classification                 | BootstrapFewShot
+Multi-step reasoning                  | MIPRO or RPE
+Code generation                      | COPA or Fine-tuning
+Domain-specific tasks                 | Fine-tuning
+Resource-constrained                 | BootstrapFewShot or RPE
+Maximum performance needed           | COPA
+Multiple competing objectives        | GEPA
+Need for solution diversity          | GEPA
+Trade-off analysis required          | GEPA
 ```
 
 ### Performance vs. Cost Trade-off
 - **Budget Conscious**: BootstrapFewShot (90% of performance at 10% cost)
 - **Balanced Approach**: MIPRO or RPE (95% of performance at 30% cost)
 - **Performance Critical**: COPA or Fine-tuning (100% performance at 100% cost)
+- **Multi-Objective Optimization**: GEPA (95% performance on all objectives at 40% cost)
 
 ## Conclusion
 
 The benchmarks demonstrate that:
 1. DSPy optimization consistently improves performance over baseline prompting
 2. Different optimizers excel at different types of tasks
-3. Joint optimization (COPA) yields the best results
+3. Joint optimization (COPA) yields the best single-objective results
 4. RPE provides gradient-free optimization that competes with RL methods
-5. Considerations include task complexity, data availability, and compute budget
+5. GEPA excels at multi-objective optimization with competing requirements
+6. Considerations include task complexity, data availability, compute budget, and objective diversity
 
-For most practical applications, starting with BootstrapFewShot and progressing to MIPRO or COPA as needed provides the best balance of performance and efficiency.
+For most practical applications, starting with BootstrapFewShot and progressing to MIPRO, COPA, or GEPA as needed provides the best balance of performance and efficiency. Use GEPA when you have multiple competing objectives or need a diverse set of solutions.
