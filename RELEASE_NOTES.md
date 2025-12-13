@@ -4,11 +4,11 @@
 
 ### Overview
 
-This update incorporates six cutting-edge research papers that expand DSPy's applications in healthcare NLP, information retrieval, production-ready prompt optimization, and human-AI collaboration for data labeling. The new content brings the total to **19 foundational DSPy papers** fully integrated, making the DSPy ebook the most comprehensive resource available.
+This update incorporates eight cutting-edge research papers and three major industry case studies that expand DSPy's applications in healthcare NLP, information retrieval, production-ready prompt optimization, human-AI collaboration for data labeling, scientific figure captioning, AI safety guardrails, and enterprise deployments. The new content brings the total to **21 foundational DSPy papers** and **24 comprehensive case studies** fully integrated, making the DSPy ebook the most comprehensive resource available.
 
 ### What's New
 
-#### 📚 New Content (6 New Papers)
+#### 📚 New Content (8 New Papers, 3 Industry Case Studies)
 
 **Chapter 5: Optimizers (4 New Sections)**
 - **InPars+** - Advanced synthetic data generation with CPO fine-tuning
@@ -28,11 +28,19 @@ This update incorporates six cutting-edge research papers that expand DSPy's app
   - Iterative improvement strategies with limited feedback
   - Insights for few-shot learning scenarios
 
-**Chapter 6: Real-World Applications (1 New Application)**
+**Chapter 6: Real-World Applications (3 New Applications)**
 - **LingVarBench** - Synthetic healthcare transcript generation
   - HIPAA-compliant synthetic data framework
   - DSPy SIMBA optimizer for automated prompt synthesis
   - 90%+ accuracy on real healthcare transcripts
+- **Scientific Figure Captioning** - Two-stage caption generation pipeline
+  - Category-specific optimization with MIPROv2 and SIMBA
+  - Author-specific stylistic refinement
+  - 40-48% BLEU improvement with contextual understanding
+- **Retrieval-Augmented Guardrails** - AI safety evaluation system
+  - Clinical error taxonomy with 59 granular error codes
+  - Retrieval-Augmented Evaluation Pipeline (RAEC)
+  - F1 score improvement from 0.256 to 0.500
 
 #### 🔧 Technical Improvements
 
@@ -41,6 +49,8 @@ This update incorporates six cutting-edge research papers that expand DSPy's app
 - **Production Optimization**: Enhanced MIPROv2 with constraint-driven optimization
 - **Meta-Optimization**: Automatic optimizer selection and tuning with metaTextGrad
 - **Human-AI Collaboration**: Strategies for prompt engineering without gold labels
+- **Scientific Communication**: Author-aware caption generation with style adaptation
+- **AI Safety**: Retrieval-augmented guardrails with clinical error taxonomy
 - **Real-World Case Studies**: Multi-domain optimization across 5 production scenarios
 
 ### Papers Integrated
@@ -75,6 +85,16 @@ This update incorporates six cutting-edge research papers that expand DSPy's app
    - Two-stage instruction and demonstration generation
    - ArXiv: https://arxiv.org/abs/2511.11898
 
+20. **"Leveraging Author-Specific Context for Scientific Figure Caption Generation: 3rd SciCap Challenge"** (2025)
+   - Two-stage pipeline for scientific caption generation
+   - Category-specific optimization with MIPROv2 and SIMBA
+   - ArXiv: https://arxiv.org/abs/2510.07993
+
+21. **"Retrieval-Augmented Guardrails for AI-Drafted Patient-Portal Messages: Error Taxonomy Construction and Large-Scale Evaluation"** (2025)
+   - Retrieval-Augmented Evaluation Pipeline (RAEC) for AI safety
+   - Clinical error taxonomy with 59 granular error codes
+   - ArXiv: https://arxiv.org/abs/2509.22565
+
 ### Performance Highlights
 
 - **90%+ F1 score** on real healthcare data using only synthetic training data
@@ -83,6 +103,8 @@ This update incorporates six cutting-edge research papers that expand DSPy's app
 - **5% improvement** in routing agent accuracy with CustomMIPROv2
 - **80% cost reduction** compared to manual data annotation
 - **45% improvement** in human prompt engineering success with structured feedback
+- **40-48% BLEU improvement** in scientific figure captioning with style adaptation
+- **95% F1 improvement** in AI safety evaluation with retrieval augmentation (0.256 → 0.500)
 
 ## Version 2.0 - Complete Coverage Integration (December 2025)
 

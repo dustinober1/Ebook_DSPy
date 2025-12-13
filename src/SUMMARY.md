@@ -107,6 +107,8 @@
   - [Extreme Few-Shot Learning: Training with 10 Gold Labels](06-real-world-applications/11-extreme-few-shot-learning.md)
   - [IR Model Training from Scratch](06-real-world-applications/12-ir-model-training-scratch.md)
   - [LingVarBench: Synthetic Healthcare Transcript Generation](06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.md)
+  - [Scientific Figure Caption Generation with DSPy](06-real-world-applications/14-scientific-figure-caption-generation.md)
+  - [Retrieval-Augmented Guardrails for AI Systems](06-real-world-applications/15-retrieval-augmented-guardrails.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
 
 - [Chapter 7: Advanced Topics](07-advanced-topics/00-chapter-intro.md)
@@ -130,6 +132,9 @@
   - [Automated Data Analysis](08-case-studies/04-automated-data-analysis.md)
   - [STORM Writing Assistant](08-case-studies/05-storm-writing-assistant.md)
   - [Assertion-Driven Applications](08-case-studies/06-assertion-driven-applications.md)
+  - [Databricks & JetBlue LLM Optimization](08-case-studies/07-databricks-jetblue-llm-optimization.md)
+  - [Replit Code Repair with DSPy](08-case-studies/08-replit-code-repair-dspy.md)
+  - [Databricks Platform Integration](08-case-studies/09-databricks-dspy-platform-integration.md)
   - [Exercises](08-case-studies/05-exercises.md)
 
 ---

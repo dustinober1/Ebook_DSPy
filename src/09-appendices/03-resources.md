@@ -126,6 +126,39 @@ The DSPy ebook integrates findings from these cutting-edge papers:
    - CustomMIPROv2 optimizer with two-stage optimization
    - Multi-domain evaluation across 5 real-world use cases
 
+17. **"Leveraging Author-Specific Context for Scientific Figure Caption Generation: 3rd SciCap Challenge"** (2025)
+   - Authors: Watcharapong Timklaypachara, Monrada Chiewhawan, Nopporn Lekuthai, Titipat Achakulvisut
+   - ArXiv: https://arxiv.org/abs/2510.07993
+   - Two-stage pipeline with MIPROv2 and SIMBA optimization
+   - 40-48% BLEU improvement with author-specific stylistic refinement
+
+18. **"Retrieval-Augmented Guardrails for AI-Drafted Patient-Portal Messages: Error Taxonomy Construction and Large-Scale Evaluation"** (2025)
+   - Authors: Wenyuan Chen, Fateme Nateghi Haredasht, Kameron C. Black, Francois Grolleau, Emily Alsentzer, Jonathan H. Chen, Stephen P. Ma
+   - ArXiv: https://arxiv.org/abs/2509.22565
+   - Retrieval-Augmented Evaluation Pipeline (RAEC) with DSPy
+   - F1 score improvement from 0.256 to 0.500 with retrieval augmentation
+
+## Industry Case Studies
+
+22. **Databricks & JetBlue: Optimizing LLM Pipelines with DSPy** (2024)
+   - Authors: Databricks Engineering Team
+   - 2x faster deployment than LangChain
+   - Blog: https://www.databricks.com/blog/optimizing-databricks-llm-pipelines-dspy
+   - Self-improving pipelines with automatic prompt optimization
+   - Use cases: customer feedback classification, predictive maintenance
+
+23. **Replit: Building LLMs for Code Repair with DSPy** (2024)
+   - Authors: Replit AI Team (Madhav Singhal, Ryan Carelli, Gian Segato, Vaibhav Kumar, Michele Catasta)
+   - Blog: https://blog.replit.com/code-repair
+   - 7B parameter model competitive with GPT-4 Turbo on code repair
+   - Synthetic data generation pipeline using DSPy
+
+24. **Databricks: DSPy Platform Integration** (2024)
+   - Authors: Databricks Engineering Team
+   - Blog: https://www.databricks.com/blog/dspy-databricks
+   - Native support for Databricks Foundation Model APIs
+   - Integration with Vector Search and Model Serving
+
 ### Related LLM Research
 
 1. **"Language Models are Unsupervised Multitask Learners"** (2019)
