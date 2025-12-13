@@ -137,9 +137,9 @@ def demonstrate_multiple_outputs():
         """Analyze text for multiple attributes."""
         text = dspy.InputField(desc="Text to analyze", type=str)
         sentiment = dspy.OutputField(desc="Overall sentiment", type=str)
-        word_count = dspy.OutputField(desc("Number of words", type=int)
-        has_questions = dspy.OutputField(desc("Contains questions", type=bool)
-        main_topics = dspy.OutputField(desc("Main topics discussed", type=str)
+        word_count = dspy.OutputField(desc="Number of words", type=int)
+        has_questions = dspy.OutputField(desc="Contains questions", type=bool)
+        main_topics = dspy.OutputField(desc="Main topics discussed", type=str)
 
     analyzer = dspy.Predict(TextAnalyzer)
 
@@ -190,7 +190,7 @@ def demonstrate_batch_processing():
     # Create classifier
     class QuickClassifier(dspy.Signature):
         text = dspy.InputField(desc="Text to classify", type=str)
-        label = dspy.OutputField(desc("Text label", type=str)
+        label = dspy.OutputField(desc="Text label", type=str)
 
     classifier = dspy.Predict(QuickClassifier)
     batch_processor = BatchProcessor(classifier)

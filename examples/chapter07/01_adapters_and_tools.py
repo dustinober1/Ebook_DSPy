@@ -562,7 +562,7 @@ def demo_enhanced_rag():
     """Demonstrate enhanced RAG with adapters."""
     print("\n" + "=" * 60)
     print("Example 5: Enhanced RAG with Adapters")
-    print "=" * 60)
+    print("=" * 60)
 
     # Note: Would need database connection in production
     # db_adapter = PostgreSQLAdapter("postgresql://...")

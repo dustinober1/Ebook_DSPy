@@ -348,9 +348,9 @@ def demonstrate_interactive_react():
         """Interactive agent that can ask clarifying questions."""
         user_request = dspy.InputField(desc="User's initial request", type=str)
         clarification_needed = dspy.OutputField(desc="Questions for user", type=str)
-        action_taken = dspy.OutputField(desc("Actions performed", type=str)
-        result = dspy.OutputField(desc("Result of actions", type=str)
-        follow_up = dspy.OutputField(desc("Follow-up suggestions", type=str)
+        action_taken = dspy.OutputField(desc="Actions performed", type=str)
+        result = dspy.OutputField(desc="Result of actions", type=str)
+        follow_up = dspy.OutputField(desc="Follow-up suggestions", type=str)
 
     interactive_agent = dspy.React(signature=InteractiveSignature, tools=ReActAgentWithTools().tools)
 

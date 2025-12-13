@@ -129,7 +129,7 @@ class TopicClassifier(dspy.Signature):
     related_topics = dspy.OutputField(
         desc="Secondary topics with scores",
         type=List[Dict[str, Union[str, float]]],
-        prefix("🔗 Related Topics:\n")
+        prefix="🔗 Related Topics:\n"
     )
 
 class Summarizer(dspy.Signature):
@@ -164,13 +164,13 @@ class Summarizer(dspy.Signature):
     key_points = dspy.OutputField(
         desc="Key points extracted from text",
         type=List[str],
-        prefix("💡 Key Points:\n")
+        prefix="💡 Key Points:\n"
     )
 
     compression_ratio = dspy.OutputField(
         desc="Ratio of original to summary length",
         type=float,
-        prefix("📊 Compression: ")
+        prefix="📊 Compression: "
     )
 
 # Example 2: Composed Signatures - Combining building blocks
@@ -225,13 +225,13 @@ class DocumentAnalyzer(dspy.Signature):
     document_summary = dspy.OutputField(
         desc="Document summary and key points",
         type=Dict[str, Union[str, List[str], float]],
-        prefix("📝 Summary:\n")
+        prefix="📝 Summary:\n"
     )
 
     overall_insights = dspy.OutputField(
         desc="Combined insights from all analyses",
         type=Dict[str, Union[str, List[str], Dict[str, Any]]],
-        prefix("💡 Overall Insights:\n")
+        prefix="💡 Overall Insights:\n"
     )
 
 # Example 3: Sequential Processing Pipeline

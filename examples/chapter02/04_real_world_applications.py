@@ -235,7 +235,7 @@ class FinancialRiskAssessment(dspy.Signature):
     )
 
     mitigating_factors = dspy.OutputField(
-        desc "Factors that reduce risk",
+        desc="Factors that reduce risk",
         type=List[Dict[str, Union[str, str, int]]],
         prefix="🛡️ Mitigating Factors:\n"
     )
@@ -289,7 +289,7 @@ class LegalComplianceChecker(dspy.Signature):
 
     applicable_regulations = dspy.InputField(
         desc="List of regulations that apply to this document",
-        type[List[ComplianceArea]],
+        type=List[ComplianceArea],
         prefix="🏛️ Applicable Regulations:\n"
     )
 

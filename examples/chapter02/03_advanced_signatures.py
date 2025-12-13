@@ -307,7 +307,7 @@ class MultiModalAnalyzer(dspy.Signature):
     cross_modal_correlations = dspy.OutputField(
         desc="Correlations and connections between modalities",
         type=List[Dict[str, Union[str, float, List[str]]]],
-        prefix("🔗 Cross-Modal Correlations:\n")
+        prefix="🔗 Cross-Modal Correlations:\n"
     )
 
     modality_contributions = dspy.OutputField(
@@ -383,7 +383,7 @@ class WorkflowOrchestrator(dspy.Signature):
     )
 
     errors_and_retries = dspy.OutputField(
-        desc "Errors encountered and retry attempts",
+        desc="Errors encountered and retry attempts",
         type=List[Dict[str, Union[str, int, bool]]],
         optional=True,
         prefix="❌ Errors & Retries:\n"

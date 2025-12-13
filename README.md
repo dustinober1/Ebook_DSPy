@@ -151,39 +151,47 @@ This book is built using [mdBook](https://rust-lang.github.io/mdBook/).
 ### Install mdBook
 
 ```bash
+# Using Homebrew (macOS/Linux)
+brew install mdbook
+
+# Or using Cargo (any platform)
 cargo install mdbook
 ```
 
 ### Build HTML Version
 
 ```bash
-./scripts/build.sh
-```
+# Quick build
+mdbook build
 
-Output will be in `build/html/`
+# Output will be in `build/html/`
+open build/html/index.html
+```
 
 ### Local Development Server
 
 ```bash
-./scripts/serve.sh
+# Start local server with live reload
+mdbook serve
+
+# Opens at http://localhost:3000 automatically
+# Changes to markdown files reload in real-time
 ```
 
-This starts a server at `http://localhost:3000` with live reload.
-
-### Build Options
+### Advanced Build Options
 
 ```bash
-# Build HTML only
-./scripts/build.sh --html-only
+# Build with specific output directory
+mdbook build --dest-dir ./output
 
-# Skip code validation
-./scripts/build.sh --skip-validation
+# Clean build
+rm -rf build && mdbook build
 
 # Serve on custom port
-./scripts/serve.sh --port 8080
+mdbook serve --port 8080
 
-# Open browser automatically
-./scripts/serve.sh --open
+# Serve with specific binding
+mdbook serve --hostname 0.0.0.0
 ```
 
 ---
@@ -298,13 +306,19 @@ See [LICENSE](LICENSE) for details (coming soon).
 
 ---
 
-## 📊 Status
+## 📊 Project Status
 
-- **Current Status**: ✅ Foundation & Infrastructure Complete
-- **Content Status**: 🚧 In Development
-  - ✅ Front Matter (Complete)
-  - 🚧 Core Chapters (In Progress)
-  - 📋 Case Studies (Planned)
+- **Overall Status**: ✅ Content Complete | 🚧 Polish Phase
+- **Content Chapters**: ✅ 100% Complete (10 chapters)
+  - ✅ Chapter 0: Front Matter
+  - ✅ Chapter 1-3: Foundations & Core Concepts
+  - ✅ Chapter 4-5: Evaluation & Optimization
+  - ✅ Chapter 6-7: Real-World Applications & Advanced
+  - ✅ Chapter 8: Case Studies (4 complete)
+  - ✅ Chapter 9: Appendices (API Ref, Troubleshooting, Resources, Glossary)
+- **Code Examples**: ✅ 25 examples (all syntax validated)
+- **Build System**: ✅ mdBook configured and tested
+- **Quality Assurance**: 🚧 In Progress
 
 ---
 
