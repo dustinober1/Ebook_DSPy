@@ -159,6 +159,18 @@ The DSPy ebook integrates findings from these cutting-edge papers:
    - Native support for Databricks Foundation Model APIs
    - Integration with Vector Search and Model Serving
 
+25. **DDI: Behavioral Simulation Automation with DSPy** (2024)
+   - Authors: DDI Development Team, Databricks
+   - Customer Story: https://www.databricks.com/customers/ddi
+   - Automated leadership assessment with 17,000x faster delivery
+   - DSPy prompt optimization improved recall from 0.43 to 0.98
+
+26. **VMware Research: Automatic Prompt Optimization** (2024)
+   - Authors: Rick Battle, Teja Gollapudi (VMware/Broadcom)
+   - Paper Coverage: The Register, Business Insider
+   - LLMs can optimize their own prompts better than humans
+   - Surprising "Star Trek" prompts improve math reasoning by 40%
+
 ### Related LLM Research
 
 1. **"Language Models are Unsupervised Multitask Learners"** (2019)
@@ -212,6 +224,18 @@ The DSPy ebook integrates findings from these cutting-edge papers:
 - **[Stanford NLP Blog](https://nlp.stanford.edu/)** - Research and insights
 - **[Towards Data Science](https://towardsdatascience.com/)** - DSPy tutorials and articles
 - **[Medium DSPy Tag](https://medium.com/tag/dspy)** - Community articles
+
+### Media Coverage
+
+- **[The Register: "Prompt engineering is a task best left to AI models"](https://www.theregister.com/2024/02/22/prompt_engineering_ai_models/)** (Feb 2024)
+  - Coverage of VMware's automatic prompt optimization research
+  - Demonstrates how LLMs can optimize their own prompts
+  - Star Trek-themed prompts improve math reasoning
+
+- **[Business Insider: "AI may kill the one job everyone thought it would create"](https://www.businessinsider.com/chaptgpt-large-language-model-ai-prompt-engineering-automated-optimizer-2024-3)** (Mar 2024)
+  - Analysis of prompt engineering job future with AI automation
+  - VMware findings on automatic prompt optimization
+  - Industry perspective on AI's impact on prompt engineering roles
 
 ## Language Model Providers
 

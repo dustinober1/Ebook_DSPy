@@ -4,13 +4,13 @@
 
 ### Overview
 
-This update incorporates eight cutting-edge research papers and three major industry case studies that expand DSPy's applications in healthcare NLP, information retrieval, production-ready prompt optimization, human-AI collaboration for data labeling, scientific figure captioning, AI safety guardrails, and enterprise deployments. The new content brings the total to **21 foundational DSPy papers** and **24 comprehensive case studies** fully integrated, making the DSPy ebook the most comprehensive resource available.
+This update incorporates eight cutting-edge research papers and six major industry case studies that expand DSPy's applications in healthcare NLP, information retrieval, production-ready prompt optimization, human-AI collaboration for data labeling, scientific figure captioning, AI safety guardrails, automatic prompt optimization, behavioral assessment automation, and enterprise deployments. The new content brings the total to **21 foundational DSPy papers** and **26 comprehensive case studies** fully integrated, making the DSPy ebook the most comprehensive resource available.
 
 ### What's New
 
-#### 📚 New Content (8 New Papers, 3 Industry Case Studies)
+#### 📚 New Content (8 New Papers, 6 Industry Case Studies)
 
-**Chapter 5: Optimizers (4 New Sections)**
+**Chapter 5: Optimizers (5 New Sections)**
 - **InPars+** - Advanced synthetic data generation with CPO fine-tuning
   - Contrastive Preference Optimization for better query quality
   - DSPy-based dynamic prompt optimization
@@ -27,6 +27,10 @@ This update incorporates eight cutting-edge research papers and three major indu
   - Analysis of human prompt engineering behavior
   - Iterative improvement strategies with limited feedback
   - Insights for few-shot learning scenarios
+- **Automatic Prompt Optimization** - When AI outperforms human prompt engineers
+  - VMware research on LLM self-optimization capabilities
+  - Surprising "Star Trek" prompts improve math reasoning by 40%
+  - Cost-effective optimization with as few as 100 examples
 
 **Chapter 6: Real-World Applications (3 New Applications)**
 - **LingVarBench** - Synthetic healthcare transcript generation
@@ -42,6 +46,24 @@ This update incorporates eight cutting-edge research papers and three major indu
   - Retrieval-Augmented Evaluation Pipeline (RAEC)
   - F1 score improvement from 0.256 to 0.500
 
+**Chapter 8: Case Studies (4 New Industry Case Studies)**
+- **Databricks & JetBlue LLM Optimization** - Production deployment success
+  - 2x faster response time than LangChain implementations
+  - Self-improving pipelines with automated prompt optimization
+  - 17% absolute accuracy improvement with MIPROv2
+- **Replit Code Repair** - AI-powered code fix generation
+  - DSPy for synthetic training data generation
+  - 7B model competitive with GPT-4 Turbo on real-world errors
+  - Scaled to hundreds of millions of daily diagnostics
+- **Databricks Platform Integration** - Native DSPy support
+  - Seamless integration with Foundation Model APIs
+  - Vector Search and Delta Lake integration
+  - 15x faster development time (days to hours)
+- **DDI Behavioral Simulation Automation** - Leadership assessment at scale
+  - 17,000x faster report delivery (48 hours to 10 seconds)
+  - DSPy optimization improved recall from 0.43 to 0.98
+  - MLflow integration for continuous model improvement
+
 #### 🔧 Technical Improvements
 
 - **Healthcare NLP**: Complete synthetic data generation pipeline for medical conversations
@@ -51,7 +73,8 @@ This update incorporates eight cutting-edge research papers and three major indu
 - **Human-AI Collaboration**: Strategies for prompt engineering without gold labels
 - **Scientific Communication**: Author-aware caption generation with style adaptation
 - **AI Safety**: Retrieval-augmented guardrails with clinical error taxonomy
-- **Real-World Case Studies**: Multi-domain optimization across 5 production scenarios
+- **Real-World Case Studies**: Multi-domain optimization across 6 production scenarios
+- **Automatic Prompt Engineering**: LLM self-optimization outperforming human experts
 
 ### Papers Integrated
 
@@ -95,6 +118,33 @@ This update incorporates eight cutting-edge research papers and three major indu
    - Clinical error taxonomy with 59 granular error codes
    - ArXiv: https://arxiv.org/abs/2509.22565
 
+### Industry Case Studies Integrated
+
+22. **Databricks & JetBlue: Optimizing LLM Pipelines with DSPy** (May 2024)
+   - Production deployment achieving 2x performance over LangChain
+   - Self-improving pipelines with continuous learning
+   - Blog: https://www.databricks.com/blog/optimizing-databricks-llm-pipelines-dspy
+
+23. **Replit: Building LLMs for Code Repair** (April 2024)
+   - DSPy-powered synthetic data generation pipeline
+   - 7B model competitive with GPT-4 Turbo
+   - Blog: https://blog.replit.com/code-repair
+
+24. **Databricks: DSPy Platform Integration** (April 2024)
+   - Native DSPy support with Foundation Model APIs
+   - Vector Search and MLflow integration
+   - Blog: https://www.databricks.com/blog/dspy-databricks
+
+25. **DDI: Behavioral Simulation Automation** (August 2024)
+   - Leadership assessment automation with DSPy
+   - 17,000x faster delivery, recall improved from 0.43 to 0.98
+   - Customer Story: https://www.databricks.com/customers/ddi
+
+26. **VMware Research: Automatic Prompt Optimization** (February 2024)
+   - LLMs outperform human prompt engineers
+   - The Register & Business Insider coverage
+   - Star Trek prompts improve math reasoning
+
 ### Performance Highlights
 
 - **90%+ F1 score** on real healthcare data using only synthetic training data
@@ -105,6 +155,11 @@ This update incorporates eight cutting-edge research papers and three major indu
 - **45% improvement** in human prompt engineering success with structured feedback
 - **40-48% BLEU improvement** in scientific figure captioning with style adaptation
 - **95% F1 improvement** in AI safety evaluation with retrieval augmentation (0.256 → 0.500)
+- **17,000x speed improvement** in behavioral assessment delivery (48 hours → 10 seconds)
+- **128% recall improvement** with DSPy prompt optimization (0.43 → 0.98)
+- **2x faster deployment** than LangChain with DSPy optimization (JetBlue/Databricks)
+- **7B model matches GPT-4** on real-world code repair tasks (Replit)
+- **15x faster development** with native platform integration (Databricks)
 
 ## Version 2.0 - Complete Coverage Integration (December 2025)
 

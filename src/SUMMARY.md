@@ -87,6 +87,7 @@
   - [State-Space Search for Prompt Optimization](05-optimizers/23-state-space-prompt-optimization.md)
   - [InPars+: Advanced Synthetic Data Generation for Information Retrieval](05-optimizers/24-inpars-plus-synthetic-data-ir.md)
   - [CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization](05-optimizers/25-custom-mipro-enhanced-optimization.md)
+  - [Automatic Prompt Optimization Research](05-optimizers/26-automatic-prompt-optimization-research.md)
   - [Exercises](05-optimizers/07-exercises.md)
 
 ---
@@ -135,6 +136,7 @@
   - [Databricks & JetBlue LLM Optimization](08-case-studies/07-databricks-jetblue-llm-optimization.md)
   - [Replit Code Repair with DSPy](08-case-studies/08-replit-code-repair-dspy.md)
   - [Databricks Platform Integration](08-case-studies/09-databricks-dspy-platform-integration.md)
+  - [DDI Behavioral Simulation Automation](08-case-studies/10-ddi-behavioral-simulation-automation.md)
   - [Exercises](08-case-studies/05-exercises.md)
 
 ---
