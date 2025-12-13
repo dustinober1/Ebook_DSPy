@@ -2,6 +2,24 @@
 
 DSPy (Declarative Self-improving Language Programs, yeah!) is a framework for programming—not prompting—foundation models like GPT-4, Claude, and others. It provides a systematic way to build LM-based applications that are modular, composable, and automatically optimizable.
 
+## Historical Context: The Demonstrate-Search-Predict Paper
+
+DSPy originated from the groundbreaking research paper **"Demonstrate-Search-Predict: A Paradigm for Solving Complex, Multi-Hop Reasoning Tasks with Large Language Models"** by Omar Khattab and colleagues at Stanford University. This work established the foundational principles that would evolve into the DSPy framework.
+
+The paper demonstrated that complex reasoning tasks could be decomposed into three systematic stages:
+
+1. **DEMONSTRATE**: Learning from examples and demonstrations
+2. **SEARCH**: Retrieving and synthesizing information from multiple sources
+3. **PREDICT**: Generating accurate outputs based on gathered evidence
+
+This three-stage approach showed that by treating language model tasks as structured programs rather than mere prompts, we could achieve:
+- Better compositional generalization
+- More reliable multi-hop reasoning
+- Systematic optimization through weak supervision
+- Zero-shot transfer to new tasks
+
+The research proved that moving from ad-hoc prompt engineering to structured programming was the key to building reliable LM applications. DSPy is the production-ready implementation of these research insights, providing the tools and abstractions needed to build complex language model programs at scale.
+
 ---
 
 ## The Problem: Manual Prompt Engineering
@@ -398,6 +416,15 @@ DSPy:         Human defines task → DSPy optimizes → LM executes → System i
 ```
 Imperative:   "Here's how to answer: First read the context, then..."
 Declarative:  "Given context and question, produce an answer"
+```
+
+### Structured Reasoning > Flat Prompts
+
+The Demonstrate-Search-Predict paradigm gives us:
+```
+DEMONSTRATE: Learn from examples → Build task understanding
+SEARCH:      Retrieve evidence → Gather relevant information
+PREDICT:     Generate output → Produce final answer
 ```
 
 ### Optimizable > Static

@@ -179,6 +179,16 @@ def train_multilabel_classifier(trainset):
 - Precision and recall are important for multi-label
 - F1-score needs micro and macro averaging
 
+### Going Further: Extreme Multi-Label Classification
+
+After mastering this exercise, challenge yourself with **Extreme Multi-Label Classification (XML)** where you'll handle millions of labels instead of just dozens. See the **[XML Exercises](../../../exercises/chapter06/xml-exercises.md)** for advanced challenges including:
+
+- Scalable label indexing and search
+- Hierarchical classification strategies
+- Zero-shot XML for new labels
+- Specialized evaluation metrics (P@k, nDCG@k, PS@k)
+- Memory-efficient streaming processors
+
 ### Expected Output
 ```
 Document: "Apple announces new AI features and stock rises"

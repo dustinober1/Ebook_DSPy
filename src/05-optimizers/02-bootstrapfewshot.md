@@ -4,6 +4,66 @@
 
 BootstrapFewShot is one of DSPy's most powerful optimizers. It automatically generates and selects high-quality few-shot examples to improve your program's performance. Instead of manually crafting examples, BootstrapFewShot discovers the optimal demonstrations for your specific task.
 
+## Weak Supervision and the annotate() Method
+
+A key innovation from the Demonstrate-Search-Predict paper is the concept of **weak supervision** - the ability to train models without hand-labeled intermediate steps. BootstrapFewShot implements this through the `annotate()` functionality, which allows:
+
+1. **Automatic annotation of reasoning chains** without manual step-by-step labeling
+2. **Bootstrapping demonstrations** from minimal supervision
+3. **Training with only input-output pairs** (no intermediate reasoning needed)
+
+### The annotate() Mechanism
+
+```python
+from dspy.teleprompter import BootstrapFewShot
+
+# Traditional approach requires manually annotated reasoning
+traditional_training = [
+    dspy.Example(
+        question="What is 15 * 23?",
+        reasoning="Step 1: 15 * 20 = 300\nStep 2: 15 * 3 = 45\nStep 3: 300 + 45 = 345",
+        answer="345"
+    ),
+    # ... many more with detailed reasoning
+]
+
+# With weak supervision (annotate), you only need:
+weak_supervision_training = [
+    dspy.Example(question="What is 15 * 23?", answer="345"),
+    dspy.Example(question="What is 12 * 17?", answer="204"),
+    # ... just input-output pairs
+]
+
+# BootstrapFewShot will automatically generate the reasoning!
+```
+
+### How annotate() Works
+
+1. **Teacher-Student Framework**:
+   - A teacher model generates full demonstrations
+   - The student learns from these generated examples
+   - Only final outputs need to be verified
+
+2. **Automatic Reasoning Generation**:
+   ```python
+   class MathSolver(dspy.Module):
+       def __init__(self):
+           super().__init__()
+           self.solve = dspy.ChainOfThought("question -> answer")
+
+       def forward(self, question):
+           result = self.solve(question=question)
+           return dspy.Prediction(
+               answer=result.answer,
+               reasoning=result.rationale  # Automatically generated!
+           )
+   ```
+
+3. **Filtering by Ground Truth**:
+   - Generated demonstrations are validated against known outputs
+   - Only high-quality demonstrations are kept
+   - Poor generations are automatically discarded
+
 ## How BootstrapFewShot Works
 
 ### The Bootstrap Process
@@ -101,6 +161,78 @@ optimizer = BootstrapFewShot(
 
 compiled_cot = optimizer.compile(CoTQA(), trainset=trainset)
 ```
+
+### Weak Supervision Example: Complex Reasoning
+
+```python
+class ComplexReasoning(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        # Multi-step reasoning task
+        self.reason = dspy.ChainOfThought(
+            "context, question -> reasoning_steps, answer"
+        )
+
+    def forward(self, context, question):
+        result = self.reason(context=context, question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning_steps=result.rationale  # Will be auto-generated!
+        )
+
+# Training data with ONLY inputs and outputs (weak supervision)
+reasoning_trainset = [
+    dspy.Example(
+        context="Alice is taller than Bob. Bob is taller than Charlie.",
+        question="Who is the tallest?",
+        answer="Alice"
+    ),
+    dspy.Example(
+        context="All mammals are animals. Dogs are mammals.",
+        question="Are dogs animals?",
+        answer="Yes"
+    ),
+    # ... more examples without manually written reasoning steps
+]
+
+# BootstrapFewShot automatically generates the reasoning steps!
+optimizer = BootstrapFewShot(
+    metric=exact_match,
+    max_bootstrapped_demos=6,
+    max_labeled_demos=2  # Keep 2 original examples for stability
+)
+
+# The magic: annotate() happens automatically during compilation
+compiled_reasoner = optimizer.compile(
+    ComplexReasoning(),
+    trainset=reasoning_trainset
+)
+
+# The compiled model now has high-quality demonstrations
+# with automatically generated reasoning steps!
+```
+
+### Benefits of Weak Supervision
+
+1. **Reduced Annotation Cost**:
+   - No need to write detailed reasoning chains
+   - Only final answers need verification
+   - Scales to thousands of examples easily
+
+2. **Consistent Quality**:
+   - Generated reasoning follows consistent patterns
+   - Avoids human annotation inconsistencies
+   - Maintains formatting automatically
+
+3. **Rapid Prototyping**:
+   - Test new tasks with minimal data preparation
+   - Iterate quickly on task definitions
+   - Focus on problem formulation, not annotation
+
+4. **Better Coverage**:
+   - Generates diverse reasoning strategies
+   - Discovers multiple solution paths
+   - Reduces annotation bias
 
 ## Working with Different Task Types
 

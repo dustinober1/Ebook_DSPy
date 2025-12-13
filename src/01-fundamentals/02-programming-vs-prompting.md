@@ -2,6 +2,113 @@
 
 The shift from **prompting** to **programming** language models is the core innovation of DSPy. Understanding this paradigm shift is essential to mastering the framework.
 
+## The Three-Stage Architecture: DEMONSTRATE-SEARCH-PREDICT
+
+At the heart of DSPy lies the three-stage architecture that originated from the Demonstrate-Search-Predict research paper. This architecture provides a systematic way to structure complex reasoning tasks.
+
+### Stage 1: DEMONSTRATE
+
+The DEMONSTRATE stage focuses on learning from examples and building task understanding:
+
+```python
+# In DSPy, demonstration is handled through:
+class TaskSignature(dspy.Signature):
+    """Define what the task does"""
+    input_field: str = dspy.InputField()
+    output_field: str = dspy.OutputField()
+
+# Examples provide demonstrations
+trainset = [
+    dspy.Example(input_field="Example 1", output_field="Expected output 1"),
+    dspy.Example(input_field="Example 2", output_field="Expected output 2"),
+    # ... more demonstrations
+]
+```
+
+**Key aspects**:
+- Learn task structure from demonstrations
+- Build understanding of input-output relationships
+- Create reusable patterns for similar tasks
+
+### Stage 2: SEARCH
+
+The SEARCH stage involves retrieving and synthesizing information from multiple sources:
+
+```python
+class SearchModule(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        # Retrieval components
+        self.retrieve = dspy.Retrieve(k=5)  # Search for relevant documents
+        self.select_relevant = dspy.Predict("documents, query -> relevant_docs")
+
+    def forward(self, query):
+        # Search for relevant information
+        docs = self.retrieve(query).passages
+        selected = self.select_relevant(documents=docs, query=query)
+        return selected
+```
+
+**Key aspects**:
+- Gather evidence from multiple sources
+- Filter and rank relevant information
+- Build context for final prediction
+
+### Stage 3: PREDICT
+
+The PREDICT stage generates the final output based on gathered evidence:
+
+```python
+class PredictModule(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought("context, query -> answer")
+
+    def forward(self, context, query):
+        # Generate final answer
+        result = self.generate(context=context, query=query)
+        return result.answer
+```
+
+**Key aspects**:
+- Synthesize information from search results
+- Generate final, accurate outputs
+- Apply reasoning patterns learned from demonstrations
+
+### Putting It All Together
+
+```python
+class DSPipeline(dspy.Module):
+    """Complete DEMONSTRATE-SEARCH-PREDICT pipeline"""
+
+    def __init__(self):
+        super().__init__()
+        # Stage 1: Demonstration is handled by the optimizer
+        # Stage 2: Search
+        self.search = SearchModule()
+        # Stage 3: Predict
+        self.predict = PredictModule()
+
+    def forward(self, query):
+        # Execute the three stages
+        search_results = self.search(query=query)
+        final_answer = self.predict(context=search_results.relevant_docs, query=query)
+        return dspy.Prediction(answer=final_answer, context=search_results.relevant_docs)
+```
+
+### Benefits of the Three-Stage Architecture
+
+1. **Composability**: Each stage can be optimized independently
+2. **Transparency**: Clear separation of concerns
+3. **Flexibility**: Different search strategies or prediction methods can be swapped
+4. **Optimization**: Each stage can be tuned separately
+5. **Debugging**: Issues can be isolated to specific stages
+
+This architecture maps directly to DSPy's modules:
+- **Signatures** + **Examples** → DEMONSTRATE
+- **Retrieve** + **ReAct** → SEARCH
+- **Predict** + **ChainOfThought** → PREDICT
+
 ---
 
 ## The Traditional Approach: Prompting
@@ -256,6 +363,35 @@ class Pipeline(dspy.Module):
 ---
 
 ## The Paradigm Shift in Detail
+
+### From Monolithic Prompts to Structured Pipelines
+
+**Traditional prompting** mixes all stages into one monolithic prompt:
+
+```python
+# All stages crammed into one prompt
+monolithic_prompt = """
+You are a helpful assistant. First, think about similar examples you've seen.
+Then search through your knowledge for relevant information.
+Finally, provide a clear answer.
+
+Example: Input "2+2" → Output "4"
+Example: Input "3+3" → Output "6"
+
+Now, answer this question: {query}
+"""
+```
+
+**DSPy programming** separates and optimizes each stage:
+
+```python
+# Each stage is separate and optimizable
+pipeline = DSPipeline()  # Demonstrations are learned
+optimized_pipeline = optimizer.compile(pipeline, trainset=demos)
+
+result = optimized_pipeline(query="What is 4+4?")
+# Each stage executed and optimized independently
+```
 
 ### From Strings to Signatures
 

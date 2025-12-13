@@ -9,6 +9,7 @@ Welcome to Chapter 6 where we bridge the gap between theory and practice by buil
 - **RAG Systems**: Building sophisticated retrieval-augmented generation applications
 - **Multi-hop Search**: Complex information gathering across multiple sources
 - **Classification Tasks**: Practical text categorization systems
+- **Extreme Multi-Label Classification**: Scaling to millions of labels efficiently
 - **Entity Extraction**: Information extraction from unstructured text
 - **Intelligent Agents**: Autonomous problem-solving systems
 - **Code Generation**: Automated programming assistants
@@ -37,10 +38,11 @@ By the end of this chapter, you will be able to:
 1. **RAG Systems** - Building intelligent document Q&A systems
 2. **Multi-hop Search** - Complex reasoning across multiple documents
 3. **Classification Tasks** - Real-world text categorization
-4. **Entity Extraction** - Extracting structured information
-5. **Intelligent Agents** - Autonomous decision-making systems
-6. **Code Generation** - Automated programming assistants
-7. **Exercises** - Practical application challenges
+4. **Extreme Multi-Label Classification** - Scaling to millions of labels
+5. **Entity Extraction** - Extracting structured information
+6. **Intelligent Agents** - Autonomous decision-making systems
+7. **Code Generation** - Automated programming assistants
+8. **Exercises** - Practical application challenges
 
 ### Real-World Focus
 

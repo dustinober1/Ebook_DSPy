@@ -454,7 +454,250 @@ class RealTimeMonitor:
 
 ---
 
-## Exercise 5: Integration Challenge
+## Exercise 5: STORM Writing Assistant Implementation
+
+### Objective
+Build a simplified version of the STORM writing assistant for generating articles.
+
+### Requirements
+1. Multi-perspective research simulation
+2. Outline generation from research
+3. Section-by-section content generation
+4. Basic citation integration
+
+### Steps
+
+#### Step 1: Perspective-Based Research
+```python
+import dspy
+
+class SimplePerspectiveResearch(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate_perspectives = dspy.Predict(
+            "topic -> perspectives"
+        )
+        self.generate_questions = dspy.Predict(
+            "topic, perspective -> questions"
+        )
+
+    def research_topic(self, topic: str, num_perspectives: int = 3) -> Dict:
+        """Simulate multi-perspective research."""
+        # Generate perspectives
+        perspectives_result = self.generate_perspectives(topic=topic)
+        perspectives = perspectives_result.perspectives.split('\n')[:num_perspectives]
+
+        research_data = {}
+        for perspective in perspectives:
+            # Generate questions for each perspective
+            questions_result = self.generate_questions(
+                topic=topic,
+                perspective=perspective
+            )
+            questions = questions_result.questions.split('\n')[:3]
+
+            # Simulate research findings
+            research_data[perspective] = {
+                'questions': questions,
+                'findings': self._simulate_findings(perspective, questions)
+            }
+
+        return research_data
+
+    def _simulate_findings(self, perspective: str, questions: List[str]) -> List[str]:
+        """Simulate research findings for questions."""
+        findings = []
+        for question in questions:
+            # In a real implementation, this would retrieve from sources
+            finding = f"From {perspective} perspective: {question} leads to important insights"
+            findings.append(finding)
+        return findings
+
+# Test the research module
+researcher = SimplePerspectiveResearch()
+research_data = researcher.research_topic("The Impact of Renewable Energy")
+print(f"Researched {len(research_data)} perspectives")
+```
+
+#### Step 2: Outline Generation
+```python
+class SimpleOutlineGenerator(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.create_outline = dspy.Predict(
+            "topic, research_findings -> outline"
+        )
+
+    def generate_outline(self, topic: str, research_data: Dict) -> List[Dict]:
+        """Generate article outline from research."""
+        # Compile research findings
+        all_findings = []
+        for perspective, data in research_data.items():
+            for finding in data['findings']:
+                all_findings.append(f"({perspective}) {finding}")
+
+        findings_text = "\n".join(all_findings)
+
+        # Generate outline
+        outline_result = self.create_outline(
+            topic=topic,
+            research_findings=findings_text
+        )
+
+        # Parse outline into structured format
+        sections = []
+        lines = outline_result.outline.split('\n')
+        current_section = None
+
+        for line in lines:
+            if line.strip().startswith('I.') or line.strip().startswith('1.'):
+                if current_section:
+                    sections.append(current_section)
+                current_section = {
+                    'title': line.strip().split(' ', 1)[1],
+                    'subsections': []
+                }
+            elif line.strip().startswith('   A.') and current_section:
+                current_section['subsections'].append(
+                    line.strip().split(' ', 1)[1]
+                )
+
+        if current_section:
+            sections.append(current_section)
+
+        return sections
+
+# Test outline generation
+outliner = SimpleOutlineGenerator()
+outline = outliner.generate_outline("The Impact of Renewable Energy", research_data)
+print(f"Generated outline with {len(outline)} main sections")
+```
+
+#### Step 3: Content Generation with Citations
+```python
+class ContentGenerator(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate_content = dspy.Predict(
+            "section_title, research_data, word_count -> content"
+        )
+        self.add_citations = dspy.Predict(
+            "content, research_data -> cited_content"
+        )
+
+    def generate_section(self,
+                        section_title: str,
+                        research_data: Dict,
+                        word_count: int = 300) -> Dict:
+        """Generate content for a section with citations."""
+        # Convert research data to text
+        research_text = ""
+        for perspective, data in research_data.items():
+            research_text += f"\n{perspective}:\n"
+            research_text += "\n".join(data['findings'])
+
+        # Generate content
+        content_result = self.generate_content(
+            section_title=section_title,
+            research_data=research_text,
+            word_count=str(word_count)
+        )
+
+        # Add citations
+        cited_result = self.add_citations(
+            content=content_result.content,
+            research_data=research_text
+        )
+
+        return {
+            'title': section_title,
+            'content': cited_result.cited_content,
+            'word_count': len(cited_result.cited_content.split())
+        }
+
+# Test content generation
+generator = ContentGenerator()
+if outline:
+    section = generator.generate_section(
+        outline[0]['title'],
+        research_data
+    )
+    print(f"Generated section: {section['title']}")
+    print(f"Word count: {section['word_count']}")
+```
+
+#### Step 4: Assemble Complete Article
+```python
+class ArticleAssembler:
+    def __init__(self, content_generator: ContentGenerator):
+        self.content_generator = content_generator
+
+    def create_article(self,
+                      topic: str,
+                      outline: List[Dict],
+                      research_data: Dict) -> Dict:
+        """Assemble complete article from outline and research."""
+        article_parts = []
+
+        # Add title
+        article_parts.append(f"# {topic}\n")
+
+        # Generate content for each section
+        for section in outline:
+            # Generate section content
+            section_content = self.content_generator.generate_section(
+                section['title'],
+                research_data,
+                word_count=400
+            )
+
+            # Add to article
+            article_parts.append(f"\n## {section_content['title']}\n")
+            article_parts.append(section_content['content'])
+
+            # Generate subsections if any
+            for subsection in section.get('subsections', []):
+                sub_content = self.content_generator.generate_section(
+                    subsection,
+                    research_data,
+                    word_count=200
+                )
+
+                article_parts.append(f"\n### {sub_content['title']}\n")
+                article_parts.append(sub_content['content'])
+
+        # Combine all parts
+        full_article = '\n'.join(article_parts)
+
+        return {
+            'title': topic,
+            'content': full_article,
+            'sections': len(outline),
+            'word_count': len(full_article.split())
+        }
+
+# Create complete article
+assembler = ArticleAssembler(generator)
+article = assembler.create_article(
+    "The Impact of Renewable Energy",
+    outline,
+    research_data
+)
+
+print(f"Article generated!")
+print(f"Total sections: {article['sections']}")
+print(f"Total words: {article['word_count']}")
+```
+
+### Challenge Extensions
+1. Add quality assessment using FactScore
+2. Implement verifiability checking
+3. Add human review simulation
+4. Create different article formats (blog post, academic paper, etc.)
+
+---
+
+## Exercise 6: Integration Challenge
 
 ### Objective
 Integrate multiple case studies into a unified platform.
@@ -565,6 +808,12 @@ Choose one of the following projects:
 - Add project analysis
 - Include automated testing suggestions
 - Generate project documentation
+
+#### Option 4: Wikipedia-like Article Generator
+- Implement STORM-based research and writing
+- Add multi-perspective analysis
+- Include citation and fact-checking
+- Generate articles on complex topics
 
 ### Requirements for Final Project:
 1. **Complete Implementation**: Working code for all features

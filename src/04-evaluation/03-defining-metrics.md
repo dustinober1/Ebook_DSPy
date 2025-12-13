@@ -568,6 +568,460 @@ def interpretable_metric(example, pred, trace=None):
     return sum(checks.values()) / len(checks)
 ```
 
+## Specialized Metrics for Long-form Content Generation
+
+When evaluating long-form articles like Wikipedia entries, we need specialized metrics that go beyond simple answer correctness. These metrics assess comprehensiveness, factual accuracy, and verifiability.
+
+### Topic Coverage Evaluation
+
+Measures how comprehensively the generated content covers the topic:
+
+```python
+def topic_coverage_rouge(example, pred, trace=None):
+    """
+    Evaluate topic coverage using ROUGE metrics against reference articles.
+
+    ROUGE (Recall-Oriented Understudy for Gisting Evaluation) measures
+    overlap between generated and reference content.
+    """
+    try:
+        from rouge_score import rouge_scorer
+    except ImportError:
+        print("Install rouge_score: pip install rouge-score")
+        return 0.0
+
+    scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
+
+    # Score against reference content
+    scores = scorer.score(
+        example.reference_content,
+        pred.article_content
+    )
+
+    # Use ROUGE-L as primary metric (measures longest common subsequence)
+    rouge_l_score = scores['rougeL'].fmeasure
+
+    if trace is not None:
+        # During optimization, require good coverage
+        return rouge_l_score >= 0.4
+
+    return rouge_l_score
+
+def comprehensive_topic_coverage(example, pred, trace=None):
+    """
+    More comprehensive topic coverage evaluation.
+
+    Checks coverage of multiple aspects:
+    1. Key entities mentioned
+    2. Important concepts covered
+    3. Topic depth across sections
+    """
+    # Extract key entities from reference
+    reference_entities = set(example.get('key_entities', []))
+    generated_text = pred.article_content.lower()
+
+    # Check entity coverage
+    entities_covered = sum(
+        1 for entity in reference_entities
+        if entity.lower() in generated_text
+    )
+    entity_coverage = entities_covered / len(reference_entities) if reference_entities else 0
+
+    # Check section coverage (if outline provided)
+    if hasattr(pred, 'outline') and pred.outline:
+        expected_sections = set(example.get('required_sections', []))
+        generated_sections = set(s['title'].lower() for s in pred.outline)
+
+        section_coverage = len(expected_sections & generated_sections) / len(expected_sections)
+    else:
+        section_coverage = 0.5  # Default if no outline
+
+    # Check concept coverage
+    reference_concepts = set(example.get('key_concepts', []))
+    concepts_covered = sum(
+        1 for concept in reference_concepts
+        if concept.lower() in generated_text
+    )
+    concept_coverage = concepts_covered / len(reference_concepts) if reference_concepts else 0
+
+    # Weighted combination
+    overall_coverage = (
+        0.4 * entity_coverage +
+        0.4 * concept_coverage +
+        0.2 * section_coverage
+    )
+
+    if trace is not None:
+        return overall_coverage >= 0.6
+
+    return overall_coverage
+```
+
+### Factual Accuracy (FactScore)
+
+FactScore is a metric specifically designed to evaluate factual accuracy in long-form generation:
+
+```python
+class FactScoreMetric:
+    """
+    FactScore: Evaluates factual accuracy by breaking down content into
+    atomic claims and verifying each against a knowledge source.
+    """
+
+    def __init__(self, model_name="gpt-3.5-turbo"):
+        self.model_name = model_name
+        self.claim_extractor = dspy.Predict(
+            "text -> atomic_claims"
+        )
+        self.fact_checker = dspy.ChainOfThought(
+            "claim, context -> is_factual, confidence, correction"
+        )
+
+    def __call__(self, example, pred, trace=None):
+        """
+        Calculate FactScore for generated content.
+
+        Returns the average of factual claim scores.
+        """
+        # Extract atomic claims from generated content
+        claims_result = self.claim_extractor(
+            text=pred.article_content
+        )
+        claims = self._parse_claims(claims_result.atomic_claims)
+
+        if not claims:
+            return 0.0
+
+        # Verify each claim
+        claim_scores = []
+        for claim in claims:
+            verification = self.fact_checker(
+                claim=claim,
+                context=example.get('reference_documents', '')
+            )
+
+            # Convert confidence to score
+            if verification.is_factual.lower() == 'true':
+                score = float(verification.confidence)
+            else:
+                score = 0.0
+
+            claim_scores.append(score)
+
+        # Calculate FactScore (average of verified claims)
+        fact_score = sum(claim_scores) / len(claim_scores)
+
+        if trace is not None:
+            # During optimization, require high factual accuracy
+            return fact_score >= 0.7
+
+        return fact_score
+
+    def _parse_claims(self, claims_text: str) -> List[str]:
+        """Parse atomic claims from extracted text."""
+        claims = []
+        lines = claims_text.strip().split('\n')
+        for line in lines:
+            if line.strip() and (line.strip().startswith('-') or line.strip().startswith('•')):
+                claim = line.strip().lstrip('- •').strip()
+                if claim.endswith('.'):
+                    claim = claim[:-1]
+                claims.append(claim)
+        return claims
+
+# Usage
+fact_scorer = FactScoreMetric()
+def factscore_metric(example, pred, trace=None):
+    """Wrapper for FactScore metric."""
+    return fact_scorer(example, pred, trace)
+```
+
+### Verifiability Assessment
+
+Measures how well claims in the generated content can be verified with citations:
+
+```python
+def verifiability_metric(example, pred, trace=None):
+    """
+    Measures the fraction of sentences that can be verified
+    using retrieved evidence or citations.
+    """
+    sentences = _split_into_sentences(pred.article_content)
+
+    if not sentences:
+        return 0.0
+
+    verifiable_count = 0
+
+    for sentence in sentences:
+        # Check if sentence has citation
+        has_citation = bool(re.search(r'\[\d+\]|\[.*?\]', sentence))
+
+        # Check if sentence is factual claim
+        is_factual = _is_factual_claim(sentence)
+
+        # Check if supporting evidence exists
+        if hasattr(pred, 'citations') and pred.citations:
+            has_evidence = _check_evidence_support(
+                sentence,
+                pred.citations,
+                example.get('reference_documents', '')
+            )
+        else:
+            has_evidence = False
+
+        # Sentence is verifiable if it has citation OR supporting evidence
+        if is_factual and (has_citation or has_evidence):
+            verifiable_count += 1
+
+    verifiability = verifiable_count / len(sentences)
+
+    if trace is not None:
+        # During optimization, require high verifiability
+        return verifiability >= 0.6
+
+    return verifiability
+
+def _split_into_sentences(text: str) -> List[str]:
+    """Split text into sentences."""
+    import re
+    # Simple sentence splitting
+    sentences = re.split(r'[.!?]+', text)
+    return [s.strip() for s in sentences if s.strip()]
+
+def _is_factual_claim(sentence: str) -> bool:
+    """Determine if a sentence makes a factual claim."""
+    factual_indicators = [
+        'according to', 'research shows', 'studies indicate',
+        'data suggests', 'reported', 'found that', 'demonstrates',
+        'proved', 'discovered', 'measured', 'calculated'
+    ]
+
+    # Check for numbers (statistics)
+    has_numbers = bool(re.search(r'\d+', sentence))
+
+    # Check for factual indicators
+    has_indicators = any(ind in sentence.lower() for ind in factual_indicators)
+
+    # Check for specific entities (often indicates facts)
+    has_entities = bool(re.search(r'[A-Z][a-z]+ [A-Z][a-z]+', sentence))
+
+    return has_numbers or has_indicators or has_entities
+
+def _check_evidence_support(sentence: str,
+                           citations: List[str],
+                           reference_docs: str) -> bool:
+    """Check if sentence has supporting evidence in references."""
+    # Simple check - in practice would use semantic similarity
+    sentence_words = set(sentence.lower().split())
+
+    for citation in citations:
+        # Extract cited content (simplified)
+        cited_content = _extract_citation_content(citation, reference_docs)
+
+        if cited_content:
+            cited_words = set(cited_content.lower().split())
+            overlap = len(sentence_words & cited_words) / len(sentence_words)
+
+            if overlap > 0.3:  # 30% overlap threshold
+                return True
+
+    return False
+
+def _extract_citation_content(citation: str, reference_docs: str) -> str:
+    """Extract content for a specific citation."""
+    # Simplified - would need proper citation parsing
+    if citation in reference_docs:
+        return reference_docs.split(citation)[1].split('\n')[0]
+    return ""
+```
+
+### Citation Quality Metrics
+
+```python
+def citation_quality_metric(example, pred, trace=None):
+    """
+    Evaluates the quality and appropriateness of citations in the article.
+    """
+    if not hasattr(pred, 'citations') or not pred.citations:
+        return 0.0
+
+    total_score = 0.0
+
+    for citation in pred.citations:
+        # Check citation format
+        format_score = _check_citation_format(citation)
+
+        # Check citation relevance
+        relevance_score = _check_citation_relevance(
+            citation,
+            pred.article_content,
+            example.get('reference_documents', '')
+        )
+
+        # Check source credibility (if available)
+        credibility_score = _check_source_credibility(citation)
+
+        # Combine scores
+        citation_score = (
+            0.3 * format_score +
+            0.5 * relevance_score +
+            0.2 * credibility_score
+        )
+
+        total_score += citation_score
+
+    average_score = total_score / len(pred.citations)
+
+    if trace is not None:
+        return average_score >= 0.7
+
+    return average_score
+
+def _check_citation_format(citation: str) -> float:
+    """Check if citation follows expected format."""
+    # Check for common citation formats
+    patterns = [
+        r'\[\d+\]',  # Numeric [1]
+        r'\([A-Z][a-z]+, \d{4}\)',  # APA (Smith, 2023)
+        r'\([A-Z][a-z]+ et al\., \d{4}\)',  # APA et al.
+    ]
+
+    for pattern in patterns:
+        if re.search(pattern, citation):
+            return 1.0
+
+    return 0.5  # Partial score for unrecognized format
+
+def _check_citation_relevance(citation: str,
+                             content: str,
+                             references: str) -> float:
+    """Check how relevant the citation is to the content."""
+    # Simplified - would use semantic similarity in practice
+    citation_text = _extract_citation_text(citation, references)
+
+    if not citation_text:
+        return 0.0
+
+    # Find where citation is used in content
+    citation_context = _find_citation_context(citation, content)
+
+    if not citation_context:
+        return 0.0
+
+    # Calculate word overlap
+    context_words = set(citation_context.lower().split())
+    citation_words = set(citation_text.lower().split())
+
+    overlap = len(context_words & citation_words)
+    return min(1.0, overlap / 10)  # Normalize by expected overlap
+
+def _check_source_credibility(citation: str) -> float:
+    """Check the credibility of the cited source."""
+    # List of credible sources (simplified)
+    credible_domains = [
+        'nature.com', 'science.org', 'cell.com',
+        'arxiv.org', 'scholar.google.com',
+        'gov', 'edu', 'ieee.org', 'acm.org'
+    ]
+
+    # Extract domain if URL is present
+    if 'http' in citation:
+        from urllib.parse import urlparse
+        try:
+            domain = urlparse(citation).netloc
+            if any(cred in domain for cred in credible_domains):
+                return 1.0
+            return 0.5  # Partial for other domains
+        except:
+            return 0.5
+
+    # For non-URL citations, assume academic source
+    return 0.8
+```
+
+### Composite Long-form Quality Metric
+
+```python
+def longform_composite_metric(example, pred, trace=None):
+    """
+    Composite metric for evaluating long-form article quality.
+
+    Combines multiple aspects:
+    - Topic coverage (ROUGE)
+    - Factual accuracy (FactScore)
+    - Verifiability
+    - Citation quality
+    - Coherence and flow
+    """
+    # Individual component scores
+    coverage_score = topic_coverage_rouge(example, pred, trace)
+    factual_score = factscore_metric(example, pred, trace)
+    verifiability_score = verifiability_metric(example, pred, trace)
+    citation_score = citation_quality_metric(example, pred, trace)
+
+    # Coherence score (simplified)
+    coherence_score = _evaluate_coherence(pred.article_content)
+
+    # Weighted combination for final score
+    final_score = (
+        0.25 * coverage_score +
+        0.30 * factual_score +
+        0.20 * verifiability_score +
+        0.15 * citation_score +
+        0.10 * coherence_score
+    )
+
+    if trace is not None:
+        # During optimization, require good overall quality
+        return final_score >= 0.6
+
+    return final_score
+
+def _evaluate_coherence(text: str) -> float:
+    """Evaluate text coherence and flow."""
+    sentences = _split_into_sentences(text)
+
+    if len(sentences) < 2:
+        return 1.0
+
+    coherence_scores = []
+
+    # Check transitions between consecutive sentences
+    for i in range(len(sentences) - 1):
+        current = sentences[i]
+        next_sent = sentences[i + 1]
+
+        # Check for transition words
+        transitions = ['however', 'therefore', 'furthermore', 'consequently',
+                      'moreover', 'in addition', 'in contrast', 'similarly']
+
+        has_transition = any(trans in next_sent.lower() for trans in transitions)
+
+        # Check for pronoun reference to previous sentence
+        current_words = set(current.lower().split())
+        next_words = set(next_sent.lower().split())
+
+        # Common coherence indicators
+        pronouns = {'it', 'they', 'this', 'that', 'these', 'those'}
+        pronoun_reference = bool(pronouns & next_words)
+
+        # Topic continuity
+        topic_overlap = len(current_words & next_words) / len(current_words | next_words)
+
+        # Score for this transition
+        transition_score = (
+            0.4 * (1.0 if has_transition else 0.0) +
+            0.3 * (1.0 if pronoun_reference else 0.0) +
+            0.3 * topic_overlap
+        )
+
+        coherence_scores.append(transition_score)
+
+    # Average coherence across all transitions
+    return sum(coherence_scores) / len(coherence_scores)
+```
+
 ## Summary
 
 Effective metrics are the key to meaningful evaluation:
@@ -577,6 +1031,7 @@ Effective metrics are the key to meaningful evaluation:
 3. **Create custom metrics** for domain-specific needs
 4. **Combine multiple aspects** with composite metrics
 5. **Use trace appropriately** for optimization vs. evaluation
+6. **Employ specialized metrics** for long-form content (ROUGE, FactScore, Verifiability)
 
 ### Key Takeaways
 
@@ -585,6 +1040,7 @@ Effective metrics are the key to meaningful evaluation:
 3. **Custom metrics** capture domain-specific quality
 4. **Composite metrics** address multiple dimensions
 5. **Robustness matters** - Handle edge cases gracefully
+6. **Long-form content requires specialized evaluation** beyond simple accuracy
 
 ## Next Steps
 

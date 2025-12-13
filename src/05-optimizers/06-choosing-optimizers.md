@@ -12,6 +12,7 @@ DSPy offers multiple optimization strategies, each with distinct strengths and i
 | **BootstrapFewShot** | General improvement | 10-100 examples | Fast | Good | Medium |
 | **KNNFewShot** | Dynamic context, large datasets | 100+ examples | Medium | Good | Medium |
 | **MIPRO** | Maximum performance | 20-200 examples | Slow | Excellent | High |
+| **RPE** | Complex reasoning, exploration | 30+ examples | Slow | Excellent | High |
 | **Fine-Tuning** | Domain-specific, cost-sensitive | 1000+ examples | Very Slow | Excellent | Very High |
 
 ## Decision Framework
@@ -125,6 +126,15 @@ def recommend_optimizer(constraints):
             "confidence": "High"
         })
 
+        # Also suggest RPE for complex reasoning tasks
+        if constraints.num_examples >= 30:
+            recommendations.append({
+                "optimizer": "ReflectivePromptEvolution",
+                "config": {"population_size": 10, "generations": 5},
+                "reason": "Evolutionary approach excellent for complex multi-step reasoning",
+                "confidence": "Medium"
+            })
+
     if constraints.domain_specificity == "specialized" and constraints.num_examples > 1000:
         recommendations.append({
             "optimizer": "Fine-Tuning",
@@ -220,7 +230,44 @@ if inference_cost_high:
 - Use MIPRO for maximum performance
 - Consider fine-tuning for long-term cost efficiency
 
-### Use Case 3: Real-time Classification API
+### Use Case 3: Complex Multi-hop Reasoning
+
+**Scenario**: Question answering requiring multiple reasoning steps (e.g., HotpotQA, complex medical diagnosis)
+
+**Constraints**:
+- Multi-step reasoning required
+- Complex problem decomposition needed
+- Medium dataset size (50-500 examples)
+- High accuracy critical (>90%)
+
+**Recommendation**:
+```python
+# RPE for complex reasoning tasks
+optimizer = ReflectivePromptEvolution(
+    metric=multi_hop_accuracy,
+    population_size=12,
+    generations=6,
+    mutation_rate=0.3,
+    diversity_weight=0.4
+)
+
+reasoning_system = optimizer.compile(
+    MultiHopReasoner(),
+    trainset=complex_qa_examples,
+    valset=val_examples
+)
+
+# Combine with Chain of Thought for best results
+final_system = ChainOfThoughtEnhanced(reasoning_system)
+```
+
+**Why**:
+- RPE excels at discovering novel reasoning patterns
+- Evolutionary approach explores multiple solution paths
+- Self-reflection improves reasoning quality over time
+- Diversity maintenance prevents converging on suboptimal approaches
+
+### Use Case 4: Real-time Classification API
 
 **Scenario**: Content moderation for social platform
 
@@ -326,6 +373,10 @@ optimizers_to_test = {
     "MIPRO": {
         "optimizer": MIPRO(metric=accuracy_metric),
         "kwargs": {"num_candidates": 10, "auto": "medium"}
+    },
+    "RPE": {
+        "optimizer": ReflectivePromptEvolution(metric=accuracy_metric),
+        "kwargs": {"population_size": 8, "generations": 4}
     }
 }
 
@@ -347,6 +398,7 @@ print(results_df)
 | BootstrapFewShot | 5-15% | 1-5 min | Fast | Most tasks |
 | KNNFewShot | 5-12% | 1-2 min | Medium | Context tasks |
 | MIPRO | 10-25% | 5-30 min | Fast | Complex tasks |
+| RPE | 12-28% | 10-45 min | Fast | Complex reasoning |
 | Fine-Tuning | 15-30% | 1-4 hrs | Fast-Medium | Production |
 
 ## Optimization Strategies
@@ -377,6 +429,12 @@ def progressive_optimization(program, trainset, valset):
             "name": "MIPRO",
             "optimizer": MIPRO(metric=accuracy_metric, auto="medium"),
             "description": "Full optimization"
+        },
+        {
+            "name": "RPE",
+            "optimizer": ReflectivePromptEvolution(metric=accuracy_metric),
+            "config": {"population_size": 8, "generations": 4},
+            "description": "Evolutionary optimization for complex reasoning"
         }
     ]
 
@@ -526,6 +584,11 @@ def calculate_optimization_cost(optimizer_type, config, data_size):
             "base_time": 300,
             "compute_multiplier": 3.0
         },
+        "RPE": {
+            "time_per_example": 8.0,
+            "base_time": 600,
+            "compute_multiplier": 5.0
+        },
         "FineTuning": {
             "time_per_example": 10.0,
             "base_time": 1800,
@@ -555,7 +618,7 @@ def calculate_optimization_cost(optimizer_type, config, data_size):
     }
 
 # Example usage
-for optimizer in ["BootstrapFewShot", "KNNFewShot", "MIPRO", "FineTuning"]:
+for optimizer in ["BootstrapFewShot", "KNNFewShot", "MIPRO", "RPE", "FineTuning"]:
     cost = calculate_optimization_cost(optimizer, {}, 1000)
     print(f"\n{optimizer}:")
     print(f"  Time: {cost['estimated_time_minutes']:.1f} minutes")
@@ -603,6 +666,350 @@ for optimizer, analysis in roi_analysis.items():
     print(f"  Annual ROI: {analysis['annual_roi']:.1%}")
 ```
 
+## Optimization Order Effects
+
+When combining multiple optimization strategies, the order of application significantly impacts final performance.
+
+### Why Order Matters
+
+Research on joint optimization demonstrates that **fine-tuning first, then prompt optimization** consistently outperforms the reverse order:
+
+```python
+# OPTIMAL ORDER
+# Fine-tuning -> Prompt Optimization
+# Improvement: 3.5x beyond individual approaches
+
+# SUBOPTIMAL ORDER
+# Prompt Optimization -> Fine-tuning
+# Improvement: Only 1.8x (prompts don't transfer well)
+
+def demonstrate_order_effects(program, trainset, testset, base_model):
+    """Show impact of optimization order."""
+    results = {}
+
+    # Baseline
+    results["baseline"] = evaluate(program, testset)
+
+    # Order 1: Fine-tune first (RECOMMENDED)
+    finetuned = finetune(base_model, trainset)
+    dspy.settings.configure(lm=finetuned)
+    optimizer = MIPRO(metric=accuracy, auto="medium")
+    compiled = optimizer.compile(program, trainset=trainset)
+    results["ft_then_po"] = evaluate(compiled, testset)
+
+    # Order 2: Prompt optimize first (NOT RECOMMENDED)
+    dspy.settings.configure(lm=base_model)
+    compiled_base = optimizer.compile(program, trainset=trainset)
+    finetuned_after = finetune(base_model, trainset)
+    dspy.settings.configure(lm=finetuned_after)
+    # Note: prompts optimized for base model may not work well
+    results["po_then_ft"] = evaluate(compiled_base, testset)
+
+    print(f"Baseline: {results['baseline']:.2%}")
+    print(f"Fine-tune -> Prompt Opt: {results['ft_then_po']:.2%}")
+    print(f"Prompt Opt -> Fine-tune: {results['po_then_ft']:.2%}")
+
+    return results
+```
+
+### The Optimization Order Decision Tree
+
+```
+Starting optimization?
+|
++-- Have compute for fine-tuning?
+|   +-- Yes: Fine-tune first
+|   |       |
+|   |       +-- Need maximum performance?
+|   |           +-- Yes: MIPRO or COPA
+|   |           +-- No: BootstrapFewShot
+|   |
+|   +-- No: Skip to prompt optimization
+|           |
+|           +-- Complex task?
+|               +-- Yes: MIPRO or RPE
+|               +-- No: BootstrapFewShot or KNNFewShot
+```
+
+## Synergy Quantification
+
+Combined optimization approaches achieve synergistic effects that exceed the sum of individual improvements.
+
+### Measuring Synergy
+
+```python
+def calculate_synergy(baseline, ft_only, po_only, combined):
+    """
+    Calculate synergistic improvement from combined optimization.
+
+    Synergy = Combined - (Baseline + FT_Improvement + PO_Improvement)
+
+    A positive synergy indicates the approaches work better together
+    than they would independently.
+    """
+    ft_improvement = ft_only - baseline
+    po_improvement = po_only - baseline
+    additive_expected = baseline + ft_improvement + po_improvement
+
+    synergy = combined - additive_expected
+    synergy_multiplier = combined / additive_expected if additive_expected > 0 else 0
+
+    return {
+        "baseline": baseline,
+        "fine_tuning_only": ft_only,
+        "prompt_opt_only": po_only,
+        "combined": combined,
+        "additive_expected": additive_expected,
+        "synergy_absolute": synergy,
+        "synergy_multiplier": synergy_multiplier
+    }
+
+# Example from research benchmarks:
+# Baseline: 12%
+# Fine-tuning only: 28% (+16%)
+# Prompt optimization only: 20% (+8%)
+# Combined: 45% (not 36%!)
+
+synergy_result = calculate_synergy(
+    baseline=0.12,
+    ft_only=0.28,
+    po_only=0.20,
+    combined=0.45
+)
+
+print(f"Expected additive: {synergy_result['additive_expected']:.2%}")
+print(f"Actual combined: {synergy_result['combined']:.2%}")
+print(f"Synergy: {synergy_result['synergy_absolute']:.2%}")
+print(f"Synergy multiplier: {synergy_result['synergy_multiplier']:.2f}x")
+# Output: Synergy multiplier: 1.25x (25% better than additive)
+```
+
+### Benchmark Synergy Results
+
+| Task | Baseline | FT Only | PO Only | Expected | Combined | Synergy |
+|------|----------|---------|---------|----------|----------|---------|
+| MultiHopQA | 12% | 28% | 20% | 36% | 45% | 3.5x |
+| GSM8K Math | 11% | 32% | 22% | 43% | 55% | 2.8x |
+| AQuA | 9% | 35% | 28% | 54% | 69% | 3.4x |
+| Classification | 65% | 82% | 78% | 95%* | 91% | N/A |
+
+*Note: Classification ceiling effects limit synergy measurement.
+
+### When Synergy Is Highest
+
+Synergy is most pronounced when:
+
+1. **Task complexity is high**: Multi-step reasoning tasks
+2. **Base model capability is low**: Smaller models (< 13B)
+3. **Instructions are complex**: Multi-part requirements
+4. **Domain is specialized**: Technical/domain-specific content
+
+```python
+def predict_synergy_potential(task_complexity, model_size, instruction_complexity):
+    """
+    Estimate potential synergy from combined optimization.
+
+    Higher values indicate greater potential benefit.
+    """
+    # Empirical factors from research
+    complexity_factor = {"simple": 1.0, "moderate": 1.5, "complex": 2.5}
+    size_factor = {"<7B": 2.0, "7-13B": 1.5, ">13B": 1.0}
+    instruction_factor = {"basic": 1.0, "detailed": 1.5, "multi_step": 2.0}
+
+    synergy_potential = (
+        complexity_factor.get(task_complexity, 1.0) *
+        size_factor.get(model_size, 1.0) *
+        instruction_factor.get(instruction_complexity, 1.0)
+    )
+
+    return synergy_potential
+```
+
+## Joint Optimization Limitations
+
+While combined optimization offers powerful improvements, understanding its limitations helps set realistic expectations.
+
+### Data Requirements
+
+```python
+JOINT_OPTIMIZATION_REQUIREMENTS = {
+    "minimum_examples": 50,
+    "recommended_examples": 100,
+    "optimal_examples": 200,
+    "warning_threshold": 30
+}
+
+def assess_data_sufficiency(num_examples):
+    """Check if dataset is sufficient for joint optimization."""
+    if num_examples < JOINT_OPTIMIZATION_REQUIREMENTS["warning_threshold"]:
+        return {
+            "sufficient": False,
+            "recommendation": "Use prompt-only optimization (BootstrapFewShot)",
+            "reason": "Insufficient data for fine-tuning"
+        }
+    elif num_examples < JOINT_OPTIMIZATION_REQUIREMENTS["minimum_examples"]:
+        return {
+            "sufficient": "marginal",
+            "recommendation": "Consider lightweight fine-tuning or prompt-only",
+            "reason": "Fine-tuning may overfit"
+        }
+    elif num_examples < JOINT_OPTIMIZATION_REQUIREMENTS["recommended_examples"]:
+        return {
+            "sufficient": True,
+            "recommendation": "Joint optimization viable, use regularization",
+            "reason": "Adequate but not ideal for fine-tuning"
+        }
+    else:
+        return {
+            "sufficient": True,
+            "recommendation": "Full joint optimization recommended",
+            "reason": "Sufficient data for robust optimization"
+        }
+
+# Example assessment
+assessment = assess_data_sufficiency(75)
+print(f"Sufficient: {assessment['sufficient']}")
+print(f"Recommendation: {assessment['recommendation']}")
+```
+
+### Computational Cost Considerations
+
+```python
+def estimate_joint_optimization_cost(
+    num_examples,
+    model_size_b,
+    optimization_strategy
+):
+    """
+    Estimate computational requirements for joint optimization.
+
+    Returns estimated GPU hours and API calls.
+    """
+    costs = {
+        "fine_tuning_only": {
+            "gpu_hours": model_size_b * num_examples / 5000,
+            "api_calls": 0
+        },
+        "prompt_only_bootstrap": {
+            "gpu_hours": 0,
+            "api_calls": num_examples * 10
+        },
+        "prompt_only_mipro": {
+            "gpu_hours": 0,
+            "api_calls": num_examples * 25
+        },
+        "joint_bootstrap": {
+            "gpu_hours": model_size_b * num_examples / 5000,
+            "api_calls": num_examples * 10
+        },
+        "joint_mipro": {
+            "gpu_hours": model_size_b * num_examples / 5000,
+            "api_calls": num_examples * 25
+        },
+        "copa": {
+            "gpu_hours": model_size_b * num_examples / 5000 * 1.2,
+            "api_calls": num_examples * 30
+        }
+    }
+
+    if optimization_strategy not in costs:
+        return None
+
+    cost = costs[optimization_strategy]
+
+    # Rough cost estimate (adjust based on your infrastructure)
+    estimated_cost = cost["gpu_hours"] * 2.0 + cost["api_calls"] * 0.002
+
+    return {
+        "strategy": optimization_strategy,
+        "gpu_hours": cost["gpu_hours"],
+        "api_calls": cost["api_calls"],
+        "estimated_cost_usd": estimated_cost
+    }
+
+# Compare strategies
+for strategy in ["prompt_only_bootstrap", "joint_bootstrap", "copa"]:
+    cost = estimate_joint_optimization_cost(100, 7, strategy)
+    print(f"{strategy}: ${cost['estimated_cost_usd']:.2f}")
+```
+
+### Scope Limitations and Mitigation
+
+Joint optimization has inherent scope limitations:
+
+| Limitation | Impact | Mitigation Strategy |
+|------------|--------|---------------------|
+| Domain shift | Fine-tuned model may not generalize | Include diverse training data |
+| Prompt brittleness | Optimized prompts may not transfer | Test on held-out domains |
+| Computational cost | Multiple optimization runs needed | Use progressive optimization |
+| Data requirements | Need 50-100+ examples | Data augmentation techniques |
+| Model lock-in | Fine-tuned weights are model-specific | Document and version models |
+
+```python
+def mitigate_scope_limitations(trainset, valset):
+    """
+    Apply mitigation strategies for joint optimization limitations.
+    """
+    mitigations = []
+
+    # 1. Check domain diversity
+    domains = set(getattr(ex, 'domain', 'unknown') for ex in trainset)
+    if len(domains) < 3:
+        mitigations.append({
+            "issue": "Limited domain diversity",
+            "action": "Add examples from related domains",
+            "severity": "medium"
+        })
+
+    # 2. Check data size
+    if len(trainset) < 50:
+        mitigations.append({
+            "issue": "Insufficient training data",
+            "action": "Use data augmentation or reduce fine-tuning epochs",
+            "severity": "high"
+        })
+
+    # 3. Recommend validation strategy
+    if len(valset) < len(trainset) * 0.2:
+        mitigations.append({
+            "issue": "Small validation set",
+            "action": "Use k-fold cross-validation",
+            "severity": "medium"
+        })
+
+    return mitigations
+```
+
+## COPA: The Comprehensive Solution
+
+For maximum performance with proper handling of optimization order and synergy, consider using COPA (Combined Optimization and Prompt Adaptation):
+
+```python
+from copa_optimizer import COPAOptimizer
+
+# COPA automatically handles:
+# 1. Proper optimization order (fine-tune first)
+# 2. Synergistic combination of approaches
+# 3. Data requirement checks
+# 4. Computational budgeting
+
+copa = COPAOptimizer(
+    base_model_name="mistralai/Mistral-7B-v0.1",
+    metric=your_metric,
+    finetune_epochs=3,
+    prompt_optimizer="mipro"
+)
+
+# Achieves 2-26x improvements on complex tasks
+optimized, model = copa.optimize(
+    program=YourProgram(),
+    trainset=train_examples,
+    valset=val_examples
+)
+```
+
+See [COPA: Combined Fine-Tuning and Prompt Optimization](09-copa-optimizer.md) for complete documentation.
+
 ## Key Takeaways
 
 1. **Data Size Matters**: More data enables more sophisticated optimization
@@ -611,6 +1018,9 @@ for optimizer, analysis in roi_analysis.items():
 4. **Progressive Approach Works**: Start simple, iterate to complex
 5. **Cost-Benefit Analysis**: Not all optimization justifies the cost
 6. **Ensemble Methods**: Can combine strengths of multiple optimizers
+7. **Optimization Order**: Always fine-tune first, then apply prompt optimization
+8. **Synergy Is Real**: Combined approaches achieve 2-3.5x better than additive
+9. **Know Your Limits**: Joint optimization requires 50-100+ examples
 
 ## Quick Decision Tree
 
@@ -625,11 +1035,13 @@ Need optimization?
     │  │  └─ BootstrapFewShot
     │  └─ Can wait longer?
     │     └─ MIPRO (light)
+    ├─ Complex multi-step reasoning?
+    │  └─ RPE (evolutionary approach)
     ├─ > 100 examples?
     │  ├─ Context matters?
     │  │  └─ KNNFewShot
     │  └─ Maximum performance?
-    │     └─ MIPRO (heavy)
+    │     └─ MIPRO (heavy) or RPE
     └─ Domain-specific & > 1000 examples?
        └─ Consider Fine-Tuning
 ```

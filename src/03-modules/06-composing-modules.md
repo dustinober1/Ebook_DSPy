@@ -828,6 +828,269 @@ Module composition enables:
 - **Error resilience** with fallbacks and retries
 - **Testable and maintainable** code structures
 
+## Advanced Composition Patterns
+
+### Section-by-Section Writing Pattern
+
+The section-by-section writing pattern is essential for generating long-form content like articles, reports, or documentation. This pattern maintains context and coherence while generating content piece by piece.
+
+```python
+class SectionBySectionWriter(dspy.Module):
+    """Writes long-form content section by section with context management."""
+
+    def __init__(self, section_generator: dspy.Module, max_context_sections: int = 3):
+        """
+        Initialize section-by-section writer.
+
+        Args:
+            section_generator: Module that generates individual sections
+            max_context_sections: Number of previous sections to keep in context
+        """
+        super().__init__()
+        self.section_generator = section_generator
+        self.max_context_sections = max_context_sections
+        self.generated_sections = []
+        self.section_context = {}
+
+    def forward(self, outline: List[Dict], topic: str, **kwargs):
+        """
+        Generate content section by section following an outline.
+
+        Args:
+            outline: Structured outline with section information
+            topic: Overall topic for context
+            **kwargs: Additional parameters for content generation
+
+        Returns:
+            Complete generated content with metadata
+        """
+        self.generated_sections = []
+
+        # Generate each section in order
+        for i, section_info in enumerate(outline):
+            # Get context from previous sections
+            context = self._get_section_context(i)
+
+            # Generate current section
+            section_content = self._generate_section(
+                section_info=section_info,
+                context=context,
+                topic=topic,
+                **kwargs
+            )
+
+            # Store generated section
+            self.generated_sections.append({
+                'title': section_info.get('title', f'Section {i+1}'),
+                'content': section_content,
+                'word_count': len(section_content.split()),
+                'section_number': i + 1
+            })
+
+        # Combine all sections
+        full_content = self._combine_sections()
+
+        return dspy.Prediction(
+            content=full_content,
+            sections=self.generated_sections,
+            total_word_count=sum(s['word_count'] for s in self.generated_sections),
+            total_sections=len(self.generated_sections)
+        )
+
+    def _get_section_context(self, current_section_index: int) -> str:
+        """Get context from recent sections."""
+        context_sections = []
+
+        # Include previous sections within context window
+        start_index = max(0, current_section_index - self.max_context_sections)
+
+        for i in range(start_index, current_section_index):
+            if i < len(self.generated_sections):
+                section = self.generated_sections[i]
+                context_sections.append(
+                    f"Section {section['section_number']}: {section['title']}\n"
+                    f"Content: {section['content'][:200]}..."  # First 200 chars
+                )
+
+        return "\n\n".join(context_sections) if context_sections else ""
+
+    def _generate_section(self,
+                         section_info: Dict,
+                         context: str,
+                         topic: str,
+                         **kwargs) -> str:
+        """Generate a single section with appropriate context."""
+        # Prepare section-specific prompt
+        section_prompt = self._create_section_prompt(
+            section_info=section_info,
+            context=context,
+            topic=topic
+        )
+
+        # Generate section content
+        result = self.section_generator(
+            section_prompt=section_prompt,
+            word_limit=section_info.get('word_count', 500),
+            **kwargs
+        )
+
+        return result.content
+
+    def _create_section_prompt(self,
+                              section_info: Dict,
+                              context: str,
+                              topic: str) -> str:
+        """Create a comprehensive prompt for section generation."""
+        prompt_parts = [
+            f"Topic: {topic}",
+            f"Section Title: {section_info.get('title', 'Untitled Section')}",
+            f"Section Purpose: {section_info.get('purpose', 'Explain this aspect of the topic')}"
+        ]
+
+        if context:
+            prompt_parts.append(
+                f"\nPrevious Sections Context:\n{context}\n"
+                "Ensure your section flows naturally from the previous content."
+            )
+
+        if section_info.get('keywords'):
+            prompt_parts.append(
+                f"\nKeywords to include: {', '.join(section_info['keywords'])}"
+            )
+
+        if section_info.get('perspective'):
+            prompt_parts.append(
+                f"\nWrite from this perspective: {section_info['perspective']}"
+            )
+
+        return "\n".join(prompt_parts)
+
+    def _combine_sections(self) -> str:
+        """Combine all sections into a coherent document."""
+        document_parts = []
+
+        for section in self.generated_sections:
+            # Add section title
+            document_parts.append(f"\n## {section['title']}\n")
+
+            # Add section content
+            document_parts.append(section['content'])
+
+            # Add transition
+            if section['section_number'] < len(self.generated_sections):
+                next_section = self.generated_sections[section['section_number']]
+                transition = self._create_transition(
+                    current_section=section,
+                    next_section=next_section
+                )
+                if transition:
+                    document_parts.append(f"\n{transition}\n")
+
+        return "".join(document_parts)
+
+    def _create_transition(self, current_section: Dict, next_section: Dict) -> str:
+        """Create a smooth transition between sections."""
+        transition_generator = dspy.Predict(
+            "current_section, next_section -> transition_text"
+        )
+
+        result = transition_generator(
+            current_section=f"{current_section['title']}: {current_section['content'][-100:]}",
+            next_section=next_section['title']
+        )
+
+        return result.transition_text
+
+
+# Example: Using the Section-by-Section Writer
+class ArticleSectionGenerator(dspy.Module):
+    """Specialized module for generating article sections."""
+
+    def __init__(self):
+        super().__init__()
+        self.generate_section = dspy.ChainOfThought(
+            "section_prompt, word_limit -> content"
+        )
+
+    def forward(self, section_prompt: str, word_limit: int = 500) -> dspy.Prediction:
+        """Generate content for a single section."""
+        result = self.generate_section(
+            section_prompt=section_prompt,
+            word_limit=str(word_limit)
+        )
+
+        # Ensure content meets word limit
+        content = result.content
+        words = content.split()
+
+        if len(words) > word_limit * 1.2:  # Allow 20% overflow
+            content = " ".join(words[:word_limit])
+            content += "..."  # Indicate truncation
+        elif len(words) < word_limit * 0.8:  # Require at least 80%
+            # Expand content if too short
+            expander = dspy.Predict(
+                "content, target_length -> expanded_content"
+            )
+            expanded = expander(
+                content=content,
+                target_length=str(word_limit)
+            )
+            content = expanded.expanded_content
+
+        return dspy.Prediction(content=content)
+
+
+# Example usage
+outline = [
+    {
+        'title': 'Introduction',
+        'purpose': 'Introduce the topic and outline the article',
+        'word_count': 300,
+        'keywords': ['overview', 'introduction', 'scope']
+    },
+    {
+        'title': 'Background',
+        'purpose': 'Provide necessary background information',
+        'word_count': 500,
+        'keywords': ['history', 'context', 'foundation']
+    },
+    {
+        'title': 'Main Analysis',
+        'purpose': 'Present detailed analysis and findings',
+        'word_count': 800,
+        'perspective': 'analytical'
+    },
+    {
+        'title': 'Conclusion',
+        'purpose': 'Summarize key points and provide future outlook',
+        'word_count': 300,
+        'keywords': ['summary', 'conclusion', 'future']
+    }
+]
+
+# Create and use the writer
+section_gen = ArticleSectionGenerator()
+writer = SectionBySectionWriter(section_gen, max_context_sections=2)
+
+result = writer(
+    outline=outline,
+    topic="The Impact of AI on Education",
+    writing_style="academic"
+)
+
+print(f"Generated {result.total_sections} sections")
+print(f"Total word count: {result.total_word_count}")
+print("\nFirst section preview:")
+print(result.sections[0]['content'][:200] + "...")
+```
+
+This pattern is particularly useful for:
+- **Long-form article generation** where maintaining coherence is crucial
+- **Documentation writing** with structured sections
+- **Report generation** following specific formats
+- **Educational content** with progressive concept building
+- **Research synthesis** combining findings from multiple sources
+
 ### Key Takeaways
 
 1. **Start simple** - Compose basic modules first

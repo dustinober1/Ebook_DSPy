@@ -600,6 +600,331 @@ deterministic_agent = dspy.ReAct(
 3. **Fast response required** - ReAct adds latency
 4. **Reliable knowledge** - Model's knowledge is sufficient
 
+## Integration with Assertions
+
+Combine ReAct agents with assertions for reliable tool usage and validated outputs:
+
+### 1. Tool Usage Validation
+
+Ensure agents use tools appropriately and effectively:
+
+```python
+import dspy
+
+class ValidatedResearchAgent(dspy.Module):
+    """Research agent with validated tool usage."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("query -> research_findings")
+
+    def forward(self, query):
+        # Validate tool usage
+        def validate_tool_usage(example, pred, trace=None):
+            # Check if tools were actually used
+            if not trace or 'tool_calls' not in str(trace):
+                raise AssertionError("Must use search tools for research")
+
+            # Check for sufficient tool interactions
+            tool_calls = str(trace).count('Action:')
+            if tool_calls < 2:
+                raise AssertionError("Make multiple searches for comprehensive research")
+
+            # Verify findings incorporate tool results
+            if len(pred.research_findings) < 200:
+                raise AssertionError("Research findings too brief - use more sources")
+
+            return True
+
+        # Apply assertion
+        validated_react = dspy.Assert(
+            self.react,
+            validation_fn=validate_tool_usage,
+            max_attempts=3,
+            recovery_hint="Use search tools to gather information from multiple sources"
+        )
+
+        return validated_react(query=query)
+
+# Use validated research agent
+researcher = ValidatedResearchAgent()
+result = researcher(query="Impact of AI on job markets in 2024")
+```
+
+### 2. Output Source Verification
+
+Ensure agent outputs properly cite sources from tool usage:
+
+```python
+class SourceAwareAgent(dspy.Module):
+    """Agent that must cite sources from tools."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("question -> answer_with_sources")
+
+    def forward(self, question):
+        def validate_source_citation(example, pred, trace=None):
+            answer = pred.answer_with_sources
+
+            # Check for citations
+            citation_patterns = ['Source:', '[', 'According to', 'Based on']
+            has_citations = any(pattern in answer for pattern in citation_patterns)
+
+            if not has_citations:
+                raise AssertionError(
+                    "Answer must include sources. Use patterns like 'Source: [URL]'"
+                )
+
+            # Extract citations and verify they match tool results
+            if trace:
+                # This would parse trace to match URLs with tool calls
+                tool_urls = extract_tool_urls(trace)
+                answer_urls = extract_citation_urls(answer)
+
+                if not answer_urls:
+                    raise AssertionError("No valid source citations found in answer")
+
+                # Ensure at least one citation matches tool usage
+                if not any(url in str(tool_urls) for url in answer_urls):
+                    raise AssertionError("Citations must match tool search results")
+
+            return True
+
+        # Apply source validation
+        with_sources = dspy.Assert(
+            self.react,
+            validation_fn=validate_source_citation,
+            max_attempts=3
+        )
+
+        return with_sources(question=question)
+
+def extract_tool_urls(trace):
+    """Extract URLs from tool trace."""
+    import re
+    urls = []
+    trace_str = str(trace)
+    url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+'
+    urls.extend(re.findall(url_pattern, trace_str))
+    return urls
+
+def extract_citation_urls(text):
+    """Extract URLs from citations in answer."""
+    import re
+    urls = []
+    # Find URLs in brackets or after "Source:"
+    bracket_pattern = r'\[(https?://[^\]]+)\]'
+    source_pattern = r'Source:\s*(https?://[^\s]+)'
+
+    urls.extend(re.findall(bracket_pattern, text))
+    urls.extend(re.findall(source_pattern, text))
+    return urls
+```
+
+### 3. Step-by-Step Action Validation
+
+Validate the agent's reasoning and action sequence:
+
+```python
+class StepValidatedAgent(dspy.Module):
+    """Agent with validated reasoning steps."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("task -> solution")
+
+    def forward(self, task):
+        def validate_action_sequence(example, pred, trace=None):
+            if not trace:
+                return True  # No trace to validate
+
+            # Parse the thought-action-observation sequence
+            steps = parse_trace_steps(trace)
+
+            # Check for minimum steps
+            if len(steps) < 3:
+                raise AssertionError("Need more reasoning steps - show your work")
+
+            # Verify thought precedes each action
+            for i, step in enumerate(steps):
+                if 'Action:' in step and i > 0:
+                    prev_step = steps[i-1]
+                    if 'Thought:' not in prev_step:
+                        raise AssertionError(
+                            "Explain your reasoning (Thought:) before taking action"
+                        )
+
+            # Check if observations are used in subsequent thoughts
+            for i, step in enumerate(steps):
+                if 'Observation:' in step and i < len(steps) - 1:
+                    next_step = steps[i+1]
+                    # Simple check - in practice, this would be more sophisticated
+                    if 'Thought:' in next_step and len(next_step) < 50:
+                        raise AssertionError(
+                            "Reflect on observations before proceeding"
+                        )
+
+            return True
+
+        def parse_trace_steps(trace):
+            """Parse trace into individual steps."""
+            import re
+            # Simple parsing - split by Thought/Action/Observation markers
+            pattern = r'(Thought:|Action:|Observation:)'
+            parts = re.split(pattern, str(trace))
+
+            steps = []
+            for i in range(1, len(parts), 2):
+                if i < len(parts):
+                    steps.append(parts[i] + parts[i+1])
+            return steps
+
+        # Apply step validation
+        step_validated = dspy.Assert(
+            self.react,
+            validation_fn=validate_action_sequence,
+            max_attempts=2,
+            recovery_hint="Show clear Thought: Action: Observation: sequence"
+        )
+
+        return step_validated(task=task)
+```
+
+### 4. Error Recovery and Retry Logic
+
+Build agents that recover from failures gracefully:
+
+```python
+class ResilientAgent(dspy.Module):
+    """Agent with error recovery capabilities."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("goal -> result")
+
+    def forward(self, goal):
+        def validate_completion(example, pred, trace=None):
+            # Check if goal was actually achieved
+            if not assess_goal_achievement(goal, pred.result):
+                raise AssertionError(
+                    "Goal not fully achieved. Review your approach and try alternative actions."
+                )
+
+            # Check for proper error handling in trace
+            if trace and 'error' in str(trace).lower():
+                # Should see recovery attempts after errors
+                if 'Thought:' not in str(trace).split('error')[-1]:
+                    raise AssertionError(
+                        "After an error, show recovery reasoning before continuing"
+                    )
+
+            return True
+
+        def assess_goal_achievement(goal, result):
+            """Assess if the agent achieved its goal."""
+            # Simple heuristic - could be more sophisticated
+            goal_words = set(goal.lower().split())
+            result_words = set(result.lower().split())
+
+            # Check if key goal terms appear in result
+            overlap = len(goal_words.intersection(result_words))
+            return overlap > len(goal_words) * 0.3
+
+        # Custom error handler for assertion failures
+        def custom_error_handler(assertion_type, error_msg, attempt):
+            """Provide specific recovery hints based on error type."""
+            if "Goal not fully achieved" in error_msg:
+                return """
+                Review the original goal and your current result.
+                Identify what's missing and plan specific actions to address gaps.
+                Consider: What specific information or actions are still needed?
+                """
+            elif "error" in error_msg.lower():
+                return """
+                You encountered an error. Analyze what went wrong and choose:
+                1. Try the same action with different parameters
+                2. Use an alternative tool or approach
+                3. Modify your strategy based on the error
+                """
+            else:
+                return "Review your actions and ensure they address the goal."
+
+        # Apply with custom error handling
+        resilient_react = dspy.Assert(
+            self.react,
+            validation_fn=validate_completion,
+            max_attempts=3,
+            error_handler=custom_error_handler
+        )
+
+        return resilient_react(goal=goal)
+```
+
+### 5. Multi-Tool Coordination Validation
+
+Ensure agents coordinate multiple tools effectively:
+
+```python
+class MultiToolAgent(dspy.Module):
+    """Agent that must use multiple tools in coordination."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct(
+            "analysis_request -> comprehensive_analysis",
+            tools=[
+                dspy.WebSearch(),      # For recent information
+                dspy.Calculator(),     # For calculations
+                CustomAPITool()        # Custom data source
+            ]
+        )
+
+    def forward(self, analysis_request):
+        def validate_tool_coordination(example, pred, trace=None):
+            if not trace:
+                return True
+
+            # Check for usage of different tool types
+            used_search = 'search' in str(trace).lower()
+            used_calc = 'calculator' in str(trace).lower() or 'calculate' in str(trace).lower()
+            used_api = 'api' in str(trace).lower()
+
+            tool_count = sum([used_search, used_calc, used_api])
+
+            # Require at least 2 different tools for comprehensive analysis
+            if tool_count < 2:
+                raise AssertionError(
+                    "Use multiple tools (search, calculator, API) for comprehensive analysis"
+                )
+
+            # Validate tool use sequence makes sense
+            if used_calc and not used_search:
+                # If doing calculations, should have data first
+                if 'Action:' in str(trace).split('calculator')[0]:
+                    raise AssertionError(
+                        "Gather data with search before performing calculations"
+                    )
+
+            return True
+
+        # Apply multi-tool validation
+        coordinated_agent = dspy.Assert(
+            self.react,
+            validation_fn=validate_tool_coordination,
+            max_attempts=3,
+            recovery_hint="Coordinate multiple tools: gather data, analyze, calculate"
+        )
+
+        return coordinated_agent(analysis_request=analysis_request)
+
+class CustomAPITool:
+    """Example custom tool for demonstration."""
+    def __call__(self, query):
+        # Simulate API call
+        return f"API result for: {query}"
+```
+
 ## Summary
 
 ReAct agents enable:
@@ -609,6 +934,7 @@ ReAct agents enable:
 - **Complex problem solving** - Handle multi-step tasks
 - **Real-time capabilities** - Access current information
 - **Extensibility** - Easy to add new tools
+- **Reliability with assertions** - Guaranteed tool usage and output quality
 
 ### Key Takeaways
 
@@ -617,6 +943,9 @@ ReAct agents enable:
 3. **Handle errors gracefully** - tools can fail
 4. **Limit complexity** - too many tools can confuse the agent
 5. **Cache results** - improve performance and reduce costs
+6. **Validate with assertions** - Ensure proper tool usage and reliable outputs
+7. **Require citations** - Always source information from tools
+8. **Check action sequences** - Validate reasoning steps
 
 ## Next Steps
 

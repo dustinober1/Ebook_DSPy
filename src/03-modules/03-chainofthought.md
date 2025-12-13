@@ -487,6 +487,220 @@ Chain of Thought enables:
 - **Error detection** - steps can be verified
 - **Teaching opportunities** - shows how to think
 
+## Integration with Assertions
+
+Combine Chain of Thought with assertions for guaranteed reasoning quality:
+
+### 1. Validating Reasoning Steps
+
+Ensure each reasoning step is logical and correct:
+
+```python
+import dspy
+
+class ValidatedReasoning(dspy.Signature):
+    """Reason with validated logical steps."""
+    problem = dspy.InputField(desc="Problem to solve", type=str)
+    reasoning_steps = dspy.OutputField(desc="Step-by-step reasoning", type=str)
+    conclusion = dspy.OutputField(desc("Final conclusion", type=str)
+
+# Create CoT module
+reasoner = dspy.ChainOfThought(ValidatedReasoning)
+
+def validate_reasoning_logic(example, pred, trace=None):
+    """Validate the logical flow of reasoning."""
+    steps = pred.reasoning_steps.split('\n')
+
+    # Check minimum number of steps
+    if len(steps) < 2:
+        raise AssertionError("Must include at least 2 reasoning steps")
+
+    # Look for logical connectors
+    connectors = ['therefore', 'because', 'since', 'thus', 'hence', 'so']
+    has_logic = any(connector in pred.reasoning_steps.lower()
+                   for connector in connectors)
+
+    if not has_logic:
+        raise AssertionError("Use logical connectors between steps")
+
+    # Verify conclusion follows from reasoning
+    if pred.conclusion not in pred.reasoning_steps:
+        # Conclusion should be supported by reasoning
+        raise AssertionError("Conclusion must be supported by reasoning")
+
+    return True
+
+# Wrap with assertions
+validated_reasoner = dspy.Assert(
+    reasoner,
+    validation_fn=validate_reasoning_logic,
+    max_attempts=3,
+    recovery_hint="Show clear logical connections between steps"
+)
+
+# Use it
+result = validated_reasoner(
+    problem="If all birds can fly, and a penguin is a bird, what can we conclude?"
+)
+```
+
+### 2. Mathematical Validation
+
+Ensure calculations are correct:
+
+```python
+class MathReasoning(dspy.Signature):
+    """Solve math problems with verified calculations."""
+    math_problem = dspy.InputField(desc="Math problem to solve", type=str)
+    steps = dspy.OutputField(desc("Calculation steps", type=str)
+    answer = dspy.OutputField(desc("Final numerical answer", type=str)
+
+math_solver = dspy.ChainOfThought(MathReasoning)
+
+def validate_math_calculation(example, pred, trace=None):
+    """Verify mathematical calculations."""
+    import re
+    import math
+
+    # Extract numbers from problem and answer
+    problem_nums = [float(n) for n in re.findall(r'\d+\.?\d*', example.math_problem)]
+    answer_num = float(re.search(r'-?\d+\.?\d*', pred.answer).group())
+
+    # Specific problem validation
+    if "sum" in example.math_problem.lower():
+        expected_sum = sum(problem_nums)
+        if abs(answer_num - expected_sum) > 0.01:
+            raise AssertionError(f"Incorrect sum. Expected {expected_sum}, got {answer_num}")
+
+    elif "average" in example.math_problem.lower():
+        expected_avg = sum(problem_nums) / len(problem_nums)
+        if abs(answer_num - expected_avg) > 0.01:
+            raise AssertionError(f"Incorrect average. Expected {expected_avg}, got {answer_num}")
+
+    # Check that steps show calculations
+    if not any(char.isdigit() for char in pred.steps):
+        raise AssertionError("Reasoning steps must show calculations")
+
+    return True
+
+# Create validated math solver
+safe_math_solver = dspy.Assert(
+    math_solver,
+    validation_fn=validate_math_calculation,
+    max_attempts=3
+)
+
+result = safe_math_solver(math_problem="What is the sum of 15, 23, and 42?")
+```
+
+### 3. Multi-Step Reasoning with Checkpoints
+
+Validate reasoning at multiple stages:
+
+```python
+class MultiStageReasoning(dspy.Module):
+    """Reasoning with validation checkpoints."""
+
+    def __init__(self):
+        super().__init__()
+        self.analyzer = dspy.ChainOfThought("data -> initial_analysis")
+        self.synthesizer = dspy.ChainOfThought("analysis -> synthesis")
+
+    def forward(self, data):
+        # Stage 1: Analyze with validation
+        def validate_analysis(example, pred, trace=None):
+            if len(pred.initial_analysis) < 100:
+                raise AssertionError("Analysis too brief - be more detailed")
+            if pred.initial_analysis.count('.') < 3:
+                raise AssertionError("Include at least 3 complete sentences")
+            return True
+
+        analyzed = dspy.Assert(
+            self.analyzer,
+            validation_fn=validate_analysis,
+            max_attempts=2
+        )
+
+        analysis_result = analyzed(data=data)
+
+        # Stage 2: Synthesize with validation
+        def validate_synthesis(example, pred, trace=None):
+            synthesis = pred.synthesis
+            analysis = example.initial_analysis  # From previous stage
+
+            # Ensure synthesis references analysis
+            if not any(word in synthesis for word in analysis.split()[:5]):
+                raise AssertionError("Synthesis must build on analysis")
+
+            return True
+
+        synthesized = dspy.Assert(
+            self.synthesizer,
+            validation_fn=validate_synthesis,
+            max_attempts=2
+        )
+
+        result = synthesized(analysis=analysis_result.initial_analysis)
+
+        return dspy.Prediction(
+            analysis=analysis_result.initial_analysis,
+            synthesis=result.synthesis
+        )
+
+# Use multi-stage reasoning
+reasoner = MultiStageReasoning()
+result = reasoner(data="Quarterly sales data shows 15% growth")
+```
+
+### 4. Constraint-Driven Reasoning
+
+Guide reasoning with specific constraints:
+
+```python
+class ConstrainedReasoning(dspy.Signature):
+    """Reason within specific constraints."""
+    scenario = dspy.InputField(desc("Scenario to analyze", type=str)
+    constraints = dspy.InputField(desc("Constraints to consider", type=str)
+    reasoning = dspy.OutputField(desc("Constrained reasoning", type=str)
+    solution = dspy.OutputField(desc("Solution respecting constraints", type=str)
+
+constrained_reasoner = dspy.ChainOfThought(ConstrainedReasoning)
+
+def validate_constraint_adherence(example, pred, trace=None):
+    """Ensure solution respects all constraints."""
+    constraints = example.constraints.lower()
+    solution = pred.solution.lower()
+
+    # Check budget constraints
+    if "budget" in constraints or "cost" in constraints:
+        if not any(word in solution for word in ["cost", "budget", "affordable"]):
+            raise AssertionError("Solution must address budget constraints")
+
+    # Check time constraints
+    if "time" in constraints or "deadline" in constraints:
+        if not any(word in solution for word in ["timeline", "schedule", "deadline"]):
+            raise AssertionError("Solution must address time constraints")
+
+    # Check resource constraints
+    if "resource" in constraints or "limited" in constraints:
+        if "resource" not in solution:
+            raise AssertionError("Solution must address resource limitations")
+
+    return True
+
+# Apply constraint validation
+budget_reasoner = dspy.Assert(
+    constrained_reasoner,
+    validation_fn=validate_constraint_adherence,
+    max_attempts=3
+)
+
+result = budget_reasoner(
+    scenario="Plan a marketing campaign",
+    constraints="Budget: $10,000, Time: 3 months, Team: 5 people"
+)
+```
+
 ### Key Takeaways
 
 1. **Always show work** - Make reasoning explicit
@@ -494,6 +708,7 @@ Chain of Thought enables:
 3. **Structure reasoning** according to problem type
 4. **Verify conclusions** - Include validation steps
 5. **Know when to use** - Not all tasks need CoT
+6. **Validate with assertions** - Ensure reasoning quality and correctness
 
 ## Next Steps
 

@@ -136,6 +136,23 @@ class MultiLabelClassifier(dspy.Module):
         )
 ```
 
+### When Multi-label Becomes Extreme
+
+When your label space grows from hundreds to thousands or millions of labels, you're entering the domain of **Extreme Multi-Label Classification (XML)**. Standard multi-label approaches become infeasible due to:
+
+- **Computational Complexity**: O(|L|) per instance becomes prohibitive
+- **Memory Constraints**: Storing millions of label embeddings and classifiers
+- **Data Sparsity**: Most label pairs rarely co-occur
+- **Inference Latency**: Real-time requirements cannot be met
+
+For these extreme scenarios, DSPy provides specialized XML techniques that we explore in depth in **[Extreme Multi-Label Classification](08-extreme-multilabel-classification.md)**. These include:
+
+- Efficient label indexing and similarity search
+- Hierarchical label organization
+- Zero-shot XML for handling new labels
+- Specialized evaluation metrics (P@k, nDCG@k, PS@k)
+- Memory-efficient streaming processors
+
 ## Advanced Classification Techniques
 
 ### Hierarchical Classification

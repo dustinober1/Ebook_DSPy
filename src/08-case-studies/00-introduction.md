@@ -56,6 +56,16 @@ Learn to create an automated system for data analysis and insight generation. Th
 - Visualization creation
 - Anomaly detection and alerting
 
+### Case Study 5: STORM Writing Assistant for Article Generation
+
+Explore the implementation of STORM (Synthesis of Topic Outlines through Retrieval and Multi-perspective questioning), a sophisticated AI writing assistant. This case study demonstrates:
+
+- Two-stage article generation (pre-writing and writing)
+- Perspective-driven research simulation
+- Long-form content generation with coherence
+- Citation management and fact-checking
+- Human-AI collaborative writing
+
 ## Prerequisites
 
 To fully benefit from these case studies, you should have:

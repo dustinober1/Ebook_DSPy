@@ -693,6 +693,363 @@ Overall Score: 89.5%
 
 ---
 
+## Exercise 7: Reflective Prompt Evolution for Complex Reasoning
+
+### Objective
+Learn to use Reflective Prompt Evolution (RPE) for optimizing complex multi-step reasoning tasks.
+
+### Problem
+You have a multi-hop reasoning task that requires understanding relationships between multiple pieces of information. Use RPE to evolve better reasoning prompts.
+
+### Starter Code
+```python
+import dspy
+from dspy.teleprompter import ReflectivePromptEvolution
+
+class MultiHopReasoner(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.hop1 = dspy.ChainOfThought("question -> first_answer")
+        self.hop2 = dspy.ChainOfThought("question, first_answer -> second_answer")
+        self.hop3 = dspy.ChainOfThought("question, first_answer, second_answer -> final_answer")
+
+    def forward(self, question):
+        result1 = self.hop1(question=question)
+        result2 = self.hop2(question=question, first_answer=result1.first_answer)
+        result3 = self.hop3(
+            question=question,
+            first_answer=result1.first_answer,
+            second_answer=result2.second_answer
+        )
+        return dspy.Prediction(
+            answer=result3.final_answer,
+            reasoning_chain=[
+                result1.reasoning,
+                result2.reasoning,
+                result3.reasoning
+            ]
+        )
+
+# Multi-hop reasoning dataset
+trainset = [
+    dspy.Example(
+        question="Who was the US President when the author of 'To Kill a Mockingbird' was born?",
+        answer="Herbert Hoover",
+        hops=[
+            "Author of 'To Kill a Mockingbird' is Harper Lee",
+            "Harper Lee was born in 1926",
+            "Herbert Hoover was president in 1926"
+        ]
+    ),
+    # Add more multi-hop examples...
+]
+
+# TODO: Implement these functions
+def rpe_optimize(program, trainset, valset):
+    """Optimize using Reflective Prompt Evolution."""
+    pass
+
+def analyze_evolution_progress(optimizer, program, trainset, valset):
+    """Analyze how RPE evolves the prompts over generations."""
+    pass
+
+def custom_mutation_operator(program, domain_knowledge):
+    """Apply domain-specific mutations."""
+    pass
+```
+
+### Tasks
+
+1. **Basic RPE Setup** (15 minutes)
+   - Initialize RPE with appropriate parameters
+   - Run basic optimization
+   - Compare with baseline performance
+
+2. **Custom Reflection** (20 minutes)
+   - Implement custom reflection prompt templates
+   - Add domain-specific reflection questions
+   - Improve reflection quality
+
+3. **Mutation Strategies** (25 minutes)
+   - Implement custom mutation operators
+   - Add domain-specific mutations
+   - Balance exploration vs exploitation
+
+4. **Diversity Analysis** (20 minutes)
+   - Track population diversity
+   - Implement diversity maintenance
+   - Analyze convergence patterns
+
+5. **Comparative Analysis** (20 minutes)
+   - Compare RPE with MIPRO on the same task
+   - Analyze trade-offs
+   - Document findings
+
+### Expected Output
+```
+RPE Optimization Report:
+=======================
+Configuration:
+  Population size: 12
+  Generations: 6
+  Mutation rate: 0.3
+  Selection pressure: 0.5
+
+Evolution Progress:
+  Gen 0: Best accuracy = 45.2%, Diversity = 0.85
+  Gen 1: Best accuracy = 52.1%, Diversity = 0.78
+  Gen 2: Best accuracy = 61.3%, Diversity = 0.71
+  Gen 3: Best accuracy = 68.9%, Diversity = 0.65
+  Gen 4: Best accuracy = 73.4%, Diversity = 0.58
+  Gen 5: Best accuracy = 76.2%, Diversity = 0.52
+
+Evolved Prompt Features:
+  - Added explicit multi-step instructions
+  - Improved error checking mechanisms
+  - Better context preservation between hops
+  - Enhanced reasoning verification
+
+Comparison with MIPRO:
+  RPE: 76.2% accuracy (45 min optimization)
+  MIPRO: 72.8% accuracy (30 min optimization)
+  BootstrapFewShot: 58.3% accuracy (5 min optimization)
+
+RPE Strengths:
+  + Discovered novel reasoning patterns
+  + Better handling of edge cases
+  + More diverse solution approaches
+  + Continuous improvement over generations
+```
+
+---
+
+## Exercise 8: Joint Optimization with COPA
+
+### Objective
+Apply combined fine-tuning and prompt optimization to achieve maximum performance on a mathematical reasoning task, demonstrating 3-8x improvements over baseline.
+
+### Background
+Research on joint optimization shows that combining fine-tuning with prompt optimization achieves synergistic effects that exceed additive improvements. This exercise demonstrates this approach on mathematical reasoning.
+
+### Problem
+Optimize a mathematical reasoning system using the COPA approach (fine-tuning + prompt optimization).
+
+### Starter Code
+```python
+import dspy
+from dspy.teleprompter import BootstrapFewShot, MIPRO
+
+class MathReasoner(dspy.Module):
+    """Mathematical reasoning with Chain of Thought."""
+
+    def __init__(self):
+        super().__init__()
+        self.reason = dspy.ChainOfThought(
+            "problem -> steps, intermediate_results, final_answer"
+        )
+
+    def forward(self, problem):
+        result = self.reason(problem=problem)
+        return dspy.Prediction(
+            steps=result.rationale,
+            answer=result.final_answer
+        )
+
+# GSM8K-style math problems
+trainset = [
+    dspy.Example(
+        problem="Janet's ducks lay 16 eggs per day. She eats 3 for breakfast every morning and bakes muffins for her friends with 4 every day. She sells the remainder at the farmers' market daily for $2 per egg. How much does she make daily?",
+        answer="$18"
+    ),
+    dspy.Example(
+        problem="A robe takes 2 bolts of blue fiber and half that much white fiber. How many bolts in total does it take?",
+        answer="3"
+    ),
+    dspy.Example(
+        problem="Josh decides to try flipping a house. He buys a house for $80,000 and puts $50,000 in repairs. This increased the value to 150% of the initial purchase price. How much profit did he make?",
+        answer="$-10,000"
+    ),
+    # ... more examples (aim for 50-100 total)
+]
+
+# Test set
+testset = [
+    dspy.Example(
+        problem="A farmer has 100 chickens. 20% are roosters. Half of the hens lay an egg a day. How many eggs per day?",
+        answer="40"
+    ),
+    # ... more test examples
+]
+
+# TODO: Implement these functions
+
+def math_accuracy_metric(example, pred, trace=None):
+    """
+    Evaluate mathematical answer accuracy.
+    Handle numeric comparisons and text variations.
+    """
+    # Extract numerical answer
+    # Compare with tolerance for floating point
+    # Return 1.0 for correct, 0.0 for incorrect
+    pass
+
+def finetune_math_model(base_model_name, training_data, epochs=3):
+    """
+    Fine-tune a small model for mathematical reasoning.
+    Focus on instruction-following for math problems.
+    """
+    # Load model with QLoRA
+    # Prepare math-specific training format
+    # Fine-tune with appropriate hyperparameters
+    # Return fine-tuned model
+    pass
+
+def joint_optimization_pipeline(program, trainset, valset, base_model):
+    """
+    Execute COPA-style joint optimization:
+    1. Fine-tune the base model
+    2. Apply prompt optimization to fine-tuned model
+
+    Returns: optimized_program, finetuned_model, results_dict
+    """
+    results = {}
+
+    # Step 1: Baseline evaluation
+    print("Evaluating baseline...")
+    # Your code here
+
+    # Step 2: Fine-tune the model
+    print("Fine-tuning model...")
+    # Your code here
+
+    # Step 3: Evaluate fine-tuned only
+    print("Evaluating fine-tuned model...")
+    # Your code here
+
+    # Step 4: Apply prompt optimization to base model
+    print("Prompt optimization (base model)...")
+    # Your code here
+
+    # Step 5: Apply prompt optimization to fine-tuned model (COPA)
+    print("COPA optimization (fine-tuned + prompts)...")
+    # Your code here
+
+    # Step 6: Calculate synergy
+    print("Calculating synergy...")
+    # Your code here
+
+    return optimized_program, finetuned_model, results
+
+def calculate_synergy(results):
+    """
+    Calculate synergistic improvement from joint optimization.
+
+    Synergy = Combined - (Baseline + FT_Improvement + PO_Improvement)
+
+    Returns synergy value and interpretation.
+    """
+    baseline = results["baseline"]
+    ft_only = results["fine_tuning_only"]
+    po_only = results["prompt_opt_only"]
+    combined = results["copa"]
+
+    # Expected additive improvement
+    ft_improvement = ft_only - baseline
+    po_improvement = po_only - baseline
+    additive_expected = baseline + ft_improvement + po_improvement
+
+    # Actual synergy
+    synergy = combined - additive_expected
+    improvement_factor = combined / baseline if baseline > 0 else float('inf')
+
+    return {
+        "synergy_absolute": synergy,
+        "improvement_factor": improvement_factor,
+        "additive_expected": additive_expected,
+        "actual_combined": combined
+    }
+```
+
+### Tasks
+
+1. **Implement the Evaluation Metric** (15 minutes)
+   - Handle numeric extraction from text
+   - Compare with tolerance for floating point
+   - Account for different answer formats ($18 vs 18 dollars)
+
+2. **Fine-Tune the Model** (30 minutes)
+   - Use QLoRA for memory-efficient fine-tuning
+   - Format training data for math instruction following
+   - Train for 3 epochs with appropriate learning rate
+
+3. **Execute Joint Optimization** (20 minutes)
+   - Follow correct order: fine-tune FIRST, then prompt optimize
+   - Use MIPRO for prompt optimization
+   - Track results at each stage
+
+4. **Analyze Synergy** (15 minutes)
+   - Calculate improvement beyond additive expectations
+   - Understand why synergy occurs
+   - Document findings
+
+5. **Benchmark Comparison** (20 minutes)
+   - Compare all approaches: baseline, FT-only, PO-only, COPA
+   - Calculate improvement factors
+   - Identify optimal strategy for your compute budget
+
+### Hints
+- Extract numbers using regex: `import re; numbers = re.findall(r'-?\d+\.?\d*', text)`
+- Order matters: fine-tune first consistently outperforms prompt-first
+- Synergy is highest for complex reasoning tasks
+- Fine-tuned models need fewer demonstrations (3-shot vs 8-shot)
+- Data requirement: aim for 50-100 training examples
+
+### Expected Output
+```
+COPA Joint Optimization Report
+==============================
+
+Data Analysis:
+  Training examples: 75
+  Validation examples: 25
+  Test examples: 50
+
+Optimization Results:
+---------------------
+Baseline (no optimization):     11.2%
+Fine-tuning only:               32.4%  (+21.2%)
+Prompt optimization only:       22.8%  (+11.6%)
+COPA (combined):                54.6%  (+43.4%)
+
+Synergy Analysis:
+----------------
+Expected additive:              44.0%
+Actual combined:                54.6%
+Synergistic gain:               10.6%
+Improvement factor:             4.9x
+
+Key Findings:
+1. Order matters: FT->PO achieved 54.6%, PO->FT only 38.2%
+2. Synergy effect: 10.6% beyond additive expectations
+3. Demo efficiency: Fine-tuned model achieves 8-shot baseline with just 3 demos
+4. Instruction complexity: Fine-tuned model follows complex multi-step instructions
+
+Recommendations:
+- Use joint optimization for complex reasoning tasks
+- Minimum 50 training examples for effective fine-tuning
+- Always fine-tune first, then apply prompt optimization
+- Consider compute budget: COPA requires ~2 GPU hours + API calls
+```
+
+### Challenge Extension
+For advanced practice:
+1. Implement Monte Carlo exploration of prompt configurations
+2. Add Bayesian optimization for hyperparameter selection
+3. Compare COPA with RPE on the same task
+4. Measure demonstration efficiency improvements
+
+---
+
 ## Exercise Solutions
 
 After completing these exercises, you'll have:

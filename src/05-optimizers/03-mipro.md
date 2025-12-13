@@ -1,23 +1,834 @@
 # MIPRO: Multi-step Instruction and Demonstration Optimization
 
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+- Understand MIPRO's dual-component optimization approach
+- Implement meta-prompting for instruction generation
+- Configure simulated annealing for efficient prompt search
+- Apply module-specific demonstration selection strategies
+- Optimize multi-stage pipelines effectively
+- Interpret and replicate MIPRO benchmark results
+
 ## Introduction
 
-MIPRO (Multi-step Instruction and demonstration PRompt Optimization) is DSPy's most advanced optimizer. Unlike BootstrapFewShot which only optimizes examples, MIPRO simultaneously optimizes both the instructions (prompts) and demonstrations (examples) to achieve superior performance.
+MIPRO (Multi-step Instruction and demonstration PRompt Optimization) represents a significant advancement in automated prompt optimization for language model programs. Unlike simpler approaches that only optimize examples, MIPRO simultaneously optimizes both the instructions (prompts) and demonstrations (examples) for each module in a multi-stage pipeline.
+
+Research demonstrates MIPRO's effectiveness across diverse benchmarks:
+- **HotpotQA**: 52.3 F1 vs 32.0 F1 manual prompting (63% improvement)
+- **GSM8K**: 33.8% vs 28.5% manual prompting (19% improvement)
+- **CodeAlpaca**: 64.8% vs 63.1% manual prompting
+
+These results highlight MIPRO's ability to discover optimized prompts that generalize better than hand-crafted alternatives, often achieving zero-shot superiority through optimized instructions alone.
+
+## Core Architecture: Dual-Component Optimization
+
+MIPRO's power comes from its dual-component approach that jointly optimizes two key elements:
+
+### Component 1: Instruction Generation
+MIPRO generates candidate instructions using **meta-prompting**, where a language model is prompted to create task-specific instructions conditioned on:
+- The program's overall structure and purpose
+- Individual module signatures and roles
+- Relationships between pipeline stages
+- Dataset characteristics and examples
+
+### Component 2: Demonstration Selection
+For few-shot learning, MIPRO selects demonstrations using:
+- Data-driven selection from bootstrapped examples (via BootstrapFewShot)
+- Module-specific demonstration counts
+- Utility scoring based on validation performance
+- Greedy selection algorithms
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                     MIPRO Optimization Loop                       │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌────────────────┐      ┌────────────────┐                      │
+│  │  Meta-Prompt   │      │  Demonstration │                      │
+│  │  Generation    │      │  Selection     │                      │
+│  └───────┬────────┘      └───────┬────────┘                      │
+│          │                       │                               │
+│          ▼                       ▼                               │
+│  ┌────────────────────────────────────────┐                      │
+│  │        Candidate Configurations        │                      │
+│  │   (Instruction + Demonstration Pairs)  │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │      Simulated Annealing Search        │                      │
+│  │   - Evaluate on validation set         │                      │
+│  │   - Accept/reject based on temperature │                      │
+│  │   - Gradually reduce temperature       │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │         Best Configuration             │                      │
+│  └────────────────────────────────────────┘                      │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+## Meta-Prompting for Instruction Generation
+
+Meta-prompting is MIPRO's technique for generating candidate instructions automatically. Instead of requiring human-written prompts, MIPRO uses a language model to generate diverse, task-specific instructions.
+
+### How Meta-Prompting Works
+
+```python
+class MIPROMetaPromptGenerator:
+    """
+    Generates candidate instructions using meta-prompting.
+
+    Meta-prompts condition on:
+    1. Program structure (modules and their connections)
+    2. Dataset characteristics (input/output types, examples)
+    3. Task description (what the program should accomplish)
+    """
+
+    def generate_instruction_candidates(
+        self,
+        module_signature: str,
+        program_description: str,
+        dataset_summary: str,
+        num_candidates: int = 10,
+        temperature: float = 0.7
+    ) -> list[str]:
+        """
+        Generate diverse instruction candidates for a module.
+
+        Args:
+            module_signature: The module's input/output signature
+            program_description: Overall program purpose
+            dataset_summary: Summary of training data characteristics
+            num_candidates: Number of candidates to generate
+            temperature: Sampling temperature (0.7 recommended for diversity)
+
+        Returns:
+            List of candidate instruction strings
+        """
+        meta_prompt = f"""
+You are designing instructions for a language model module in a larger program.
+
+PROGRAM PURPOSE: {program_description}
+
+MODULE SIGNATURE: {module_signature}
+
+DATASET CHARACTERISTICS: {dataset_summary}
+
+Generate {num_candidates} diverse instruction variations for this module.
+Each instruction should:
+1. Clearly specify the task
+2. Guide the model toward high-quality outputs
+3. Be self-contained and unambiguous
+4. Vary in phrasing, structure, and emphasis
+
+Instructions:
+"""
+
+        candidates = []
+        for _ in range(num_candidates):
+            # Temperature sampling enables diversity
+            response = self.lm(meta_prompt, temperature=temperature)
+            candidates.append(response)
+
+        return candidates
+```
+
+### Temperature Sampling for Diversity
+
+MIPRO uses temperature sampling (T=0.7 by default) to generate diverse instruction candidates:
+
+```python
+# Low temperature (T=0.3): More deterministic, similar instructions
+# Medium temperature (T=0.7): Good diversity while maintaining quality
+# High temperature (T=1.2): Maximum diversity, may reduce quality
+
+optimizer = MIPRO(
+    metric=your_metric,
+    num_candidates=10,
+    init_temperature=0.7  # Controls instruction generation diversity
+)
+```
+
+### Self-Reflection for Instruction Refinement
+
+MIPRO can optionally use self-reflection to refine generated instructions:
+
+```python
+class InstructionRefiner:
+    """
+    Refines candidate instructions through self-reflection.
+    """
+
+    def __init__(self):
+        self.reflect = dspy.Predict(
+            "instruction, task_description, failure_cases -> improved_instruction"
+        )
+
+    def refine(self, instruction: str, task_desc: str, failures: list) -> str:
+        """
+        Improve an instruction based on observed failures.
+        """
+        result = self.reflect(
+            instruction=instruction,
+            task_description=task_desc,
+            failure_cases="\n".join(failures)
+        )
+        return result.improved_instruction
+```
+
+## Demonstration Selection Strategy
+
+MIPRO's demonstration selection builds on BootstrapFewShot but adds sophisticated selection mechanisms.
+
+### Data-Driven Selection
+
+```python
+class MIPRODemonstrationSelector:
+    """
+    Selects demonstrations using data-driven strategies.
+    """
+
+    def __init__(self, trainset, metric, max_demos_per_module=8):
+        self.trainset = trainset
+        self.metric = metric
+        self.max_demos_per_module = max_demos_per_module
+
+    def bootstrap_demonstrations(self, program):
+        """
+        Generate candidate demonstrations using BootstrapFewShot.
+        """
+        # First, bootstrap potential demonstrations
+        bootstrap = BootstrapFewShot(
+            metric=self.metric,
+            max_bootstrapped_demos=self.max_demos_per_module * 2
+        )
+        bootstrapped = bootstrap.compile(program, trainset=self.trainset)
+        return bootstrapped.demos
+
+    def score_demonstration_utility(self, demo, module, valset):
+        """
+        Score a demonstration's utility for a specific module.
+
+        Utility is measured by validation set performance improvement
+        when the demonstration is included.
+        """
+        # Test with and without this demonstration
+        score_with = self._evaluate_with_demo(module, demo, valset)
+        score_without = self._evaluate_without_demo(module, demo, valset)
+
+        return score_with - score_without
+
+    def greedy_select(self, candidates, module, valset, k):
+        """
+        Greedy selection of top-k demonstrations.
+
+        Args:
+            candidates: List of candidate demonstrations
+            module: The module to optimize
+            valset: Validation set for scoring
+            k: Number of demonstrations to select
+
+        Returns:
+            List of k selected demonstrations
+        """
+        selected = []
+        remaining = candidates.copy()
+
+        for _ in range(k):
+            if not remaining:
+                break
+
+            # Score each remaining candidate
+            scores = [
+                (demo, self.score_demonstration_utility(demo, module, valset))
+                for demo in remaining
+            ]
+
+            # Select the best
+            best_demo, best_score = max(scores, key=lambda x: x[1])
+            selected.append(best_demo)
+            remaining.remove(best_demo)
+
+        return selected
+```
+
+### Module-Specific Demonstration Counts
+
+Different modules may benefit from different numbers of demonstrations:
+
+```python
+def determine_demo_count(module_type, context_budget=16000):
+    """
+    Determine optimal demonstration count per module.
+
+    Args:
+        module_type: Type of module (e.g., 'retrieval', 'reasoning', 'generation')
+        context_budget: Available context window in tokens
+
+    Returns:
+        Recommended number of demonstrations
+    """
+    # Simple modules need fewer demos
+    if module_type == 'classification':
+        return min(4, context_budget // 500)
+
+    # Reasoning tasks benefit from more demos
+    elif module_type == 'reasoning':
+        return min(8, context_budget // 1000)
+
+    # Generation tasks need diverse examples
+    elif module_type == 'generation':
+        return min(6, context_budget // 800)
+
+    # Default
+    return min(5, context_budget // 600)
+```
+
+## Simulated Annealing for Prompt Search
+
+MIPRO uses simulated annealing to efficiently search the space of possible prompt configurations.
+
+### Why Simulated Annealing?
+
+The prompt optimization landscape is:
+- **High-dimensional**: Many modules, each with instruction and demonstration choices
+- **Non-convex**: Local optima are common
+- **Noisy**: Validation scores have variance
+
+Simulated annealing handles these challenges by:
+1. Starting with high temperature (accepting many changes)
+2. Gradually cooling (becoming more selective)
+3. Allowing occasional "uphill" moves to escape local optima
+
+### Implementation
+
+```python
+import math
+import random
+
+class SimulatedAnnealingOptimizer:
+    """
+    Simulated annealing for prompt configuration search.
+    """
+
+    def __init__(
+        self,
+        init_temperature: float = 1.0,
+        cooling_rate: float = 0.95,
+        min_temperature: float = 0.01,
+        max_iter: int = 100
+    ):
+        self.init_temperature = init_temperature
+        self.cooling_rate = cooling_rate
+        self.min_temperature = min_temperature
+        self.max_iter = max_iter
+
+    def optimize(
+        self,
+        initial_config,
+        neighbor_fn,
+        score_fn,
+        valset
+    ):
+        """
+        Find optimal configuration using simulated annealing.
+
+        Args:
+            initial_config: Starting configuration
+            neighbor_fn: Function to generate neighboring configurations
+            score_fn: Function to score a configuration
+            valset: Validation set for evaluation
+
+        Returns:
+            Best configuration found
+        """
+        current_config = initial_config
+        current_score = score_fn(current_config, valset)
+
+        best_config = current_config
+        best_score = current_score
+
+        temperature = self.init_temperature
+
+        for iteration in range(self.max_iter):
+            # Generate neighbor configuration
+            neighbor = neighbor_fn(current_config)
+            neighbor_score = score_fn(neighbor, valset)
+
+            # Calculate acceptance probability
+            delta = neighbor_score - current_score
+
+            if delta > 0:
+                # Better solution: always accept
+                accept_prob = 1.0
+            else:
+                # Worse solution: accept with probability
+                accept_prob = math.exp(delta / temperature)
+
+            # Accept or reject
+            if random.random() < accept_prob:
+                current_config = neighbor
+                current_score = neighbor_score
+
+                # Update best
+                if current_score > best_score:
+                    best_config = current_config
+                    best_score = current_score
+
+            # Cool down
+            temperature = max(
+                self.min_temperature,
+                temperature * self.cooling_rate
+            )
+
+            # Optional: Log progress
+            if iteration % 10 == 0:
+                print(f"Iter {iteration}: Score={current_score:.3f}, "
+                      f"Best={best_score:.3f}, T={temperature:.3f}")
+
+        return best_config, best_score
+```
+
+### Configuration Neighbor Generation
+
+```python
+def generate_neighbor(current_config, instruction_pool, demo_pool):
+    """
+    Generate a neighboring configuration by making small changes.
+
+    Possible mutations:
+    1. Change instruction for one module
+    2. Add/remove/swap demonstration for one module
+    3. Adjust demonstration count
+    """
+    neighbor = copy.deepcopy(current_config)
+
+    # Choose mutation type
+    mutation_type = random.choice([
+        'change_instruction',
+        'swap_demo',
+        'add_demo',
+        'remove_demo'
+    ])
+
+    # Choose random module to mutate
+    module_idx = random.randint(0, len(neighbor.modules) - 1)
+
+    if mutation_type == 'change_instruction':
+        # Select new instruction from pool
+        new_instruction = random.choice(instruction_pool[module_idx])
+        neighbor.modules[module_idx].instruction = new_instruction
+
+    elif mutation_type == 'swap_demo':
+        # Swap one demonstration
+        if neighbor.modules[module_idx].demos:
+            demo_idx = random.randint(0, len(neighbor.modules[module_idx].demos) - 1)
+            new_demo = random.choice(demo_pool[module_idx])
+            neighbor.modules[module_idx].demos[demo_idx] = new_demo
+
+    elif mutation_type == 'add_demo':
+        # Add a demonstration if under limit
+        if len(neighbor.modules[module_idx].demos) < MAX_DEMOS:
+            new_demo = random.choice(demo_pool[module_idx])
+            neighbor.modules[module_idx].demos.append(new_demo)
+
+    elif mutation_type == 'remove_demo':
+        # Remove a demonstration if any exist
+        if neighbor.modules[module_idx].demos:
+            neighbor.modules[module_idx].demos.pop()
+
+    return neighbor
+```
+
+## Multi-Stage Pipeline Optimization
+
+MIPRO excels at optimizing multi-stage pipelines where modules depend on each other.
+
+### Module Coupling Considerations
+
+When optimizing pipelines, MIPRO considers how modules interact:
+
+```python
+class MultiStagePipelineOptimizer:
+    """
+    Optimizes multi-stage pipelines considering module dependencies.
+    """
+
+    def analyze_module_coupling(self, program):
+        """
+        Analyze how modules in a pipeline are coupled.
+
+        Returns dependency graph and coupling strength estimates.
+        """
+        modules = program.modules
+        coupling = {}
+
+        for i, module in enumerate(modules):
+            coupling[i] = {
+                'inputs_from': [],
+                'outputs_to': [],
+                'coupling_strength': 0.0
+            }
+
+            # Analyze dataflow
+            for j, other in enumerate(modules):
+                if i != j:
+                    if self._has_dataflow(module, other):
+                        coupling[i]['outputs_to'].append(j)
+                        coupling[j]['inputs_from'].append(i)
+
+        return coupling
+
+    def optimize_pipeline(self, program, trainset, valset):
+        """
+        Optimize a multi-stage pipeline.
+
+        Strategy:
+        1. Start with later stages (less dependent)
+        2. Progressively optimize earlier stages
+        3. Use frozen later stages when optimizing earlier ones
+        """
+        modules = program.modules
+        coupling = self.analyze_module_coupling(program)
+
+        # Order modules by dependency depth (later stages first)
+        optimization_order = self._topological_sort_reverse(coupling)
+
+        for module_idx in optimization_order:
+            print(f"Optimizing module {module_idx}...")
+
+            # Freeze downstream modules
+            frozen_modules = [i for i in optimization_order
+                           if i != module_idx and
+                           module_idx in coupling[i]['inputs_from']]
+
+            # Optimize this module
+            self._optimize_module(
+                program,
+                module_idx,
+                trainset,
+                valset,
+                frozen_modules
+            )
+
+        return program
+```
+
+### Generate-Retrieve-Generate Pipeline Example
+
+```python
+class GRGPipeline(dspy.Module):
+    """
+    Generate-Retrieve-Generate pipeline for complex QA.
+
+    Stage 1 (Generate): Generate search queries from question
+    Stage 2 (Retrieve): Retrieve relevant documents
+    Stage 3 (Generate): Generate answer from retrieved context
+    """
+
+    def __init__(self):
+        super().__init__()
+        # Stage 1: Query generation
+        self.generate_queries = dspy.Predict(
+            "question -> search_queries"
+        )
+
+        # Stage 2: Retrieval
+        self.retrieve = dspy.Retrieve(k=5)
+
+        # Stage 3: Answer generation
+        self.generate_answer = dspy.ChainOfThought(
+            "question, context -> answer"
+        )
+
+    def forward(self, question):
+        # Stage 1
+        queries = self.generate_queries(question=question)
+
+        # Stage 2
+        all_passages = []
+        for query in queries.search_queries.split('\n'):
+            passages = self.retrieve(query=query.strip()).passages
+            all_passages.extend(passages)
+
+        # Stage 3
+        context = '\n\n'.join(all_passages[:10])
+        answer = self.generate_answer(
+            question=question,
+            context=context
+        )
+
+        return dspy.Prediction(
+            answer=answer.answer,
+            reasoning=answer.rationale,
+            passages_used=len(all_passages)
+        )
+
+# Optimize with MIPRO
+def optimize_grg_pipeline(trainset, valset):
+    """
+    Optimize GRG pipeline using MIPRO.
+    """
+    pipeline = GRGPipeline()
+
+    def grg_metric(example, pred, trace=None):
+        # Check answer correctness
+        if hasattr(example, 'answer') and hasattr(pred, 'answer'):
+            return example.answer.lower() in pred.answer.lower()
+        return 0
+
+    optimizer = MIPRO(
+        metric=grg_metric,
+        num_candidates=15,  # More candidates for multi-stage
+        init_temperature=0.7,
+        auto="medium"
+    )
+
+    optimized = optimizer.compile(
+        pipeline,
+        trainset=trainset,
+        num_trials=5,
+        max_bootstrapped_demos=6  # Per module
+    )
+
+    return optimized
+```
+
+### Zero-Shot vs Few-Shot Trade-offs
+
+MIPRO research reveals important insights about zero-shot vs few-shot optimization:
+
+```python
+def analyze_zeroshot_vs_fewshot(program, trainset, valset, testset):
+    """
+    Analyze when zero-shot optimized prompts outperform few-shot.
+
+    Key findings from MIPRO research:
+    1. Optimized zero-shot can beat manual few-shot
+    2. Context window savings enable more reasoning
+    3. Generalization is often better with zero-shot
+    """
+    results = {}
+
+    # Zero-shot optimization
+    mipro_zeroshot = MIPRO(
+        metric=metric,
+        num_candidates=20,
+        init_temperature=0.7
+    )
+    zeroshot_compiled = mipro_zeroshot.compile(
+        program,
+        trainset=trainset,
+        max_bootstrapped_demos=0  # Zero demonstrations
+    )
+    results['zeroshot'] = evaluate(zeroshot_compiled, testset)
+
+    # Few-shot optimization
+    mipro_fewshot = MIPRO(
+        metric=metric,
+        num_candidates=20,
+        init_temperature=0.7
+    )
+    fewshot_compiled = mipro_fewshot.compile(
+        program,
+        trainset=trainset,
+        max_bootstrapped_demos=8  # Include demonstrations
+    )
+    results['fewshot'] = evaluate(fewshot_compiled, testset)
+
+    # Manual few-shot baseline
+    bootstrap = BootstrapFewShot(metric=metric, max_bootstrapped_demos=8)
+    manual_fewshot = bootstrap.compile(program, trainset=trainset)
+    results['manual_fewshot'] = evaluate(manual_fewshot, testset)
+
+    # Analysis
+    print("\nZero-Shot vs Few-Shot Analysis:")
+    print(f"  MIPRO Zero-Shot: {results['zeroshot']:.1%}")
+    print(f"  MIPRO Few-Shot:  {results['fewshot']:.1%}")
+    print(f"  Manual Few-Shot: {results['manual_fewshot']:.1%}")
+
+    if results['zeroshot'] > results['manual_fewshot']:
+        print("\n  > Optimized zero-shot outperforms manual few-shot!")
+        print("  > This indicates strong instruction optimization.")
+
+    return results
+```
+
+## Hyperparameter Configuration
+
+### Recommended Settings
+
+Based on MIPRO research, here are recommended hyperparameter configurations:
+
+```python
+# Standard configuration
+optimizer = MIPRO(
+    metric=your_metric,
+    num_candidates=10,          # 10-20 instruction candidates
+    init_temperature=0.7,       # T=0.7 for diverse but quality instructions
+    verbose=True
+)
+
+# Compile with appropriate settings
+compiled = optimizer.compile(
+    program,
+    trainset=trainset,
+    num_trials=3,              # 3-5 optimization trials
+    max_bootstrapped_demos=8,  # Up to 8 demos per module
+    max_labeled_demos=4,       # Up to 4 labeled demos
+)
+
+# Context window management (important for large pipelines)
+# Total context budget: 16k tokens typical
+# Reserve: ~4k for reasoning
+# Remaining: ~12k for instructions + demonstrations
+# With 8 demos at ~300 tokens each: 2.4k tokens
+# Leaves: ~9.6k for instructions and output
+```
+
+### Configuration Table
+
+| Parameter | Default | Range | Description |
+|-----------|---------|-------|-------------|
+| `num_candidates` | 10 | 5-30 | Instruction candidates per module |
+| `init_temperature` | 1.0 | 0.5-1.5 | Meta-prompt sampling temperature |
+| `num_trials` | 3 | 1-10 | Optimization iterations |
+| `max_bootstrapped_demos` | 8 | 0-16 | Max demonstrations per module |
+| `max_labeled_demos` | 4 | 0-8 | Max labeled (gold) demonstrations |
+| `auto` | None | "light"/"medium"/"heavy" | Auto-configuration mode |
+
+### Auto Mode Configurations
+
+```python
+# Light mode: Quick optimization for simple tasks
+# Equivalent to: num_candidates=5, init_temperature=0.8
+optimizer = MIPRO(auto="light")
+
+# Medium mode: Balanced optimization (recommended default)
+# Equivalent to: num_candidates=10, init_temperature=1.0
+optimizer = MIPRO(auto="medium")
+
+# Heavy mode: Extensive optimization for complex tasks
+# Equivalent to: num_candidates=20, init_temperature=1.2
+optimizer = MIPRO(auto="heavy")
+```
+
+## Performance Benchmarks
+
+### Research Results
+
+MIPRO has been extensively benchmarked across diverse tasks:
+
+| Dataset | Task Type | Manual Prompt | MIPRO Optimized | Improvement |
+|---------|-----------|---------------|-----------------|-------------|
+| HotpotQA | Multi-hop QA | 32.0 F1 | 52.3 F1 | +63.4% |
+| GSM8K | Math Reasoning | 28.5% | 33.8% | +18.6% |
+| CodeAlpaca | Code Generation | 63.1% | 64.8% | +2.7% |
+| FEVER | Fact Verification | 71.2% | 78.9% | +10.8% |
+| Natural Questions | Open-domain QA | 45.3% | 54.7% | +20.8% |
+
+### Reproducing Benchmarks
+
+```python
+def benchmark_mipro_hotpotqa(trainset, valset, testset):
+    """
+    Reproduce HotpotQA benchmark results.
+
+    Expected: ~52.3 F1 with MIPRO optimization
+    """
+    # Define multi-hop QA program
+    class HotpotQA(dspy.Module):
+        def __init__(self):
+            super().__init__()
+            self.retrieve = dspy.Retrieve(k=5)
+            self.hop1 = dspy.ChainOfThought("question, context -> intermediate_answer")
+            self.hop2 = dspy.ChainOfThought(
+                "question, intermediate_answer, context -> final_answer"
+            )
+
+        def forward(self, question):
+            # First hop
+            context1 = self.retrieve(question=question).passages
+            hop1_result = self.hop1(
+                question=question,
+                context='\n'.join(context1)
+            )
+
+            # Second hop (refined query)
+            refined_query = f"{question} {hop1_result.intermediate_answer}"
+            context2 = self.retrieve(question=refined_query).passages
+
+            final = self.hop2(
+                question=question,
+                intermediate_answer=hop1_result.intermediate_answer,
+                context='\n'.join(context2)
+            )
+
+            return dspy.Prediction(
+                answer=final.final_answer,
+                reasoning=final.rationale
+            )
+
+    # F1 metric for evaluation
+    def hotpot_f1(example, pred, trace=None):
+        from collections import Counter
+
+        pred_tokens = pred.answer.lower().split()
+        gold_tokens = example.answer.lower().split()
+
+        common = Counter(pred_tokens) & Counter(gold_tokens)
+        num_same = sum(common.values())
+
+        if num_same == 0:
+            return 0
+
+        precision = num_same / len(pred_tokens)
+        recall = num_same / len(gold_tokens)
+        f1 = 2 * precision * recall / (precision + recall)
+
+        return f1
+
+    # MIPRO optimization
+    optimizer = MIPRO(
+        metric=hotpot_f1,
+        num_candidates=15,
+        init_temperature=0.7,
+        auto="medium"
+    )
+
+    optimized = optimizer.compile(
+        HotpotQA(),
+        trainset=trainset,
+        num_trials=5,
+        max_bootstrapped_demos=6
+    )
+
+    # Evaluate
+    from dspy.evaluate import Evaluate
+    evaluator = Evaluate(devset=testset, metric=hotpot_f1)
+    score = evaluator(optimized)
+
+    print(f"HotpotQA F1 Score: {score:.1f}")
+    return optimized, score
+```
 
 ## What Makes MIPRO Special?
 
 ### Dual Optimization
-1. **Instruction Optimization**: Rewrites and refines natural language instructions
-2. **Demonstration Optimization**: Selects and generates optimal examples
-3. **Joint Optimization**: Optimizes instructions and examples together
+1. **Instruction Optimization**: Rewrites and refines natural language instructions using meta-prompting
+2. **Demonstration Optimization**: Selects and generates optimal examples using utility-based scoring
+3. **Joint Optimization**: Optimizes instructions and examples together using simulated annealing
 
 ### Multi-Step Process
 MIPRO uses an iterative approach to progressively improve your program:
-1. Analyze current performance
-2. Identify weak points
-3. Generate improvements
-4. Evaluate and select best versions
-5. Repeat until convergence
+1. Generate diverse instruction candidates via meta-prompting
+2. Bootstrap and score potential demonstrations
+3. Use simulated annealing to search configuration space
+4. Evaluate candidates on validation set
+5. Select best configuration based on metric performance
 
 ## Basic MIPRO Usage
 
