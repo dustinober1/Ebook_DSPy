@@ -83,6 +83,7 @@
   - [Prompts as Auto-Optimized Hyperparameters](05-optimizers/20-prompts-as-hyperparameters.md)
   - [Minimal Data Training Pipelines](05-optimizers/21-minimal-data-pipelines.md)
   - [GEPA: Genetic-Pareto Optimization](05-optimizers/22-gepa-genetic-pareto-optimization.md)
+  - [State-Space Search for Prompt Optimization](05-optimizers/23-state-space-prompt-optimization.md)
   - [Exercises](05-optimizers/07-exercises.md)
 
 ---

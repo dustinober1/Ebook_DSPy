@@ -4,11 +4,11 @@
 
 ### Overview
 
-This major release incorporates comprehensive coverage of 11 foundational DSPy research papers including the latest GEPA framework (ArXiv 2512.01452) and Structured Prompting methodology (ArXiv 2511.20836), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
+This major release incorporates comprehensive coverage of 12 foundational DSPy research papers including the latest GEPA framework (ArXiv 2512.01452), Structured Prompting methodology (ArXiv 2511.20836), and State-Space Search optimization (ArXiv 2511.18619), making the DSPy ebook the most complete and up-to-date resource available for learning and applying DSPy techniques.
 
 ### What's New
 
-#### 📚 New Content (25 New Files)
+#### 📚 New Content (26 New Files)
 
 **Chapter 3: Modules**
 - `TypedPredictor` - Type-safe prediction patterns
@@ -20,7 +20,7 @@ This major release incorporates comprehensive coverage of 11 foundational DSPy r
 - Modular prompt components
 - Best practices for consistent evaluation
 
-**Chapter 5: Optimizers (15 New Sections)**
+**Chapter 5: Optimizers (16 New Sections)**
 - Constraint-Driven Optimization
 - Reflective Prompt Evolution (RPE)
 - COPA: Compiler and Prompt Optimization
@@ -33,6 +33,7 @@ This major release incorporates comprehensive coverage of 11 foundational DSPy r
 - Prompts as Auto-Optimized Hyperparameters
 - Minimal Data Training Pipelines
 - **GEPA: Genetic-Pareto Optimization** (NEW!)
+- **State-Space Search Optimization** (NEW!)
 - And more advanced topics!
 
 **Chapter 6: Real-World Applications (6 New Applications)**
@@ -93,6 +94,12 @@ This major release incorporates comprehensive coverage of 11 foundational DSPy r
    - Modular prompt components
    - Consistent and reproducible evaluation
 
+7. **State-Space Search Optimization** (NEW!)
+   - Graph-based prompt exploration
+   - Classical AI search algorithms (beam search, random walk)
+   - Prompt transformation operators
+   - Quantitative analysis of prompt techniques
+
 ### Papers Integrated
 
 1. **Assisting in Writing Wikipedia-like Articles** - STORM system
@@ -106,6 +113,7 @@ This major release incorporates comprehensive coverage of 11 foundational DSPy r
 9. **REFLECTIVE PROMPT EVOLUTION** - Evolutionary prompt optimization
 10. **AUTOMATED RISK-OF-BIAS ASSESSMENT: A GEPA-TRAINED FRAMEWORK** - Genetic-Pareto optimization (ArXiv:2512.01452)
 11. **STRUCTURED PROMPTING ENABLES MORE ROBUST EVALUATION** - Systematic evaluation methodology (ArXiv:2511.20836)
+12. **PROMPT OPTIMIZATION AS A STATE-SPACE SEARCH PROBLEM** - Graph-based prompt optimization (ArXiv:2511.18619)
 
 ### Performance Highlights
 
