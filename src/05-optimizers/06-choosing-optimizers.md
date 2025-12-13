@@ -12,7 +12,7 @@ DSPy offers multiple optimization strategies, each with distinct strengths and i
 | **BootstrapFewShot** | General improvement | 10-100 examples | Fast | Good | Medium |
 | **KNNFewShot** | Dynamic context, large datasets | 100+ examples | Medium | Good | Medium |
 | **MIPRO** | Maximum performance | 20-200 examples | Slow | Excellent | High |
-| **RPE** | Complex reasoning, exploration | 30+ examples | Slow | Excellent | High |
+| **[RPE](08-reflective-prompt-evolution.md)** | Complex reasoning, exploration | 30+ examples | Slow | Excellent | High |
 | **Fine-Tuning** | Domain-specific, cost-sensitive | 1000+ examples | Very Slow | Excellent | Very High |
 
 ## Decision Framework

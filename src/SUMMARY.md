@@ -38,10 +38,12 @@
 - [Chapter 3: Modules](03-modules/00-chapter-intro.md)
   - [Module Basics](03-modules/01-module-basics.md)
   - [Predict Module](03-modules/02-predict-module.md)
+  - [TypedPredictor](03-modules/02a-typed-predictor.md)
   - [Chain of Thought](03-modules/03-chainofthought.md)
   - [ReAct Agents](03-modules/04-react-agents.md)
   - [Custom Modules](03-modules/05-custom-modules.md)
   - [Composing Modules](03-modules/06-composing-modules.md)
+  - [Assertions](03-modules/08-assertions.md)
   - [Exercises](03-modules/07-exercises.md)
 
 ---
@@ -59,6 +61,7 @@
 - [Chapter 5: Optimizers and Compilation](05-optimizers/00-chapter-intro.md)
   - [The Compilation Concept](05-optimizers/01-compilation-concept.md)
   - [BootstrapFewShot](05-optimizers/02-bootstrapfewshot.md)
+  - [COPRO: Cost-aware Prompt Optimization](05-optimizers/02a-copro.md)
   - [MIPRO](05-optimizers/03-mipro.md)
   - [KNNFewShot](05-optimizers/04-knnfewshot.md)
   - [Fine-tuning](05-optimizers/05-finetuning.md)
@@ -92,7 +95,10 @@
   - [Entity Extraction](06-real-world-applications/04-entity-extraction.md)
   - [Intelligent Agents](06-real-world-applications/05-intelligent-agents.md)
   - [Code Generation](06-real-world-applications/06-code-generation.md)
+  - [Perspective-Driven Research](06-real-world-applications/07-perspective-driven-research.md)
   - [Extreme Multi-Label Classification](06-real-world-applications/08-extreme-multilabel-classification.md)
+  - [Long-Form Generation](06-real-world-applications/08-long-form-generation.md)
+  - [Outline Generation](06-real-world-applications/09-outline-generation.md)
   - [Extreme Few-Shot Learning: Training with 10 Gold Labels](06-real-world-applications/11-extreme-few-shot-learning.md)
   - [IR Model Training from Scratch](06-real-world-applications/12-ir-model-training-scratch.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
@@ -103,6 +109,8 @@
   - [Async and Streaming](07-advanced-topics/03-async-streaming.md)
   - [Debugging and Tracing](07-advanced-topics/04-debugging-tracing.md)
   - [Deployment Strategies](07-advanced-topics/05-deployment-strategies.md)
+  - [Self-Refining Pipelines](07-advanced-topics/07-self-refining-pipelines.md)
+  - [Declarative Compilation](07-advanced-topics/08-declarative-compilation.md)
   - [Exercises](07-advanced-topics/06-exercises.md)
 
 ---
@@ -110,10 +118,12 @@
 # Part V: Case Studies
 
 - [Chapter 8: Case Studies](08-case-studies/00-introduction.md)
-  - [Healthcare: Clinical Notes Analysis](08-case-studies/01-enterprise-rag-system.md)
-  - [Finance: Document Analysis](08-case-studies/02-customer-support-chatbot.md)
-  - [Legal: Contract Review](08-case-studies/03-ai-code-assistant.md)
-  - [Research: Data Pipeline](08-case-studies/04-automated-data-analysis.md)
+  - [Enterprise RAG System](08-case-studies/01-enterprise-rag-system.md)
+  - [Customer Support Chatbot](08-case-studies/02-customer-support-chatbot.md)
+  - [AI Code Assistant](08-case-studies/03-ai-code-assistant.md)
+  - [Automated Data Analysis](08-case-studies/04-automated-data-analysis.md)
+  - [STORM Writing Assistant](08-case-studies/05-storm-writing-assistant.md)
+  - [Assertion-Driven Applications](08-case-studies/06-assertion-driven-applications.md)
   - [Exercises](08-case-studies/05-exercises.md)
 
 ---

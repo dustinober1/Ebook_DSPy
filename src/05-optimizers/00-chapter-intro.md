@@ -121,25 +121,28 @@ By the end of this chapter, you will be able to:
 
 ### Chapter Structure
 
-1. **Compilation Concept** - What compilation means in DSPy
-2. **BootstrapFewShot** - Automatic example generation
-3. **MIPRO** - Advanced instruction optimization
-4. **KNNFewShot** - Similarity-based optimization
-5. **Fine-tuning** - Small model optimization
-6. **Reflective Prompt Evolution** - Evolutionary optimization
-7. **Constraint-Driven Optimization** - Optimization with constraints and objectives
-8. **COPA** - Combined compiler and prompt optimization for synergistic improvements
-9. **Joint Optimization** - Coordinating fine-tuning and prompt optimization simultaneously
-10. **Monte Carlo Optimization** - Stochastic optimization for complex search spaces
-11. **Bayesian Optimization** - Intelligent exploration with probabilistic models
-12. **Comprehensive Examples** - Real-world applications and implementation patterns
-13. **Choosing Optimizers** - Decision guide, trade-offs, and optimization synergy
-14. **Multi-stage Optimization Theory** - Theoretical foundations for cascaded programs
-15. **Instruction Tuning Frameworks** - Methodologies and best practices
-16. **Demonstration Optimization** - Selection algorithms and utility functions
-17. **Multi-stage Program Architectures** - Design patterns and implementation
-18. **Complex Pipeline Optimization** - Hierarchical and resource-aware strategies
-19. **Instruction-Demonstration Interactions** - Synergy analysis and optimization
-20. **Exercises** - Hands-on optimization tasks
+1. **[Compilation Concept](01-compilation-concept.md)** - What compilation means in DSPy
+2. **[BootstrapFewShot](02-bootstrapfewshot.md)** - Automatic example generation
+3. **[COPRO](02a-copro.md)** - Cost-aware prompt optimization
+4. **[MIPRO](03-mipro.md)** - Advanced instruction optimization
+5. **[KNNFewShot](04-knnfewshot.md)** - Similarity-based optimization
+6. **[Fine-tuning](05-finetuning.md)** - Small model optimization
+7. **[Choosing Optimizers](06-choosing-optimizers.md)** - Decision guide and trade-offs
+8. **[Constraint-Driven Optimization](07-constraint-driven-optimization.md)** - Optimization with constraints
+9. **[Reflective Prompt Evolution](08-reflective-prompt-evolution.md)** - Evolutionary optimization
+10. **[COPA](09-copa-method.md)** - Combined compiler and prompt optimization
+11. **[Joint Optimization](10-joint-optimization.md)** - Coordinating fine-tuning and prompts
+12. **[Monte Carlo Optimization](11-monte-carlo-optimization.md)** - Stochastic optimization
+13. **[Bayesian Optimization](12-bayesian-optimization.md)** - Intelligent exploration
+14. **[Comprehensive Examples](13-comprehensive-examples.md)** - Real-world applications
+15. **[Multi-stage Optimization Theory](14-multistage-optimization-theory.md)** - Theoretical foundations
+16. **[Instruction Tuning Frameworks](15-instruction-tuning-frameworks.md)** - Methodologies
+17. **[Demonstration Optimization](16-demonstration-optimization.md)** - Selection algorithms
+18. **[Multi-stage Architectures](17-multistage-architectures.md)** - Design patterns
+19. **[Complex Pipeline Optimization](18-complex-pipeline-optimization.md)** - Hierarchical strategies
+20. **[Instruction-Demonstration Interactions](19-instruction-demonstration-interactions.md)** - Synergy analysis
+21. **[Prompts as Hyperparameters](20-prompts-as-hyperparameters.md)** - Training with 10 examples
+22. **[Minimal Data Pipelines](21-minimal-data-pipelines.md)** - Extreme few-shot learning
+23. **[Exercises](07-exercises.md)** - Hands-on optimization tasks
 
 Let's begin this exciting journey into DSPy optimization!
