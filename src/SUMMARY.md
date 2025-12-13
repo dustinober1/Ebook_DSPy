@@ -111,6 +111,7 @@
   - [Scientific Figure Caption Generation with DSPy](06-real-world-applications/14-scientific-figure-caption-generation.md)
   - [Retrieval-Augmented Guardrails for AI Systems](06-real-world-applications/15-retrieval-augmented-guardrails.md)
   - [GraphRAG from Wikipedia with TiDB](06-real-world-applications/16-graphrag-wikipedia-tidb-tutorial.md)
+  - [Framework Comparisons in the DSPy Ecosystem](06-real-world-applications/17-framework-comparisons-dspy-ecosystem.md)
   - [Exercises](06-real-world-applications/07-exercises.md)
 
 - [Chapter 7: Advanced Topics](07-advanced-topics/00-chapter-intro.md)

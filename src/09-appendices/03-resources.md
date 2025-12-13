@@ -285,6 +285,12 @@ The DSPy ebook integrates findings from these cutting-edge papers:
   - VMware findings on automatic prompt optimization
   - Industry perspective on AI's impact on prompt engineering roles
 
+- **[Qdrant: "DSPy vs LangChain: A Comprehensive Framework Comparison"](https://qdrant.tech/blog/dspy-vs-langchain/)** (Feb 2024)
+  - Detailed comparison of architecture and approaches
+  - Feature comparison table with strengths/weaknesses
+  - Guidelines for choosing between frameworks
+  - Integration possibilities with vector databases
+
 ## Language Model Providers
 
 ### Major LLM Providers
