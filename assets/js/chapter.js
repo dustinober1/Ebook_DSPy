@@ -174,6 +174,43 @@ async function loadMarkdownContent(url, targetId) {
 }
 
 /**
+ * Load HTML content from file (for professional pre-rendered content)
+ */
+async function loadHtmlContent(url, targetId) {
+    const targetElement = document.getElementById(targetId);
+    if (!targetElement) return;
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const html = await response.text();
+        targetElement.innerHTML = html;
+
+        // Apply syntax highlighting to any code blocks
+        applySyntaxHighlighting(targetElement);
+
+        // Add visible class for animation
+        const section = targetElement.closest('.content-section');
+        if (section) {
+            section.classList.add('is-visible');
+        }
+
+    } catch (error) {
+        console.error(`Error loading ${url}:`, error);
+        targetElement.innerHTML = `
+            <div class="error-message">
+                <p><strong>Unable to load content.</strong></p>
+                <p>Please try refreshing the page.</p>
+            </div>
+        `;
+    }
+}
+
+/**
  * Process Mermaid diagrams
  */
 async function processMermaidDiagrams(container) {
@@ -413,7 +450,12 @@ function initChapter(config) {
         config.sections.forEach((section, index) => {
             // Stagger loading for smoother appearance
             setTimeout(() => {
-                loadMarkdownContent(section.file, section.contentId);
+                // Support both HTML and markdown content types
+                if (section.type === 'html') {
+                    loadHtmlContent(section.file, section.contentId);
+                } else {
+                    loadMarkdownContent(section.file, section.contentId);
+                }
             }, index * 100);
         });
     }
