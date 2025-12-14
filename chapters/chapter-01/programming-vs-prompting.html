@@ -128,13 +128,14 @@
                                     Demonstrate-Search-Predict research paper. This architecture provides a systematic
                                     way to structure complex reasoning tasks.</p>
 
-                                <div class="stages-grid">
-                                    <div class="stage-card demonstrate">
-                                        <div class="stage-number">1</div>
-                                        <h4>DEMONSTRATE</h4>
-                                        <p>Learn from examples and build task understanding</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Define what the task does
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎯</span>
+                                        <div class="section-content">
+                                            <h4>DEMONSTRATE</h4>
+                                            <p>Learn from examples and build task understanding</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Define what the task does
 class TaskSignature(dspy.Signature):
     input_field: str = dspy.InputField()
     output_field: str = dspy.OutputField()
@@ -144,15 +145,17 @@ trainset = [
     dspy.Example(input_field="Example 1", output_field="Output 1"),
     dspy.Example(input_field="Example 2", output_field="Output 2"),
 ]</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="stage-card search">
-                                        <div class="stage-number">2</div>
-                                        <h4>SEARCH</h4>
-                                        <p>Retrieve and synthesize information from multiple sources</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python">class SearchModule(dspy.Module):
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔍</span>
+                                        <div class="section-content">
+                                            <h4>SEARCH</h4>
+                                            <p>Retrieve and synthesize information from multiple sources</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">class SearchModule(dspy.Module):
     def __init__(self):
         self.retrieve = dspy.Retrieve(k=5)
         self.select = dspy.Predict("documents, query -> relevant_docs")
@@ -160,21 +163,24 @@ trainset = [
     def forward(self, query):
         docs = self.retrieve(query).passages
         return self.select(documents=docs, query=query)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="stage-card predict">
-                                        <div class="stage-number">3</div>
-                                        <h4>PREDICT</h4>
-                                        <p>Generate final outputs based on gathered evidence</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python">class PredictModule(dspy.Module):
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>PREDICT</h4>
+                                            <p>Generate final outputs based on gathered evidence</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">class PredictModule(dspy.Module):
     def __init__(self):
         self.generate = dspy.ChainOfThought("context, query -> answer")
 
     def forward(self, context, query):
         result = self.generate(context=context, query=query)
         return result.answer</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -302,25 +308,28 @@ class Pipeline(dspy.Module):
                             <div class="content-block">
                                 <h2>✅ Benefits of the Programming Paradigm</h2>
 
-                                <div class="benefits-grid">
-                                    <div class="benefit-card">
-                                        <div class="benefit-icon">🧩</div>
-                                        <h4>1. Modularity</h4>
-                                        <p>Break complex tasks into simple components:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Each component is independent and testable
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧩</span>
+                                        <div class="section-content">
+                                            <h4>Modularity</h4>
+                                            <p>Break complex tasks into simple components:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Each component is independent and testable
 extract = dspy.Predict("text -> entities")
 classify = dspy.Predict("entities -> categories")
 generate = dspy.Predict("categories -> summary")</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="benefit-card">
-                                        <div class="benefit-icon">♻️</div>
-                                        <h4>2. Reusability</h4>
-                                        <p>Create once, use everywhere:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Define a reusable QA signature
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">♻️</span>
+                                        <div class="section-content">
+                                            <h4>Reusability</h4>
+                                            <p>Create once, use everywhere:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Define a reusable QA signature
 class QA(dspy.Signature):
     context: str = dspy.InputField()
     question: str = dspy.InputField()
@@ -329,41 +338,47 @@ class QA(dspy.Signature):
 # Use in different contexts
 basic_qa = dspy.Predict(QA)
 reasoning_qa = dspy.ChainOfThought(QA)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="benefit-card">
-                                        <div class="benefit-icon">🧪</div>
-                                        <h4>3. Testability</h4>
-                                        <p>Test components independently:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python">def test_entity_extraction():
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧪</span>
+                                        <div class="section-content">
+                                            <h4>Testability</h4>
+                                            <p>Test components independently:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">def test_entity_extraction():
     extractor = dspy.Predict("text -> entities")
     result = extractor(text="Apple released iPhone in 2007")
     assert "Apple" in result.entities
     assert "iPhone" in result.entities</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="benefit-card">
-                                        <div class="benefit-icon">⚡</div>
-                                        <h4>4. Automatic Optimization</h4>
-                                        <p>Improve systematically:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python">def accuracy_metric(example, prediction):
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚡</span>
+                                        <div class="section-content">
+                                            <h4>Automatic Optimization</h4>
+                                            <p>Improve systematically:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">def accuracy_metric(example, prediction):
     return prediction.answer == example.answer
 
 optimizer = BootstrapFewShot(metric=accuracy_metric)
 optimized = optimizer.compile(MyProgram(), trainset=data)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="benefit-card">
-                                        <div class="benefit-icon">🔧</div>
-                                        <h4>5. Maintainability</h4>
-                                        <p>Changes are localized and manageable:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Change one signature
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔧</span>
+                                        <div class="section-content">
+                                            <h4>Maintainability</h4>
+                                            <p>Changes are localized and manageable:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Change one signature
 class ImprovedQA(dspy.Signature):
     """Better QA with sources."""
     context: str = dspy.InputField()
@@ -372,6 +387,7 @@ class ImprovedQA(dspy.Signature):
     sources: list[str] = dspy.OutputField()  # Added field
 
 # All modules using this signature adapt automatically</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -468,31 +484,32 @@ result = 5 + 3</code></pre>
                             <div class="content-block summary-block">
                                 <h2>📝 Key Takeaways</h2>
 
-                                <div class="takeaways-list">
-                                    <div class="takeaway-item">
-                                        <span class="takeaway-number">1</span>
-                                        <span class="takeaway-text"><strong>Prompting</strong> = Writing instructions
-                                            for the model</span>
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Prompting</strong> = Writing instructions for the model</p>
+                                        </div>
                                     </div>
-                                    <div class="takeaway-item">
-                                        <span class="takeaway-number">2</span>
-                                        <span class="takeaway-text"><strong>Programming</strong> = Defining
-                                            specifications for tasks</span>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Programming</strong> = Defining specifications for tasks</p>
+                                        </div>
                                     </div>
-                                    <div class="takeaway-item">
-                                        <span class="takeaway-number">3</span>
-                                        <span class="takeaway-text"><strong>DSPy generates prompts</strong>
-                                            automatically from signatures</span>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>DSPy generates prompts</strong> automatically from signatures</p>
+                                        </div>
                                     </div>
-                                    <div class="takeaway-item">
-                                        <span class="takeaway-number">4</span>
-                                        <span class="takeaway-text"><strong>Composition and optimization</strong> come
-                                            naturally with programming</span>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Composition and optimization</strong> come naturally with
+                                                programming</p>
+                                        </div>
                                     </div>
-                                    <div class="takeaway-item">
-                                        <span class="takeaway-number">5</span>
-                                        <span class="takeaway-text"><strong>Invest in learning DSPy</strong> for
-                                            long-term productivity</span>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Invest in learning DSPy</strong> for long-term productivity</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
