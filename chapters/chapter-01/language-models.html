@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Models | Chapter 1 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn how to configure different language models in DSPy - OpenAI, Anthropic, Ollama, and more.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 1</h2>
+                <span class="sidebar-subtitle">DSPy Fundamentals</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-is-dspy">
+                        <a href="what-is-dspy.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What is DSPy?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="programming-vs-prompting">
+                        <a href="programming-vs-prompting.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Programming vs. Prompting</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="first-program">
+                        <a href="first-program.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Your First DSPy Program</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="language-models">
+                        <a href="language-models.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Language Models</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-02/index.html" class="next-chapter-btn">
+                    Next: Chapter 02 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 1 · Section 5</span>
+                    <h1 class="chapter-title">Language Models</h1>
+                    <p class="chapter-description">DSPy works with various language model providers. Learn how to
+                        configure different LMs and choose the right model for your task.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="language-models" data-section="language-models">
+                        <div class="markdown-content" id="language-models-content">
+
+                            <!-- The Basics -->
+                            <div class="content-block">
+                                <h2>🔧 Configuring Language Models</h2>
+
+                                <p>DSPy uses a consistent interface for all language models:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Create an LM instance
+lm = dspy.LM(model="provider/model-name", api_key="your-key")
+
+# Set it as the default
+dspy.configure(lm=lm)</code></pre>
+                                </div>
+
+                                <p>Once configured, all DSPy modules will use this LM automatically.</p>
+                            </div>
+
+                            <!-- Supported Providers -->
+                            <div class="content-block">
+                                <h2>🌐 Supported Providers</h2>
+
+                                <div class="provider-grid">
+                                    <div class="provider-card openai">
+                                        <div class="provider-header">
+                                            <span class="provider-icon">💳</span>
+                                            <h4>OpenAI</h4>
+                                        </div>
+                                        <div class="provider-models">
+                                            <p><strong>Models available:</strong></p>
+                                            <ul>
+                                                <li><code>gpt-4o</code> - Latest flagship model</li>
+                                                <li><code>gpt-4o-mini</code> - Fast, cost-effective</li>
+                                                <li><code>gpt-4-turbo</code> - Previous flagship</li>
+                                            </ul>
+                                        </div>
+                                        <div class="command-box">
+                                            <pre><code class="language-python">lm = dspy.LM(
+    model="openai/gpt-4o-mini",
+    api_key="sk-your-key-here",
+    temperature=0.7,
+    max_tokens=500
+)
+dspy.configure(lm=lm)</code></pre>
+                                        </div>
+                                        <p class="best-for">Best for: General-purpose tasks, proven reliability</p>
+                                    </div>
+
+                                    <div class="provider-card anthropic">
+                                        <div class="provider-header">
+                                            <span class="provider-icon">🤖</span>
+                                            <h4>Anthropic (Claude)</h4>
+                                        </div>
+                                        <div class="provider-models">
+                                            <p><strong>Models available:</strong></p>
+                                            <ul>
+                                                <li><code>claude-3-5-sonnet-20241022</code> - Latest, most capable</li>
+                                                <li><code>claude-3-5-haiku-20241022</code> - Fast, economical</li>
+                                                <li><code>claude-3-opus-20240229</code> - Maximum capability</li>
+                                            </ul>
+                                        </div>
+                                        <div class="command-box">
+                                            <pre><code class="language-python">lm = dspy.LM(
+    model="anthropic/claude-3-5-sonnet-20241022",
+    api_key="your-anthropic-key",
+    temperature=0.7,
+    max_tokens=1000
+)
+dspy.configure(lm=lm)</code></pre>
+                                        </div>
+                                        <p class="best-for">Best for: Long contexts, detailed analysis, coding</p>
+                                    </div>
+
+                                    <div class="provider-card local">
+                                        <div class="provider-header">
+                                            <span class="provider-icon">🏠</span>
+                                            <h4>Local Models (Ollama)</h4>
+                                        </div>
+                                        <div class="provider-models">
+                                            <p><strong>Models available:</strong></p>
+                                            <ul>
+                                                <li><code>llama3</code>, <code>llama3.1</code> - Meta's open models</li>
+                                                <li><code>mistral</code>, <code>mixtral</code> - Mistral AI models</li>
+                                                <li><code>phi3</code> - Microsoft's small model</li>
+                                            </ul>
+                                        </div>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># No API key needed!
+lm = dspy.LM(
+    model="ollama/llama3",
+    api_base="http://localhost:11434"
+)
+dspy.configure(lm=lm)</code></pre>
+                                        </div>
+                                        <p class="best-for">Best for: Privacy, no API costs, experimentation</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Temperature Guide -->
+                            <div class="content-block">
+                                <h2>🌡️ Temperature Guide</h2>
+
+                                <p><strong>Temperature</strong> controls output randomness:</p>
+
+                                <div class="temperature-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Value</th>
+                                                <th>Behavior</th>
+                                                <th>Use Case</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0.0 - 0.3</td>
+                                                <td>Deterministic, focused</td>
+                                                <td>Classification, extraction</td>
+                                            </tr>
+                                            <tr>
+                                                <td>0.4 - 0.8</td>
+                                                <td>Balanced</td>
+                                                <td>General Q&A, summaries</td>
+                                            </tr>
+                                            <tr>
+                                                <td>0.9 - 1.5</td>
+                                                <td>Creative, diverse</td>
+                                                <td>Creative writing, brainstorming</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1.6 - 2.0</td>
+                                                <td>Very random</td>
+                                                <td>Experimental, exploration</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># For factual tasks - low temperature
+factual_lm = dspy.LM(model="openai/gpt-4o-mini", temperature=0.1)
+
+# For creative tasks - higher temperature
+creative_lm = dspy.LM(model="openai/gpt-4o-mini", temperature=1.2)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Using Multiple Models -->
+                            <div class="content-block">
+                                <h2>🔀 Using Multiple Models</h2>
+
+                                <p>You can use different models for different tasks:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Fast model for simple tasks
+fast_lm = dspy.LM(model="openai/gpt-4o-mini")
+
+# Powerful model for complex tasks
+smart_lm = dspy.LM(model="openai/gpt-4o")
+
+class Pipeline(dspy.Module):
+    def __init__(self):
+        self.classify = dspy.Predict("text -> category")
+        self.analyze = dspy.ChainOfThought("text, category -> analysis")
+
+    def forward(self, text):
+        # Use fast model for classification
+        with dspy.context(lm=fast_lm):
+            category = self.classify(text=text).category
+
+        # Use smart model for complex analysis
+        with dspy.context(lm=smart_lm):
+            analysis = self.analyze(text=text, category=category).analysis
+
+        return analysis</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Model Selection Guide -->
+                            <div class="content-block">
+                                <h2>📊 Model Selection Guide</h2>
+
+                                <div class="selection-grid">
+                                    <div class="selection-card">
+                                        <h4>By Task Type</h4>
+                                        <div class="selection-rows">
+                                            <div class="selection-row">
+                                                <span class="task">Classification / Extraction</span>
+                                                <span class="model"><code>gpt-4o-mini</code> or
+                                                    <code>claude-3-5-haiku</code></span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Question Answering</span>
+                                                <span class="model"><code>gpt-4o-mini</code> or
+                                                    <code>claude-3-5-sonnet</code></span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Complex Reasoning</span>
+                                                <span class="model"><code>gpt-4o</code> or
+                                                    <code>claude-3-5-sonnet</code></span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Long Context</span>
+                                                <span class="model"><code>claude-3-5-sonnet</code> (200K context)</span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Code Generation</span>
+                                                <span class="model"><code>gpt-4o</code> or
+                                                    <code>claude-3-5-sonnet</code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="selection-card">
+                                        <h4>By Budget</h4>
+                                        <div class="selection-rows">
+                                            <div class="selection-row">
+                                                <span class="task">Free / Low Cost</span>
+                                                <span class="model">Ollama (local), <code>gpt-4o-mini</code></span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Balanced</span>
+                                                <span class="model"><code>gpt-4o</code>,
+                                                    <code>claude-3-5-sonnet</code></span>
+                                            </div>
+                                            <div class="selection-row">
+                                                <span class="task">Maximum Capability</span>
+                                                <span class="model"><code>gpt-4o</code>,
+                                                    <code>claude-3-opus</code></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Best Practices -->
+                            <div class="content-block">
+                                <h2>✅ Best Practices</h2>
+
+                                <div class="best-practices-grid">
+                                    <div class="practice-card">
+                                        <h4>1. Start Small, Scale Up</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># Development: Use small, fast models
+dev_lm = dspy.LM(model="openai/gpt-4o-mini")
+
+# Production: Upgrade when needed
+prod_lm = dspy.LM(model="openai/gpt-4o")
+
+# Easy to switch!
+lm = dev_lm if IS_DEVELOPMENT else prod_lm
+dspy.configure(lm=lm)</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="practice-card">
+                                        <h4>2. Use Environment Variables</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python">import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Never hardcode API keys!
+lm = dspy.LM(
+    model="openai/gpt-4o-mini",
+    api_key=os.getenv("OPENAI_API_KEY")
+)</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="practice-card">
+                                        <h4>3. Set Appropriate Timeouts</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># Default timeout might be too short for complex tasks
+lm = dspy.LM(
+    model="openai/gpt-4o",
+    timeout=60  # 60 seconds for complex reasoning
+)</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="practice-card">
+                                        <h4>4. Enable Caching in Development</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># DSPy has built-in caching
+dspy.configure(lm=lm, cache=True)
+
+# Speeds up development, saves costs</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Reference -->
+                            <div class="content-block">
+                                <h2>📋 Quick Reference</h2>
+
+                                <div class="quick-ref-grid">
+                                    <div class="quick-ref-item">
+                                        <span class="ref-label">OpenAI</span>
+                                        <code>lm = dspy.LM(model="openai/gpt-4o-mini", api_key=key)</code>
+                                    </div>
+                                    <div class="quick-ref-item">
+                                        <span class="ref-label">Anthropic</span>
+                                        <code>lm = dspy.LM(model="anthropic/claude-3-5-sonnet-20241022", api_key=key)</code>
+                                    </div>
+                                    <div class="quick-ref-item">
+                                        <span class="ref-label">Ollama (Local)</span>
+                                        <code>lm = dspy.LM(model="ollama/llama3", api_base="http://localhost:11434")</code>
+                                    </div>
+                                    <div class="quick-ref-item">
+                                        <span class="ref-label">Switch Models</span>
+                                        <code>with dspy.context(lm=different_lm): result = module(input=data)</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Summary</h2>
+
+                                <p><strong>Key Concepts:</strong></p>
+                                <ul>
+                                    <li>DSPy supports multiple LM providers (OpenAI, Anthropic, local, etc.)</li>
+                                    <li>Configure once with <code>dspy.configure(lm=...)</code></li>
+                                    <li>Use <code>dspy.context()</code> to temporarily switch models</li>
+                                    <li>Choose models based on task complexity and budget</li>
+                                    <li>Start with smaller models, scale up as needed</li>
+                                </ul>
+
+                                <p><strong>Best Practices:</strong></p>
+                                <ul>
+                                    <li>Use environment variables for API keys</li>
+                                    <li>Set appropriate timeouts and token limits</li>
+                                    <li>Enable caching during development</li>
+                                    <li>Choose the right model for each task</li>
+                                </ul>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="exercises.html" class="continue-btn">
+                                        <span>Continue to Exercises</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
