@@ -1,0 +1,144 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Get version from tag
+      id: version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "version=$VERSION"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: DSPy Ebook ${{ steps.version.outputs.version }}
+        body: |
+          ## DSPy Ebook ${{ steps.version.outputs.version }}
+
+          This release includes:
+          - Complete ebook in PDF format
+          - Built from commit ${{ github.sha }}
+          - Compatible with all major PDF readers
+
+          ### Downloads
+          - 📄 [DSPy_A_Practical_Guide_${{ steps.version.outputs.version }}.pdf](https://github.com/dustinober1/Ebook_DSPy/releases/download/${{ steps.version.outputs.version }}/DSPy_A_Practical_Guide_${{ steps.version.outputs.version }}.pdf)
+
+          ### Changes
+          See the [CHANGELOG.md](https://github.com/dustinober1/Ebook_DSPy/blob/main/RELEASE_NOTES.md) for detailed changes.
+
+          ### Reading Online
+          Read the ebook online for free at [https://dustinober1.github.io/Ebook_DSPy/](https://dustinober1.github.io/Ebook_DSPy/)
+        draft: false
+        prerelease: false
+
+  build-and-upload:
+    name: Build and Upload Artifacts
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache Cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Install mdBook and plugins
+      run: |
+        curl -L https://github.com/rust-lang/mdBook/releases/download/v0.5.2/mdbook-v0.5.2-x86_64-unknown-linux-gnu.tar.gz | tar xz
+        sudo mv mdbook /usr/local/bin/
+        cargo install mdbook-pdf --quiet
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install Python dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Validate code examples
+      run: |
+        python scripts/validate_code.py
+
+    - name: Get version info
+      id: version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Build ebook
+      run: |
+        mdbook build
+
+    - name: Upload PDF to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: build/html/pdf/output.pdf
+        asset_name: DSPy_A_Practical_Guide_${{ steps.version.outputs.version }}.pdf
+        asset_content_type: application/pdf
+
+    - name: Upload build info
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: version.json
+        asset_name: build_info_${{ steps.version.outputs.version }}.json
+        asset_content_type: application/json
+
+  trigger-deployment:
+    name: Trigger Production Deployment
+    runs-on: ubuntu-latest
+    needs: [create-release, build-and-upload]
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - name: Trigger deployment workflow
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        event-type: deploy-production
+        client-payload: '{"version": "${{ github.ref_name }}"}'
