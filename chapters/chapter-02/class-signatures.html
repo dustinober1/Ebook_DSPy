@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class-Based Signatures | Chapter 2 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Master DSPy class-based signatures - the full-featured, production-ready way to define LM tasks with documentation and type hints.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 2</h2>
+                <span class="sidebar-subtitle">Signatures</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-are-signatures">
+                        <a href="what-are-signatures.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What Are Signatures?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="inline-signatures">
+                        <a href="inline-signatures.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Inline Signatures</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="class-signatures">
+                        <a href="class-signatures.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Class-Based Signatures</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="field-types">
+                        <a href="field-types.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Field Types & Descriptions</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-03/index.html" class="next-chapter-btn">
+                    Next: Chapter 03 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 2 · Section 4</span>
+                    <h1 class="chapter-title">Class-Based Signatures</h1>
+                    <p class="chapter-description">The full-featured, production-ready way to define LM tasks with
+                        documentation, type hints, and field descriptions.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="class-signatures" data-section="class-signatures">
+                        <div class="markdown-content" id="class-signatures-content">
+
+                            <!-- Introduction -->
+                            <div class="content-block">
+                                <h2>🏗️ Why Class-Based Signatures?</h2>
+
+                                <p>While inline signatures are great for prototyping, <strong>class-based
+                                        signatures</strong> provide the full power of DSPy:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📃</span>
+                                        <div class="section-content">
+                                            <h4>Documentation</h4>
+                                            <p>Docstrings describe the task and become part of the prompt.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏷️</span>
+                                        <div class="section-content">
+                                            <h4>Type Hints</h4>
+                                            <p>Specify expected types for structured outputs.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>Field Descriptions</h4>
+                                            <p>Guide the LM with detailed field-level instructions.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">♻️</span>
+                                        <div class="section-content">
+                                            <h4>Reusability</h4>
+                                            <p>Import and reuse signatures across your codebase.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Basic Structure -->
+                            <div class="content-block">
+                                <h2>📐 Basic Structure</h2>
+
+                                <p>A class-based signature inherits from <code>dspy.Signature</code>:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+class TaskName(dspy.Signature):
+    """Description of what this task does."""
+    
+    # Input fields
+    input_name: type = dspy.InputField()
+    
+    # Output fields
+    output_name: type = dspy.OutputField()</code></pre>
+                                </div>
+
+                                <p>Let's break down each component:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏷️</span>
+                                        <div class="section-content">
+                                            <h4>Class Name</h4>
+                                            <p>Use PascalCase. Choose a name that describes the task (e.g.,
+                                                <code>Summarize</code>, <code>TranslateToFrench</code>,
+                                                <code>ExtractEntities</code>).
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📃</span>
+                                        <div class="section-content">
+                                            <h4>Docstring</h4>
+                                            <p>A clear, concise description of the task. This becomes the main
+                                                instruction in the generated prompt.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📥</span>
+                                        <div class="section-content">
+                                            <h4>InputField</h4>
+                                            <p>Marks a field as input. The user provides these values when calling the
+                                                module.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📤</span>
+                                        <div class="section-content">
+                                            <h4>OutputField</h4>
+                                            <p>Marks a field as output. The LM generates these values.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Complete Examples -->
+                            <div class="content-block">
+                                <h2>💡 Complete Examples</h2>
+
+                                <h3>Question Answering</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class QuestionAnswer(dspy.Signature):
+    """Answer questions based on the provided context."""
+    
+    context: str = dspy.InputField(
+        desc="Background information to answer the question"
+    )
+    question: str = dspy.InputField(
+        desc="The question to answer"
+    )
+    answer: str = dspy.OutputField(
+        desc="A concise, accurate answer based on the context"
+    )
+
+# Usage
+qa = dspy.Predict(QuestionAnswer)
+result = qa(
+    context="The Eiffel Tower was completed in 1889.",
+    question="When was the Eiffel Tower completed?"
+)
+print(result.answer)  # 1889</code></pre>
+                                </div>
+
+                                <h3>Sentiment Analysis</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class SentimentAnalysis(dspy.Signature):
+    """Analyze the sentiment of the given text."""
+    
+    text: str = dspy.InputField(
+        desc="The text to analyze"
+    )
+    sentiment: str = dspy.OutputField(
+        desc="The sentiment: 'positive', 'negative', or 'neutral'"
+    )
+    confidence: float = dspy.OutputField(
+        desc="Confidence score from 0.0 to 1.0"
+    )
+    reasoning: str = dspy.OutputField(
+        desc="Brief explanation for the classification"
+    )
+
+# Usage
+analyzer = dspy.Predict(SentimentAnalysis)
+result = analyzer(text="This product exceeded my expectations!")
+print(f"Sentiment: {result.sentiment}")      # positive
+print(f"Confidence: {result.confidence}")    # 0.95
+print(f"Reasoning: {result.reasoning}")      # Expresses strong satisfaction</code></pre>
+                                </div>
+
+                                <h3>Code Review</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class CodeReview(dspy.Signature):
+    """Review code for bugs, style issues, and improvements."""
+    
+    code: str = dspy.InputField(
+        desc="The code to review"
+    )
+    language: str = dspy.InputField(
+        desc="Programming language of the code"
+    )
+    bugs: list[str] = dspy.OutputField(
+        desc="List of potential bugs found"
+    )
+    style_issues: list[str] = dspy.OutputField(
+        desc="List of style/formatting issues"
+    )
+    suggestions: list[str] = dspy.OutputField(
+        desc="List of improvement suggestions"
+    )
+    overall_quality: str = dspy.OutputField(
+        desc="Quality rating: 'excellent', 'good', 'needs_work', or 'poor'"
+    )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Writing Good Docstrings -->
+                            <div class="content-block">
+                                <h2>✍️ Writing Effective Docstrings</h2>
+
+                                <p>The docstring is crucial—it becomes the main instruction for the LM:</p>
+
+                                <div class="comparison-container">
+                                    <div class="comparison-side traditional">
+                                        <h4>❌ Weak Docstrings</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># Too vague
+"""Do the task."""
+
+# Just restates the class name
+"""Summarize class."""
+
+# No docstring at all
+class MyTask(dspy.Signature):
+    text: str = dspy.InputField()
+    output: str = dspy.OutputField()</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="comparison-side dspy">
+                                        <h4>✅ Strong Docstrings</h4>
+                                        <div class="command-box">
+                                            <pre><code class="language-python"># Clear and specific
+"""Summarize the text in 2-3 sentences,
+capturing the main points."""
+
+# Includes constraints
+"""Extract all person names mentioned
+in the text. Return an empty list if
+no names are found."""
+
+# Provides context
+"""Translate the text to French,
+preserving tone and style."""</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Pro tip:</strong> Think of the docstring as instructions you'd give to a
+                                        helpful assistant. Be clear about what you want and any constraints.</p>
+                                </div>
+                            </div>
+
+                            <!-- Multiple Outputs Pattern -->
+                            <div class="content-block">
+                                <h2>🔀 Working with Multiple Outputs</h2>
+
+                                <p>Class-based signatures shine when you need structured, multi-field outputs:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class ArticleAnalysis(dspy.Signature):
+    """Analyze a news article comprehensively."""
+    
+    article: str = dspy.InputField(desc="The article text")
+    
+    # Multiple structured outputs
+    title: str = dspy.OutputField(desc="Article headline")
+    summary: str = dspy.OutputField(desc="2-3 sentence summary")
+    topics: list[str] = dspy.OutputField(desc="Main topics covered")
+    sentiment: str = dspy.OutputField(desc="Overall tone")
+    key_entities: list[str] = dspy.OutputField(desc="People, places, orgs mentioned")
+    reading_time: int = dspy.OutputField(desc="Estimated reading time in minutes")
+
+# All outputs accessible as attributes
+analyzer = dspy.Predict(ArticleAnalysis)
+result = analyzer(article=article_text)
+
+print(f"Title: {result.title}")
+print(f"Topics: {result.topics}")
+print(f"Entities: {result.key_entities}")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Inheritance and Composition -->
+                            <div class="content-block">
+                                <h2>🧬 Signature Composition</h2>
+
+                                <p>You can create variations of signatures for related tasks:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Base translation signature
+class Translate(dspy.Signature):
+    """Translate text to the target language."""
+    text: str = dspy.InputField()
+    target_language: str = dspy.InputField()
+    translation: str = dspy.OutputField()
+
+# Specialized versions
+class TranslateToSpanish(dspy.Signature):
+    """Translate text to Spanish."""
+    text: str = dspy.InputField()
+    translation: str = dspy.OutputField(desc="Spanish translation")
+
+class TranslateToFrench(dspy.Signature):
+    """Translate text to French."""
+    text: str = dspy.InputField()
+    translation: str = dspy.OutputField(desc="French translation")
+
+class TranslateToGerman(dspy.Signature):
+    """Translate text to German."""
+    text: str = dspy.InputField()
+    translation: str = dspy.OutputField(desc="German translation")</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Note:</strong> While you could use Python class inheritance, in practice
+                                        it's cleaner to define separate signatures for different task variations.</p>
+                                </div>
+                            </div>
+
+                            <!-- Best Practices -->
+                            <div class="content-block">
+                                <h2>✅ Best Practices</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>One Task Per Signature</h4>
+                                            <p>Keep signatures focused on a single, well-defined task.</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Good: focused
+class ExtractEmails(dspy.Signature):
+    """Extract email addresses from text."""
+    ...
+
+# Avoid: too broad
+class ProcessDocument(dspy.Signature):
+    """Extract emails, summarize, translate, and classify."""
+    ...</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏷️</span>
+                                        <div class="section-content">
+                                            <h4>Use Descriptive Field Names</h4>
+                                            <p>Field names are used in prompt generation.</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Good
+source_language: str = dspy.InputField()
+target_language: str = dspy.InputField()
+
+# Avoid
+lang1: str = dspy.InputField()
+lang2: str = dspy.InputField()</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📃</span>
+                                        <div class="section-content">
+                                            <h4>Add Field Descriptions</h4>
+                                            <p>Use <code>desc=</code> to provide context and constraints.</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">rating: int = dspy.OutputField(
+    desc="Rating from 1-5, where 5 is best"
+)
+
+category: str = dspy.OutputField(
+    desc="One of: 'tech', 'sports', 'politics', 'entertainment'"
+)</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📁</span>
+                                        <div class="section-content">
+                                            <h4>Organize in Modules</h4>
+                                            <p>Keep signatures in separate files for reusability.</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># signatures/nlp.py
+class Summarize(dspy.Signature): ...
+class Translate(dspy.Signature): ...
+class ExtractEntities(dspy.Signature): ...
+
+# main.py
+from signatures.nlp import Summarize
+summarizer = dspy.Predict(Summarize)</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Class-based signatures</strong> inherit from
+                                                <code>dspy.Signature</code>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Docstrings become instructions</strong> in the generated prompt
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Use InputField and OutputField</strong> to define the data flow
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Add descriptions</strong> with <code>desc=</code> for better
+                                                outputs</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Keep signatures focused</strong> on one task each</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="field-types.html" class="continue-btn">
+                                        <span>Continue to Field Types & Descriptions</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

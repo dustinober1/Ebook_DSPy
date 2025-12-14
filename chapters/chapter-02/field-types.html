@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Types & Descriptions | Chapter 2 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn how to use field types and descriptions in DSPy signatures to guide LM behavior and get structured outputs.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 2</h2>
+                <span class="sidebar-subtitle">Signatures</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-are-signatures">
+                        <a href="what-are-signatures.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What Are Signatures?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="inline-signatures">
+                        <a href="inline-signatures.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Inline Signatures</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="class-signatures">
+                        <a href="class-signatures.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Class-Based Signatures</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="field-types">
+                        <a href="field-types.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Field Types & Descriptions</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-03/index.html" class="next-chapter-btn">
+                    Next: Chapter 03 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 2 · Section 5</span>
+                    <h1 class="chapter-title">Field Types & Descriptions</h1>
+                    <p class="chapter-description">Use type hints and descriptions to guide LM behavior and get
+                        precisely structured outputs.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~12 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="field-types" data-section="field-types">
+                        <div class="markdown-content" id="field-types-content">
+
+                            <!-- Introduction -->
+                            <div class="content-block">
+                                <h2>🎯 Why Types and Descriptions Matter</h2>
+
+                                <p>Field types and descriptions are powerful tools for shaping LM outputs:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏷️</span>
+                                        <div class="section-content">
+                                            <h4>Type Hints</h4>
+                                            <p>Tell DSPy what format you expect (string, list, number, boolean).</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>Descriptions</h4>
+                                            <p>Provide constraints and context that guide the LM's response.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Validation</h4>
+                                            <p>DSPy can validate and parse outputs based on your type hints.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Supported Types -->
+                            <div class="content-block">
+                                <h2>📊 Supported Field Types</h2>
+
+                                <h3>Basic Types</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+class BasicTypes(dspy.Signature):
+    """Demonstrate basic field types."""
+    
+    # String - most common, default type
+    text: str = dspy.InputField()
+    summary: str = dspy.OutputField()
+    
+    # Integer
+    word_count: int = dspy.OutputField(desc="Number of words")
+    
+    # Float
+    confidence: float = dspy.OutputField(desc="Score from 0.0 to 1.0")
+    
+    # Boolean
+    is_valid: bool = dspy.OutputField(desc="True if valid, False otherwise")</code></pre>
+                                </div>
+
+                                <h3>Collection Types</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class CollectionTypes(dspy.Signature):
+    """Demonstrate collection field types."""
+    
+    # List of strings
+    keywords: list[str] = dspy.OutputField(
+        desc="List of relevant keywords"
+    )
+    
+    # List of integers
+    page_numbers: list[int] = dspy.OutputField(
+        desc="Relevant page numbers"
+    )
+    
+    # Note: Dictionaries require careful handling
+    # Use typing.Dict or structured output patterns</code></pre>
+                                </div>
+
+                                <h3>Literal Types (Constrained Values)</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">from typing import Literal
+
+class ConstrainedOutput(dspy.Signature):
+    """Use Literal for constrained output values."""
+    
+    text: str = dspy.InputField()
+    
+    # Only these specific values allowed
+    sentiment: Literal["positive", "negative", "neutral"] = dspy.OutputField()
+    
+    priority: Literal["low", "medium", "high", "critical"] = dspy.OutputField()
+    
+    rating: Literal[1, 2, 3, 4, 5] = dspy.OutputField()</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Pro tip:</strong> <code>Literal</code> types are great for
+                                        classification tasks where you want specific output values!</p>
+                                </div>
+                            </div>
+
+                            <!-- Field Descriptions -->
+                            <div class="content-block">
+                                <h2>✍️ Writing Effective Descriptions</h2>
+
+                                <p>The <code>desc</code> parameter is your main tool for guiding outputs:</p>
+
+                                <h3>Format Specifications</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class FormattedOutputs(dspy.Signature):
+    """Generate formatted outputs."""
+    
+    document: str = dspy.InputField()
+    
+    # Specify format
+    summary: str = dspy.OutputField(
+        desc="2-3 sentences maximum"
+    )
+    
+    date: str = dspy.OutputField(
+        desc="Date in YYYY-MM-DD format"
+    )
+    
+    phone: str = dspy.OutputField(
+        desc="Phone number in format: (XXX) XXX-XXXX"
+    )
+    
+    bullet_points: str = dspy.OutputField(
+        desc="Formatted as a bulleted list with - prefix"
+    )</code></pre>
+                                </div>
+
+                                <h3>Value Constraints</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class ConstrainedValues(dspy.Signature):
+    """Outputs with value constraints."""
+    
+    text: str = dspy.InputField()
+    
+    # Numeric ranges
+    rating: int = dspy.OutputField(
+        desc="Rating from 1 to 10"
+    )
+    
+    confidence: float = dspy.OutputField(
+        desc="Confidence between 0.0 and 1.0"
+    )
+    
+    # Categorical constraints
+    category: str = dspy.OutputField(
+        desc="One of: 'tech', 'finance', 'health', 'sports'"
+    )
+    
+    # Length constraints
+    title: str = dspy.OutputField(
+        desc="Short title, maximum 10 words"
+    )</code></pre>
+                                </div>
+
+                                <h3>Contextual Instructions</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class ContextualOutputs(dspy.Signature):
+    """Outputs with contextual guidance."""
+    
+    article: str = dspy.InputField(
+        desc="News article to analyze"
+    )
+    
+    # Tone guidance
+    summary: str = dspy.OutputField(
+        desc="Professional, objective summary for business readers"
+    )
+    
+    # Audience consideration
+    explanation: str = dspy.OutputField(
+        desc="Simple explanation suitable for a general audience"
+    )
+    
+    # Action-oriented
+    action_items: list[str] = dspy.OutputField(
+        desc="Specific, actionable items the reader should take"
+    )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Combining Types and Descriptions -->
+                            <div class="content-block">
+                                <h2>🔗 Combining Types and Descriptions</h2>
+
+                                <p>The most effective signatures combine type hints with descriptive text:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from typing import Literal
+
+class ProductReview(dspy.Signature):
+    """Analyze a product review comprehensively."""
+    
+    review_text: str = dspy.InputField(
+        desc="The full text of the customer review"
+    )
+    
+    # Literal type + description
+    sentiment: Literal["positive", "negative", "mixed"] = dspy.OutputField(
+        desc="Overall sentiment of the review"
+    )
+    
+    # Float type + constrained range
+    rating_prediction: float = dspy.OutputField(
+        desc="Predicted star rating from 1.0 to 5.0"
+    )
+    
+    # List type + specific guidance
+    pros: list[str] = dspy.OutputField(
+        desc="Positive aspects mentioned, 3-5 items"
+    )
+    
+    cons: list[str] = dspy.OutputField(
+        desc="Negative aspects mentioned, 3-5 items"
+    )
+    
+    # Boolean + clear criteria
+    would_recommend: bool = dspy.OutputField(
+        desc="True if reviewer would recommend the product"
+    )
+    
+    # String + format specification
+    one_liner: str = dspy.OutputField(
+        desc="One sentence summary, max 15 words"
+    )</code></pre>
+                                </div>
+
+                                <h3>Example Usage</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Configure LM
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Create predictor
+reviewer = dspy.Predict(ProductReview)
+
+# Analyze a review
+result = reviewer(
+    review_text="""
+    I've been using this laptop for 3 months now. The battery life 
+    is amazing - easily lasts 12 hours! The keyboard is comfortable 
+    for long typing sessions. However, the trackpad is a bit small 
+    and the speakers are mediocre. For the price point though, it's 
+    a solid choice for students or light work.
+    """
+)
+
+print(f"Sentiment: {result.sentiment}")           # positive
+print(f"Predicted Rating: {result.rating_prediction}")  # 4.0
+print(f"Pros: {result.pros}")                     # ['Amazing battery life', ...]
+print(f"Cons: {result.cons}")                     # ['Small trackpad', ...]
+print(f"Would Recommend: {result.would_recommend}")  # True
+print(f"Summary: {result.one_liner}")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Input Field Descriptions -->
+                            <div class="content-block">
+                                <h2>📥 Input Field Descriptions</h2>
+
+                                <p>Descriptions on input fields help the LM understand the context:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class TranslationTask(dspy.Signature):
+    """Translate text while preserving meaning and tone."""
+    
+    # Descriptive input fields
+    source_text: str = dspy.InputField(
+        desc="The original text to translate"
+    )
+    
+    source_language: str = dspy.InputField(
+        desc="The language of the source text (e.g., 'English')"
+    )
+    
+    target_language: str = dspy.InputField(
+        desc="The language to translate into (e.g., 'Spanish')"
+    )
+    
+    formality: str = dspy.InputField(
+        desc="Desired formality: 'formal', 'casual', or 'neutral'"
+    )
+    
+    # Output
+    translation: str = dspy.OutputField(
+        desc="Translated text matching the specified formality"
+    )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Advanced Patterns -->
+                            <div class="content-block">
+                                <h2>🚀 Advanced Patterns</h2>
+
+                                <h3>Optional Fields with Defaults</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">from typing import Optional
+
+class FlexibleAnalysis(dspy.Signature):
+    """Analyze with optional detailed output."""
+    
+    text: str = dspy.InputField()
+    include_details: bool = dspy.InputField(
+        desc="Whether to include detailed analysis"
+    )
+    
+    summary: str = dspy.OutputField()
+    
+    # Optional output - may be empty if not requested
+    detailed_analysis: Optional[str] = dspy.OutputField(
+        desc="Detailed analysis if include_details is True"
+    )</code></pre>
+                                </div>
+
+                                <h3>Structured JSON-like Outputs</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class EntityExtraction(dspy.Signature):
+    """Extract named entities from text."""
+    
+    text: str = dspy.InputField()
+    
+    # Use list with structured descriptions
+    people: list[str] = dspy.OutputField(
+        desc="Names of people mentioned"
+    )
+    
+    organizations: list[str] = dspy.OutputField(
+        desc="Organization and company names"
+    )
+    
+    locations: list[str] = dspy.OutputField(
+        desc="Geographic locations mentioned"
+    )
+    
+    dates: list[str] = dspy.OutputField(
+        desc="Dates in standardized YYYY-MM-DD format"
+    )</code></pre>
+                                </div>
+
+                                <h3>Multi-Step Reasoning Outputs</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class ReasonedClassification(dspy.Signature):
+    """Classify with explicit reasoning steps."""
+    
+    content: str = dspy.InputField(
+        desc="Content to classify"
+    )
+    
+    # Force explicit reasoning
+    observations: list[str] = dspy.OutputField(
+        desc="Key observations about the content"
+    )
+    
+    reasoning: str = dspy.OutputField(
+        desc="Step-by-step reasoning for classification"
+    )
+    
+    classification: str = dspy.OutputField(
+        desc="Final classification based on reasoning"
+    )
+    
+    confidence: float = dspy.OutputField(
+        desc="Confidence in classification (0.0 to 1.0)"
+    )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Common Mistakes -->
+                            <div class="content-block">
+                                <h2>⚠️ Common Mistakes to Avoid</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">❌</span>
+                                        <div class="section-content">
+                                            <h4>Vague Descriptions</h4>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Bad - too vague
+output: str = dspy.OutputField(desc="The result")
+
+# Good - specific
+summary: str = dspy.OutputField(
+    desc="2-3 sentence summary capturing main points"
+)</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">❌</span>
+                                        <div class="section-content">
+                                            <h4>Conflicting Instructions</h4>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Bad - contradictory
+summary: str = dspy.OutputField(
+    desc="Detailed comprehensive summary in 1 sentence"
+)
+
+# Good - consistent
+summary: str = dspy.OutputField(
+    desc="Concise 1-sentence summary of key point"
+)</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">❌</span>
+                                        <div class="section-content">
+                                            <h4>Missing Type Hints</h4>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Bad - no type hint
+keywords = dspy.OutputField(desc="List of keywords")
+
+# Good - typed
+keywords: list[str] = dspy.OutputField(
+    desc="List of 5-10 relevant keywords"
+)</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Type hints</strong> tell DSPy the expected format (str, int,
+                                                list, bool)</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Descriptions</strong> provide constraints, format specs, and
+                                                context</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Literal types</strong> constrain outputs to specific values</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Combine both</strong> for maximum control over outputs</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Be specific and consistent</strong> in your descriptions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="exercises.html" class="continue-btn">
+                                        <span>Continue to Exercises</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
