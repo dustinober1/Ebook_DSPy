@@ -79,13 +79,16 @@ async function buildSite() {
 }
 
 async function copyAssets() {
-  console.log('📁 Copying assets...');
+  console.log('📁 Verifying assets...');
 
-  // Copy professional CSS
-  await fs.copy('assets/professional.css', 'assets/css/main.css');
+  // Ensure directories exist
+  await fs.ensureDir('assets/css');
+  await fs.ensureDir('assets/js');
 
   // Copy navigation JS
-  await fs.copy('assets/navigation.js', 'assets/js/navigation.js');
+  if (await fs.pathExists('assets/navigation.js')) {
+    await fs.copy('assets/navigation.js', 'assets/js/navigation.js');
+  }
 
   // Create main.js with navigation logic
   const mainJS = `
