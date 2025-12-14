@@ -1048,4 +1048,4 @@ Need optimization?
 
 ## Next Steps
 
-Now you have a comprehensive understanding of DSPy optimizers. In the exercises, you'll apply these concepts to real-world scenarios and learn to make informed optimization decisions.</think>
+Now you have a comprehensive understanding of DSPy optimizers. In the exercises, you'll apply these concepts to real-world scenarios and learn to make informed optimization decisions.
