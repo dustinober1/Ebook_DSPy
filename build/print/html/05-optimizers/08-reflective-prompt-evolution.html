@@ -1,0 +1,1069 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Reflective Prompt Evolution - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="reflective-prompt-evolution-rpe-evolutionary-optimization-without-gradients"><a class="header" href="#reflective-prompt-evolution-rpe-evolutionary-optimization-without-gradients">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Reflective Prompt Evolution (RPE) is a novel optimizer that brings evolutionary computation techniques to prompt optimization. Unlike gradient-based or heuristic-based methods, RPE uses a population-based approach with mutation and selection to evolve better prompts through self-reflection, making it particularly effective for complex reasoning tasks where traditional optimization methods may struggle.</p>
+<h2 id="what-makes-rpe-special"><a class="header" href="#what-makes-rpe-special">What Makes RPE Special?</a></h2>
+<h3 id="evolutionary-approach"><a class="header" href="#evolutionary-approach">Evolutionary Approach</a></h3>
+<ol>
+<li><strong>Population-Based</strong>: Maintains multiple candidate prompts simultaneously</li>
+<li><strong>Self-Reflection</strong>: Uses LM to critique and improve prompts</li>
+<li><strong>Mutation Operations</strong>: Applies structured mutations to evolve prompts</li>
+<li><strong>Selection Pressure</strong>: Keeps only the best-performing variants</li>
+</ol>
+<h3 id="key-innovation-reflection-guided-evolution"><a class="header" href="#key-innovation-reflection-guided-evolution">Key Innovation: Reflection-Guided Evolution</a></h3>
+<p>RPE’s core insight is that language models can effectively critique their own prompts and suggest improvements. This self-reflection capability guides the evolutionary process, making mutations more intelligent than random perturbations.</p>
+<h2 id="basic-rpe-usage"><a class="header" href="#basic-rpe-usage">Basic RPE Usage</a></h2>
+<h3 id="simple-example"><a class="header" href="#simple-example">Simple Example</a></h3>
+<pre><code class="language-python">import dspy
+from dspy.teleprompter import ReflectivePromptEvolution
+
+# 1. Define your program
+class ComplexReasoning(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.reason = dspy.ChainOfThought(
+            "context, question -&gt; reasoning, answer"
+        )
+
+    def forward(self, context, question):
+        result = self.reason(context=context, question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning=result.reasoning
+        )
+
+# 2. Define evaluation metric
+def evaluate_reasoning(reasoning_text):
+    """Simple reasoning quality evaluator."""
+    # Basic heuristic: longer reasoning with more steps gets higher score
+    if not reasoning_text:
+        return 0.0
+
+    # Count reasoning indicators
+    reasoning_indicators = ["because", "therefore", "since", "thus", "hence", "step", "first", "second"]
+    score = sum(1 for indicator in reasoning_indicators if indicator in reasoning_text.lower())
+
+    # Normalize to 0-1 range
+    return min(score / len(reasoning_indicators), 1.0)
+
+def reasoning_accuracy(example, pred, trace=None):
+    """Evaluate both answer correctness and reasoning quality."""
+    answer_correct = example.answer.lower() == pred.answer.lower()
+    reasoning_quality = evaluate_reasoning(pred.reasoning)
+    return 0.7 * answer_correct + 0.3 * reasoning_quality
+
+# 3. Prepare data
+trainset = [
+    dspy.Example(
+        context="The company reported Q3 earnings...",
+        question="What was the revenue growth?",
+        answer="15% year-over-year"
+    ),
+    # ... more examples requiring complex reasoning
+]
+
+# 4. Create RPE optimizer
+optimizer = ReflectivePromptEvolution(
+    metric=reasoning_accuracy,
+    population_size=10,        # Maintain 10 candidate prompts
+    generations=5,             # Evolve for 5 generations
+    mutation_rate=0.3,         # 30% chance of mutation per generation
+    selection_pressure=0.5     # Keep top 50% each generation
+)
+
+# 5. Compile the program
+compiled_reasoning = optimizer.compile(
+    ComplexReasoning(),
+    trainset=trainset,
+    valset=valset  # Validation set for fitness evaluation
+)
+
+# 6. Use the evolved program
+result = compiled_reasoning(
+    context="In the latest shareholder meeting...",
+    question="What are the strategic priorities?"
+)
+print(f"Answer: {result.answer}")
+print(f"Reasoning: {result.reasoning}")
+</code></pre>
+<h2 id="the-rpe-algorithm"><a class="header" href="#the-rpe-algorithm">The RPE Algorithm</a></h2>
+<h3 id="three-step-evolution-process"><a class="header" href="#three-step-evolution-process">Three-Step Evolution Process</a></h3>
+<pre><code class="language-python">class RPEEvolution:
+    def __init__(self, population_size, generations):
+        self.population_size = population_size
+        self.generations = generations
+        self.population = []
+
+    def evolve(self, initial_program, trainset, metric):
+        """Main evolution loop."""
+        # Initialize population with variations
+        self.population = self.initialize_population(initial_program)
+
+        for generation in range(self.generations):
+            print(f"Generation {generation + 1}/{self.generations}")
+
+            # Step 1: Selection - evaluate fitness
+            fitness_scores = self.evaluate_population(
+                self.population, trainset, metric
+            )
+
+            # Step 2: Reflection - generate critiques
+            reflections = self.generate_reflections(
+                self.population, fitness_scores
+            )
+
+            # Step 3: Mutation - create offspring
+            offspring = self.mutate_population(
+                self.population, reflections
+            )
+
+            # Selection for next generation
+            self.population = self.select_survivors(
+                self.population + offspring,
+                fitness_scores
+            )
+
+        # Return best individual
+        best_idx = max(range(len(self.population)),
+                      key=lambda i: fitness_scores[i])
+        return self.population[best_idx]
+</code></pre>
+<h3 id="selection-mechanisms"><a class="header" href="#selection-mechanisms">Selection Mechanisms</a></h3>
+<pre><code class="language-python">def tournament_selection(population, fitness_scores, tournament_size=3):
+    """Select individuals using tournament selection."""
+    selected = []
+    for _ in range(len(population) // 2):  # Select half
+        # Random tournament participants
+        tournament_idx = random.sample(
+            range(len(population)),
+            min(tournament_size, len(population))
+        )
+
+        # Select winner of tournament
+        winner_idx = max(tournament_idx,
+                        key=lambda i: fitness_scores[i])
+        selected.append(population[winner_idx])
+
+    return selected
+
+def truncation_selection(population, fitness_scores, keep_ratio=0.5):
+    """Select top-performing individuals."""
+    # Sort by fitness
+    sorted_pop = sorted(
+        zip(population, fitness_scores),
+        key=lambda x: x[1],
+        reverse=True
+    )
+
+    # Keep top individuals
+    num_keep = int(len(population) * keep_ratio)
+    return [ind for ind, _ in sorted_pop[:num_keep]]
+</code></pre>
+<h2 id="self-reflection-mechanisms"><a class="header" href="#self-reflection-mechanisms">Self-Reflection Mechanisms</a></h2>
+<h3 id="generating-reflective-critiques"><a class="header" href="#generating-reflective-critiques">Generating Reflective Critiques</a></h3>
+<pre><code class="language-python">def generate_reflection(program, performance_data):
+    """Generate a reflective critique of the program."""
+    reflection_prompt = f"""
+    Analyze this prompt optimization task:
+
+    Current Program: {program}
+    Performance Data: {performance_data}
+
+    Reflect on:
+    1. What aspects of the prompt are causing errors?
+    2. Which instructions are unclear or ambiguous?
+    3. What type of reasoning is missing?
+    4. How could the prompt structure be improved?
+
+    Provide specific, actionable suggestions for improvement.
+    """
+
+    reflection = dspy.Predict(
+        "program, performance -&gt; critique, suggestions"
+    )
+
+    result = reflection(
+        program=str(program),
+        performance=performance_data
+    )
+
+    return {
+        'critique': result.critique,
+        'suggestions': result.suggestions.split('\n')
+    }
+
+def structured_reflection(program, examples, predictions):
+    """Generate structured reflection focusing on specific aspects."""
+    error_analysis = analyze_errors(examples, predictions)
+
+    reflection_template = """
+    Prompt Reflection Report:
+
+    1. ERROR PATTERNS:
+    - Most common error type: {error_type}
+    - Frequency: {error_freq}%
+    - Typical scenario: {error_scenario}
+
+    2. PROMPT WEAKNESSES:
+    - Missing instructions: {missing_instructions}
+    - Ambiguous terms: {ambiguous_terms}
+    - Insufficient context: {context_issues}
+
+    3. IMPROVEMENT RECOMMENDATIONS:
+    - Add specific guidance for: {additions}
+    - Clarify ambiguous terms: {clarifications}
+    - Restructure for better flow: {restructuring}
+    """
+
+    return reflection_prompt.format(**error_analysis)
+</code></pre>
+<h3 id="using-reflections-to-guide-mutations"><a class="header" href="#using-reflections-to-guide-mutations">Using Reflections to Guide Mutations</a></h3>
+<pre><code class="language-python">def reflection_guided_mutation(program, reflection):
+    """Apply mutations based on reflection insights."""
+    mutations = []
+
+    # Parse reflection for specific suggestions
+    for suggestion in reflection['suggestions']:
+        if "add instruction" in suggestion.lower():
+            mutations.append(('add_instruction', suggestion))
+        elif "clarify" in suggestion.lower():
+            mutations.append(('clarify_term', suggestion))
+        elif "restructure" in suggestion.lower():
+            mutations.append(('restructure', suggestion))
+
+    # Apply mutations with probabilities
+    mutated_program = program.copy()
+    for mutation_type, mutation_detail in mutations:
+        if random.random() &lt; 0.3:  # 30% chance per suggestion
+            mutated_program = apply_mutation(
+                mutated_program,
+                mutation_type,
+                mutation_detail
+            )
+
+    return mutated_program
+</code></pre>
+<h2 id="mutation-strategies"><a class="header" href="#mutation-strategies">Mutation Strategies</a></h2>
+<h3 id="basic-mutation-operations"><a class="header" href="#basic-mutation-operations">Basic Mutation Operations</a></h3>
+<pre><code class="language-python">class PromptMutator:
+    def __init__(self, mutation_rate=0.3):
+        self.mutation_rate = mutation_rate
+        self.mutation_operators = [
+            self.swap_instructions,
+            self.reverse_order,
+            self.random_replace,
+            self.add_instruction,
+            self.remove_instruction
+        ]
+
+    def swap_instructions(self, prompt):
+        """Swap two instruction segments."""
+        instructions = prompt.split('\n')
+        if len(instructions) &gt;= 2:
+            i, j = random.sample(range(len(instructions)), 2)
+            instructions[i], instructions[j] = instructions[j], instructions[i]
+            return '\n'.join(instructions)
+        return prompt
+
+    def reverse_order(self, prompt):
+        """Reverse the order of instructions."""
+        instructions = prompt.split('\n')
+        if len(instructions) &gt; 1:
+            return '\n'.join(reversed(instructions))
+        return prompt
+
+    def random_replace(self, prompt):
+        """Replace a random instruction with a variation."""
+        instructions = prompt.split('\n')
+        if instructions:
+            idx = random.randint(0, len(instructions) - 1)
+            variations = [
+                "Consider carefully:",
+                "Think step by step:",
+                "Analyze the following:",
+                "Evaluate systematically:",
+                "Examine in detail:"
+            ]
+            instructions[idx] = random.choice(variations)
+            return '\n'.join(instructions)
+        return prompt
+
+    def add_instruction(self, prompt):
+        """Add a new instruction at a random position."""
+        new_instructions = [
+            "Double-check your reasoning.",
+            "Consider alternative perspectives.",
+            "Ensure logical consistency.",
+            "Verify all assumptions.",
+            "Provide explicit justification."
+        ]
+
+        instructions = prompt.split('\n')
+        insert_pos = random.randint(0, len(instructions))
+        instructions.insert(insert_pos, random.choice(new_instructions))
+        return '\n'.join(instructions)
+
+    def remove_instruction(self, prompt):
+        """Remove a random instruction."""
+        instructions = prompt.split('\n')
+        if len(instructions) &gt; 1:
+            idx = random.randint(0, len(instructions) - 1)
+            instructions.pop(idx)
+            return '\n'.join(instructions)
+        return prompt
+</code></pre>
+<h3 id="label-mutation-for-demonstrations"><a class="header" href="#label-mutation-for-demonstrations">Label Mutation for Demonstrations</a></h3>
+<pre><code class="language-python">def mutate_labels(program, mutation_strength=0.2):
+    """Mutate the labels in few-shot examples."""
+    mutated_program = program.copy()
+
+    for example in mutated_program.demos:
+        # Get mutable fields
+        for field_name, field_value in example.items():
+            if isinstance(field_value, str):
+                # Decide whether to mutate this field
+                if random.random() &lt; mutation_strength:
+                    mutated_value = apply_label_mutation(field_value)
+                    example[field_name] = mutated_value
+
+    return mutated_program
+
+def apply_label_mutation(text):
+    """Apply specific mutation to a text label."""
+    mutations = [
+        lambda t: t.capitalize(),
+        lambda t: t.lower(),
+        lambda t: add_qualifier(t),
+        lambda t: remove_qualifier(t),
+        lambda t: rephrase(t)
+    ]
+
+    mutation_func = random.choice(mutations)
+    return mutation_func(text)
+
+def add_qualifier(text):
+    """Add a qualifying phrase."""
+    qualifiers = [
+        "Clearly, ", "Obviously, ", "Typically, ",
+        "Generally, ", "Usually, ", "Often "
+    ]
+    return random.choice(qualifiers) + text
+
+def rephrase(text):
+    """Simple rephrasing using synonyms."""
+    # Simplified example - in practice, use LM for better rephrasing
+    replacements = {
+        "good": "excellent",
+        "bad": "poor",
+        "big": "large",
+        "small": "tiny",
+        "fast": "quick"
+    }
+
+    words = text.split()
+    for i, word in enumerate(words):
+        lower_word = word.lower().strip('.,!?')
+        if lower_word in replacements:
+            words[i] = word.replace(lower_word, replacements[lower_word])
+
+    return ' '.join(words)
+</code></pre>
+<h2 id="diversity-maintenance"><a class="header" href="#diversity-maintenance">Diversity Maintenance</a></h2>
+<h3 id="cosine-similarity-thresholds"><a class="header" href="#cosine-similarity-thresholds">Cosine Similarity Thresholds</a></h3>
+<pre><code class="language-python">from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+def get_program_embedding(program):
+    """Generate embedding for a program based on its instruction and demonstrations."""
+    # Simple embedding based on text features
+    # In a real implementation, you'd use a proper language model
+    text_features = []
+
+    # Add instruction to features
+    if hasattr(program, 'instruction') and program.instruction:
+        text_features.append(program.instruction)
+
+    # Add demonstrations to features
+    if hasattr(program, 'demonstrations') and program.demonstrations:
+        for demo in program.demonstrations:
+            if isinstance(demo, str):
+                text_features.append(demo)
+            elif hasattr(demo, 'instruction'):
+                text_features.append(demo.instruction)
+
+    # Create simple embedding (tf-idf like)
+    all_text = ' '.join(text_features)
+
+    # Simple character-based embedding for demonstration
+    embedding = np.zeros(100)  # Fixed-size embedding
+    if all_text:
+        # Use character frequency as simple features
+        for i, char in enumerate(all_text[:100]):
+            embedding[i] = ord(char) / 255.0  # Normalize
+
+    return embedding
+
+def calculate_diversity(population):
+    """Calculate diversity metrics for the population."""
+    # Convert programs to embeddings
+    embeddings = []
+    for program in population:
+        embedding = get_program_embedding(program)
+        embeddings.append(embedding)
+
+    embeddings = np.array(embeddings)
+
+    # Calculate pairwise similarities
+    similarities = cosine_similarity(embeddings)
+
+    # Diversity metrics
+    avg_similarity = np.mean(similarities[np.triu_indices_from(similarities, k=1)])
+    min_similarity = np.min(similarities[similarities &gt; 0])
+    max_similarity = np.max(similarities)
+
+    return {
+        'average_similarity': avg_similarity,
+        'min_similarity': min_similarity,
+        'max_similarity': max_similarity,
+        'diversity_score': 1 - avg_similarity  # Higher = more diverse
+    }
+
+def enforce_diversity_constraint(population, threshold=0.9):
+    """Remove programs that are too similar to others."""
+    if len(population) &lt;= 1:
+        return population
+
+    # Calculate all pairwise similarities
+    embeddings = [get_program_embedding(p) for p in population]
+    similarities = cosine_similarity(embeddings)
+
+    # Find and remove similar programs
+    to_remove = set()
+    for i in range(len(population)):
+        for j in range(i + 1, len(population)):
+            if similarities[i][j] &gt; threshold:
+                # Remove the one with lower fitness (assume sorted)
+                to_remove.add(j)
+
+    # Return filtered population
+    return [p for i, p in enumerate(population) if i not in to_remove]
+
+def diversity_mutation(population, diversity_score, target_diversity=0.7):
+    """Apply mutations to increase diversity if needed."""
+    if diversity_score &lt; target_diversity:
+        # Population lacks diversity, apply more mutations
+        mutated = []
+        for program in population:
+            if random.random() &lt; 0.5:  # 50% chance
+                mutated_program = apply_exploratory_mutation(program)
+                mutated.append(mutated_program)
+            else:
+                mutated.append(program)
+        return mutated
+    return population
+
+def apply_exploratory_mutation(program):
+    """Apply more exploratory mutations for diversity."""
+    mutator = PromptMutator(mutation_rate=0.5)  # Higher rate
+    return mutator.mutate(program)
+</code></pre>
+<h3 id="novelty-based-selection"><a class="header" href="#novelty-based-selection">Novelty-Based Selection</a></h3>
+<pre><code class="language-python">def novelty_based_selection(population, fitness_scores, novelty_weight=0.3):
+    """Select based on combination of fitness and novelty."""
+    # Calculate novelty scores
+    novelty_scores = calculate_novelty_scores(population)
+
+    # Combine fitness and novelty
+    combined_scores = []
+    for i in range(len(population)):
+        combined = (1 - novelty_weight) * fitness_scores[i] + \
+                  novelty_weight * novelty_scores[i]
+        combined_scores.append(combined)
+
+    # Select based on combined scores
+    selected_indices = sorted(
+        range(len(population)),
+        key=lambda i: combined_scores[i],
+        reverse=True
+    )[:len(population) // 2]
+
+    return [population[i] for i in selected_indices]
+
+def calculate_novelty_scores(population):
+    """Calculate novelty score for each program."""
+    embeddings = [get_program_embedding(p) for p in population]
+    novelty_scores = []
+
+    for i, embedding in enumerate(embeddings):
+        # Average distance to all others
+        distances = []
+        for j, other_embedding in enumerate(embeddings):
+            if i != j:
+                dist = np.linalg.norm(embedding - other_embedding)
+                distances.append(dist)
+
+        novelty = np.mean(distances) if distances else 0
+        novelty_scores.append(novelty)
+
+    # Normalize to [0, 1]
+    max_novelty = max(novelty_scores) if novelty_scores else 1
+    return [n / max_novelty for n in novelty_scores]
+</code></pre>
+<h2 id="integration-examples"><a class="header" href="#integration-examples">Integration Examples</a></h2>
+<h3 id="rpe-with-chainofthought"><a class="header" href="#rpe-with-chainofthought">RPE with ChainOfThought</a></h3>
+<pre><code class="language-python">class RPEChainOfThought(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.cot = dspy.ChainOfThought(
+            "question -&gt; reasoning, answer"
+        )
+
+    def forward(self, question):
+        return self.cot(question=question)
+
+# Optimize Chain of Thought with RPE
+optimizer = ReflectivePromptEvolution(
+    metric=exact_match,
+    population_size=8,
+    generations=4,
+    mutation_rate=0.4
+)
+
+optimized_cot = optimizer.compile(
+    RPEChainOfThought(),
+    trainset=math_problems,
+    valset=math_problems_val
+)
+
+# The evolved Chain of Thought prompt might include:
+# - Specific math problem-solving instructions
+# - Step-by-step reasoning requirements
+# - Error-checking procedures
+# - Domain-specific guidance
+</code></pre>
+<h3 id="rpe-for-complex-multi-hop-reasoning"><a class="header" href="#rpe-for-complex-multi-hop-reasoning">RPE for Complex Multi-hop Reasoning</a></h3>
+<pre><code class="language-python">class MultiHopReasoning(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.hop1 = dspy.ChainOfThought("question -&gt; intermediate_1")
+        self.hop2 = dspy.ChainOfThought("question, intermediate_1 -&gt; intermediate_2")
+        self.hop3 = dspy.ChainOfThought("question, intermediate_1, intermediate_2 -&gt; answer")
+
+    def forward(self, question):
+        result1 = self.hop1(question=question)
+        result2 = self.hop2(question=question, intermediate_1=result1.intermediate_1)
+        result3 = self.hop3(
+            question=question,
+            intermediate_1=result1.intermediate_1,
+            intermediate_2=result2.intermediate_2
+        )
+        return dspy.Prediction(
+            answer=result3.answer,
+            reasoning_chain=[
+                result1.reasoning,
+                result2.reasoning,
+                result3.reasoning
+            ]
+        )
+
+# RPE optimization for multi-hop reasoning
+optimizer = ReflectivePromptEvolution(
+    metric=multi_hop_accuracy,
+    population_size=12,
+    generations=6,
+    selection_pressure=0.4,  # More selective
+    diversity_weight=0.4     # Emphasize diverse approaches
+)
+
+optimized_multihop = optimizer.compile(
+    MultiHopReasoning(),
+    trainset=complex_qa_pairs,
+    valset=complex_qa_val
+)
+</code></pre>
+<h3 id="comparative-performance-analysis"><a class="header" href="#comparative-performance-analysis">Comparative Performance Analysis</a></h3>
+<pre><code class="language-python">def compare_optimizers(task, trainset, testset):
+    """Compare RPE with other optimizers on the same task."""
+    results = {}
+
+    # 1. Baseline
+    baseline = task()
+    results['baseline'] = evaluate(baseline, testset)
+
+    # 2. BootstrapFewShot
+    bootstrap_optimizer = BootstrapFewShot(metric=exact_match)
+    bootstrap_compiled = bootstrap_optimizer.compile(task(), trainset=trainset)
+    results['bootstrap'] = evaluate(bootstrap_compiled, testset)
+
+    # 3. MIPRO
+    mipro_optimizer = MIPRO(metric=exact_match, num_candidates=10)
+    mipro_compiled = mipro_optimizer.compile(task(), trainset=trainset)
+    results['mipro'] = evaluate(mipro_compiled, testset)
+
+    # 4. RPE
+    rpe_optimizer = ReflectivePromptEvolution(
+        metric=exact_match,
+        population_size=10,
+        generations=5
+    )
+    rpe_compiled = rpe_optimizer.compile(task(), trainset=trainset)
+    results['rpe'] = evaluate(rpe_compiled, testset)
+
+    # Analyze results
+    print("Optimizer Comparison Results:")
+    for optimizer, score in results.items():
+        improvement = ((score - results['baseline']) / results['baseline']) * 100
+        print(f"{optimizer}: {score:.3f} ({improvement:+.1f}%)")
+
+    return results
+
+# Example comparison on a complex reasoning task
+results = compare_optimizers(
+    task=MultiHopReasoning,
+    trainset=hotpotqa_train[:100],
+    testset=hotpotqa_test[:50]
+)
+</code></pre>
+<h2 id="advanced-configuration"><a class="header" href="#advanced-configuration">Advanced Configuration</a></h2>
+<h3 id="custom-mutation-operators"><a class="header" href="#custom-mutation-operators">Custom Mutation Operators</a></h3>
+<pre><code class="language-python">class CustomMutationOperator:
+    def __init__(self, domain_knowledge=None):
+        self.domain_knowledge = domain_knowledge or {}
+
+    def domain_specific_mutation(self, prompt, domain):
+        """Apply domain-specific mutations."""
+        if domain == "math":
+            return self.add_math_guidance(prompt)
+        elif domain == "code":
+            return self.add_code_guidance(prompt)
+        elif domain == "legal":
+            return self.add_legal_guidance(prompt)
+        return prompt
+
+    def add_math_guidance(self, prompt):
+        """Add mathematical reasoning guidance."""
+        math_guidance = [
+            "Show all calculations step by step.",
+            "Verify your final answer makes sense.",
+            "Consider edge cases and special conditions.",
+            "Check for common mathematical errors."
+        ]
+
+        return prompt + "\n" + "\n".join(math_guidance)
+
+    def add_code_guidance(self, prompt):
+        """Add programming-specific guidance."""
+        code_guidance = [
+            "Consider time and space complexity.",
+            "Handle edge cases and error conditions.",
+            "Follow best practices for readability.",
+            "Test with example inputs."
+        ]
+
+        return prompt + "\n" + "\n".join(code_guidance)
+
+# Use custom mutations with RPE
+custom_mutator = CustomMutationOperator(domain_knowledge={
+    "math": ["algebra", "calculus", "statistics"],
+    "code": ["python", "javascript", "sql"]
+})
+
+optimizer = ReflectivePromptEvolution(
+    metric=accuracy_metric,
+    population_size=10,
+    generations=5,
+    custom_mutator=custom_mutator
+)
+</code></pre>
+<h3 id="adaptive-evolution-parameters"><a class="header" href="#adaptive-evolution-parameters">Adaptive Evolution Parameters</a></h3>
+<pre><code class="language-python">class AdaptiveRPE(ReflectivePromptEvolution):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.performance_history = []
+        self.adaptive_params = {
+            'mutation_rate': kwargs.get('mutation_rate', 0.3),
+            'population_size': kwargs.get('population_size', 10),
+            'selection_pressure': kwargs.get('selection_pressure', 0.5)
+        }
+
+    def adapt_parameters(self, generation, fitness_scores):
+        """Adapt evolution parameters based on performance."""
+        if len(self.performance_history) &gt; 1:
+            # Check if performance is stagnating
+            recent_improvement = (
+                self.performance_history[-1] -
+                self.performance_history[-2]
+            )
+
+            if recent_improvement &lt; 0.01:  # Stagnating
+                # Increase mutation rate
+                self.adaptive_params['mutation_rate'] = min(
+                    0.7,
+                    self.adaptive_params['mutation_rate'] * 1.2
+                )
+                print(f"Increasing mutation rate to {self.adaptive_params['mutation_rate']:.2f}")
+
+            elif recent_improvement &gt; 0.05:  # Rapid improvement
+                # Decrease mutation rate to fine-tune
+                self.adaptive_params['mutation_rate'] = max(
+                    0.1,
+                    self.adaptive_params['mutation_rate'] * 0.9
+                )
+                print(f"Decreasing mutation rate to {self.adaptive_params['mutation_rate']:.2f}")
+
+    def evolve_generation(self, population, generation):
+        """Evolve one generation with adaptive parameters."""
+        # Record best fitness
+        fitness_scores = self.evaluate_fitness(population)
+        self.performance_history.append(max(fitness_scores))
+
+        # Adapt parameters based on performance
+        self.adapt_parameters(generation, fitness_scores)
+
+        # Apply evolution with current parameters
+        return super().evolve_generation(population, generation)
+
+# Use adaptive RPE
+adaptive_optimizer = AdaptiveRPE(
+    metric=accuracy_metric,
+    population_size=10,
+    generations=10,
+    mutation_rate=0.3
+)
+</code></pre>
+<h2 id="best-practices-and-tips"><a class="header" href="#best-practices-and-tips">Best Practices and Tips</a></h2>
+<h3 id="when-to-use-rpe"><a class="header" href="#when-to-use-rpe">When to Use RPE</a></h3>
+<ol>
+<li><strong>Complex Reasoning Tasks</strong>: Multi-step problems requiring sophisticated reasoning</li>
+<li><strong>Limited Gradient Information</strong>: When evaluation is expensive or non-differentiable</li>
+<li><strong>Diverse Solution Space</strong>: Problems with multiple valid approaches</li>
+<li><strong>Exploratory Optimization</strong>: When you want to discover novel prompt strategies</li>
+</ol>
+<h3 id="rpe-configuration-guidelines"><a class="header" href="#rpe-configuration-guidelines">RPE Configuration Guidelines</a></h3>
+<pre><code class="language-python"># For small datasets (&lt; 50 examples)
+small_config = {
+    "population_size": 5,
+    "generations": 3,
+    "mutation_rate": 0.5,  # Higher mutation due to less data
+    "selection_pressure": 0.6
+}
+
+# For medium datasets (50-200 examples)
+medium_config = {
+    "population_size": 10,
+    "generations": 5,
+    "mutation_rate": 0.3,
+    "selection_pressure": 0.5
+}
+
+# For large datasets (&gt; 200 examples)
+large_config = {
+    "population_size": 15,
+    "generations": 7,
+    "mutation_rate": 0.2,  # Lower mutation, more exploitation
+    "selection_pressure": 0.4
+}
+
+# For highly complex tasks
+complex_config = {
+    "population_size": 20,
+    "generations": 10,
+    "mutation_rate": 0.4,
+    "selection_pressure": 0.3,  # Keep more diversity
+    "diversity_weight": 0.4
+}
+</code></pre>
+<h3 id="common-pitfalls-to-avoid"><a class="header" href="#common-pitfalls-to-avoid">Common Pitfalls to Avoid</a></h3>
+<ol>
+<li><strong>Too Small Population</strong>: Less than 5 individuals may not provide enough diversity</li>
+<li><strong>Too High Mutation Rate</strong>: Can destroy good solutions (&gt; 0.7)</li>
+<li><strong>Insufficient Generations</strong>: Less than 3 generations may not converge</li>
+<li><strong>Ignoring Diversity</strong>: Can lead to premature convergence</li>
+<li><strong>Poor Reflection Quality</strong>: Ensure reflection prompts are specific and actionable</li>
+</ol>
+<h3 id="debugging-rpe"><a class="header" href="#debugging-rpe">Debugging RPE</a></h3>
+<pre><code class="language-python">class DebugRPE(ReflectivePromptEvolution):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.debug_info = {
+            'mutations_applied': [],
+            'reflection_quality': [],
+            'diversity_history': [],
+            'fitness_progression': []
+        }
+
+    def log_mutation(self, program, mutation_type, result):
+        """Log mutation for debugging."""
+        self.debug_info['mutations_applied'].append({
+            'generation': len(self.debug_info['fitness_progression']),
+            'type': mutation_type,
+            'before': program[:100],
+            'after': result[:100]
+        })
+
+    def analyze_convergence(self):
+        """Analyze optimization progress."""
+        import matplotlib.pyplot as plt
+
+        # Plot fitness progression
+        plt.figure(figsize=(12, 4))
+
+        plt.subplot(1, 3, 1)
+        plt.plot(self.debug_info['fitness_progression'])
+        plt.title('Fitness Progression')
+        plt.xlabel('Generation')
+        plt.ylabel('Best Fitness')
+
+        plt.subplot(1, 3, 2)
+        plt.plot(self.debug_info['diversity_history'])
+        plt.title('Population Diversity')
+        plt.xlabel('Generation')
+        plt.ylabel('Diversity Score')
+
+        plt.subplot(1, 3, 3)
+        mutation_counts = {}
+        for mutation in self.debug_info['mutations_applied']:
+            mutation_type = mutation['type']
+            mutation_counts[mutation_type] = mutation_counts.get(mutation_type, 0) + 1
+
+        plt.bar(mutation_counts.keys(), mutation_counts.values())
+        plt.title('Mutation Types Applied')
+        plt.xlabel('Mutation Type')
+        plt.ylabel('Count')
+
+        plt.tight_layout()
+        plt.show()
+
+# Use debug RPE to analyze optimization
+debug_optimizer = DebugRPE(
+    metric=accuracy_metric,
+    population_size=8,
+    generations=5
+)
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Reflective Prompt Evolution brings the power of evolutionary computation to prompt optimization:</p>
+<ol>
+<li><strong>Self-Reflection</strong>: Uses LM to intelligently guide mutations</li>
+<li><strong>Population-Based</strong>: Explores multiple solutions simultaneously</li>
+<li><strong>Adaptive</strong>: Adjusts to task complexity and data availability</li>
+<li><strong>Diverse</strong>: Maintains solution diversity through explicit mechanisms</li>
+<li><strong>Principled</strong>: Based on established evolutionary algorithms principles</li>
+</ol>
+<p>RPE is particularly valuable for complex reasoning tasks where traditional optimizers may struggle, offering a novel approach to prompt optimization that combines the strengths of both evolutionary computation and language model self-reflection.</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Evolution Without Gradients</strong>: RPE doesn’t require gradient information</li>
+<li><strong>Reflection-Guided</strong>: Self-reflection makes mutations more intelligent</li>
+<li><strong>Diversity Matters</strong>: Maintaining population diversity is crucial</li>
+<li><strong>Adaptive Parameters</strong>: RPE can adapt its strategy during optimization</li>
+<li><strong>Best for Complex Tasks</strong>: Excels at multi-step reasoning problems</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/07-constraint-driven-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/09-copa-method.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/07-constraint-driven-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/09-copa-method.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

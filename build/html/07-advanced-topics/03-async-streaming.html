@@ -1,0 +1,1035 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Async and Streaming - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/07-advanced-topics/03-async-streaming.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="async-and-streaming-building-real-time-dspy-applications"><a class="header" href="#async-and-streaming-building-real-time-dspy-applications">Async and Streaming: Building Real-Time DSPy Applications</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>As applications scale and user expectations grow, the ability to handle real-time data streams and concurrent operations becomes essential. This section explores how to build asynchronous and streaming-capable DSPy applications that can process data as it arrives, handle multiple requests simultaneously, and provide responsive user experiences.</p>
+<h2 id="understanding-asynchronous-dspy"><a class="header" href="#understanding-asynchronous-dspy">Understanding Asynchronous DSPy</a></h2>
+<h3 id="why-async-matters"><a class="header" href="#why-async-matters">Why Async Matters</a></h3>
+<ol>
+<li><strong>Non-blocking Operations</strong>: Don’t wait for slow API calls</li>
+<li><strong>Concurrent Processing</strong>: Handle multiple requests simultaneously</li>
+<li><strong>Real-time Responses</strong>: Process streaming data as it arrives</li>
+<li><strong>Resource Efficiency</strong>: Better utilization of system resources</li>
+<li><strong>Improved Throughput</strong>: Process more requests per second</li>
+</ol>
+<h3 id="async-dspy-patterns"><a class="header" href="#async-dspy-patterns">Async DSPy Patterns</a></h3>
+<pre><code class="language-python">import asyncio
+import aiohttp
+from typing import AsyncGenerator, List, Dict, Any
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+class AsyncDSPyModule(dspy.Module):
+    """Base class for asynchronous DSPy modules."""
+
+    def __init__(self):
+        super().__init__()
+        self.executor = ThreadPoolExecutor(max_workers=4)
+
+    async def aforward(self, *args, **kwargs):
+        """Async version of forward method."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(
+            self.executor,
+            self.forward,
+            *args,
+            **kwargs
+        )
+
+    async def batch_aforward(self, batch_args, batch_kwargs=None):
+        """Async batch processing."""
+        if batch_kwargs is None:
+            batch_kwargs = [{}] * len(batch_args)
+
+        tasks = [
+            self.aforward(*args, **kwargs)
+            for args, kwargs in zip(batch_args, batch_kwargs)
+        ]
+
+        return await asyncio.gather(*tasks)
+</code></pre>
+<h2 id="streaming-data-processing"><a class="header" href="#streaming-data-processing">Streaming Data Processing</a></h2>
+<h3 id="1-stream-processor"><a class="header" href="#1-stream-processor">1. Stream Processor</a></h3>
+<pre><code class="language-python">from collections import deque
+import queue
+
+class StreamProcessor:
+    """Process streaming data with DSPy modules."""
+
+    def __init__(self, buffer_size=100, batch_size=5):
+        self.buffer_size = buffer_size
+        self.batch_size = batch_size
+        self.buffer = deque(maxlen=buffer_size)
+        self.is_running = False
+        self.results_queue = queue.Queue()
+
+    async def add_item(self, item):
+        """Add item to stream buffer."""
+        self.buffer.append(item)
+        if len(self.buffer) &gt;= self.batch_size:
+            await self._process_batch()
+
+    async def _process_batch(self):
+        """Process current buffer as batch."""
+        if not self.buffer:
+            return
+
+        batch = list(self.buffer)
+        self.buffer.clear()
+
+        # Process batch
+        results = await self._process_batch_items(batch)
+
+        # Put results in queue
+        for result in results:
+            self.results_queue.put(result)
+
+    async def _process_batch_items(self, batch):
+        """Override in subclasses for specific processing."""
+        return batch  # Default: return items as-is
+
+    def get_results(self):
+        """Get processed results."""
+        results = []
+        while not self.results_queue.empty():
+            results.append(self.results_queue.get())
+        return results
+
+    async def flush(self):
+        """Process remaining items in buffer."""
+        if self.buffer:
+            await self._process_batch()
+
+    def start(self):
+        """Start stream processing."""
+        self.is_running = True
+
+    def stop(self):
+        """Stop stream processing."""
+        self.is_running = False
+</code></pre>
+<h3 id="2-real-time-text-analyzer"><a class="header" href="#2-real-time-text-analyzer">2. Real-time Text Analyzer</a></h3>
+<pre><code class="language-python">class RealTimeTextAnalyzer(AsyncDSPyModule):
+    """Analyze text streams in real-time."""
+
+    def __init__(self):
+        super().__init__()
+        self.analyze = dspy.Predict("text -&gt; sentiment, topics, entities")
+        self.stream_processor = StreamProcessor()
+
+    async def analyze_stream(self, text_stream: AsyncGenerator[str, None]):
+        """Analyze text as it streams in."""
+        self.stream_processor.start()
+
+        try:
+            async for text in text_stream:
+                await self.stream_processor.add_item(text)
+
+                # Get and process results
+                results = self.stream_processor.get_results()
+                for result in results:
+                    analysis = await self._analyze_text(result)
+                    yield analysis
+
+        finally:
+            await self.stream_processor.flush()
+            self.stream_processor.stop()
+
+    async def _analyze_text(self, text):
+        """Analyze individual text item."""
+        loop = asyncio.get_event_loop()
+        analysis = await loop.run_in_executor(
+            self.executor,
+            self.analyze,
+            text=text
+        )
+        return {
+            "text": text,
+            "sentiment": analysis.sentiment,
+            "topics": analysis.topics,
+            "entities": analysis.entities,
+            "timestamp": time.time()
+        }
+
+    async def _process_batch_items(self, batch):
+        """Process batch of texts."""
+        loop = asyncio.get_event_loop()
+        tasks = [self._analyze_text(text) for text in batch]
+        return await asyncio.gather(*tasks)
+</code></pre>
+<h2 id="concurrent-request-handling"><a class="header" href="#concurrent-request-handling">Concurrent Request Handling</a></h2>
+<h3 id="1-concurrent-request-manager"><a class="header" href="#1-concurrent-request-manager">1. Concurrent Request Manager</a></h3>
+<pre><code class="language-python">import asyncio
+from typing import Dict, Callable, Any
+from dataclasses import dataclass
+
+@dataclass
+class Request:
+    id: str
+    data: Any
+    callback: Callable = None
+    timeout: float = 30.0
+
+class ConcurrentRequestManager:
+    """Manage concurrent DSPy requests efficiently."""
+
+    def __init__(self, max_concurrent=10, request_timeout=30):
+        self.max_concurrent = max_concurrent
+        self.request_timeout = request_timeout
+        self.semaphore = asyncio.Semaphore(max_concurrent)
+        self.active_requests: Dict[str, asyncio.Task] = {}
+        self.request_queue = asyncio.Queue()
+
+    async def submit_request(self, request: Request) -&gt; Any:
+        """Submit request for processing."""
+        # Acquire semaphore to limit concurrency
+        async with self.semaphore:
+            task = asyncio.create_task(
+                self._process_request(request)
+            )
+            self.active_requests[request.id] = task
+
+            try:
+                result = await asyncio.wait_for(
+                    task,
+                    timeout=request.timeout
+                )
+                return result
+            except asyncio.TimeoutError:
+                task.cancel()
+                raise TimeoutError(f"Request {request.id} timed out")
+            finally:
+                self.active_requests.pop(request.id, None)
+
+    async def _process_request(self, request: Request):
+        """Process individual request."""
+        # Override in subclasses or provide processor function
+        if request.callback:
+            return await request.callback(request.data)
+        else:
+            return request.data
+
+    async def submit_batch(self, requests: List[Request]) -&gt; List[Any]:
+        """Submit multiple requests concurrently."""
+        tasks = [
+            self.submit_request(request)
+            for request in requests
+        ]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+
+    def cancel_request(self, request_id: str):
+        """Cancel a specific request."""
+        if request_id in self.active_requests:
+            self.active_requests[request_id].cancel()
+            del self.active_requests[request_id]
+
+    def get_active_requests(self) -&gt; List[str]:
+        """Get list of active request IDs."""
+        return list(self.active_requests.keys())
+
+    async def shutdown(self):
+        """Shutdown request manager."""
+        # Cancel all active requests
+        for task in self.active_requests.values():
+            task.cancel()
+
+        # Wait for all tasks to complete
+        if self.active_requests:
+            await asyncio.gather(
+                *self.active_requests.values(),
+                return_exceptions=True
+            )
+</code></pre>
+<h3 id="2-async-rag-system"><a class="header" href="#2-async-rag-system">2. Async RAG System</a></h3>
+<pre><code class="language-python">class AsyncRAG(AsyncDSPyModule):
+    """Asynchronous RAG system for real-time Q&amp;A."""
+
+    def __init__(self, concurrent_limit=5):
+        super().__init__()
+        self.concurrent_limit = concurrent_limit
+        self.request_manager = ConcurrentRequestManager(
+            max_concurrent=concurrent_limit
+        )
+
+        # Components
+        self.retrieve = dspy.Retrieve(k=5)
+        self.generate = dspy.ChainOfThought("context, question -&gt; answer")
+
+    async def aquery(self, question: str) -&gt; dspy.Prediction:
+        """Asynchronous query processing."""
+        request = Request(
+            id=str(time.time()),
+            data=question,
+            callback=self._process_query,
+            timeout=10.0
+        )
+        return await self.request_manager.submit_request(request)
+
+    async def batch_aquery(self, questions: List[str]) -&gt; List[dspy.Prediction]:
+        """Process multiple queries concurrently."""
+        requests = [
+            Request(
+                id=f"query_{i}",
+                data=question,
+                callback=self._process_query,
+                timeout=10.0
+            )
+            for i, question in enumerate(questions)
+        ]
+        return await self.request_manager.submit_batch(requests)
+
+    async def _process_query(self, question: str) -&gt; dspy.Prediction:
+        """Process individual query."""
+        loop = asyncio.get_event_loop()
+
+        # Retrieve documents asynchronously
+        retrieved = await loop.run_in_executor(
+            self.executor,
+            self.retrieve,
+            question=question
+        )
+
+        # Generate answer
+        prediction = await loop.run_in_executor(
+            self.executor,
+            self.generate,
+            context="\n".join(retrieved.passages),
+            question=question
+        )
+
+        return dspy.Prediction(
+            question=question,
+            answer=prediction.answer,
+            context=retrieved.passages
+        )
+
+    async def stream_query(self, questions_stream: AsyncGenerator[str, None]):
+        """Process streaming queries."""
+        async for question in questions_stream:
+            try:
+                result = await self.aquery(question)
+                yield result
+            except Exception as e:
+                yield dspy.Prediction(
+                    question=question,
+                    error=str(e)
+                )
+</code></pre>
+<h2 id="websocket-integration"><a class="header" href="#websocket-integration">WebSocket Integration</a></h2>
+<h3 id="1-websocket-handler"><a class="header" href="#1-websocket-handler">1. WebSocket Handler</a></h3>
+<pre><code class="language-python">import websockets
+import json
+from typing import Set
+
+class DSPyWebSocketHandler:
+    """WebSocket handler for real-time DSPy interactions."""
+
+    def __init__(self, host="localhost", port=8765):
+        self.host = host
+        self.port = port
+        self.clients: Set[websockets.WebSocketServerProtocol] = set()
+        self.dspy_module = None
+
+    def set_module(self, module):
+        """Set the DSPy module to use."""
+        self.dspy_module = module
+
+    async def register_client(self, websocket, path):
+        """Register new WebSocket client."""
+        self.clients.add(websocket)
+        print(f"Client connected. Total: {len(self.clients)}")
+
+        try:
+            await self.handle_client(websocket)
+        except websockets.exceptions.ConnectionClosed:
+            pass
+        finally:
+            self.clients.remove(websocket)
+            print(f"Client disconnected. Total: {len(self.clients)}")
+
+    async def handle_client(self, websocket):
+        """Handle client messages."""
+        async for message in websocket:
+            try:
+                data = json.loads(message)
+                response = await self.process_message(data)
+                await websocket.send(json.dumps(response))
+            except Exception as e:
+                error_response = {
+                    "type": "error",
+                    "message": str(e)
+                }
+                await websocket.send(json.dumps(error_response))
+
+    async def process_message(self, data):
+        """Process incoming message."""
+        message_type = data.get("type", "query")
+
+        if message_type == "query":
+            if self.dspy_module:
+                if hasattr(self.dspy_module, 'aforward'):
+                    result = await self.dspy_module.aforward(data.get("query"))
+                else:
+                    # Fallback to sync processing
+                    result = self.dspy_module.forward(data.get("query"))
+
+                return {
+                    "type": "response",
+                    "result": result.__dict__
+                }
+            else:
+                return {"type": "error", "message": "No module configured"}
+
+        elif message_type == "stream":
+            if hasattr(self.dspy_module, 'stream'):
+                # Handle streaming response
+                responses = []
+                async for response in self.dspy_module.stream(data.get("input")):
+                    responses.append(response)
+                    await self.broadcast({
+                        "type": "stream_update",
+                        "partial": response.__dict__
+                    })
+
+                return {
+                    "type": "stream_complete",
+                    "responses": [r.__dict__ for r in responses]
+                }
+
+        else:
+            return {"type": "error", "message": "Unknown message type"}
+
+    async def broadcast(self, message):
+        """Broadcast message to all clients."""
+        if self.clients:
+            await asyncio.gather(
+                *[client.send(json.dumps(message)) for client in self.clients],
+                return_exceptions=True
+            )
+
+    async def start_server(self):
+        """Start WebSocket server."""
+        print(f"Starting WebSocket server on {self.host}:{self.port}")
+        async with websockets.serve(self.register_client, self.host, self.port):
+            await asyncio.Future()  # Run forever
+
+    def run(self):
+        """Run the WebSocket server."""
+        asyncio.run(self.start_server())
+</code></pre>
+<h3 id="2-real-time-chat-bot"><a class="header" href="#2-real-time-chat-bot">2. Real-time Chat Bot</a></h3>
+<pre><code class="language-python">class RealTimeChatBot(AsyncDSPyModule):
+    """Real-time chat bot with WebSocket integration."""
+
+    def __init__(self):
+        super().__init__()
+        self.conversation_history = {}
+        self.respond = dspy.ChainOfThought("history, message -&gt; response")
+        self.websocket_handler = DSPyWebSocketHandler()
+
+    async def start_chat_server(self):
+        """Start chat server."""
+        self.websocket_handler.set_module(self)
+        await self.websocket_handler.start_server()
+
+    async def process_message(self, session_id: str, message: str):
+        """Process chat message."""
+        # Get conversation history
+        history = self.conversation_history.get(session_id, [])
+
+        # Generate response
+        loop = asyncio.get_event_loop()
+        response = await loop.run_in_executor(
+            self.executor,
+            self.respond,
+            history=str(history[-5:]),  # Last 5 messages
+            message=message
+        )
+
+        # Update history
+        history.append({"user": message, "bot": response.response})
+        self.conversation_history[session_id] = history
+
+        return {
+            "session_id": session_id,
+            "response": response.response,
+            "history_length": len(history)
+        }
+
+    async def _process_query(self, message):
+        """Process message for WebSocket handler."""
+        # Extract session_id from message if available
+        session_id = message.get("session_id", "default")
+        user_message = message.get("message", "")
+
+        return await self.process_message(session_id, user_message)
+
+    async def stream_response(self, session_id: str, message: str):
+        """Stream response generation."""
+        words = message.split()
+        partial_response = ""
+
+        for word in words:
+            partial_response += word + " "
+            yield {
+                "session_id": session_id,
+                "partial": partial_response,
+                "complete": False
+            }
+            await asyncio.sleep(0.1)  # Simulate typing delay
+
+        yield {
+            "session_id": session_id,
+            "final": partial_response.strip(),
+            "complete": True
+        }
+</code></pre>
+<h2 id="event-driven-architecture"><a class="header" href="#event-driven-architecture">Event-Driven Architecture</a></h2>
+<h3 id="1-event-system"><a class="header" href="#1-event-system">1. Event System</a></h3>
+<pre><code class="language-python">from collections import defaultdict
+from typing import Dict, List, Callable
+import asyncio
+
+class EventSystem:
+    """Event system for decoupled DSPy components."""
+
+    def __init__(self):
+        self.listeners: Dict[str, List[Callable]] = defaultdict(list)
+        self.event_queue = asyncio.Queue()
+        self.running = False
+
+    def subscribe(self, event_type: str, callback: Callable):
+        """Subscribe to event type."""
+        self.listeners[event_type].append(callback)
+
+    def unsubscribe(self, event_type: str, callback: Callable):
+        """Unsubscribe from event type."""
+        if callback in self.listeners[event_type]:
+            self.listeners[event_type].remove(callback)
+
+    async def publish(self, event_type: str, data: Any):
+        """Publish event to all listeners."""
+        event = {
+            "type": event_type,
+            "data": data,
+            "timestamp": time.time()
+        }
+        await self.event_queue.put(event)
+
+    async def start_processing(self):
+        """Start event processing loop."""
+        self.running = True
+        while self.running:
+            try:
+                event = await asyncio.wait_for(
+                    self.event_queue.get(),
+                    timeout=1.0
+                )
+                await self._handle_event(event)
+            except asyncio.TimeoutError:
+                continue
+
+    async def _handle_event(self, event):
+        """Handle single event."""
+        event_type = event["type"]
+        if event_type in self.listeners:
+            tasks = [
+                listener(event) if asyncio.iscoroutinefunction(listener)
+                else asyncio.create_task(self._run_sync(listener, event))
+                for listener in self.listeners[event_type]
+            ]
+            await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def _run_sync(self, func, event):
+        """Run synchronous listener in thread pool."""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, func, event)
+
+    def stop(self):
+        """Stop event processing."""
+        self.running = False
+</code></pre>
+<h3 id="2-event-driven-rag-system"><a class="header" href="#2-event-driven-rag-system">2. Event-Driven RAG System</a></h3>
+<pre><code class="language-python">class EventDrivenRAG(AsyncDSPyModule):
+    """Event-driven RAG system."""
+
+    def __init__(self):
+        super().__init__()
+        self.event_system = EventSystem()
+        self.setup_event_handlers()
+
+        # Components
+        self.retrieve = dspy.Retrieve(k=5)
+        self.generate = dspy.Predict("context, question -&gt; answer")
+        self.cache = {}
+
+        # Start event processing
+        asyncio.create_task(self.event_system.start_processing())
+
+    def setup_event_handlers(self):
+        """Setup event handlers."""
+        self.event_system.subscribe("query_received", self._handle_query)
+        self.event_system.subscribe("documents_retrieved", self._handle_documents)
+        self.event_system.subscribe("answer_generated", self._handle_answer)
+
+    async def query(self, question: str):
+        """Submit query for processing."""
+        await self.event_system.publish("query_received", {
+            "question": question,
+            "timestamp": time.time()
+        })
+
+    async def _handle_query(self, event):
+        """Handle query received event."""
+        data = event["data"]
+        question = data["question"]
+
+        # Check cache
+        if question in self.cache:
+            await self.event_system.publish("answer_generated", {
+                "question": question,
+                "answer": self.cache[question],
+                "from_cache": True
+            })
+            return
+
+        # Retrieve documents
+        loop = asyncio.get_event_loop()
+        retrieved = await loop.run_in_executor(
+            self.executor,
+            self.retrieve,
+            question=question
+        )
+
+        await self.event_system.publish("documents_retrieved", {
+            "question": question,
+            "documents": retrieved.passages
+        })
+
+    async def _handle_documents(self, event):
+        """Handle documents retrieved event."""
+        data = event["data"]
+        question = data["question"]
+        documents = data["documents"]
+
+        # Generate answer
+        loop = asyncio.get_event_loop()
+        answer = await loop.run_in_executor(
+            self.executor,
+            self.generate,
+            context="\n".join(documents),
+            question=question
+        )
+
+        # Cache result
+        self.cache[question] = answer.answer
+
+        await self.event_system.publish("answer_generated", {
+            "question": question,
+            "answer": answer.answer,
+            "from_cache": False
+        })
+
+    async def _handle_answer(self, event):
+        """Handle answer generated event."""
+        data = event["data"]
+        print(f"Answer for '{data['question']}': {data['answer']}")
+        if data.get("from_cache"):
+            print("(from cache)")
+
+    def stop(self):
+        """Stop the event-driven system."""
+        self.event_system.stop()
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="1-connection-pooling"><a class="header" href="#1-connection-pooling">1. Connection Pooling</a></h3>
+<pre><code class="language-python">import aiohttp
+from aiohttp import ClientSession, TCPConnector
+
+class ConnectionPoolManager:
+    """Manage HTTP connection pools for API calls."""
+
+    def __init__(self, pool_size=100, pool_timeout=30):
+        self.connector = TCPConnector(
+            limit=pool_size,
+            limit_per_host=pool_size,
+            keepalive_timeout=30,
+            enable_cleanup_closed=True
+        )
+        self.session = None
+
+    async def get_session(self):
+        """Get or create HTTP session."""
+        if self.session is None or self.session.closed:
+            self.session = ClientSession(
+                connector=self.connector,
+                timeout=aiohttp.ClientTimeout(total=30)
+            )
+        return self.session
+
+    async def close(self):
+        """Close connection pool."""
+        if self.session:
+            await self.session.close()
+
+# Global connection pool
+connection_pool = ConnectionPoolManager()
+</code></pre>
+<h3 id="2-request-coalescing"><a class="header" href="#2-request-coalescing">2. Request Coalescing</a></h3>
+<pre><code class="language-python">class RequestCoalescer:
+    """Coalesce similar requests to reduce API calls."""
+
+    def __init__(self, window_ms=100):
+        self.window_ms = window_ms
+        self.pending_requests = {}
+        self.lock = asyncio.Lock()
+
+    async def submit(self, key, request_func, *args, **kwargs):
+        """Submit request with coalescing."""
+        async with self.lock:
+            if key in self.pending_requests:
+                # Add to existing request
+                future = self.pending_requests[key]
+                if not hasattr(future, 'args_list'):
+                    future.args_list = []
+                    future.kwargs_list = []
+                future.args_list.append(args)
+                future.kwargs_list.append(kwargs)
+                return await future
+            else:
+                # Create new request
+                future = asyncio.Future()
+                future.args_list = [args]
+                future.kwargs_list = [kwargs]
+                self.pending_requests[key] = future
+
+                # Schedule execution after window
+                asyncio.create_task(
+                    self._execute_after_window(key, request_func, future)
+                )
+
+                return await future
+
+    async def _execute_after_window(self, key, request_func, future):
+        """Execute request after coalescing window."""
+        await asyncio.sleep(self.window_ms / 1000)
+
+        async with self.lock:
+            # Remove from pending
+            self.pending_requests.pop(key, None)
+
+        # Execute with coalesced arguments
+        try:
+            if len(future.args_list) == 1:
+                result = await request_func(
+                    *future.args_list[0],
+                    **future.kwargs_list[0]
+                )
+            else:
+                # Handle multiple similar requests
+                result = await self._handle_multiple_requests(
+                    request_func,
+                    future.args_list,
+                    future.kwargs_list
+                )
+
+            if not future.done():
+                future.set_result(result)
+
+        except Exception as e:
+            if not future.done():
+                future.set_exception(e)
+
+    async def _handle_multiple_requests(self, request_func, args_list, kwargs_list):
+        """Handle multiple similar requests."""
+        # For now, execute first and return to all
+        # Override in subclasses for specific coalescing logic
+        return await request_func(*args_list[0], **kwargs_list[0])
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-asyncawait-patterns"><a class="header" href="#1-asyncawait-patterns">1. Async/Await Patterns</a></h3>
+<ul>
+<li>Use async/await consistently throughout the application</li>
+<li>Avoid mixing sync and async code without proper bridges</li>
+<li>Use asyncio.gather() for concurrent independent operations</li>
+<li>Implement proper error handling with try/except blocks</li>
+</ul>
+<h3 id="2-resource-management"><a class="header" href="#2-resource-management">2. Resource Management</a></h3>
+<ul>
+<li>Use connection pooling for HTTP requests</li>
+<li>Implement backpressure for high-throughput systems</li>
+<li>Set appropriate timeouts for all operations</li>
+<li>Clean up resources properly</li>
+</ul>
+<h3 id="3-performance-considerations"><a class="header" href="#3-performance-considerations">3. Performance Considerations</a></h3>
+<ul>
+<li>Batch requests when possible</li>
+<li>Use semaphores to limit concurrency</li>
+<li>Implement caching for expensive operations</li>
+<li>Monitor and tune performance metrics</li>
+</ul>
+<h3 id="4-error-handling"><a class="header" href="#4-error-handling">4. Error Handling</a></h3>
+<ul>
+<li>Implement retry logic with exponential backoff</li>
+<li>Use circuit breakers for failing services</li>
+<li>Log errors appropriately</li>
+<li>Provide fallback mechanisms</li>
+</ul>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Async programming</strong> enables non-blocking operations</li>
+<li><strong>Streaming processing</strong> handles real-time data efficiently</li>
+<li><strong>WebSocket integration</strong> provides real-time communication</li>
+<li><strong>Event-driven architecture</strong> decouples components</li>
+<li><strong>Connection pooling</strong> optimizes resource usage</li>
+<li><strong>Request coalescing</strong> reduces redundant API calls</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>In the next section, we’ll explore <strong>Debugging and Tracing</strong> techniques to help you effectively debug and monitor complex DSPy applications in production environments.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../07-advanced-topics/02-caching-performance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../07-advanced-topics/04-debugging-tracing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../07-advanced-topics/02-caching-performance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../07-advanced-topics/04-debugging-tracing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

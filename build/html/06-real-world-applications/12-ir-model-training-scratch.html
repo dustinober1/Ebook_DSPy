@@ -1,0 +1,986 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>IR Model Training from Scratch - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/06-real-world-applications/12-ir-model-training-scratch.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="ir-model-training-from-scratch-methodology-and-best-practices"><a class="header" href="#ir-model-training-from-scratch-methodology-and-best-practices">IR Model Training from Scratch: Methodology and Best Practices</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Information Retrieval (IR) models are the backbone of search engines, recommendation systems, and question-answering systems. Traditional IR model training requires thousands of relevance judgments and significant computational resources. However, with DSPy’s innovative approach, we can train effective IR models from scratch using minimal data—sometimes with as few as 10 relevance judgments.</p>
+<p>This section provides a comprehensive methodology for training IR models from scratch, focusing on practical implementations, optimization strategies, and real-world applications.</p>
+<h2 id="understanding-ir-model-components"><a class="header" href="#understanding-ir-model-components">Understanding IR Model Components</a></h2>
+<h3 id="core-ir-architecture"><a class="header" href="#core-ir-architecture">Core IR Architecture</a></h3>
+<p>An IR model typically consists of three main components:</p>
+<pre><code>Query → Encoder → Document Encoder → Matching → Ranking
+</code></pre>
+<ol>
+<li><strong>Query Encoder</strong>: Transforms user queries into vector representations</li>
+<li><strong>Document Encoder</strong>: Converts documents into comparable vector representations</li>
+<li><strong>Matching &amp; Ranking</strong>: Determines relevance and produces ranked results</li>
+</ol>
+<h3 id="types-of-ir-models"><a class="header" href="#types-of-ir-models">Types of IR Models</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Model Type</th><th>Description</th><th>Training Requirements</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Sparse Retrieval</strong> (BM25, TF-IDF)</td><td>Keyword-based matching</td><td>Minimal (statistical)</td></tr>
+<tr><td><strong>Dense Retrieval</strong> (DPR, ColBERT)</td><td>Semantic embedding matching</td><td>Moderate (hundreds of pairs)</td></tr>
+<tr><td><strong>Hybrid Retrieval</strong></td><td>Combines sparse and dense</td><td>Moderate to high</td></tr>
+<tr><td><strong>Neural Re-ranking</strong></td><td>Cross-attention models</td><td>High (thousands of pairs)</td></tr>
+<tr><td><strong>Learned Sparse</strong> (SPLADE)</td><td>Learned term weighting</td><td>Moderate</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="training-ir-models-with-minimal-data"><a class="header" href="#training-ir-models-with-minimal-data">Training IR Models with Minimal Data</a></h2>
+<h3 id="the-zero-to-ir-framework"><a class="header" href="#the-zero-to-ir-framework">The Zero-to-IR Framework</a></h3>
+<pre><code class="language-python">import dspy
+from typing import List, Dict, Any, Tuple, Optional
+import numpy as np
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+
+@dataclass
+class IRTrainingConfig:
+    """Configuration for IR model training"""
+    model_type: str  # 'sparse', 'dense', 'hybrid', 'reranker'
+    training_examples: int  # Number of relevance judgments
+    optimization_strategy: str  # 'prompt', 'meta', 'hybrid'
+    domain: str  # Domain specialization
+    base_model: str = "gpt-3.5-turbo"
+
+class IRModelTrainer:
+    """Trainer for IR models from scratch"""
+
+    def __init__(self, config: IRTrainingConfig):
+        self.config = config
+        self.training_data = []
+        self.model_components = {}
+
+    def train_from_scratch(self,
+                          documents: List[str],
+                          relevance_judgments: List[Dict[str, Any]]) -&gt; dspy.Module:
+        """Train complete IR model from scratch"""
+
+        print(f"Training {self.config.model_type} IR model with {len(relevance_judgments)} judgments")
+
+        # Phase 1: Initialize components
+        self._initialize_components(documents)
+
+        # Phase 2: Process training data
+        processed_data = self._process_relevance_judgments(relevance_judgments)
+
+        # Phase 3: Train based on strategy
+        if self.config.optimization_strategy == 'prompt':
+            trained_model = self._prompt_optimization_training(processed_data)
+        elif self.config.optimization_strategy == 'meta':
+            trained_model = self._meta_learning_training(processed_data)
+        else:  # hybrid
+            trained_model = self._hybrid_training(processed_data)
+
+        # Phase 4: Post-processing and calibration
+        final_model = self._calibrate_model(trained_model)
+
+        return final_model
+
+    def _initialize_components(self, documents: List[str]):
+        """Initialize IR model components based on type"""
+
+        if self.config.model_type == 'dense':
+            # Initialize dual encoder architecture
+            self.model_components['query_encoder'] = dspy.Predict(
+                "query -&gt; query_embedding"
+            )
+            self.model_components['document_encoder'] = dspy.Predict(
+                "document -&gt; document_embedding"
+            )
+            self.model_components['similarity_calculator'] = dspy.Predict(
+                "query_embedding, document_embedding -&gt; similarity_score"
+            )
+
+        elif self.config.model_type == 'sparse':
+            # Initialize learned sparse retrieval
+            self.model_components['term_expander'] = dspy.ChainOfThought(
+                "query -&gt; expanded_terms, weights"
+            )
+            self.model_components['document_scorer'] = dspy.Predict(
+                "query_terms, document -&gt; relevance_score"
+            )
+
+        elif self.config.model_type == 'hybrid':
+            # Initialize both sparse and dense components
+            self.model_components['sparse_retriever'] = self._create_sparse_component()
+            self.model_components['dense_retriever'] = self._create_dense_component()
+            self.model_components['fusion_module'] = dspy.Predict(
+                "sparse_scores, dense_scores -&gt; final_scores"
+            )
+
+        elif self.config.model_type == 'reranker':
+            # Initialize neural re-ranker
+            self.model_components['candidate_scorer'] = dspy.ChainOfThought(
+                "query, document -&gt; relevance_score, reasoning"
+            )
+
+    def _create_sparse_component(self) -&gt; dspy.Module:
+        """Create sparse retrieval component"""
+
+        class SparseRetriever(dspy.Module):
+            def __init__(self):
+                super().__init__()
+                self.query_processor = dspy.ChainOfThought(
+                    "query -&gt; processed_terms, weights"
+                )
+                self.document_matcher = dspy.Predict(
+                    "query_terms, document -&gt; match_score"
+                )
+
+            def forward(self, query: str, documents: List[str]):
+                # Process query
+                processed = self.query_processor(query=query)
+
+                # Score documents
+                scores = []
+                for doc in documents:
+                    match = self.document_matcher(
+                        query_terms=processed.processed_terms,
+                        document=doc
+                    )
+                    scores.append(float(match.match_score))
+
+                return dspy.Prediction(
+                    scores=scores,
+                    processed_terms=processed.processed_terms,
+                    weights=processed.weights
+                )
+
+        return SparseRetriever()
+
+    def _create_dense_component(self) -&gt; dspy.Module:
+        """Create dense retrieval component"""
+
+        class DenseRetriever(dspy.Module):
+            def __init__(self):
+                super().__init__()
+                self.query_encoder = dspy.Predict(
+                    "query, domain_context -&gt; query_vector"
+                )
+                self.document_encoder = dspy.Predict(
+                    "document, domain_context -&gt; document_vector"
+                )
+
+            def forward(self, query: str, documents: List[str], domain_context: str):
+                # Encode query
+                q_encoding = self.query_encoder(
+                    query=query,
+                    domain_context=domain_context
+                )
+
+                # Encode documents
+                doc_encodings = []
+                for doc in documents:
+                    d_encoding = self.document_encoder(
+                        document=doc,
+                        domain_context=domain_context
+                    )
+                    doc_encodings.append(d_encoding.document_vector)
+
+                # Calculate similarities
+                similarities = self._calculate_similarities(
+                    q_encoding.query_vector,
+                    doc_encodings
+                )
+
+                return dspy.Prediction(
+                    similarities=similarities,
+                    query_vector=q_encoding.query_vector,
+                    document_vectors=doc_encodings
+                )
+
+        return DenseRetriever()
+
+    def _prompt_optimization_training(self, processed_data: Dict[str, Any]) -&gt; dspy.Module:
+        """Train IR model using prompt optimization"""
+
+        # Create base IR model
+        base_model = self._create_base_ir_model()
+
+        # Generate prompt variations
+        prompt_variations = self._generate_ir_prompt_variations()
+
+        # Evaluate each variation
+        best_prompt = None
+        best_score = 0.0
+
+        for prompt in prompt_variations:
+            # Apply prompt to model
+            temp_model = self._apply_prompt_to_ir_model(base_model, prompt)
+
+            # Evaluate with limited data
+            score = self._evaluate_ir_model(temp_model, processed_data)
+
+            if score &gt; best_score:
+                best_score = score
+                best_prompt = prompt
+
+        # Train final model with best prompt
+        final_model = self._apply_prompt_to_ir_model(base_model, best_prompt)
+        optimized_model = self._fine_tune_with_limited_data(
+            final_model, processed_data
+        )
+
+        return optimized_model
+
+    def _meta_learning_training(self, processed_data: Dict[str, Any]) -&gt; dspy.Module:
+        """Train IR model using meta-learning"""
+
+        # Step 1: Identify meta-tasks
+        meta_tasks = self._identify_meta_ir_tasks(self.config.domain)
+
+        # Step 2: Learn from meta-tasks
+        meta_knowledge = self._learn_from_meta_tasks(meta_tasks)
+
+        # Step 3: Adapt to target task
+        adapted_model = self._adapt_to_target_task(
+            meta_knowledge, processed_data
+        )
+
+        return adapted_model
+
+    def _hybrid_training(self, processed_data: Dict[str, Any]) -&gt; dspy.Module:
+        """Combine multiple training strategies"""
+
+        # Train multiple models
+        models = {}
+
+        # Prompt-based model
+        models['prompt'] = self._prompt_optimization_training(processed_data)
+
+        # Meta-learning model
+        models['meta'] = self._meta_learning_training(processed_data)
+
+        # Ensemble the models
+        ensemble = self._create_ensemble(models)
+
+        return ensemble
+</code></pre>
+<h2 id="specialized-training-for-different-ir-tasks"><a class="header" href="#specialized-training-for-different-ir-tasks">Specialized Training for Different IR Tasks</a></h2>
+<h3 id="task-1-document-ranking-with-10-relevance-judgments"><a class="header" href="#task-1-document-ranking-with-10-relevance-judgments">Task 1: Document Ranking with 10 Relevance Judgments</a></h3>
+<pre><code class="language-python">def train_document_ranker_with_10_judgments():
+    """Train document ranking model with only 10 relevance judgments"""
+
+    # Example: 10 relevance judgments for web search
+    judgments = [
+        {
+            'query': 'machine learning tutorials',
+            'documents': [
+                {'id': 'doc1', 'content': 'Complete guide to machine learning for beginners', 'relevance': 2},
+                {'id': 'doc2', 'content': 'Advanced deep learning techniques', 'relevance': 1},
+                {'id': 'doc3', 'content': 'Python machine learning libraries comparison', 'relevance': 2},
+                {'id': 'doc4', 'content': 'History of artificial intelligence', 'relevance': 0},
+                {'id': 'doc5', 'content': 'Machine learning in healthcare applications', 'relevance': 1}
+            ]
+        },
+        # ... 9 more query-document judgments
+    ]
+
+    # Configure for minimal data training
+    config = IRTrainingConfig(
+        model_type='dense',
+        training_examples=10,
+        optimization_strategy='hybrid',
+        domain='web_search'
+    )
+
+    # Create document collection
+    all_documents = extract_all_documents(judgments)
+
+    # Initialize trainer
+    trainer = IRModelTrainer(config)
+
+    # Train from scratch
+    ranking_model = trainer.train_from_scratch(
+        documents=all_documents,
+        relevance_judgments=judgments
+    )
+
+    return ranking_model
+
+def test_ranking_model(model, test_queries, document_collection):
+    """Test the trained ranking model"""
+
+    for query in test_queries:
+        # Get rankings
+        results = model(query=query, documents=document_collection)
+
+        # Sort documents by score
+        ranked_docs = sorted(
+            zip(document_collection, results.scores),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        print(f"\nQuery: {query}")
+        print("Ranked Documents:")
+        for i, (doc, score) in enumerate(ranked_docs[:5]):
+            print(f"{i+1}. Score: {score:.3f}")
+            print(f"   {doc[:100]}...")
+</code></pre>
+<h3 id="task-2-passage-retrieval-for-qa-systems"><a class="header" href="#task-2-passage-retrieval-for-qa-systems">Task 2: Passage Retrieval for QA Systems</a></h3>
+<pre><code class="language-python">class PassageRetrieverTrainer:
+    """Specialized trainer for passage retrieval in QA systems"""
+
+    def __init__(self):
+        self.passage_encoder = None
+        self.query_encoder = None
+        self.reranker = None
+
+    def train_passage_retriever_with_10_examples(self,
+                                                passages: List[str],
+                                                qa_pairs: List[Dict[str, str]]):
+        """Train passage retriever with 10 QA pairs"""
+
+        # Step 1: Create training data from QA pairs
+        training_data = []
+        for qa in qa_pairs:
+            # Find relevant passages (simulated here)
+            relevant_passages = find_relevant_passages(
+                qa['question'], passages, top_k=3
+            )
+            training_data.append({
+                'query': qa['question'],
+                'relevant_passages': relevant_passages,
+                'answer': qa['answer']
+            })
+
+        # Step 2: Initialize passage retrieval components
+        self._initialize_passage_components()
+
+        # Step 3: Train with minimal data
+        trained_retriever = self._train_with_minimal_data(training_data)
+
+        # Step 4: Add answer-aware re-ranking
+        self.reranker = self._train_answer_aware_reranker(training_data)
+
+        return self._create_complete_retriever(trained_retriever)
+
+    def _train_with_minimal_data(self, training_data):
+        """Train using minimal data strategies"""
+
+        # Create synthetic examples through data augmentation
+        augmented_data = self._augment_qa_training_data(training_data)
+
+        # Use prompt optimization for passage encoding
+        prompt_optimizer = PromptOptimizer()
+        best_prompts = prompt_optimizer.optimize_for_passage_retrieval(
+            augmented_data
+        )
+
+        # Create trained retriever
+        class TrainedPassageRetriever(dspy.Module):
+            def __init__(self, prompts):
+                super().__init__()
+                self.query_encoder = dspy.ChainOfThought(prompts['query_encoding'])
+                self.passage_scorer = dspy.Predict(prompts['passage_scoring'])
+
+            def forward(self, question, passages):
+                # Encode question with context
+                encoded_q = self.query_encoder(
+                    question=question,
+                    context="Find passages that answer this question"
+                )
+
+                # Score passages
+                scored_passages = []
+                for passage in passages:
+                    score = self.passage_scorer(
+                        question=encoded_q.reasoning,
+                        passage=passage
+                    )
+                    scored_passages.append({
+                        'passage': passage,
+                        'score': float(score.score),
+                        'reasoning': score.get('reasoning', '')
+                    })
+
+                # Sort by score
+                scored_passages.sort(key=lambda x: x['score'], reverse=True)
+
+                return dspy.Prediction(
+                    ranked_passages=[p['passage'] for p in scored_passages],
+                    scores=[p['score'] for p in scored_passages],
+                    reasoning=[p['reasoning'] for p in scored_passages]
+                )
+
+        return TrainedPassageRetriever(best_prompts)
+</code></pre>
+<h3 id="task-3-cross-lingual-ir-with-minimal-bilingual-data"><a class="header" href="#task-3-cross-lingual-ir-with-minimal-bilingual-data">Task 3: Cross-Lingual IR with Minimal Bilingual Data</a></h3>
+<pre><code class="language-python">class CrossLingualIRTrainer:
+    """Train cross-lingual IR models with minimal bilingual data"""
+
+    def __init__(self, source_lang: str, target_lang: str):
+        self.source_lang = source_lang
+        self.target_lang = target_lang
+        self.translation_cache = {}
+
+    def train_with_10_bilingual_examples(self,
+                                       source_docs: List[str],
+                                       target_docs: List[str],
+                                       parallel_examples: List[Dict[str, Any]]):
+        """Train cross-lingual IR with 10 parallel examples"""
+
+        # Step 1: Learn cross-lingual representations
+        multilingual_encoder = self._learn_cross_lingual_encoding(parallel_examples)
+
+        # Step 2: Train query translation model
+        query_translator = self._train_query_translation(parallel_examples)
+
+        # Step 3: Train cross-lingual similarity
+        similarity_model = self._train_cross_lingual_similarity(parallel_examples)
+
+        # Step 4: Create complete cross-lingual IR system
+        clir_system = self._create_clir_system(
+            multilingual_encoder,
+            query_translator,
+            similarity_model
+        )
+
+        return clir_system
+
+    def _learn_cross_lingual_encoding(self, parallel_examples):
+        """Learn shared space for multiple languages"""
+
+        # Use parallel examples to learn mapping between languages
+        class CrossLingualEncoder(dspy.Module):
+            def __init__(self):
+                super().__init__()
+                # Learn to map both languages to shared space
+                self.source_encoder = dspy.Predict(
+                    f"text, language='{self.source_lang}' -&gt; embedding"
+                )
+                self.target_encoder = dspy.Predict(
+                    f"text, language='{self.target_lang}' -&gt; embedding"
+                )
+                # Alignment layer
+                self.align_embeddings = dspy.Predict(
+                    "source_emb, target_emb -&gt; aligned_source, aligned_target"
+                )
+
+            def forward(self, text, language):
+                if language == self.source_lang:
+                    encoded = self.source_encoder(text=text, language=language)
+                else:
+                    encoded = self.target_encoder(text=text, language=language)
+
+                return encoded.embedding
+
+        # Train using 10 parallel examples
+        encoder = CrossLingualEncoder()
+        trained_encoder = self._train_encoder_with_examples(
+            encoder, parallel_examples
+        )
+
+        return trained_encoder
+</code></pre>
+<h2 id="advanced-training-techniques"><a class="header" href="#advanced-training-techniques">Advanced Training Techniques</a></h2>
+<h3 id="technique-1-self-supervised-pre-training-for-ir"><a class="header" href="#technique-1-self-supervised-pre-training-for-ir">Technique 1: Self-Supervised Pre-training for IR</a></h3>
+<pre><code class="language-python">def self_supervised_ir_pretraining(documents: List[str]) -&gt; dspy.Module:
+    """Pre-train IR components without any labels"""
+
+    # Step 1: Create synthetic training tasks
+    synthetic_tasks = create_ir_pretraining_tasks(documents)
+
+    # Step 2: Pre-train query encoder
+    query_encoder = pretrain_query_encoder(synthetic_tasks)
+
+    # Step 3: Pre-train document encoder
+    document_encoder = pretrain_document_encoder(synthetic_tasks)
+
+    # Step 4: Pre-train matching component
+    matcher = pretrain_matching_component(synthetic_tasks)
+
+    return IRModel(query_encoder, document_encoder, matcher)
+
+def create_ir_pretraining_tasks(documents):
+    """Create self-supervised tasks for IR pre-training"""
+
+    tasks = []
+
+    # Task 1: Document reconstruction (like masked language modeling)
+    for doc in documents[:1000]:  # Limit for computation
+        masked_doc = mask_random_tokens(doc)
+        tasks.append({
+            'type': 'reconstruction',
+            'input': masked_doc,
+            'target': doc
+        })
+
+    # Task 2: Next sentence prediction for document pairs
+    for i in range(len(documents) - 1):
+        tasks.append({
+            'type': 'next_doc',
+            'input': documents[i],
+            'target': documents[i + 1]
+        })
+
+    # Task 3: Query-document matching (synthetic)
+    for doc in documents[:500]:
+        # Generate synthetic query from document
+        synthetic_query = generate_query_from_document(doc)
+        tasks.append({
+            'type': 'query_doc_match',
+            'query': synthetic_query,
+            'document': doc,
+            'label': 1  # Positive example
+        })
+
+        # Add negative example
+        negative_doc = documents[np.random.randint(len(documents))]
+        if negative_doc != doc:
+            tasks.append({
+                'type': 'query_doc_match',
+                'query': synthetic_query,
+                'document': negative_doc,
+                'label': 0  # Negative example
+            })
+
+    return tasks
+</code></pre>
+<h3 id="technique-2-active-learning-for-ir"><a class="header" href="#technique-2-active-learning-for-ir">Technique 2: Active Learning for IR</a></h3>
+<pre><code class="language-python">class ActiveIRLearner:
+    """Active learning framework for IR with minimal annotations"""
+
+    def __init__(self, unlabeled_documents: List[str]):
+        self.documents = unlabeled_documents
+        self.labeled_queries = []
+        self.annotator_feedback = []
+
+    def active_learning_cycle(self,
+                            initial_annotations: List[Dict] = None,
+                            budget: int = 50) -&gt; dspy.Module:
+        """Perform active learning to minimize annotation requirements"""
+
+        # Start with initial annotations (could be 0)
+        if initial_annotations:
+            self.labeled_queries = initial_annotations
+
+        # Iterative active learning
+        for iteration in range(budget):
+            print(f"Active learning iteration {iteration + 1}/{budget}")
+
+            # Step 1: Train current model with available labels
+            current_model = self._train_with_current_labels()
+
+            # Step 2: Select most informative queries to label
+            candidates = self._generate_candidate_queries()
+            selected = self._select_informative_queries(
+                current_model, candidates, n=5
+            )
+
+            # Step 3: Get human annotations (simulated here)
+            new_annotations = self._request_annotations(selected)
+
+            # Step 4: Add to labeled set
+            self.labeled_queries.extend(new_annotations)
+
+        # Train final model with all collected labels
+        final_model = self._train_with_current_labels()
+
+        return final_model
+
+    def _select_informative_queries(self,
+                                   model,
+                                   candidates,
+                                   n: int = 5):
+        """Select queries with highest uncertainty or diversity"""
+
+        uncertainties = []
+        for query in candidates:
+            # Get model uncertainty for this query
+            uncertainty = self._calculate_query_uncertainty(model, query)
+            uncertainties.append((query, uncertainty))
+
+        # Sort by uncertainty
+        uncertainties.sort(key=lambda x: x[1], reverse=True)
+
+        # Select top uncertain queries
+        selected = [q for q, _ in uncertainties[:n]]
+
+        # Ensure diversity
+        diverse_selected = self._ensure_diversity(selected)
+
+        return diverse_selected
+</code></pre>
+<h3 id="technique-3-multi-task-learning-for-ir"><a class="header" href="#technique-3-multi-task-learning-for-ir">Technique 3: Multi-Task Learning for IR</a></h3>
+<pre><code class="language-python">def multi_task_ir_training(tasks: List[Dict[str, Any]]) -&gt; dspy.Module:
+    """Train IR model on multiple related tasks simultaneously"""
+
+    # Task definitions could include:
+    # - Document ranking
+    # - Passage retrieval
+    # - Answer span prediction
+    # - Query classification
+    # - Document classification
+
+    class MultiTaskIRModel(dspy.Module):
+        def __init__(self):
+            super().__init__()
+            # Shared encoder
+            self.shared_encoder = dspy.Predict(
+                "text, task_type -&gt; shared_representation"
+            )
+
+            # Task-specific heads
+            self.ranking_head = dspy.Predict(
+                "query_repr, doc_repr -&gt; relevance_score"
+            )
+            self.retrieval_head = dspy.Predict(
+                "query_repr, passage_repr -&gt; retrieval_score"
+            )
+            self.classification_head = dspy.Predict(
+                "text_repr -&gt; class_label"
+            )
+
+        def forward(self, inputs, task_type):
+            # Get shared representation
+            shared = self.shared_encoder(
+                text=inputs['text'],
+                task_type=task_type
+            )
+
+            # Route to appropriate task head
+            if task_type == 'ranking':
+                return self.ranking_head(**inputs, query_repr=shared)
+            elif task_type == 'retrieval':
+                return self.retrieval_head(**inputs, query_repr=shared)
+            elif task_type == 'classification':
+                return self.classification_head(text_repr=shared)
+
+    # Train on all tasks simultaneously
+    model = MultiTaskIRModel()
+    trained_model = train_multi_task(model, tasks)
+
+    return trained_model
+</code></pre>
+<h2 id="evaluation-methodology"><a class="header" href="#evaluation-methodology">Evaluation Methodology</a></h2>
+<h3 id="ir-evaluation-with-minimal-test-data"><a class="header" href="#ir-evaluation-with-minimal-test-data">IR Evaluation with Minimal Test Data</a></h3>
+<pre><code class="language-python">def evaluate_ir_model_minimal_data(model,
+                                  test_queries: List[str],
+                                  test_relevance: Dict[str, List[int]],
+                                  confidence_adjusted: bool = True) -&gt; Dict[str, float]:
+    """Evaluate IR model with minimal test data"""
+
+    metrics = {}
+
+    # Standard IR metrics
+    for query in test_queries:
+        # Get rankings
+        results = model(query=query, documents=all_documents)
+        ranked_docs = parse_rankings(results)
+
+        # Calculate metrics with confidence adjustment
+        if confidence_adjusted and 'confidence' in results:
+            # Weight metrics by confidence
+            weights = results['confidence']
+            adjusted_ranking = apply_confidence_weights(
+                ranked_docs, weights
+            )
+        else:
+            adjusted_ranking = ranked_docs
+
+        # Calculate per-query metrics
+        query_metrics = calculate_ir_metrics(
+            adjusted_ranking,
+            test_relevance[query]
+        )
+
+        # Aggregate
+        for metric, value in query_metrics.items():
+            if metric not in metrics:
+                metrics[metric] = []
+            metrics[metric].append(value)
+
+    # Calculate final scores
+    final_metrics = {
+        metric: np.mean(values) + 1.96 * np.std(values) / np.sqrt(len(values))
+        for metric, values in metrics.items()
+    }
+
+    return final_metrics
+</code></pre>
+<h2 id="best-practices-and-guidelines"><a class="header" href="#best-practices-and-guidelines">Best Practices and Guidelines</a></h2>
+<h3 id="for-training-with-minimal-data"><a class="header" href="#for-training-with-minimal-data">For Training with Minimal Data</a></h3>
+<ol>
+<li><strong>Start Simple</strong>: Begin with simpler models (sparse retrieval) before complex ones</li>
+<li><strong>Use Pre-training</strong>: Leverage self-supervised pre-training when possible</li>
+<li><strong>Data Quality</strong>: Ensure every relevance judgment is accurate</li>
+<li><strong>Active Learning</strong>: Select examples that maximize learning</li>
+<li><strong>Regular Evaluation</strong>: Continuously evaluate to prevent overfitting</li>
+</ol>
+<h3 id="for-production-deployment"><a class="header" href="#for-production-deployment">For Production Deployment</a></h3>
+<ol>
+<li><strong>Confidence Estimation</strong>: Always include confidence scores</li>
+<li><strong>Fallback Mechanisms</strong>: Have simpler models as fallbacks</li>
+<li><strong>Continuous Learning</strong>: Collect feedback for model improvement</li>
+<li><strong>Monitoring</strong>: Track performance drift over time</li>
+<li><strong>A/B Testing</strong>: Test new models before full deployment</li>
+</ol>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>IR Models Can Be Trained from Scratch</strong>: Even with 10 relevance judgments</li>
+<li><strong>Strategy Selection is Crucial</strong>: Different tasks require different approaches</li>
+<li><strong>Data Efficiency is Possible</strong>: Through prompt optimization and meta-learning</li>
+<li><strong>Quality Trumps Quantity</strong>: High-quality judgments are more valuable than many poor ones</li>
+<li><strong>Confidence Estimation is Essential</strong>: When working with minimal training data</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>This section covered training IR models from scratch with minimal data. The concepts here build upon the optimization techniques discussed in earlier chapters and demonstrate practical applications in real-world scenarios.</p>
+<p>For continued learning, explore:</p>
+<ul>
+<li><a href="../05-optimizers/20-prompts-as-hyperparameters.html">Prompt Hyperparameter Optimization</a> for deeper optimization techniques</li>
+<li><a href="../04-evaluation/03-defining-metrics.html">Evaluation Strategies</a> for comprehensive model evaluation</li>
+<li><a href="../08-case-studies/">Real-world Case Studies</a> for production deployment examples</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../06-real-world-applications/11-extreme-few-shot-learning.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../06-real-world-applications/11-extreme-few-shot-learning.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

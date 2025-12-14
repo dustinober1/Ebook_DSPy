@@ -1,0 +1,524 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Signature Syntax - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="signature-syntax"><a class="header" href="#signature-syntax">Signature Syntax</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./01-understanding-signatures.html">Understanding Signatures</a> - Grasp of signature concepts</li>
+<li><strong>Required Knowledge</strong>: Basic understanding of string formatting and data types</li>
+<li><strong>Difficulty Level</strong>: Intermediate</li>
+<li><strong>Estimated Reading Time</strong>: 30 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master the basic string-based signature syntax in DSPy</li>
+<li>Understand how to structure complex multi-field signatures</li>
+<li>Learn best practices for naming and formatting signatures</li>
+<li>Be able to write signatures for various task types</li>
+</ul>
+<h2 id="basic-signature-syntax"><a class="header" href="#basic-signature-syntax">Basic Signature Syntax</a></h2>
+<p>DSPy signatures use a simple, intuitive string format:</p>
+<pre><code>input_fields -&gt; output_fields
+</code></pre>
+<p>The arrow (<code>-&gt;</code>) separates inputs from outputs, clearly showing the transformation.</p>
+<h3 id="simple-examples"><a class="header" href="#simple-examples">Simple Examples</a></h3>
+<pre><code class="language-python"># Basic question answering
+"question -&gt; answer"
+
+# Text summarization
+"long_document -&gt; short_summary"
+
+# Translation
+"source_text, target_language -&gt; translated_text"
+</code></pre>
+<h2 id="field-separation"><a class="header" href="#field-separation">Field Separation</a></h2>
+<p>Fields are separated by commas. Use descriptive names that clearly indicate the field’s purpose.</p>
+<h3 id="input-fields"><a class="header" href="#input-fields">Input Fields</a></h3>
+<pre><code class="language-python"># Single input
+"question -&gt; answer"
+
+# Multiple inputs
+"question, context -&gt; answer"
+
+# Many inputs with clear names
+"customer_email, company_policy, urgency_level -&gt; response, escalation_needed"
+</code></pre>
+<h3 id="output-fields"><a class="header" href="#output-fields">Output Fields</a></h3>
+<pre><code class="language-python"># Single output
+"text -&gt; sentiment"
+
+# Multiple outputs
+"review -&gt; sentiment, key_points, overall_rating"
+
+# Structured outputs
+"meeting_notes -&gt; action_items, decisions, follow_up_tasks, attendees"
+</code></pre>
+<h2 id="naming-conventions"><a class="header" href="#naming-conventions">Naming Conventions</a></h2>
+<h3 id="1-use-descriptive-names"><a class="header" href="#1-use-descriptive-names">1. Use Descriptive Names</a></h3>
+<pre><code class="language-python"># Poor naming
+"a, b, c -&gt; d, e"
+
+# Good naming
+"product_description, customer_segment, price_point -&gt; recommended_marketing_message, target_audience_fit"
+</code></pre>
+<h3 id="2-be-consistent"><a class="header" href="#2-be-consistent">2. Be Consistent</a></h3>
+<pre><code class="language-python"># Inconsistent
+"text, doc, article -&gt; summary, brief"
+
+# Consistent
+"document_text -&gt; document_summary"
+"meeting_transcript -&gt; meeting_summary"
+"email_thread -&gt; email_summary"
+</code></pre>
+<h3 id="3-use-underscores-for-multi-word-names"><a class="header" href="#3-use-underscores-for-multi-word-names">3. Use Underscores for Multi-word Names</a></h3>
+<pre><code class="language-python"># Camel case (less readable)
+"customerFeedback -&gt; analysisResult"
+
+# Underscores (recommended)
+"customer_feedback -&gt; analysis_result"
+</code></pre>
+<h3 id="4-include-units-or-types-when-helpful"><a class="header" href="#4-include-units-or-types-when-helpful">4. Include Units or Types When Helpful</a></h3>
+<pre><code class="language-python">"temperature_celsius, humidity_percent -&gt; comfort_level, hvac_recommendation"
+</code></pre>
+<h2 id="complex-signatures"><a class="header" href="#complex-signatures">Complex Signatures</a></h2>
+<h3 id="multiple-inputs-and-outputs"><a class="header" href="#multiple-inputs-and-outputs">Multiple Inputs and Outputs</a></h3>
+<pre><code class="language-python"># Comprehensive analysis
+"financial_report, fiscal_year, industry_type -&gt; revenue_growth, profit_margins, risk_factors, investment_recommendation"
+
+# Content processing
+"raw_article, target_audience, desired_tone -&gt; processed_article, readability_score, engagement_prediction"
+</code></pre>
+<h3 id="conditional-logic-in-signatures"><a class="header" href="#conditional-logic-in-signatures">Conditional Logic in Signatures</a></h3>
+<p>While signatures don’t contain conditional logic, they can imply it through field design:</p>
+<pre><code class="language-python"># Implies conditional processing
+"support_ticket, customer_tier, issue_type -&gt; resolution_steps, estimated_time, escalation_required, customer_satisfaction_prediction"
+</code></pre>
+<h2 id="common-patterns"><a class="header" href="#common-patterns">Common Patterns</a></h2>
+<h3 id="1-transformation-pattern"><a class="header" href="#1-transformation-pattern">1. Transformation Pattern</a></h3>
+<pre><code>input -&gt; output
+</code></pre>
+<pre><code class="language-python">"raw_data -&gt; cleaned_data"
+"informal_text -&gt; formal_text"
+"technical_specification -&gt; user_friendly_description"
+</code></pre>
+<h3 id="2-analysis-pattern"><a class="header" href="#2-analysis-pattern">2. Analysis Pattern</a></h3>
+<pre><code>data -&gt; analysis, metadata
+</code></pre>
+<pre><code class="language-python">"product_review -&gt; sentiment_score, key_aspects, recommendation_strength"
+"sales_data -&gt; trend_analysis, seasonal_patterns, forecast"
+</code></pre>
+<h3 id="3-generation-pattern"><a class="header" href="#3-generation-pattern">3. Generation Pattern</a></h3>
+<pre><code>requirements, constraints -&gt; generated_content, validation"
+</code></pre>
+<pre><code class="language-python">"topic, audience, length -&gt; blog_post, seo_score, readability_metrics"
+"requirements, tech_stack -&gt; implementation_plan, estimated_effort, risk_assessment"
+</code></pre>
+<h3 id="4-extraction-pattern"><a class="header" href="#4-extraction-pattern">4. Extraction Pattern</a></h3>
+<pre><code>source_document -&gt; extracted_field1, extracted_field2, extracted_field3"
+</code></pre>
+<pre><code class="language-python">"invoice_document -&gt; vendor_name, invoice_number, total_amount, due_date"
+"job_description -&gt; required_skills, experience_level, salary_range, company_benefits"
+</code></pre>
+<h2 id="signature-examples-by-domain"><a class="header" href="#signature-examples-by-domain">Signature Examples by Domain</a></h2>
+<h3 id="customer-service"><a class="header" href="#customer-service">Customer Service</a></h3>
+<pre><code class="language-python">"customer_complaint, product_info -&gt; resolution_steps, apology_template, compensation_suggestion"
+
+"support_ticket, customer_history, issue_type -&gt; solution_recommendation, estimated_resolution_time, satisfaction_prediction"
+</code></pre>
+<h3 id="healthcare"><a class="header" href="#healthcare">Healthcare</a></h3>
+<pre><code class="language-python">"patient_symptoms, medical_history -&gt; possible_conditions, urgency_level, recommended_tests"
+
+"clinical_notes, research_guidelines -&gt; treatment_plan, success_probability, alternative_options"
+</code></pre>
+<h3 id="finance"><a class="header" href="#finance">Finance</a></h3>
+<pre><code class="language-python">"market_data, risk_tolerance -&gt; investment_portfolio, expected_return, risk_assessment"
+
+"financial_statement, accounting_standards -&gt; revenue_recognition, compliance_status, red_flags"
+</code></pre>
+<h3 id="legal"><a class="header" href="#legal">Legal</a></h3>
+<pre><code class="language-python">"contract_document, jurisdiction -&gt; key_clauses, potential_risks, amendment_suggestions"
+
+"case_law, legal_question -&gt; relevant_precedents, success_probability, argument_strategy"
+</code></pre>
+<h3 id="education"><a class="header" href="#education">Education</a></h3>
+<pre><code class="language-python">"student_essay, rubric -&gt; grade, feedback_points, improvement_suggestions"
+
+"lesson_plan, student_level -&gt; learning_objectives, assessment_methods, differentiation_strategies"
+</code></pre>
+<h2 id="advanced-syntax-features"><a class="header" href="#advanced-syntax-features">Advanced Syntax Features</a></h2>
+<h3 id="field-descriptions-inline-documentation"><a class="header" href="#field-descriptions-inline-documentation">Field Descriptions (Inline Documentation)</a></h3>
+<p>For complex signatures, you can add inline documentation:</p>
+<pre><code class="language-python"># With inline descriptions
+"question, context[provided_background] -&gt; answer[concise_response], confidence[score_0_to_1]"
+
+# Multiple descriptive fields
+"meeting_transcript, attendees_list, meeting_date -&gt; action_items[with_owners_and_due_dates], decisions[with_reasoning], follow_up_email_draft"
+</code></pre>
+<h3 id="type-hints-informal"><a class="header" href="#type-hints-informal">Type Hints (Informal)</a></h3>
+<p>While DSPy doesn’t enforce types, you can include them as documentation:</p>
+<pre><code class="language-python">"customer_feedback:string[int], sentiment:label -&gt; category:label, priority:number[1-5]"
+</code></pre>
+<h2 id="signature-validation"><a class="header" href="#signature-validation">Signature Validation</a></h2>
+<p>DSPy provides built-in validation for signatures:</p>
+<h3 id="valid-signatures"><a class="header" href="#valid-signatures">Valid Signatures</a></h3>
+<pre><code class="language-python"># Valid: Clear input/output separation
+"text -&gt; summary"
+
+# Valid: Multiple fields
+"article, author, publication_date -&gt; abstract, key_findings, citation_format"
+
+# Valid: Descriptive names
+"product_features, customer_needs -&gt; value_proposition, competitive_advantages"
+</code></pre>
+<h3 id="invalid-signatures"><a class="header" href="#invalid-signatures">Invalid Signatures</a></h3>
+<pre><code class="language-python"># Invalid: No arrow separator
+"text summary"
+
+# Invalid: Multiple arrows
+"input -&gt; intermediate -&gt; output"
+
+# Invalid: Empty inputs or outputs
+" -&gt; output"
+"input -&gt; "
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-start-simple-expand-as-needed"><a class="header" href="#1-start-simple-expand-as-needed">1. Start Simple, Expand as Needed</a></h3>
+<pre><code class="language-python"># Start with this
+"question -&gt; answer"
+
+# Then expand if needed
+"question, context -&gt; answer, confidence, sources"
+</code></pre>
+<h3 id="2-include-all-necessary-context"><a class="header" href="#2-include-all-necessary-context">2. Include All Necessary Context</a></h3>
+<pre><code class="language-python"># Missing context
+"email -&gt; response"
+
+# Better with context
+"customer_email, previous_interactions, company_policy -&gt; personalized_response, escalation_needed"
+</code></pre>
+<h3 id="3-think-about-output-usage"><a class="header" href="#3-think-about-output-usage">3. Think About Output Usage</a></h3>
+<pre><code class="language-python"># If you need structured data
+"interview_transcript -&gt; key_skills, experience_years, cultural_fit_score, recommendation"
+
+# If you need natural language
+"interview_transcript -&gt; candidate_assessment_summary"
+</code></pre>
+<h3 id="4-consider-the-models-perspective"><a class="header" href="#4-consider-the-models-perspective">4. Consider the Model’s Perspective</a></h3>
+<p>Design signatures that make it clear what the model should produce:</p>
+<pre><code class="language-python"># Ambiguous
+"data -&gt; analysis"
+
+# Clear
+"sales_data_monthly -&gt; trend_analysis_growth_percentage, top_performing_products, seasonality_notes"
+</code></pre>
+<h3 id="5-use-consistent-terminology"><a class="header" href="#5-use-consistent-terminology">5. Use Consistent Terminology</a></h3>
+<pre><code class="language-python"># Confusing mix
+"doc -&gt; abstract, summary, brief"
+
+# Consistent terminology
+"article -&gt; executive_summary, main_points, conclusion"
+</code></pre>
+<h2 id="debugging-signatures"><a class="header" href="#debugging-signatures">Debugging Signatures</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<ol>
+<li>
+<p><strong>Vague Field Names</strong></p>
+<pre><code class="language-python"># Problem
+"info -&gt; result"
+
+# Solution
+"customer_review_text -&gt; sentiment_analysis_score"
+</code></pre>
+</li>
+<li>
+<p><strong>Missing Required Context</strong></p>
+<pre><code class="language-python"># Problem
+"question -&gt; answer"
+
+# Solution
+"question, domain_knowledge, answer_length -&gt; answer, confidence"
+</code></pre>
+</li>
+<li>
+<p><strong>Too Many Outputs</strong></p>
+<pre><code class="language-python"># Problem: Overly complex
+"document -&gt; summary, sentiment, entities, topics, language, quality, recommendations, actions"
+
+# Solution: Split into multiple signatures
+"document -&gt; summary, main_topics"
+"document -&gt; sentiment, emotional_tone"
+"document -&gt; named_entities, relationships"
+</code></pre>
+</li>
+</ol>
+<h3 id="testing-your-signature"><a class="header" href="#testing-your-signature">Testing Your Signature</a></h3>
+<p>Before implementing, ask:</p>
+<ul>
+<li>Does each input have a clear purpose?</li>
+<li>Is each output necessary and distinct?</li>
+<li>Would another developer understand this?</li>
+<li>Can I create test cases for this signature?</li>
+</ul>
+<h2 id="signatures-in-practice"><a class="header" href="#signatures-in-practice">Signatures in Practice</a></h2>
+<h3 id="using-signatures-with-dspy-modules"><a class="header" href="#using-signatures-with-dspy-modules">Using Signatures with DSPy Modules</a></h3>
+<pre><code class="language-python">import dspy
+
+# Define a signature
+qa_signature = "question, context -&gt; answer, confidence"
+
+# Use it with a module
+qa_module = dspy.Predict(qa_signature)
+
+# Call with structured data
+result = qa_module(
+    question="What is the capital of France?",
+    context="European geography, countries and capitals"
+)
+</code></pre>
+<h3 id="chaining-signatures"><a class="header" href="#chaining-signatures">Chaining Signatures</a></h3>
+<pre><code class="language-python"># Define a pipeline
+summarizer = dspy.Predict("document -&gt; summary")
+analyzer = dspy.Predict("summary -&gt; key_insights")
+
+# Chain them
+doc_summary = summarizer(document=document_text)
+insights = analyzer(summary=doc_summary.summary)
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Signature syntax in DSPy is:</p>
+<ul>
+<li><strong>Simple</strong>: Uses clear <code>input -&gt; output</code> format</li>
+<li><strong>Flexible</strong>: Supports multiple fields and complex transformations</li>
+<li><strong>Expressive</strong>: Can represent sophisticated AI tasks</li>
+<li><strong>Composable</strong>: Enables building complex workflows</li>
+</ul>
+<p>Key syntax rules:</p>
+<ul>
+<li>Use <code>-&gt;</code> to separate inputs from outputs</li>
+<li>Separate fields with commas</li>
+<li>Use descriptive, consistent naming</li>
+<li>Include all necessary context</li>
+<li>Keep signatures focused and testable</li>
+</ul>
+<p>In the next section, we’ll explore typed signatures that add rich metadata and constraints to our signatures.</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Syntax is simple but powerful</strong>: <code>input1, input2 -&gt; output1, output2</code></li>
+<li><strong>Naming matters</strong>: Clear, descriptive names prevent ambiguity</li>
+<li><strong>Include context</strong>: All relevant inputs should be specified</li>
+<li><strong>Think about outputs</strong>: Structure them for easy consumption</li>
+<li><strong>Test your signatures</strong>: Ensure they’re unambiguous and complete</li>
+</ol>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="./03-typed-signatures.html">Next Section: Typed Signatures</a> - Adding type information and constraints</li>
+<li><a href="./05-practical-examples.html">Practical Examples</a> - See signatures in real-world applications</li>
+<li><a href="../03-modules/">Chapter 3: Modules</a> - Using signatures with DSPy modules</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../02-signatures/01-understanding-signatures.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../02-signatures/03-typed-signatures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../02-signatures/01-understanding-signatures.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../02-signatures/03-typed-signatures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

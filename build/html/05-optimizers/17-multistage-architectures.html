@@ -1,0 +1,1301 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Multi-stage Program Architectures - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/05-optimizers/17-multistage-architectures.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="multi-stage-program-architectures"><a class="header" href="#multi-stage-program-architectures">Multi-stage Program Architectures</a></h1>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ul>
+<li>Design effective multi-stage language model program architectures</li>
+<li>Implement common architectural patterns for complex tasks</li>
+<li>Optimize inter-stage communication and data flow</li>
+<li>Handle error propagation and recovery in multi-stage systems</li>
+<li>Build scalable and maintainable multi-stage programs</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Multi-stage program architectures represent a powerful paradigm for tackling complex language model tasks that cannot be effectively solved in a single pass. By breaking down complex problems into sequential stages, we can:</p>
+<ol>
+<li><strong>Modularize complexity</strong>: Each stage focuses on a specific subtask</li>
+<li><strong>Improve interpretability</strong>: Individual stages can be analyzed and debugged</li>
+<li><strong>Enable specialized optimization</strong>: Different stages can use different strategies</li>
+<li><strong>Enhance reusability</strong>: Stages can be reused across different programs</li>
+<li><strong>Facilitate parallel development</strong>: Teams can work on different stages independently</li>
+</ol>
+<p>This section explores architectural patterns, design principles, and implementation strategies for building robust multi-stage programs in DSPy.</p>
+<h2 id="architectural-patterns"><a class="header" href="#architectural-patterns">Architectural Patterns</a></h2>
+<h3 id="1-sequential-pipeline-architecture"><a class="header" href="#1-sequential-pipeline-architecture">1. Sequential Pipeline Architecture</a></h3>
+<p>The most common pattern where stages process data in a linear sequence.</p>
+<pre><code>Input → Stage 1 → Stage 2 → Stage 3 → ... → Stage N → Output
+</code></pre>
+<h4 id="implementation"><a class="header" href="#implementation">Implementation</a></h4>
+<pre><code class="language-python">import dspy
+from typing import List, Any, Dict, Optional
+
+class SequentialPipeline(dspy.Module):
+    """Sequential multi-stage pipeline."""
+
+    def __init__(self, stages: List[dspy.Module]):
+        super().__init__()
+        self.stages = stages
+        self.stage_names = [f"stage_{i}" for i in range(len(stages))]
+
+    def forward(self, **kwargs) -&gt; dspy.Prediction:
+        """Forward pass through all stages."""
+
+        current_input = kwargs
+        stage_outputs = {}
+
+        for i, stage in enumerate(self.stages):
+            # Execute stage
+            stage_name = self.stage_names[i]
+            output = stage(**current_input)
+
+            # Store output for debugging
+            stage_outputs[stage_name] = output
+
+            # Prepare input for next stage
+            if hasattr(output, 'predictions'):
+                current_input.update(output.predictions)
+            else:
+                current_input = output
+
+        # Combine all outputs
+        return dspy.Prediction(
+            output=current_input,
+            stage_outputs=stage_outputs,
+            trace=stage_outputs
+        )
+
+    def add_stage(self, stage: dspy.Module, position: Optional[int] = None):
+        """Add a new stage to the pipeline."""
+
+        if position is None:
+            self.stages.append(stage)
+            self.stage_names.append(f"stage_{len(self.stages)-1}")
+        else:
+            self.stages.insert(position, stage)
+            self.stage_names.insert(position, f"stage_{position}")
+            # Rename subsequent stages
+            for i in range(position + 1, len(self.stages)):
+                self.stage_names[i] = f"stage_{i}"
+</code></pre>
+<h4 id="example-multi-hop-question-answering"><a class="header" href="#example-multi-hop-question-answering">Example: Multi-hop Question Answering</a></h4>
+<pre><code class="language-python"># Define signatures for each stage
+class QueryDecompositionSignature(dspy.Signature):
+    """Decompose complex query into simpler sub-questions."""
+    question = dspy.InputField()
+    sub_questions = dspy.OutputField(desc="List of simpler sub-questions")
+
+class InformationRetrievalSignature(dspy.Signature):
+    """Retrieve relevant information for each sub-question."""
+    sub_question = dspy.InputField()
+    retrieved_info = dspy.OutputField(desc="Relevant information from knowledge base")
+
+class AnswerSynthesisSignature(dspy.Signature):
+    """Synthesize final answer from retrieved information."""
+    original_question = dspy.InputField()
+    retrieved_facts = dspy.InputField()
+    final_answer = dspy.OutputField(desc="Comprehensive answer to original question")
+
+# Create modules for each stage
+class QueryDecomposer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.decompose = dspy.ChainOfThought(QueryDecompositionSignature)
+
+    def forward(self, question):
+        return self.decompose(question=question)
+
+class InformationRetriever(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.retrieve = dspy.ChainOfThought(InformationRetrievalSignature)
+        self.rm = dspy.Retrieve(k=3)
+
+    def forward(self, sub_question):
+        # First retrieve from knowledge base
+        docs = self.rm(sub_question).passages
+
+        # Then synthesize retrieved information
+        prediction = self.retrieve(sub_question=sub_question, context=docs)
+        return prediction
+
+class AnswerSynthesizer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.synthesize = dspy.ChainOfThought(AnswerSynthesisSignature)
+
+    def forward(self, original_question, retrieved_facts):
+        return self.synthesize(
+            original_question=original_question,
+            retrieved_facts=retrieved_facts
+        )
+
+# Build the complete pipeline
+def build_multi_hop_qa_pipeline():
+    """Build a complete multi-hop QA pipeline."""
+
+    stages = [
+        QueryDecomposer(),
+        InformationRetriever(),
+        AnswerSynthesizer()
+    ]
+
+    pipeline = SequentialPipeline(stages)
+
+    # Add custom forward method for multi-hop logic
+    def forward(self, question):
+        # Stage 1: Decompose query
+        decomposition = self.stages[0].forward(question=question)
+        sub_questions = decomposition.sub_questions
+
+        # Stage 2: Process each sub-question
+        all_facts = []
+        for sub_q in sub_questions:
+            info = self.stages[1].forward(sub_question=sub_q)
+            all_facts.append(info.retrieved_info)
+
+        # Stage 3: Synthesize final answer
+        combined_facts = "\n".join(all_facts)
+        final_answer = self.stages[2].forward(
+            original_question=question,
+            retrieved_facts=combined_facts
+        )
+
+        return dspy.Prediction(
+            question=question,
+            sub_questions=sub_questions,
+            facts=all_facts,
+            answer=final_answer.final_answer
+        )
+
+    pipeline.forward = forward.__get__(pipeline, SequentialPipeline)
+    return pipeline
+</code></pre>
+<h3 id="2-branching-architecture"><a class="header" href="#2-branching-architecture">2. Branching Architecture</a></h3>
+<p>Different execution paths based on intermediate results.</p>
+<pre><code>           ┌─→ Stage 2a → Stage 3a ─┐
+Input → Stage 1 →                     → Stage N → Output
+           └─→ Stage 2b → Stage 3b ─┘
+</code></pre>
+<h4 id="implementation-1"><a class="header" href="#implementation-1">Implementation</a></h4>
+<pre><code class="language-python">class BranchingPipeline(dspy.Module):
+    """Pipeline with conditional branching logic."""
+
+    def __init__(self, router_stage, branches):
+        super().__init__()
+        self.router = router_stage
+        self.branches = branches
+
+    def forward(self, **kwargs):
+        """Forward pass with routing."""
+
+        # Route to appropriate branch
+        route_decision = self.router(**kwargs)
+        branch_name = route_decision.branch
+
+        # Execute selected branch
+        if branch_name not in self.branches:
+            raise ValueError(f"Unknown branch: {branch_name}")
+
+        branch = self.branches[branch_name]
+        result = branch(**kwargs, **route_decision.predictions)
+
+        return dspy.Prediction(
+            branch=branch_name,
+            route_decision=route_decision,
+            result=result
+        )
+
+# Example routing module
+class TaskRouter(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.classify = dspy.ChainOfThought(
+            "question -&gt; task_type (multiple_choice / short_answer / essay)"
+        )
+
+    def forward(self, question):
+        result = self.classify(question=question)
+        return dspy.Prediction(
+            branch=result.task_type.replace(' ', '_'),
+            task_type=result.task_type
+        )
+</code></pre>
+<h3 id="3-iterativeloop-architecture"><a class="header" href="#3-iterativeloop-architecture">3. Iterative/Loop Architecture</a></h3>
+<p>Repeatedly process and refine results.</p>
+<pre><code>        ┌─────────────────┐
+        │                 ▼
+Input → Stage 1 → Stage 2 → (condition) → Output
+        ▲                 │
+        └─────Stage 3─────┘
+</code></pre>
+<h4 id="implementation-2"><a class="header" href="#implementation-2">Implementation</a></h4>
+<pre><code class="language-python">class IterativePipeline(dspy.Module):
+    """Pipeline with iterative refinement."""
+
+    def __init__(self, processing_stages, stopping_condition, max_iterations=5):
+        super().__init__()
+        self.processing_stages = processing_stages
+        self.stopping_condition = stopping_condition
+        self.max_iterations = max_iterations
+
+    def forward(self, **kwargs):
+        """Forward pass with iteration."""
+
+        current_state = kwargs
+        iteration = 0
+        iterations_data = []
+
+        while iteration &lt; self.max_iterations:
+            # Process through all stages
+            for stage in self.processing_stages:
+                result = stage(**current_state)
+                current_state.update(result.predictions if hasattr(result, 'predictions') else result)
+
+            # Check stopping condition
+            should_stop = self.stopping_condition(current_state, iteration)
+            iterations_data.append({
+                'iteration': iteration,
+                'state': current_state.copy(),
+                'should_stop': should_stop
+            })
+
+            if should_stop:
+                break
+
+            iteration += 1
+
+        return dspy.Prediction(
+            final_state=current_state,
+            iterations=iterations_data,
+            converged=should_stop
+        )
+
+# Example stopping condition
+class QualityBasedStopping:
+    def __init__(self, quality_threshold=0.9, patience=2):
+        self.quality_threshold = quality_threshold
+        self.patience = patience
+        self.patience_counter = 0
+
+    def __call__(self, state, iteration):
+        # Check quality score in state
+        if 'quality_score' in state:
+            if state['quality_score'] &gt;= self.quality_threshold:
+                return True
+
+        # Check for improvement plateau
+        if 'improvement' in state:
+            if state['improvement'] &lt; 0.01:
+                self.patience_counter += 1
+                if self.patience_counter &gt;= self.patience:
+                    return True
+            else:
+                self.patience_counter = 0
+
+        return False
+</code></pre>
+<h3 id="4-hierarchical-architecture"><a class="header" href="#4-hierarchical-architecture">4. Hierarchical Architecture</a></h3>
+<p>Nested multi-stage structures for complex tasks.</p>
+<pre><code>                    ┌─→ Sub-pipeline A
+Input → Stage 1 ──→ ├─→ Sub-pipeline B → Stage N → Output
+                    └─→ Sub-pipeline C
+</code></pre>
+<h4 id="implementation-3"><a class="header" href="#implementation-3">Implementation</a></h4>
+<pre><code class="language-python">class HierarchicalPipeline(dspy.Module):
+    """Pipeline with nested sub-pipelines."""
+
+    def __init__(self, structure):
+        super().__init__()
+        self.structure = self._build_structure(structure)
+
+    def _build_structure(self, structure_def):
+        """Build nested structure from definition."""
+
+        structure = {}
+        for name, config in structure_def.items():
+            if config['type'] == 'module':
+                structure[name] = dspy.Module.load(config['module'])
+            elif config['type'] == 'pipeline':
+                structure[name] = self._build_pipeline(config['stages'])
+            elif config['type'] == 'conditional':
+                structure[name] = self._build_conditional(config)
+
+        return structure
+
+    def forward(self, stage_name='root', **kwargs):
+        """Execute hierarchical structure."""
+
+        if stage_name not in self.structure:
+            raise ValueError(f"Unknown stage: {stage_name}")
+
+        stage = self.structure[stage_name]
+
+        if isinstance(stage, dspy.Module):
+            return stage(**kwargs)
+        elif isinstance(stage, dict):
+            # Handle conditional logic
+            return self._execute_conditional(stage, kwargs)
+</code></pre>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<h3 id="1-clear-interface-contracts"><a class="header" href="#1-clear-interface-contracts">1. Clear Interface Contracts</a></h3>
+<p>Each stage should have well-defined inputs and outputs.</p>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+from typing import Optional
+
+class StageInput(BaseModel):
+    """Standardized input format for stages."""
+
+    content: str = Field(description="Main content to process")
+    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
+    context: Optional[str] = Field(default=None, description="Additional context")
+
+class StageOutput(BaseModel):
+    """Standardized output format for stages."""
+
+    content: str = Field(description="Processed content")
+    confidence: float = Field(description="Confidence score")
+    metadata: Optional[Dict[str, Any]] = Field(default=None, description="Stage-specific metadata")
+    error: Optional[str] = Field(default=None, description="Error message if failed")
+
+class StandardStage(dspy.Module):
+    """Base class with standardized interfaces."""
+
+    input_schema = StageInput
+    output_schema = StageOutput
+
+    def forward(self, **kwargs) -&gt; StageOutput:
+        # Validate input
+        validated_input = self.input_schema(**kwargs)
+
+        try:
+            # Process input
+            result = self.process(validated_input)
+
+            # Validate output
+            validated_output = self.output_schema(**result)
+            return validated_output
+
+        except Exception as e:
+            # Return error output
+            return StageOutput(
+                content="",
+                confidence=0.0,
+                error=str(e)
+            )
+
+    def process(self, input_data: StageInput) -&gt; Dict[str, Any]:
+        """Override in subclasses."""
+        raise NotImplementedError
+</code></pre>
+<h3 id="2-graceful-error-handling"><a class="header" href="#2-graceful-error-handling">2. Graceful Error Handling</a></h3>
+<p>Build robustness through error detection and recovery.</p>
+<pre><code class="language-python">class ErrorHandlingPipeline(dspy.Module):
+    """Pipeline with comprehensive error handling."""
+
+    def __init__(self, stages, recovery_strategies=None):
+        super().__init__()
+        self.stages = stages
+        self.recovery_strategies = recovery_strategies or {}
+        self.error_log = []
+
+    def forward(self, **kwargs):
+        """Forward pass with error recovery."""
+
+        current_state = kwargs
+
+        for i, stage in enumerate(self.stages):
+            try:
+                # Execute stage
+                result = stage(**current_state)
+
+                # Check for stage-level errors
+                if hasattr(result, 'error') and result.error:
+                    raise StageError(f"Stage {i}: {result.error}")
+
+                current_state = result.predictions if hasattr(result, 'predictions') else result
+
+            except Exception as e:
+                # Log error
+                error_info = {
+                    'stage_index': i,
+                    'stage_name': getattr(stage, 'name', f'stage_{i}'),
+                    'error': str(e),
+                    'input_state': current_state
+                }
+                self.error_log.append(error_info)
+
+                # Attempt recovery
+                if i in self.recovery_strategies:
+                    recovery_result = self.recovery_strategies[i](e, current_state)
+                    if recovery_result:
+                        current_state = recovery_result
+                        continue
+
+                # Fallback: skip stage or raise error
+                if self._should_continue_on_error(e):
+                    continue
+                else:
+                    raise PipelineError(f"Failed at stage {i}: {str(e)}") from e
+
+        return dspy.Prediction(
+            result=current_state,
+            error_log=self.error_log
+        )
+
+    def _should_continue_on_error(self, error):
+        """Determine if pipeline should continue after error."""
+
+        # Non-critical errors can be ignored
+        non_critical_errors = ['timeout', 'low_confidence']
+        return any(err in str(error).lower() for err in non_critical_errors)
+
+class StageError(Exception):
+    """Error occurring within a stage."""
+
+    pass
+
+class PipelineError(Exception):
+    """Error affecting the entire pipeline."""
+
+    pass
+</code></pre>
+<h3 id="3-caching-and-memoization"><a class="header" href="#3-caching-and-memoization">3. Caching and Memoization</a></h3>
+<p>Optimize performance through intelligent caching.</p>
+<pre><code class="language-python">from functools import lru_cache
+import hashlib
+import json
+
+class CachedStage(dspy.Module):
+    """Stage with caching capabilities."""
+
+    def __init__(self, underlying_stage, cache_size=1000):
+        super().__init__()
+        self.underlying_stage = underlying_stage
+        self.cache = {}
+        self.cache_size = cache_size
+        self.cache_hits = 0
+        self.cache_misses = 0
+
+    def forward(self, **kwargs):
+        """Forward pass with caching."""
+
+        # Generate cache key
+        cache_key = self._generate_cache_key(kwargs)
+
+        # Check cache
+        if cache_key in self.cache:
+            self.cache_hits += 1
+            return self.cache[cache_key]
+
+        # Cache miss - compute result
+        self.cache_misses += 1
+        result = self.underlying_stage(**kwargs)
+
+        # Store in cache
+        self._store_in_cache(cache_key, result)
+
+        return result
+
+    def _generate_cache_key(self, kwargs):
+        """Generate unique key for caching."""
+
+        # Serialize input
+        serialized = json.dumps(kwargs, sort_keys=True, default=str)
+
+        # Generate hash
+        return hashlib.md5(serialized.encode()).hexdigest()
+
+    def _store_in_cache(self, key, value):
+        """Store value in cache with LRU eviction."""
+
+        if len(self.cache) &gt;= self.cache_size:
+            # Simple LRU: remove first item
+            oldest_key = next(iter(self.cache))
+            del self.cache[oldest_key]
+
+        self.cache[key] = value
+
+    def get_cache_stats(self):
+        """Get cache performance statistics."""
+
+        total = self.cache_hits + self.cache_misses
+        hit_rate = self.cache_hits / total if total &gt; 0 else 0
+
+        return {
+            'hits': self.cache_hits,
+            'misses': self.cache_misses,
+            'hit_rate': hit_rate,
+            'cache_size': len(self.cache)
+        }
+</code></pre>
+<h2 id="advanced-architectural-patterns"><a class="header" href="#advanced-architectural-patterns">Advanced Architectural Patterns</a></h2>
+<h3 id="1-ensemble-architecture"><a class="header" href="#1-ensemble-architecture">1. Ensemble Architecture</a></h3>
+<p>Multiple processing paths with result aggregation.</p>
+<pre><code class="language-python">class EnsemblePipeline(dspy.Module):
+    """Pipeline with ensemble of processing paths."""
+
+    def __init__(self, processors, aggregator):
+        super().__init__()
+        self.processors = processors
+        self.aggregator = aggregator
+
+    def forward(self, **kwargs):
+        """Execute all processors and aggregate results."""
+
+        # Run all processors
+        results = []
+        for i, processor in enumerate(self.processors):
+            try:
+                result = processor(**kwargs)
+                results.append({
+                    'processor_id': i,
+                    'result': result,
+                    'success': True
+                })
+            except Exception as e:
+                results.append({
+                    'processor_id': i,
+                    'error': str(e),
+                    'success': False
+                })
+
+        # Aggregate successful results
+        successful_results = [r for r in results if r['success']]
+        if not successful_results:
+            raise PipelineError("All processors failed")
+
+        aggregated = self.aggregator.aggregate(successful_results)
+
+        return dspy.Prediction(
+            aggregated_result=aggregated,
+            individual_results=results
+        )
+
+class ResultAggregator:
+    """Aggregate results from multiple processors."""
+
+    def __init__(self, strategy='weighted_voting'):
+        self.strategy = strategy
+
+    def aggregate(self, results):
+        """Aggregate results based on strategy."""
+
+        if self.strategy == 'weighted_voting':
+            return self._weighted_voting(results)
+        elif self.strategy == 'best_confidence':
+            return self._best_confidence(results)
+        elif self.strategy == 'consensus':
+            return self._consensus(results)
+        else:
+            raise ValueError(f"Unknown aggregation strategy: {self.strategy}")
+
+    def _weighted_voting(self, results):
+        """Aggregate using weighted voting."""
+
+        # Collect votes
+        votes = {}
+        for r in results:
+            output = r['result']
+            if hasattr(output, 'predictions'):
+                content = output.predictions.get('content', '')
+            else:
+                content = str(output)
+
+            confidence = getattr(output, 'confidence', 0.5)
+            votes[content] = votes.get(content, 0) + confidence
+
+        # Return highest voted option
+        best_content = max(votes, key=votes.get)
+        return {'content': best_content, 'confidence': votes[best_content] / sum(votes.values())}
+</code></pre>
+<h3 id="2-adaptive-architecture"><a class="header" href="#2-adaptive-architecture">2. Adaptive Architecture</a></h3>
+<p>Dynamically adjust structure based on input characteristics.</p>
+<pre><code class="language-python">class AdaptivePipeline(dspy.Module):
+    """Pipeline that adapts its structure dynamically."""
+
+    def __init__(self, component_pool, adapter):
+        super().__init__()
+        self.component_pool = component_pool
+        self.adapter = adapter
+        self.current_structure = None
+
+    def forward(self, **kwargs):
+        """Adapt structure and execute."""
+
+        # Analyze input characteristics
+        input_analysis = self.adapter.analyze_input(kwargs)
+
+        # Select appropriate structure
+        optimal_structure = self.adapter.select_structure(
+            input_analysis,
+            self.component_pool
+        )
+
+        # Build dynamic pipeline
+        pipeline = self._build_pipeline(optimal_structure)
+
+        # Execute
+        result = pipeline(**kwargs)
+
+        return dspy.Prediction(
+            result=result,
+            used_structure=optimal_structure,
+            input_analysis=input_analysis
+        )
+
+    def _build_pipeline(self, structure):
+        """Build pipeline from structure definition."""
+
+        stages = []
+        for component_name in structure:
+            if component_name in self.component_pool:
+                stages.append(self.component_pool[component_name])
+
+        return SequentialPipeline(stages)
+
+class PipelineAdapter:
+    """Adapter for selecting optimal pipeline structure."""
+
+    def __init__(self):
+        self.structure_patterns = {
+            'simple': ['processor_a'],
+            'complex': ['preprocessor', 'processor_a', 'postprocessor'],
+            'multi_approach': ['processor_a', 'processor_b', 'aggregator']
+        }
+
+    def analyze_input(self, input_data):
+        """Analyze input characteristics."""
+
+        # Simple analysis based on input properties
+        text = input_data.get('content', '')
+
+        characteristics = {
+            'length': len(text.split()),
+            'complexity': self._compute_complexity(text),
+            'type': self._classify_input_type(text)
+        }
+
+        return characteristics
+
+    def select_structure(self, analysis, component_pool):
+        """Select optimal structure based on analysis."""
+
+        # Simple rule-based selection
+        if analysis['length'] &lt; 50 and analysis['complexity'] &lt; 0.3:
+            return self.structure_patterns['simple']
+        elif analysis['type'] == 'complex_reasoning':
+            return self.structure_patterns['multi_approach']
+        else:
+            return self.structure_patterns['complex']
+
+    def _compute_complexity(self, text):
+        """Simple complexity metric."""
+
+        # Factors: sentence length, punctuation, nested structures
+        avg_word_length = np.mean([len(word) for word in text.split()])
+        punctuation_ratio = text.count('.') + text.count(',') + text.count(';')
+        nested_indicators = text.count('(') + text.count('[')
+
+        complexity = (avg_word_length * 0.2 + punctuation_ratio * 0.3 + nested_indicators * 0.5)
+        return min(complexity / 10, 1.0)
+
+    def _classify_input_type(self, text):
+        """Classify input type."""
+
+        text_lower = text.lower()
+
+        if any(word in text_lower for word in ['why', 'how', 'explain', 'analyze']):
+            return 'complex_reasoning'
+        elif '?' in text:
+            return 'question'
+        else:
+            return 'statement'
+</code></pre>
+<h3 id="3-parallel-architecture"><a class="header" href="#3-parallel-architecture">3. Parallel Architecture</a></h3>
+<p>Execute multiple stages concurrently when possible.</p>
+<pre><code class="language-python">import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+class ParallelPipeline(dspy.Module):
+    """Pipeline with parallel execution capabilities."""
+
+    def __init__(self, parallel_groups, merger):
+        super().__init__()
+        self.parallel_groups = parallel_groups
+        self.merger = merger
+        self.executor = ThreadPoolExecutor(max_workers=4)
+
+    def forward(self, **kwargs):
+        """Execute with parallel stages."""
+
+        current_input = kwargs
+        group_results = []
+
+        for group in self.parallel_groups:
+            if len(group) == 1:
+                # Single stage - execute sequentially
+                stage = group[0]
+                result = stage(**current_input)
+                current_input = result.predictions if hasattr(result, 'predictions') else result
+                group_results.append([result])
+            else:
+                # Multiple stages - execute in parallel
+                parallel_results = self._execute_parallel(group, current_input)
+                group_results.append(parallel_results)
+
+                # Merge results
+                merged = self.merger.merge(parallel_results)
+                current_input = merged
+
+        return dspy.Prediction(
+            result=current_input,
+            group_results=group_results
+        )
+
+    def _execute_parallel(self, stages, input_data):
+        """Execute multiple stages in parallel."""
+
+        futures = []
+        for stage in stages:
+            future = self.executor.submit(stage, **input_data)
+            futures.append(future)
+
+        # Collect results
+        results = []
+        for future in futures:
+            try:
+                result = future.result(timeout=30)
+                results.append(result)
+            except Exception as e:
+                # Handle timeout or other errors
+                results.append({'error': str(e)})
+
+        return results
+
+class ResultMerger:
+    """Merge results from parallel execution."""
+
+    def merge(self, results):
+        """Merge multiple results into single output."""
+
+        successful = [r for r in results if not isinstance(r, dict) or 'error' not in r]
+
+        if not successful:
+            raise PipelineError("All parallel stages failed")
+
+        # Simple concatenation strategy
+        merged_content = []
+        for result in successful:
+            if hasattr(result, 'predictions'):
+                content = result.predictions.get('content', '')
+            else:
+                content = str(result)
+            merged_content.append(content)
+
+        return {'content': '\n'.join(merged_content)}
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="1-stage-fusion"><a class="header" href="#1-stage-fusion">1. Stage Fusion</a></h3>
+<p>Combine compatible stages to reduce overhead.</p>
+<pre><code class="language-python">class StageFusion:
+    """Fuse compatible stages for optimization."""
+
+    def __init__(self):
+        self.fusion_rules = {
+            'chain_of_thought_chain': self._fuse_cot_chains,
+            'retrieval_processing': self._fuse_retrieval_processing,
+            'filter_transform': self._fuse_filter_transform
+        }
+
+    def can_fuse(self, stage1, stage2):
+        """Check if two stages can be fused."""
+
+        # Check if stages are compatible
+        stage1_type = type(stage1).__name__
+        stage2_type = type(stage2).__name__
+
+        fusion_key = f"{stage1_type}_{stage2_type}"
+        return fusion_key in self.fusion_rules
+
+    def fuse(self, stage1, stage2):
+        """Fuse two stages into single optimized stage."""
+
+        stage1_type = type(stage1).__name__
+        stage2_type = type(stage2).__name__
+
+        fusion_key = f"{stage1_type}_{stage2_type}"
+        if fusion_key not in self.fusion_rules:
+            raise ValueError(f"Cannot fuse {stage1_type} and {stage2_type}")
+
+        return self.fusion_rules[fusion_key](stage1, stage2)
+
+    def _fuse_cot_chains(self, cot1, cot2):
+        """Fuse two ChainOfThought modules."""
+
+        class FusedCoT(dspy.Module):
+            def __init__(self, cot1, cot2):
+                super().__init__()
+                self.cot1 = cot1
+                self.cot2 = cot2
+                # Create combined signature
+                self.combined = dspy.ChainOfThought(
+                    f"{cot1.signature} -&gt; {cot2.signature}"
+                )
+
+            def forward(self, **kwargs):
+                # Execute both reasoning steps in one call
+                return self.combined(**kwargs)
+
+        return FusedCoT(cot1, cot2)
+</code></pre>
+<h3 id="2-lazy-evaluation"><a class="header" href="#2-lazy-evaluation">2. Lazy Evaluation</a></h3>
+<p>Defer stage execution until results are needed.</p>
+<pre><code class="language-python">class LazyStage(dspy.Module):
+    """Stage with lazy evaluation."""
+
+    def __init__(self, underlying_stage):
+        super().__init__()
+        self.underlying_stage = underlying_stage
+        self._cached_result = None
+        self._executed = False
+
+    def forward(self, **kwargs):
+        """Return lazy result wrapper."""
+
+        return LazyResult(self.underlying_stage, kwargs)
+
+class LazyResult:
+    """Lazy evaluation result."""
+
+    def __init__(self, stage, kwargs):
+        self.stage = stage
+        self.kwargs = kwargs
+        self._result = None
+
+    def get_result(self):
+        """Force evaluation and return result."""
+
+        if self._result is None:
+            self._result = self.stage(**self.kwargs)
+
+        return self._result
+
+    @property
+    def predictions(self):
+        """Access predictions lazily."""
+
+        return self.get_result().predictions
+
+    def __getattr__(self, name):
+        """Delegate attribute access to actual result."""
+
+        return getattr(self.get_result(), name)
+</code></pre>
+<h2 id="monitoring-and-debugging"><a class="header" href="#monitoring-and-debugging">Monitoring and Debugging</a></h2>
+<h3 id="1-performance-profiling"><a class="header" href="#1-performance-profiling">1. Performance Profiling</a></h3>
+<pre><code class="language-python">import time
+from collections import defaultdict
+
+class ProfilingPipeline(dspy.Module):
+    """Pipeline with performance profiling."""
+
+    def __init__(self, stages):
+        super().__init__()
+        self.stages = stages
+        self.profile_data = defaultdict(list)
+
+    def forward(self, **kwargs):
+        """Forward pass with profiling."""
+
+        current_input = kwargs
+
+        for i, stage in enumerate(self.stages):
+            # Profile execution time
+            start_time = time.time()
+
+            # Execute stage
+            result = stage(**current_input)
+
+            # Record execution time
+            execution_time = time.time() - start_time
+            self.profile_data[f"stage_{i}"].append(execution_time)
+
+            # Profile memory usage
+            if hasattr(result, 'predictions'):
+                input_size = len(str(current_input))
+                output_size = len(str(result.predictions))
+                self.profile_data[f"stage_{i}_sizes"].append((input_size, output_size))
+
+            current_input = result.predictions if hasattr(result, 'predictions') else result
+
+        return dspy.Prediction(
+            result=current_input,
+            profile_data=dict(self.profile_data)
+        )
+
+    def get_performance_summary(self):
+        """Get summary of performance data."""
+
+        summary = {}
+        for stage_key, times in self.profile_data.items():
+            if 'sizes' not in stage_key:
+                summary[stage_key] = {
+                    'avg_time': np.mean(times),
+                    'total_time': sum(times),
+                    'num_executions': len(times),
+                    'min_time': min(times),
+                    'max_time': max(times)
+                }
+
+        return summary
+</code></pre>
+<h3 id="2-execution-tracing"><a class="header" href="#2-execution-tracing">2. Execution Tracing</a></h3>
+<pre><code class="language-python">class TracingPipeline(dspy.Module):
+    """Pipeline with detailed execution tracing."""
+
+    def __init__(self, stages):
+        super().__init__()
+        self.stages = stages
+        self.execution_trace = []
+
+    def forward(self, **kwargs):
+        """Forward pass with tracing."""
+
+        current_input = kwargs
+        trace_entry = {
+            'timestamp': time.time(),
+            'stage': 'input',
+            'input': kwargs.copy(),
+            'type': 'input'
+        }
+        self.execution_trace.append(trace_entry)
+
+        for i, stage in enumerate(self.stages):
+            # Trace before execution
+            trace_entry = {
+                'timestamp': time.time(),
+                'stage': f'stage_{i}',
+                'stage_name': getattr(stage, 'name', f'Stage {i}'),
+                'input': current_input.copy(),
+                'type': 'stage_start'
+            }
+            self.execution_trace.append(trace_entry)
+
+            # Execute stage
+            result = stage(**current_input)
+
+            # Trace after execution
+            trace_entry = {
+                'timestamp': time.time(),
+                'stage': f'stage_{i}',
+                'stage_name': getattr(stage, 'name', f'Stage {i}'),
+                'output': result.predictions if hasattr(result, 'predictions') else result,
+                'type': 'stage_end'
+            }
+            self.execution_trace.append(trace_entry)
+
+            current_input = result.predictions if hasattr(result, 'predictions') else result
+
+        # Trace final output
+        trace_entry = {
+            'timestamp': time.time(),
+            'stage': 'output',
+            'output': current_input,
+            'type': 'output'
+        }
+        self.execution_trace.append(trace_entry)
+
+        return dspy.Prediction(
+            result=current_input,
+            execution_trace=self.execution_trace
+        )
+
+    def save_trace(self, filename):
+        """Save execution trace to file."""
+
+        import json
+        with open(filename, 'w') as f:
+            json.dump(self.execution_trace, f, indent=2, default=str)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-architectural-guidelines"><a class="header" href="#1-architectural-guidelines">1. Architectural Guidelines</a></h3>
+<ul>
+<li><strong>Single Responsibility</strong>: Each stage should have one clear purpose</li>
+<li><strong>Loose Coupling</strong>: Minimize dependencies between stages</li>
+<li><strong>Clear Interfaces</strong>: Define contracts between stages</li>
+<li><strong>Error Boundaries</strong>: Isolate failures to prevent cascade</li>
+<li><strong>Resource Management</strong>: Monitor and limit resource usage</li>
+</ul>
+<h3 id="2-performance-considerations"><a class="header" href="#2-performance-considerations">2. Performance Considerations</a></h3>
+<ul>
+<li><strong>Parallel Execution</strong>: Use parallelism when stages are independent</li>
+<li><strong>Caching</strong>: Cache expensive operations and frequently used results</li>
+<li><strong>Batch Processing</strong>: Process multiple items together when possible</li>
+<li><strong>Lazy Evaluation</strong>: Defer computation until needed</li>
+<li><strong>Resource Pooling</strong>: Reuse resources across stages</li>
+</ul>
+<h3 id="3-maintenance-tips"><a class="header" href="#3-maintenance-tips">3. Maintenance Tips</a></h3>
+<ul>
+<li><strong>Modular Design</strong>: Keep stages independent for easier updates</li>
+<li><strong>Versioning</strong>: Track versions of stages and pipelines</li>
+<li><strong>Documentation</strong>: Document stage purposes and interfaces</li>
+<li><strong>Testing</strong>: Test individual stages and integration</li>
+<li><strong>Monitoring</strong>: Track performance and error rates</li>
+</ul>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Multi-stage program architectures provide powerful patterns for building complex language model applications. Key takeaways:</p>
+<ol>
+<li><strong>Architectural Patterns</strong>: Sequential, branching, iterative, and hierarchical designs</li>
+<li><strong>Design Principles</strong>: Clear interfaces, error handling, and caching</li>
+<li><strong>Advanced Patterns</strong>: Ensemble, adaptive, and parallel architectures</li>
+<li><strong>Optimization Techniques</strong>: Stage fusion and lazy evaluation</li>
+<li><strong>Monitoring Tools</strong>: Profiling and tracing for debugging</li>
+</ol>
+<p>The next section will explore optimization strategies specifically for complex multi-stage pipelines, building on these architectural foundations.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/16-demonstration-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/18-complex-pipeline-optimization.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/16-demonstration-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/18-complex-pipeline-optimization.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

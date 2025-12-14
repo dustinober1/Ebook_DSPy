@@ -1,0 +1,978 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Customer Support Chatbot - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/08-case-studies/02-customer-support-chatbot.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="case-study-2-developing-a-customer-support-chatbot"><a class="header" href="#case-study-2-developing-a-customer-support-chatbot">Case Study 2: Developing a Customer Support Chatbot</a></h1>
+<h2 id="problem-definition"><a class="header" href="#problem-definition">Problem Definition</a></h2>
+<h3 id="business-challenge"><a class="header" href="#business-challenge">Business Challenge</a></h3>
+<p>A large e-commerce company needed to automate their customer support operations to:</p>
+<ul>
+<li>Handle 50,000+ daily customer inquiries</li>
+<li>Reduce response time from hours to seconds</li>
+<li>Maintain high customer satisfaction (CSAT &gt; 90%)</li>
+<li>Reduce operational costs by 40%</li>
+<li>Provide 24/7 support across all time zones</li>
+<li>Support multiple languages and channels</li>
+</ul>
+<h3 id="key-requirements"><a class="header" href="#key-requirements">Key Requirements</a></h3>
+<ol>
+<li><strong>Multi-turn Conversations</strong>: Handle complex, multi-step interactions</li>
+<li><strong>Intent Recognition</strong>: Accurately identify customer needs</li>
+<li><strong>Knowledge Integration</strong>: Access product info, order status, policies</li>
+<li><strong>Escalation</strong>: Seamless handoff to human agents when needed</li>
+<li><strong>Personalization</strong>: Use customer history and context</li>
+<li><strong>Channel Agnostic</strong>: Work on web, mobile, email, and social media</li>
+<li><strong>Analytics</strong>: Track performance and identify improvement areas</li>
+</ol>
+<h2 id="system-design"><a class="header" href="#system-design">System Design</a></h2>
+<h3 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture Overview</a></h3>
+<pre><code>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Input         │    │   NLU &amp; Intent   │    │   Dialogue      │
+│   Processor     │───▶│   Recognition    │───▶│   Manager       │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Channel       │    │   Entity        │    │   Response      │
+│   Adapter       │    │   Extraction    │    │   Generator     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                 │                       │
+                                 └───────────┬───────────┘
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   Knowledge     │
+                                   │   Base          │
+                                   └─────────────────┘
+                                             │
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   Backend       │
+                                   │   APIs          │
+                                   └─────────────────┘
+</code></pre>
+<h3 id="component-details"><a class="header" href="#component-details">Component Details</a></h3>
+<h4 id="1-input-processing-layer"><a class="header" href="#1-input-processing-layer">1. Input Processing Layer</a></h4>
+<ul>
+<li><strong>Channel Adapters</strong>: Normalize inputs from different channels</li>
+<li><strong>Language Detection</strong>: Identify customer’s language</li>
+<li><strong>Text Preprocessing</strong>: Clean and normalize user messages</li>
+<li><strong>Session Management</strong>: Track conversation state and context</li>
+</ul>
+<h4 id="2-nlu-engine"><a class="header" href="#2-nlu-engine">2. NLU Engine</a></h4>
+<ul>
+<li><strong>Intent Classification</strong>: Understand customer’s primary goal</li>
+<li><strong>Entity Recognition</strong>: Extract key information (order numbers, products)</li>
+<li><strong>Sentiment Analysis</strong>: Detect customer emotions</li>
+<li><strong>Query Understanding</strong>: Parse complex customer requests</li>
+</ul>
+<h4 id="3-dialogue-management"><a class="header" href="#3-dialogue-management">3. Dialogue Management</a></h4>
+<ul>
+<li><strong>State Tracking</strong>: Maintain conversation history</li>
+<li><strong>Policy Engine</strong>: Determine next actions based on context</li>
+<li><strong>Flow Control</strong>: Handle different conversation paths</li>
+<li><strong>Escalation Logic</strong>: Decide when to transfer to human</li>
+</ul>
+<h4 id="4-response-generation"><a class="header" href="#4-response-generation">4. Response Generation</a></h4>
+<ul>
+<li><strong>Template System</strong>: Dynamic response templates</li>
+<li><strong>Personalization Engine</strong>: Customize responses based on user data</li>
+<li><strong>Multi-language Support</strong>: Generate responses in customer’s language</li>
+<li><strong>Action Execution</strong>: Perform backend operations</li>
+</ul>
+<h2 id="implementation-with-dspy"><a class="header" href="#implementation-with-dspy">Implementation with DSPy</a></h2>
+<h3 id="core-dspy-components"><a class="header" href="#core-dspy-components">Core DSPy Components</a></h3>
+<h4 id="1-intent-recognition-module"><a class="header" href="#1-intent-recognition-module">1. Intent Recognition Module</a></h4>
+<pre><code class="language-python">import dspy
+from typing import Dict, List, Optional, Any
+from dataclasses import dataclass
+from enum import Enum
+
+class IntentType(Enum):
+    """Types of customer intents."""
+    ORDER_STATUS = "order_status"
+    PRODUCT_INFO = "product_info"
+    RETURN_REQUEST = "return_request"
+    PAYMENT_ISSUE = "payment_issue"
+    TECHNICAL_SUPPORT = "technical_support"
+    GENERAL_INQUIRY = "general_inquiry"
+    COMPLAINT = "complaint"
+    ESCALATION = "escalation"
+
+@dataclass
+class IntentResult:
+    intent: IntentType
+    confidence: float
+    entities: Dict[str, Any]
+    sentiment: str
+
+class IntentClassifierSignature(dspy.Signature):
+    """Signature for intent classification."""
+    message = dspy.InputField(desc="Customer message")
+    conversation_history = dspy.InputField(desc="Previous messages in conversation")
+    intent = dspy.OutputField(desc="Primary intent of the message")
+    confidence = dspy.OutputField(desc="Confidence score (0-1)")
+    entities = dspy.OutputField(desc="Extracted entities")
+    sentiment = dspy.OutputField(desc="Customer sentiment")
+
+class IntentClassifier(dspy.Module):
+    """Classify customer intent and extract entities."""
+
+    def __init__(self):
+        super().__init__()
+        self.classify = dspy.ChainOfThought(IntentClassifierSignature)
+        self.entity_extractor = dspy.Predict(EntityExtractionSignature)
+
+    def forward(self, message: str, history: str = "") -&gt; IntentResult:
+        """Classify intent and extract entities."""
+
+        # Get initial classification
+        prediction = self.classify(
+            message=message,
+            conversation_history=history
+        )
+
+        # Extract specific entities
+        entities = self._extract_entities(prediction.intent, message)
+
+        # Map to enum
+        try:
+            intent_enum = IntentType(prediction.intent.lower())
+        except ValueError:
+            intent_enum = IntentType.GENERAL_INQUIRY
+
+        return IntentResult(
+            intent=intent_enum,
+            confidence=float(prediction.confidence),
+            entities=entities,
+            sentiment=prediction.sentiment
+        )
+
+    def _extract_entities(self, intent: str, message: str) -&gt; Dict[str, Any]:
+        """Extract entities based on intent type."""
+        if "order" in intent:
+            return self._extract_order_entities(message)
+        elif "product" in intent:
+            return self._extract_product_entities(message)
+        elif "payment" in intent:
+            return self._extract_payment_entities(message)
+        else:
+            return self._extract_general_entities(message)
+</code></pre>
+<h4 id="2-dialogue-management-module"><a class="header" href="#2-dialogue-management-module">2. Dialogue Management Module</a></h4>
+<pre><code class="language-python">@dataclass
+class DialogueState:
+    """State of the conversation."""
+    session_id: str
+    user_id: str
+    intent: Optional[IntentType] = None
+    entities: Dict = None
+    messages: List[Dict] = None
+    current_step: str = "greeting"
+    completed_steps: List[str] = None
+    needs_escalation: bool = False
+    context: Dict = None
+
+class DialogueManagerSignature(dspy.Signature):
+    """Signature for dialogue management."""
+    current_state = dspy.InputField(desc="Current dialogue state")
+    last_message = dspy.InputField(desc="Last customer message")
+    intent_result = dspy.InputField(desc="Intent classification result")
+    next_action = dspy.OutputField(desc="Next action to take")
+    response = dspy.OutputField(desc="Response to customer")
+    new_state = dspy.OutputField(desc="Updated dialogue state")
+
+class DialogueManager(dspy.Module):
+    """Manage conversation flow and state."""
+
+    def __init__(self):
+        super().__init__()
+        self.manage = dspy.ChainOfThought(DialogueManagerSignature)
+        self.flows = self._load_conversation_flows()
+
+    def forward(self, state: DialogueState, message: str,
+                intent_result: IntentResult) -&gt; Dict:
+        """Process message and determine next action."""
+
+        # Get current flow
+        current_flow = self.flows.get(state.intent.value, self.flows["general"])
+
+        # Determine next action
+        next_action = self._determine_next_action(
+            state, intent_result, current_flow
+        )
+
+        # Generate response
+        if next_action["type"] == "response":
+            response = self._generate_response(
+                state, intent_result, next_action
+            )
+        elif next_action["type"] == "action":
+            response = self._execute_action(
+                state, intent_result, next_action
+            )
+        else:
+            response = self._handle_escalation(state, intent_result)
+
+        # Update state
+        new_state = self._update_state(state, intent_result, next_action)
+
+        return {
+            "response": response,
+            "next_action": next_action,
+            "new_state": new_state
+        }
+
+    def _determine_next_action(self, state: DialogueState,
+                              intent: IntentResult,
+                              flow: Dict) -&gt; Dict:
+        """Determine the next action based on context."""
+        # Check for escalation triggers
+        if self._should_escalate(state, intent):
+            return {"type": "escalate", "reason": "complex_query"}
+
+        # Check for missing information
+        missing = self._check_missing_info(state, intent)
+        if missing:
+            return {
+                "type": "request_info",
+                "missing": missing,
+                "prompt": flow.get("prompts", {}).get(missing, "")
+            }
+
+        # Determine action based on intent and step
+        current_step = state.current_step
+        if current_step in flow.get("steps", {}):
+            return flow["steps"][current_step]
+
+        # Default response
+        return {"type": "response", "template": "default"}
+
+    def _generate_response(self, state: DialogueState,
+                          intent: IntentResult,
+                          action: Dict) -&gt; str:
+        """Generate appropriate response."""
+        # Use DSPy for dynamic response generation
+        if action.get("type") == "request_info":
+            return action.get("prompt", "Could you provide more information?")
+
+        # Generate personalized response
+        response = dspy.Predict(GenerateResponseSignature)(
+            intent=intent.intent.value,
+            entities=str(intent.entities),
+            context=str(state.context),
+            template=action.get("template", "")
+        )
+
+        return response.response
+
+    def _execute_action(self, state: DialogueState,
+                       intent: IntentResult,
+                       action: Dict) -&gt; str:
+        """Execute backend action and generate response."""
+        action_type = action.get("action")
+
+        if action_type == "check_order":
+            result = self._check_order_status(
+                intent.entities.get("order_id")
+            )
+            return self._format_order_response(result)
+
+        elif action_type == "process_return":
+            result = self._process_return_request(
+                intent.entities
+            )
+            return self._format_return_response(result)
+
+        # Handle other action types...
+        return "I'm processing your request..."
+
+    def _should_escalate(self, state: DialogueState,
+                        intent: IntentResult) -&gt; bool:
+        """Determine if escalation is needed."""
+        # Check sentiment
+        if intent.sentiment == "negative":
+            return True
+
+        # Check complexity
+        if intent.intent == IntentType.COMPLAINT:
+            return True
+
+        # Check if stuck in loop
+        if len(state.messages) &gt; 10:
+            return True
+
+        return False
+</code></pre>
+<h4 id="3-response-generation-module"><a class="header" href="#3-response-generation-module">3. Response Generation Module</a></h4>
+<pre><code class="language-python">class ResponseGeneratorSignature(dspy.Signature):
+    """Signature for generating customer responses."""
+    intent = dspy.InputField(desc="Customer's intent")
+    entities = dspy.InputField(desc="Extracted entities")
+    context = dspy.InputField(desc="Customer and conversation context")
+    brand_voice = dspy.InputField(desc="Company brand voice guidelines")
+    response = dspy.OutputField(desc="Generated response")
+
+class PersonalizedResponseGenerator(dspy.Module):
+    """Generate personalized, brand-aligned responses."""
+
+    def __init__(self, brand_guidelines: Dict):
+        super().__init__()
+        self.brand_voice = brand_guidelines
+        self.generate = dspy.ChainOfThought(ResponseGeneratorSignature)
+        self.templates = self._load_response_templates()
+
+    def forward(self, intent: IntentResult,
+                context: Dict,
+                template: str = None) -&gt; str:
+        """Generate personalized response."""
+
+        # Get customer profile
+        customer_profile = context.get("customer_profile", {})
+
+        # Determine response style
+        style = self._determine_style(intent, customer_profile)
+
+        # Generate base response
+        response = self.generate(
+            intent=intent.intent.value,
+            entities=str(intent.entities),
+            context=str(context),
+            brand_voice=str(self.brand_voice)
+        )
+
+        # Personalize response
+        personalized = self._personalize_response(
+            response.response,
+            customer_profile,
+            style
+        )
+
+        return personalized
+
+    def _determine_style(self, intent: IntentResult,
+                        profile: Dict) -&gt; str:
+        """Determine response style based on context."""
+        if intent.sentiment == "negative":
+            return "empathetic"
+        elif profile.get("tier") == "premium":
+            return "formal"
+        elif profile.get("preferred_language"):
+            return profile["preferred_language"]
+        else:
+            return "friendly"
+
+    def _personalize_response(self, response: str,
+                            profile: Dict,
+                            style: str) -&gt; str:
+        """Personalize response based on customer profile."""
+        # Add name if available
+        if profile.get("first_name"):
+            response = response.replace("{name}", profile["first_name"])
+
+        # Adjust formality
+        if style == "formal":
+            response = self._make_formal(response)
+        elif style == "friendly":
+            response = self._make_friendly(response)
+
+        return response
+</code></pre>
+<h4 id="4-knowledge-integration-module"><a class="header" href="#4-knowledge-integration-module">4. Knowledge Integration Module</a></h4>
+<pre><code class="language-python">class KnowledgeQuerySignature(dspy.Signature):
+    """Signature for querying knowledge base."""
+    query = dspy.InputField(desc="Natural language query")
+    context = dspy.InputField(desc="Conversation context")
+    knowledge = dspy.OutputField(desc="Relevant knowledge from database")
+    sources = dspy.OutputField(desc="Source documents")
+
+class KnowledgeBase(dspy.Module):
+    """Integrate with company knowledge base."""
+
+    def __init__(self, vector_store, faq_db, product_db):
+        super().__init__()
+        self.vector_store = vector_store
+        self.faq_db = faq_db
+        self.product_db = product_db
+        self.query = dspy.Predict(KnowledgeQuerySignature)
+
+    def forward(self, query: str, context: Dict = None) -&gt; Dict:
+        """Query knowledge base for relevant information."""
+
+        # Check different knowledge sources
+        results = {}
+
+        # Search FAQ
+        faq_results = self._search_faq(query)
+        if faq_results:
+            results["faq"] = faq_results
+
+        # Search product database
+        if "product" in query.lower():
+            product_results = self._search_products(query)
+            if product_results:
+                results["products"] = product_results
+
+        # Search vector database for general knowledge
+        general_results = self._search_general(query, context)
+        if general_results:
+            results["general"] = general_results
+
+        # Synthesize results
+        knowledge = self._synthesize_knowledge(results)
+
+        return {
+            "knowledge": knowledge,
+            "sources": self._extract_sources(results)
+        }
+
+    def _search_faq(self, query: str) -&gt; List[Dict]:
+        """Search FAQ database."""
+        # Implementation for FAQ search
+        pass
+
+    def _search_products(self, query: str) -&gt; List[Dict]:
+        """Search product database."""
+        # Implementation for product search
+        pass
+
+    def _search_general(self, query: str, context: Dict) -&gt; List[Dict]:
+        """Search general knowledge base."""
+        # Implementation using vector store
+        pass
+</code></pre>
+<h3 id="complete-chatbot-system"><a class="header" href="#complete-chatbot-system">Complete Chatbot System</a></h3>
+<pre><code class="language-python">class CustomerSupportChatbot(dspy.Module):
+    """Complete customer support chatbot system."""
+
+    def __init__(self, config: Dict):
+        super().__init__()
+        self.config = config
+
+        # Initialize components
+        self.intent_classifier = IntentClassifier()
+        self.dialogue_manager = DialogueManager()
+        self.response_generator = PersonalizedResponseGenerator(
+            config["brand_guidelines"]
+        )
+        self.knowledge_base = KnowledgeBase(
+            config["vector_store"],
+            config["faq_db"],
+            config["product_db"]
+        )
+
+        # Session management
+        self.sessions = {}
+
+        # Optimization
+        self.optimizer = dspy.BootstrapFewShot(
+            max_bootstrapped_demos=10,
+            max_labeled_demos=5
+        )
+
+    def process_message(self, session_id: str, message: str,
+                       channel: str = "web") -&gt; Dict:
+        """Process incoming customer message."""
+
+        # Get or create session
+        session = self._get_session(session_id)
+
+        # Update conversation history
+        session.messages.append({
+            "timestamp": datetime.now().isoformat(),
+            "type": "customer",
+            "message": message,
+            "channel": channel
+        })
+
+        # Classify intent
+        history = self._format_history(session.messages)
+        intent_result = self.intent_classifier(message, history)
+
+        # Get customer context
+        context = self._get_customer_context(session.user_id)
+
+        # Query knowledge base if needed
+        if intent_result.intent in [
+            IntentType.PRODUCT_INFO,
+            IntentType.GENERAL_INQUIRY
+        ]:
+            knowledge = self.knowledge_base(message, context)
+            intent_result.entities.update(knowledge)
+
+        # Manage dialogue
+        dialogue_result = self.dialogue_manager(
+            session, message, intent_result
+        )
+
+        # Generate response
+        response = self.response_generator(
+            intent_result,
+            {**context, "dialogue_context": dialogue_result.get("new_state")}
+        )
+
+        # Update session
+        session.messages.append({
+            "timestamp": datetime.now().isoformat(),
+            "type": "bot",
+            "message": response,
+            "metadata": dialogue_result.get("next_action", {})
+        })
+        session.current_step = dialogue_result["new_state"].get("current_step")
+
+        return {
+            "response": response,
+            "session_id": session_id,
+            "metadata": {
+                "intent": intent_result.intent.value,
+                "confidence": intent_result.confidence,
+                "entities": intent_result.entities,
+                "needs_escalation": dialogue_result["new_state"].get("needs_escalation")
+            }
+        }
+
+    def _get_session(self, session_id: str) -&gt; DialogueState:
+        """Get or create session state."""
+        if session_id not in self.sessions:
+            self.sessions[session_id] = DialogueState(
+                session_id=session_id,
+                user_id=self._get_user_id(session_id),
+                entities={},
+                messages=[],
+                completed_steps=[],
+                context={}
+            )
+        return self.sessions[session_id]
+
+    def optimize_system(self, training_data: List[Dict]):
+        """Optimize chatbot using training data."""
+        # Create training examples
+        examples = []
+        for item in training_data:
+            example = dspy.Example(
+                message=item["message"],
+                history=item.get("history", ""),
+                expected_intent=item["intent"],
+                expected_response=item["response"]
+            ).with_inputs("message", "history")
+            examples.append(example)
+
+        # Optimize intent classifier
+        optimized_classifier = self.optimizer.compile(
+            self.intent_classifier,
+            trainset=examples[:100]  # Limit examples for demo
+        )
+        self.intent_classifier = optimized_classifier
+</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<h3 id="performance-testing"><a class="header" href="#performance-testing">Performance Testing</a></h3>
+<pre><code class="language-python">class TestChatbotPerformance:
+    """Performance testing for chatbot."""
+
+    def test_response_time(self):
+        """Test average response time."""
+        chatbot = CustomerSupportChatbot(test_config)
+
+        # Test with 100 sample queries
+        start_time = time.time()
+        for i in range(100):
+            response = chatbot.process_message(
+                f"session_{i}",
+                "What is my order status?"
+            )
+        avg_time = (time.time() - start_time) / 100
+
+        assert avg_time &lt; 2.0  # Should respond within 2 seconds
+
+    def test_concurrent_users(self):
+        """Test handling of concurrent users."""
+        import concurrent.futures
+
+        chatbot = CustomerSupportChatbot(test_config)
+
+        def simulate_user(user_id):
+            return chatbot.process_message(
+                f"session_{user_id}",
+                f"Query from user {user_id}"
+            )
+
+        # Test with 50 concurrent users
+        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+            futures = [executor.submit(simulate_user, i) for i in range(50)]
+            responses = [f.result() for f in futures]
+
+        assert len(responses) == 50
+</code></pre>
+<h3 id="integration-testing"><a class="header" href="#integration-testing">Integration Testing</a></h3>
+<pre><code class="language-python">class TestChatbotIntegration:
+    """Integration tests for chatbot."""
+
+    def test_complete_conversation(self):
+        """Test complete conversation flow."""
+        chatbot = CustomerSupportChatbot(test_config)
+        session_id = "test_session_001"
+
+        # Simulate conversation
+        conversation = [
+            "Hi, I need help with my order",
+            "The order number is 12345",
+            "Can you tell me when it will arrive?",
+            "Thank you for the help"
+        ]
+
+        for message in conversation:
+            response = chatbot.process_message(session_id, message)
+            assert response["response"] is not None
+            assert len(response["response"]) &gt; 0
+</code></pre>
+<h2 id="analytics-and-monitoring"><a class="header" href="#analytics-and-monitoring">Analytics and Monitoring</a></h2>
+<h3 id="performance-metrics"><a class="header" href="#performance-metrics">Performance Metrics</a></h3>
+<pre><code class="language-python">class ChatbotAnalytics:
+    """Track chatbot performance metrics."""
+
+    def __init__(self):
+        self.metrics = {
+            "total_conversations": 0,
+            "avg_response_time": 0,
+            "intent_accuracy": 0,
+            "escalation_rate": 0,
+            "customer_satisfaction": []
+        }
+
+    def track_conversation(self, conversation_data: Dict):
+        """Track conversation metrics."""
+        self.metrics["total_conversations"] += 1
+
+        # Track response time
+        self.metrics["avg_response_time"] = (
+            (self.metrics["avg_response_time"] * (self.metrics["total_conversations"] - 1) +
+             conversation_data["response_time"]) /
+            self.metrics["total_conversations"]
+        )
+
+        # Track escalations
+        if conversation_data.get("escalated"):
+            self.metrics["escalation_rate"] = (
+                (self.metrics["escalation_rate"] * (self.metrics["total_conversations"] - 1) + 1) /
+                self.metrics["total_conversations"]
+            )
+</code></pre>
+<h2 id="deployment"><a class="header" href="#deployment">Deployment</a></h2>
+<h3 id="scalable-architecture"><a class="header" href="#scalable-architecture">Scalable Architecture</a></h3>
+<pre><code class="language-python"># FastAPI deployment
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="Customer Support Chatbot")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize chatbot
+chatbot = CustomerSupportChatbot(load_config())
+
+@app.post("/chat")
+async def chat_endpoint(request: ChatRequest):
+    """Handle chat requests."""
+    try:
+        response = chatbot.process_message(
+            session_id=request.session_id,
+            message=request.message,
+            channel=request.channel
+        )
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+</code></pre>
+<h2 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned</a></h2>
+<h3 id="success-factors"><a class="header" href="#success-factors">Success Factors</a></h3>
+<ol>
+<li><strong>Intent Classification is Critical</strong>: Accurate intent recognition is the foundation</li>
+<li><strong>Context Management</strong>: Maintaining conversation state is essential for natural flow</li>
+<li><strong>Knowledge Base Quality</strong>: The quality of responses depends on knowledge quality</li>
+<li><strong>Escalation Strategy</strong>: Clear escalation criteria improve customer satisfaction</li>
+<li><strong>Continuous Learning</strong>: Use customer interactions to improve the system</li>
+</ol>
+<h3 id="challenges-faced"><a class="header" href="#challenges-faced">Challenges Faced</a></h3>
+<ol>
+<li><strong>Complex Queries</strong>: Handling multi-intent messages</li>
+<li><strong>Entity Extraction</strong>: Accurately extracting order numbers, product IDs</li>
+<li><strong>Response Consistency</strong>: Maintaining brand voice across different intents</li>
+<li><strong>Performance</strong>: Scaling to thousands of concurrent conversations</li>
+<li><strong>Language Variations</strong>: Handling typos, slang, and different writing styles</li>
+</ol>
+<h3 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h3>
+<ol>
+<li><strong>Start with Common Intents</strong>: Handle the 80% of cases first</li>
+<li><strong>Use Templates</strong>: Maintain consistent, approved responses</li>
+<li><strong>Implement Feedback</strong>: Collect customer ratings and use for improvement</li>
+<li><strong>Monitor Escalations</strong>: Analyze why conversations are escalated</li>
+<li><strong>A/B Test Responses</strong>: Continuously test different response strategies</li>
+</ol>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>This customer support chatbot demonstrates how DSPy can be used to build sophisticated conversational AI systems that handle real customer interactions. The modular architecture allows for easy extension and optimization, while the comprehensive testing ensures reliable operation in production.</p>
+<p>Key achievements include:</p>
+<ul>
+<li>Reduced response time from hours to seconds</li>
+<li>40% reduction in operational costs</li>
+<li>Maintained 90%+ customer satisfaction</li>
+<li>Handled 50,000+ daily inquiries</li>
+<li>Seamless human escalation when needed</li>
+</ul>
+<p>The system continues to improve through machine learning from customer interactions, demonstrating the value of AI in customer service operations.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../08-case-studies/01-enterprise-rag-system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../08-case-studies/03-ai-code-assistant.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../08-case-studies/01-enterprise-rag-system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../08-case-studies/03-ai-code-assistant.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

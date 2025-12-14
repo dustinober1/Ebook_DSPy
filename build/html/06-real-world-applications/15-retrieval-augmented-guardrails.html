@@ -1,0 +1,813 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Retrieval-Augmented Guardrails for AI Systems - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/06-real-world-applications/15-retrieval-augmented-guardrails.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="retrieval-augmented-guardrails-for-ai-systems"><a class="header" href="#retrieval-augmented-guardrails-for-ai-systems">Retrieval-Augmented Guardrails for AI Systems</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Retrieval-Augmented Guardrails provide a sophisticated approach to ensuring AI safety and accuracy, particularly in high-stakes domains like healthcare. This application demonstrates how DSPy can be used to build a comprehensive guardrail system that evaluates AI-generated responses against domain-specific knowledge and similar past interactions.</p>
+<h2 id="key-concepts"><a class="header" href="#key-concepts">Key Concepts</a></h2>
+<h3 id="error-taxonomy"><a class="header" href="#error-taxonomy">Error Taxonomy</a></h3>
+<p>A clinically grounded error ontology comprising:</p>
+<ol>
+<li>
+<p><strong>Clinical Accuracy</strong> (15 codes)</p>
+<ul>
+<li>Factual medical errors</li>
+<li>Dosage/miscalculation errors</li>
+<li>Outdated information</li>
+</ul>
+</li>
+<li>
+<p><strong>Completeness</strong> (12 codes)</p>
+<ul>
+<li>Missing critical information</li>
+<li>Incomplete follow-up instructions</li>
+<li>Omitted precautions</li>
+</ul>
+</li>
+<li>
+<p><strong>Appropriateness</strong> (10 codes)</p>
+<ul>
+<li>Workflow violations</li>
+<li>Scope creep</li>
+<li>Resource allocation errors</li>
+</ul>
+</li>
+<li>
+<p><strong>Communication Style</strong> (12 codes)</p>
+<ul>
+<li>Tone mismatches</li>
+<li>Technical complexity issues</li>
+<li>Cultural sensitivity</li>
+</ul>
+</li>
+<li>
+<p><strong>Safety Concerns</strong> (10 codes)</p>
+<ul>
+<li>Red flag omissions</li>
+<li>Emergency protocol violations</li>
+<li>Patient safety compromises</li>
+</ul>
+</li>
+</ol>
+<h3 id="retrieval-augmented-evaluation-pipeline-raec"><a class="header" href="#retrieval-augmented-evaluation-pipeline-raec">Retrieval-Augmented Evaluation Pipeline (RAEC)</a></h3>
+<p>The RAEC leverages semantically similar historical message-response pairs to improve evaluation quality by providing relevant context for error detection.</p>
+<h2 id="implementation"><a class="header" href="#implementation">Implementation</a></h2>
+<h3 id="basic-setup"><a class="header" href="#basic-setup">Basic Setup</a></h3>
+<pre><code class="language-python">import dspy
+from dspy.datasets import PatientMessages
+from dspy.teleprompters import BootstrapFewShot
+from dspy.retrieve import FAISSRetriever
+
+# Configure models
+lm = dspy.OpenAI(model="gpt-4", api_key="your-api-key")
+dspy.settings.configure(lm=lm)
+
+# Initialize retriever for historical messages
+retriever = FAISSRetriever(
+    collection_name="patient_messages",
+    embed_model="text-embedding-3-large"
+)
+</code></pre>
+<h3 id="error-detection-signatures"><a class="header" href="#error-detection-signatures">Error Detection Signatures</a></h3>
+<pre><code class="language-python">class ErrorClassifier(dspy.Signature):
+    """Classify errors in AI-generated patient messages."""
+
+    message_context = dspy.InputField(desc="Patient's original message")
+    ai_response = dspy.InputField(desc="AI-generated response")
+    reference_context = dspy.InputField(desc="Similar historical responses")
+    error_categories = dspy.OutputField(desc="List of potential error categories")
+    confidence_scores = dspy.OutputField(desc="Confidence scores for each error")
+
+class ErrorSeverityAssessor(dspy.Signature):
+    """Assess the severity of detected errors."""
+
+    error_description = dspy.InputField(desc="Description of detected error")
+    clinical_context = dspy.InputField(desc="Relevant clinical context")
+    severity_level = dspy.OutputField(desc="Severity: low/medium/high/critical")
+    action_required = dspy.OutputField(desc="Required action to address error")
+</code></pre>
+<h3 id="retrieval-augmented-evaluator"><a class="header" href="#retrieval-augmented-evaluator">Retrieval-Augmented Evaluator</a></h3>
+<pre><code class="language-python">class RetrievalAugmentedEvaluator(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.error_classifier = dspy.ChainOfThought(ErrorClassifier)
+        self.severity_assessor = dspy.Predict(ErrorSeverityAssessor)
+        self.retriever = retriever
+
+    def forward(self, patient_message, ai_response):
+        # Retrieve similar historical cases
+        similar_cases = self.retriever.retrieve(
+            query=patient_message,
+            k=3
+        )
+
+        # Combine contexts
+        reference_context = "\n".join([
+            f"Similar Case {i+1}:\nPatient: {case.patient}\nResponse: {case.response}"
+            for i, case in enumerate(similar_cases)
+        ])
+
+        # Classify potential errors
+        classification = self.error_classifier(
+            message_context=patient_message,
+            ai_response=ai_response,
+            reference_context=reference_context
+        )
+
+        # Assess severity for each detected error
+        error_assessments = []
+        errors = classification.error_categories.split(", ")
+        confidences = [float(c) for c in classification.confidence_scores.split(", ")]
+
+        for error, confidence in zip(errors, confidences):
+            severity = self.severity_assessor(
+                error_description=error,
+                clinical_context=reference_context
+            )
+
+            error_assessments.append({
+                "error": error,
+                "confidence": confidence,
+                "severity": severity.severity_level,
+                "action": severity.action_required
+            })
+
+        return dspy.Prediction(
+            errors=error_assessments,
+            reference_cases=similar_cases,
+            overall_safe=self._calculate_safety_score(error_assessments)
+        )
+
+    def _calculate_safety_score(self, error_assessments):
+        """Calculate overall safety score based on errors."""
+        critical_errors = sum(1 for e in error_assessments if e["severity"] == "critical")
+        high_errors = sum(1 for e in error_assessments if e["severity"] == "high")
+
+        if critical_errors &gt; 0:
+            return "unsafe"
+        elif high_errors &gt; 2:
+            return "requires_review"
+        elif high_errors &gt; 0:
+            return "minor_issues"
+        else:
+            return "safe"
+</code></pre>
+<h3 id="two-stage-hierarchical-detection"><a class="header" href="#two-stage-hierarchical-detection">Two-Stage Hierarchical Detection</a></h3>
+<pre><code class="language-python">class StageOneScreening(dspy.Module):
+    """First stage: Quick screening for obvious errors."""
+
+    def __init__(self):
+        super().__init__()
+        self.screen_classifier = dspy.Predict(
+            dspy.Signature(
+                """Screen AI response for immediate safety concerns.
+
+                patient_message: Patient's message
+                ai_response: AI-generated response
+                -&gt; screen_result: safe/needs_review/unsafe
+                immediate_concerns: List of immediate concerns if any
+            """
+            )
+        )
+
+    def forward(self, patient_message, ai_response):
+        result = self.screen_classifier(
+            patient_message=patient_message,
+            ai_response=ai_response
+        )
+
+        return dspy.Prediction(
+            screen_result=result.screen_result,
+            immediate_concerns=result.immediate_concerns.split(", ") if result.immediate_concerns else []
+        )
+
+class StageTwoDetailedAnalysis(dspy.Module):
+    """Second stage: Comprehensive error analysis."""
+
+    def __init__(self):
+        super().__init__()
+        self.detailed_evaluator = RetrievalAugmentedEvaluator()
+
+    def forward(self, patient_message, ai_response):
+        # Only proceed if stage one passed
+        stage_one = StageOneScreening()(patient_message, ai_response)
+
+        if stage_one.screen_result == "unsafe":
+            return dspy.Prediction(
+                final_assessment="unsafe",
+                critical_errors=stage_one.immediate_concerns
+            )
+
+        # Detailed analysis
+        detailed_result = self.detailed_evaluator(
+            patient_message=patient_message,
+            ai_response=ai_response
+        )
+
+        return dspy.Prediction(
+            final_assessment=detailed_result.overall_safe,
+            detailed_errors=detailed_result.errors,
+            reference_cases=detailed_result.reference_cases
+        )
+</code></pre>
+<h3 id="complete-guardrail-pipeline"><a class="header" href="#complete-guardrail-pipeline">Complete Guardrail Pipeline</a></h3>
+<pre><code class="language-python">class PatientMessageGuardrail(dspy.Module):
+    """Complete pipeline for evaluating AI-generated patient messages."""
+
+    def __init__(self):
+        super().__init__()
+        self.stage_one = StageOneScreening()
+        self.stage_two = StageTwoDetailedAnalysis()
+
+    def forward(self, patient_message, ai_response):
+        # Stage 1: Quick screening
+        screening = self.stage_one(patient_message, ai_response)
+
+        # Stage 2: Detailed analysis if needed
+        if screening.screen_result != "safe":
+            analysis = self.stage_two(patient_message, ai_response)
+            return analysis
+
+        return dspy.Prediction(
+            final_assessment="safe",
+            detailed_errors=[],
+            approved=True
+        )
+</code></pre>
+<h2 id="training-and-optimization"><a class="header" href="#training-and-optimization">Training and Optimization</a></h2>
+<h3 id="dataset-preparation"><a class="header" href="#dataset-preparation">Dataset Preparation</a></h3>
+<pre><code class="language-python">class PatientMessageDataset:
+    def __init__(self, messages_file):
+        self.data = self._load_data(messages_file)
+
+    def _load_data(self, file_path):
+        """Load patient messages with error annotations."""
+        data = []
+        with open(file_path, 'r') as f:
+            for line in f:
+                item = json.loads(line)
+                data.append({
+                    "patient_message": item["message"],
+                    "ai_response": item["ai_response"],
+                    "error_codes": item["error_codes"],
+                    "severity_levels": item["severity_levels"]
+                })
+        return data
+
+    def create_trainset(self):
+        """Create training examples for DSPy."""
+        trainset = []
+        for item in self.data:
+            # Create examples with expected outputs
+            example = dspy.Example(
+                patient_message=item["patient_message"],
+                ai_response=item["ai_response"],
+                expected_errors=item["error_codes"],
+                expected_severity=item["severity_levels"]
+            ).with_inputs("patient_message", "ai_response")
+            trainset.append(example)
+        return trainset
+</code></pre>
+<h3 id="optimization-with-dspy"><a class="header" href="#optimization-with-dspy">Optimization with DSPy</a></h3>
+<pre><code class="language-python">def optimize_guardrail_pipeline(trainset):
+    """Optimize the guardrail pipeline using DSPy."""
+
+    def evaluation_metric(example, prediction, trace=None):
+        """Custom metric for guardrail optimization."""
+
+        # Check if critical errors were detected
+        predicted_critical = [
+            e for e in prediction.detailed_errors
+            if e["severity"] in ["critical", "high"]
+        ]
+
+        expected_critical = [
+            code for code, severity in zip(
+                example.expected_errors, example.expected_severity
+            )
+            if severity in ["critical", "high"]
+        ]
+
+        # Calculate precision and recall for critical errors
+        tp = len(set(predicted_critical) &amp; set(expected_critical))
+        fp = len(set(predicted_critical) - set(expected_critical))
+        fn = len(set(expected_critical) - set(predicted_critical))
+
+        precision = tp / (tp + fp + 1e-6)
+        recall = tp / (tp + fn + 1e-6)
+
+        # F1 score with emphasis on recall (catching critical errors)
+        f1 = 2 * precision * recall / (precision + recall + 1e-6)
+
+        return f1
+
+    # Use BootstrapFewShot for optimization
+    optimizer = BootstrapFewShot(
+        metric=evaluation_metric,
+        max_bootstrapped_demos=10,
+        max_labeled_demos=5
+    )
+
+    optimized_pipeline = optimizer.compile(
+        PatientMessageGuardrail(),
+        trainset=trainset
+    )
+
+    return optimized_pipeline
+</code></pre>
+<h2 id="performance-evaluation"><a class="header" href="#performance-evaluation">Performance Evaluation</a></h2>
+<h3 id="metrics-and-benchmarks"><a class="header" href="#metrics-and-benchmarks">Metrics and Benchmarks</a></h3>
+<pre><code class="language-python">def evaluate_guardrail_performance(pipeline, testset):
+    """Evaluate guardrail pipeline performance."""
+
+    results = {
+        "total": len(testset),
+        "correctly_classified": 0,
+        "false_negatives": 0,
+        "false_positives": 0,
+        "concordance": 0,
+        "f1_score": 0
+    }
+
+    for example in testset:
+        prediction = pipeline(
+            example.patient_message,
+            example.ai_response
+        )
+
+        # Track classifications
+        if prediction.final_assessment == "safe" and not example.expected_errors:
+            results["correctly_classified"] += 1
+        elif prediction.final_assessment != "safe" and example.expected_errors:
+            results["correctly_classified"] += 1
+        elif prediction.final_assessment == "safe" and example.expected_errors:
+            results["false_negatives"] += 1
+        else:
+            results["false_positives"] += 1
+
+    # Calculate metrics
+    results["accuracy"] = results["correctly_classified"] / results["total"]
+    results["f1_score"] = calculate_f1_score(results)
+
+    return results
+
+def calculate_f1_score(results):
+    """Calculate F1 score from evaluation results."""
+    precision = results["correctly_classified"] / (
+        results["correctly_classified"] + results["false_positives"] + 1e-6
+    )
+    recall = results["correctly_classified"] / (
+        results["correctly_classified"] + results["false_negatives"] + 1e-6
+    )
+    return 2 * precision * recall / (precision + recall + 1e-6)
+</code></pre>
+<h2 id="performance-results"><a class="header" href="#performance-results">Performance Results</a></h2>
+<h3 id="improvement-with-retrieval-augmentation"><a class="header" href="#improvement-with-retrieval-augmentation">Improvement with Retrieval-Augmentation</a></h3>
+<p>Based on the published results:</p>
+<ul>
+<li><strong>Concordance Improvement</strong>: 50% vs 33% (without retrieval)</li>
+<li><strong>F1 Score</strong>: 0.500 vs 0.256 (without retrieval)</li>
+<li><strong>Error Detection</strong>: Significantly improved in:
+<ul>
+<li>Clinical completeness (+35%)</li>
+<li>Workflow appropriateness (+28%)</li>
+<li>Safety concern identification (+42%)</li>
+</ul>
+</li>
+</ul>
+<h3 id="human-validation-results"><a class="header" href="#human-validation-results">Human Validation Results</a></h3>
+<pre><code class="language-python"># Example validation results
+human_validation = {
+    "with_retrieval": {
+        "concordance": 0.50,
+        "precision": 0.48,
+        "recall": 0.52,
+        "f1": 0.500
+    },
+    "without_retrieval": {
+        "concordance": 0.33,
+        "precision": 0.32,
+        "recall": 0.20,
+        "f1": 0.256
+    }
+}
+</code></pre>
+<h2 id="advanced-features"><a class="header" href="#advanced-features">Advanced Features</a></h2>
+<h3 id="error-pattern-learning"><a class="header" href="#error-pattern-learning">Error Pattern Learning</a></h3>
+<pre><code class="language-python">class ErrorPatternLearner(dspy.Module):
+    """Learn and adapt to new error patterns."""
+
+    def __init__(self):
+        super().__init__()
+        self.pattern_detector = dspy.ChainOfThought(
+            dspy.Signature(
+                """Identify new error patterns from misclassifications.
+
+                misclassified_cases: Cases where errors were missed
+                -&gt; new_patterns: List of newly identified error patterns
+                suggested_improvements: Improvements to detection rules
+            """
+            )
+        )
+
+    def learn_from_misclassifications(self, misclassifications):
+        """Learn from cases where errors were missed."""
+        result = self.pattern_detector(
+            misclassified_cases=str(misclassifications)
+        )
+
+        return {
+            "new_patterns": result.new_patterns.split(", "),
+            "improvements": result.suggested_improvements.split("; ")
+        }
+</code></pre>
+<h3 id="adaptive-threshold-adjustment"><a class="header" href="#adaptive-threshold-adjustment">Adaptive Threshold Adjustment</a></h3>
+<pre><code class="language-python">class AdaptiveThresholdManager:
+    """Dynamically adjust detection thresholds based on performance."""
+
+    def __init__(self, initial_threshold=0.5):
+        self.threshold = initial_threshold
+        self.performance_history = []
+
+    def update_threshold(self, recent_performance):
+        """Update threshold based on recent performance."""
+        self.performance_history.append(recent_performance)
+
+        # Keep only recent history
+        if len(self.performance_history) &gt; 10:
+            self.performance_history.pop(0)
+
+        # Adjust threshold if precision is too low
+        avg_precision = np.mean([p["precision"] for p in self.performance_history])
+        if avg_precision &lt; 0.7:
+            self.threshold += 0.05
+        elif avg_precision &gt; 0.9:
+            self.threshold -= 0.02
+
+        return self.threshold
+</code></pre>
+<h2 id="real-world-deployment"><a class="header" href="#real-world-deployment">Real-World Deployment</a></h2>
+<h3 id="integration-with-ehr-systems"><a class="header" href="#integration-with-ehr-systems">Integration with EHR Systems</a></h3>
+<pre><code class="language-python">class EHRGuardrailIntegration:
+    """Integrate guardrails with Electronic Health Record systems."""
+
+    def __init__(self, guardrail_pipeline, ehr_api):
+        self.guardrail = guardrail_pipeline
+        self.ehr = ehr_api
+        self.audit_log = []
+
+    def screen_message(self, patient_id, message, ai_response):
+        """Screen an AI-generated response before sending."""
+
+        # Evaluate with guardrail
+        result = self.guardrail(message, ai_response)
+
+        # Log evaluation
+        self.audit_log.append({
+            "timestamp": datetime.now(),
+            "patient_id": patient_id,
+            "message": message,
+            "ai_response": ai_response,
+            "guardrail_result": result.final_assessment,
+            "errors": result.detailed_errors
+        })
+
+        # Determine action
+        if result.final_assessment == "safe":
+            return {"action": "send", "message": ai_response}
+        elif result.final_assessment == "requires_review":
+            return {
+                "action": "review",
+                "message": ai_response,
+                "concerns": result.detailed_errors,
+                "reviewer": "clinician"
+            }
+        else:
+            return {
+                "action": "block",
+                "reason": "Critical safety concerns detected",
+                "errors": result.detailed_errors
+            }
+</code></pre>
+<h3 id="continuous-monitoring"><a class="header" href="#continuous-monitoring">Continuous Monitoring</a></h3>
+<pre><code class="language-python">class GuardrailMonitor:
+    """Monitor guardrail performance and trigger alerts."""
+
+    def __init__(self):
+        self.error_rates = {}
+        self.alert_thresholds = {
+            "critical_miss_rate": 0.05,
+            "false_positive_rate": 0.30,
+            "response_time_ms": 5000
+        }
+
+    def check_performance(self, recent_results):
+        """Check if performance is within acceptable ranges."""
+        alerts = []
+
+        # Check critical error miss rate
+        critical_misses = sum(
+            1 for r in recent_results
+            if r.has_critical_error and r.assessment == "safe"
+        )
+        critical_miss_rate = critical_misses / len(recent_results)
+
+        if critical_miss_rate &gt; self.alert_thresholds["critical_miss_rate"]:
+            alerts.append({
+                "type": "critical_miss_rate_high",
+                "value": critical_miss_rate,
+                "threshold": self.alert_thresholds["critical_miss_rate"]
+            })
+
+        return alerts
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-error-taxonomy-design"><a class="header" href="#1-error-taxonomy-design">1. Error Taxonomy Design</a></h3>
+<ul>
+<li>Involve domain experts in taxonomy creation</li>
+<li>Regular updates based on new error patterns</li>
+<li>Balance granularity with usability</li>
+<li>Document clear criteria for each error type</li>
+</ul>
+<h3 id="2-retrieval-system-optimization"><a class="header" href="#2-retrieval-system-optimization">2. Retrieval System Optimization</a></h3>
+<ul>
+<li>Use high-quality embedding models</li>
+<li>Maintain up-to-date reference database</li>
+<li>Implement semantic similarity thresholds</li>
+<li>Cache frequent queries</li>
+</ul>
+<h3 id="3-evaluation-protocol"><a class="header" href="#3-evaluation-protocol">3. Evaluation Protocol</a></h3>
+<ul>
+<li>Include diverse error types in test set</li>
+<li>Conduct regular human validation</li>
+<li>Monitor performance drift over time</li>
+<li>Establish clear escalation procedures</li>
+</ul>
+<h3 id="4-system-integration"><a class="header" href="#4-system-integration">4. System Integration</a></h3>
+<ul>
+<li>Design for low-latency operation</li>
+<li>Implement proper audit trails</li>
+<li>Ensure compliance with healthcare regulations</li>
+<li>Provide clear feedback to end users</li>
+</ul>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>The Retrieval-Augmented Guardrail system demonstrates how DSPy can be applied to build sophisticated AI safety mechanisms that:</p>
+<ul>
+<li>Significantly improve error detection through contextual understanding</li>
+<li>Provide hierarchical evaluation for efficiency</li>
+<li>Adapt to new error patterns through continuous learning</li>
+<li>Maintain high performance in real-world healthcare scenarios</li>
+</ul>
+<p>This approach provides a robust framework for ensuring AI safety and reliability in critical applications, particularly where errors can have significant consequences.</p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li>Original paper: “Retrieval-Augmented Guardrails for AI-Drafted Patient-Portal Messages: Error Taxonomy Construction and Large-Scale Evaluation” (arXiv:2509.22565)</li>
+<li>Clinical error taxonomy documentation</li>
+<li>DSPy retrieval and optimization guides</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../06-real-world-applications/14-scientific-figure-caption-generation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../06-real-world-applications/16-graphrag-wikipedia-tidb-tutorial.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../06-real-world-applications/14-scientific-figure-caption-generation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../06-real-world-applications/16-graphrag-wikipedia-tidb-tutorial.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1307 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Demonstration Optimization - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/05-optimizers/16-demonstration-optimization.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="demonstration-optimization-strategies"><a class="header" href="#demonstration-optimization-strategies">Demonstration Optimization Strategies</a></h1>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ul>
+<li>Understand the role of demonstrations in language model prompting</li>
+<li>Implement various demonstration selection algorithms</li>
+<li>Design utility functions for evaluating demonstration effectiveness</li>
+<li>Apply diversity metrics for optimal demonstration sets</li>
+<li>Integrate demonstration optimization in multi-stage programs</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Demonstrations (few-shot examples) are a critical component of prompt engineering, providing concrete examples that guide language models toward desired behavior. However, the selection and optimization of demonstrations is far from trivial - the quality, diversity, and ordering of examples can dramatically affect model performance.</p>
+<p>In multi-stage programs, demonstration optimization becomes even more complex as we must consider:</p>
+<ul>
+<li>Stage-specific demonstration needs</li>
+<li>Cross-stage demonstration dependencies</li>
+<li>Limited context window constraints</li>
+<li>Computational efficiency requirements</li>
+</ul>
+<p>This section explores comprehensive strategies for optimizing demonstrations in DSPy programs.</p>
+<h2 id="theoretical-foundations"><a class="header" href="#theoretical-foundations">Theoretical Foundations</a></h2>
+<h3 id="why-demonstrations-matter"><a class="header" href="#why-demonstrations-matter">Why Demonstrations Matter</a></h3>
+<p>Demonstrations serve multiple purposes:</p>
+<ol>
+<li><strong>Task Clarification</strong>: Show what the task actually requires</li>
+<li><strong>Format Specification</strong>: Demonstrate expected input/output format</li>
+<li><strong>Pattern Recognition</strong>: Reveal underlying patterns in the task</li>
+<li><strong>Constraint Illustration</strong>: Show how to handle edge cases</li>
+<li><strong>Quality Benchmark</strong>: Set standards for response quality</li>
+</ol>
+<h3 id="mathematical-framework"><a class="header" href="#mathematical-framework">Mathematical Framework</a></h3>
+<p>Given a demonstration set D = {d₁, d₂, …, d_k} where each demonstration d_i = (x_i, y_i), the objective is to select or generate demonstrations that maximize expected performance:</p>
+<pre><code>D* = argmax_{|D|=k} E_{(x,y)~D_test}[f(M(Prompt(I, D, x)), y)]
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>I = instruction</li>
+<li>Prompt(I, D, x) = formatted prompt with instruction, demonstrations, and input</li>
+<li>M = language model</li>
+<li>f = evaluation metric</li>
+</ul>
+<h3 id="demonstration-effectiveness-factors"><a class="header" href="#demonstration-effectiveness-factors">Demonstration Effectiveness Factors</a></h3>
+<ol>
+<li><strong>Relevance</strong>: Similarity to target inputs</li>
+<li><strong>Diversity</strong>: Coverage of different patterns and cases</li>
+<li><strong>Quality</strong>: Correctness and clarity of examples</li>
+<li><strong>Difficulty</strong>: Appropriate complexity level</li>
+<li><strong>Consistency</strong>: Alignment with instruction</li>
+</ol>
+<h2 id="demonstration-selection-algorithms"><a class="header" href="#demonstration-selection-algorithms">Demonstration Selection Algorithms</a></h2>
+<h3 id="1-similarity-based-selection"><a class="header" href="#1-similarity-based-selection">1. Similarity-based Selection</a></h3>
+<p>Select demonstrations most similar to the input.</p>
+<pre><code class="language-python">class SimilarityBasedSelector:
+    """Select demonstrations based on input similarity."""
+
+    def __init__(self, similarity_metric="cosine", encoder="sentence-transformer"):
+        self.similarity_metric = similarity_metric
+        self.encoder = SentenceTransformer(encoder) if encoder == "sentence-transformer" else None
+
+    def select(self, query, candidates, k=5):
+        """Select top-k most similar demonstrations."""
+
+        if self.encoder:
+            # Encode all candidates
+            query_emb = self.encoder.encode(query)
+            candidate_embs = self.encoder.encode(candidates)
+
+            # Compute similarities
+            similarities = np.dot(candidate_embs, query_emb)
+        else:
+            # Use simple text similarity
+            similarities = [
+                self._text_similarity(query, candidate)
+                for candidate in candidates
+            ]
+
+        # Get top-k indices
+        top_indices = np.argsort(similarities)[-k:][::-1]
+
+        return [candidates[i] for i in top_indices]
+
+    def _text_similarity(self, text1, text2):
+        """Simple text similarity using TF-IDF."""
+
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+
+        vectorizer = TfidfVectorizer().fit([text1, text2])
+        vectors = vectorizer.transform([text1, text2])
+        similarity = cosine_similarity(vectors[0:1], vectors[1:2])[0][0]
+
+        return similarity
+</code></pre>
+<h3 id="2-diversity-aware-selection"><a class="header" href="#2-diversity-aware-selection">2. Diversity-aware Selection</a></h3>
+<p>Select diverse demonstrations that cover different aspects.</p>
+<pre><code class="language-python">class DiversityAwareSelector:
+    """Select demonstrations maximizing diversity."""
+
+    def __init__(self, diversity_weight=0.5):
+        self.diversity_weight = diversity_weight
+
+    def select(self, candidates, k=5):
+        """Select diverse set of demonstrations."""
+
+        selected = []
+        remaining = candidates.copy()
+
+        # Greedy selection maximizing diversity
+        while len(selected) &lt; k and remaining:
+            if not selected:
+                # Select first randomly or by quality
+                best = max(remaining, key=lambda x: self._quality_score(x))
+            else:
+                # Select candidate maximizing diversity-weighted score
+                best = self._select_best_for_diversity(selected, remaining)
+
+            selected.append(best)
+            remaining.remove(best)
+
+        return selected
+
+    def _select_best_for_diversity(self, selected, candidates):
+        """Select best candidate for diversity."""
+
+        best_score = -float('inf')
+        best_candidate = None
+
+        for candidate in candidates:
+            # Compute diversity score
+            diversity = self._compute_diversity(selected + [candidate])
+
+            # Combine with quality
+            quality = self._quality_score(candidate)
+            score = (
+                self.diversity_weight * diversity +
+                (1 - self.diversity_weight) * quality
+            )
+
+            if score &gt; best_score:
+                best_score = score
+                best_candidate = candidate
+
+        return best_candidate
+
+    def _compute_diversity(self, demonstrations):
+        """Compute diversity of demonstration set."""
+
+        if len(demonstrations) &lt;= 1:
+            return 0
+
+        # Compute pairwise similarities
+        similarities = []
+        for i in range(len(demonstrations)):
+            for j in range(i + 1, len(demonstrations)):
+                sim = self._similarity(demonstrations[i], demonstrations[j])
+                similarities.append(sim)
+
+        # Diversity = 1 - average similarity
+        return 1 - np.mean(similarities)
+
+    def _quality_score(self, demonstration):
+        """Score demonstration quality."""
+
+        # Factors to consider:
+        # - Correctness
+        # - Clarity
+        # - Completeness
+        # - Relevance
+
+        # Implementation depends on specific requirements
+        return 1.0  # Placeholder
+</code></pre>
+<h3 id="3-coverage-based-selection"><a class="header" href="#3-coverage-based-selection">3. Coverage-based Selection</a></h3>
+<p>Ensure demonstrations cover different categories or patterns.</p>
+<pre><code class="language-python">class CoverageBasedSelector:
+    """Select demonstrations ensuring coverage of patterns."""
+
+    def __init__(self, pattern_extractor=None):
+        self.pattern_extractor = pattern_extractor or self._default_pattern_extractor
+
+    def select(self, candidates, k=5):
+        """Select demonstrations covering diverse patterns."""
+
+        # Extract patterns from all candidates
+        all_patterns = {}
+        for i, demo in enumerate(candidates):
+            patterns = self.pattern_extractor(demo)
+            for pattern in patterns:
+                if pattern not in all_patterns:
+                    all_patterns[pattern] = []
+                all_patterns[pattern].append(i)
+
+        selected = []
+        covered_patterns = set()
+
+        # Greedy selection maximizing pattern coverage
+        while len(selected) &lt; k:
+            best_candidate = None
+            best_new_patterns = set()
+
+            for i, demo in enumerate(candidates):
+                if i in selected:
+                    continue
+
+                # Find patterns this candidate covers
+                demo_patterns = set(self.pattern_extractor(demo))
+                new_patterns = demo_patterns - covered_patterns
+
+                if len(new_patterns) &gt; len(best_new_patterns):
+                    best_candidate = i
+                    best_new_patterns = new_patterns
+
+            if best_candidate is not None:
+                selected.append(best_candidate)
+                covered_patterns.update(best_new_patterns)
+            else:
+                # No new patterns, select randomly
+                remaining = [i for i in range(len(candidates)) if i not in selected]
+                if remaining:
+                    selected.append(random.choice(remaining))
+
+        return [candidates[i] for i in selected]
+
+    def _default_pattern_extractor(self, demonstration):
+        """Extract basic patterns from demonstration."""
+
+        patterns = []
+
+        # Length pattern
+        length = len(demonstration['input'].split())
+        if length &lt; 10:
+            patterns.append('short')
+        elif length &lt; 50:
+            patterns.append('medium')
+        else:
+            patterns.append('long')
+
+        # Format pattern
+        if '?' in demonstration['input']:
+            patterns.append('question')
+        if '.' in demonstration['input'] and demonstration['input'].count('.') &gt; 2:
+            patterns.append('complex_sentence')
+
+        # Content pattern
+        text = demonstration['input'].lower()
+        if any(word in text for word in ['why', 'how', 'when', 'where']):
+            patterns.append('wh_question')
+        if any(word in text for word in ['list', 'enumerate', 'name']):
+            patterns.append('listing_task')
+
+        return patterns
+</code></pre>
+<h3 id="4-learning-based-selection"><a class="header" href="#4-learning-based-selection">4. Learning-based Selection</a></h3>
+<p>Learn selection policy from training data.</p>
+<pre><code class="language-python">class LearnedSelector:
+    """Learn demonstration selection policy from data."""
+
+    def __init__(self, model_architecture="transformer"):
+        self.model = self._build_selection_model(model_architecture)
+        self.is_trained = False
+
+    def train(self, train_data, val_data):
+        """Train selection model on demonstration effectiveness data."""
+
+        # Prepare training data
+        # Each example: (query, candidates, labels, performance_scores)
+        X_train, y_train = self._prepare_training_data(train_data)
+
+        # Train model
+        self.model.fit(X_train, y_train)
+
+        # Validate
+        X_val, y_val = self._prepare_training_data(val_data)
+        val_score = self.model.evaluate(X_val, y_val)
+
+        self.is_trained = True
+        return val_score
+
+    def select(self, query, candidates, k=5):
+        """Select demonstrations using learned policy."""
+
+        if not self.is_trained:
+            # Fallback to similarity-based selection
+            selector = SimilarityBasedSelector()
+            return selector.select(query, candidates, k)
+
+        # Score each candidate
+        scores = []
+        for candidate in candidates:
+            features = self._extract_features(query, candidate)
+            score = self.model.predict_proba([features])[0, 1]
+            scores.append(score)
+
+        # Select top-k
+        top_indices = np.argsort(scores)[-k:][::-1]
+        return [candidates[i] for i in top_indices]
+
+    def _build_selection_model(self, architecture):
+        """Build model architecture."""
+
+        if architecture == "transformer":
+            # Simple transformer model for demonstration selection
+            model = build_transformer_classifier()
+        elif architecture == "gradient_boosting":
+            model = GradientBoostingClassifier()
+        else:
+            model = LogisticRegression()
+
+        return model
+
+    def _extract_features(self, query, candidate):
+        """Extract features for selection model."""
+
+        features = {
+            'similarity': self._compute_similarity(query, candidate),
+            'query_length': len(query.split()),
+            'candidate_length': len(candidate['input'].split()),
+            'complexity_score': self._compute_complexity(candidate),
+            'topic_match': self._compute_topic_match(query, candidate),
+        }
+
+        return list(features.values())
+</code></pre>
+<h2 id="demonstration-generation"><a class="header" href="#demonstration-generation">Demonstration Generation</a></h2>
+<h3 id="1-bootstrap-generation"><a class="header" href="#1-bootstrap-generation">1. Bootstrap Generation</a></h3>
+<p>Generate demonstrations from the model itself.</p>
+<pre><code class="language-python">class BootstrapDemonstrationGenerator:
+    """Generate demonstrations using bootstrapping."""
+
+    def __init__(self, model, confidence_threshold=0.8):
+        self.model = model
+        self.confidence_threshold = confidence_threshold
+        self.generated_demos = []
+
+    def generate_demonstrations(self, instruction, seed_examples, num_new=20):
+        """Generate new demonstrations from model."""
+
+        demonstrations = seed_examples.copy()
+
+        while len(demonstrations) &lt; num_new:
+            # Sample from existing demonstrations
+            seed = random.choice(demonstrations)
+
+            # Generate new example based on seed
+            new_demo = self._generate_variation(seed, instruction)
+
+            # Validate quality
+            if self._validate_demonstration(new_demo):
+                demonstrations.append(new_demo)
+                self.generated_demos.append(new_demo)
+
+        return demonstrations
+
+    def _generate_variation(self, seed_demo, instruction):
+        """Generate variation of existing demonstration."""
+
+        # Prompt model to create variation
+        prompt = f"""
+        Instruction: {instruction}
+
+        Example:
+        Input: {seed_demo['input']}
+        Output: {seed_demo['output']}
+
+        Create a similar but different example following the same pattern:
+        Input:
+        """
+
+        response = self.model.generate(prompt, temperature=0.7)
+        new_input = self._extract_input_from_response(response)
+
+        # Generate output for new input
+        full_prompt = f"""
+        Instruction: {instruction}
+
+        Input: {new_input}
+        Output:
+        """
+
+        new_output = self.model.generate(full_prompt, temperature=0.1)
+
+        return {
+            'input': new_input,
+            'output': new_output,
+            'source': 'generated',
+            'parent': seed_demo
+        }
+
+    def _validate_demonstration(self, demonstration):
+        """Validate quality of generated demonstration."""
+
+        # Check confidence
+        confidence = self._compute_confidence(demonstration)
+
+        # Check consistency with pattern
+        consistency = self._check_consistency(demonstration)
+
+        # Check uniqueness
+        uniqueness = self._check_uniqueness(demonstration)
+
+        return (
+            confidence &gt; self.confidence_threshold and
+            consistency &gt; 0.8 and
+            uniqueness &gt; 0.7
+        )
+</code></pre>
+<h3 id="2-synthetic-generation"><a class="header" href="#2-synthetic-generation">2. Synthetic Generation</a></h3>
+<p>Create demonstrations from structured templates.</p>
+<pre><code class="language-python">class SyntheticDemonstrationGenerator:
+    """Generate synthetic demonstrations from templates."""
+
+    def __init__(self, templates=None):
+        self.templates = templates or self._default_templates()
+        self.attribute_values = self._load_attribute_values()
+
+    def generate_demonstrations(self, instruction, num_demos=50):
+        """Generate synthetic demonstrations."""
+
+        demonstrations = []
+
+        for _ in range(num_demos):
+            # Sample template
+            template = random.choice(self.templates)
+
+            # Sample attribute values
+            attributes = self._sample_attributes(template['attributes'])
+
+            # Fill template
+            demo = self._fill_template(template, attributes)
+
+            demonstrations.append(demo)
+
+        return demonstrations
+
+    def _fill_template(self, template, attributes):
+        """Fill template with sampled attributes."""
+
+        input_text = template['input_template']
+        output_text = template['output_template']
+
+        # Replace placeholders
+        for attr_name, attr_value in attributes.items():
+            input_text = input_text.replace(f'{{{attr_name}}}', str(attr_value))
+            output_text = output_text.replace(f'{{{attr_name}}}', str(attr_value))
+
+        return {
+            'input': input_text,
+            'output': output_text,
+            'template': template['name'],
+            'attributes': attributes
+        }
+
+    def _default_templates(self):
+        """Default demonstration templates."""
+
+        return [
+            {
+                'name': 'math_addition',
+                'input_template': 'What is {num1} + {num2}?',
+                'output_template': '{num1} + {num2} = {sum}',
+                'attributes': ['num1', 'num2']
+            },
+            {
+                'name': 'text_classification',
+                'input_template': 'Classify the sentiment: "{text}"',
+                'output_template': 'Sentiment: {sentiment}',
+                'attributes': ['text', 'sentiment']
+            }
+        ]
+</code></pre>
+<h2 id="utility-functions"><a class="header" href="#utility-functions">Utility Functions</a></h2>
+<h3 id="1-performance-based-utility"><a class="header" href="#1-performance-based-utility">1. Performance-based Utility</a></h3>
+<p>Evaluate demonstrations by their impact on model performance.</p>
+<pre><code class="language-python">class PerformanceUtility:
+    """Utility based on demonstration performance impact."""
+
+    def __init__(self, model, evaluation_metric):
+        self.model = model
+        self.evaluation_metric = evaluation_metric
+
+    def compute_utility(self, demonstration_set, validation_examples):
+        """Compute utility score for demonstration set."""
+
+        total_score = 0
+        total_count = 0
+
+        for example in validation_examples:
+            # Create prompt with demonstrations
+            prompt = self._format_prompt(demonstration_set, example['input'])
+
+            # Generate response
+            response = self.model.generate(prompt)
+
+            # Score response
+            score = self.evaluation_metric(response, example['output'])
+            total_score += score
+            total_count += 1
+
+        return total_score / total_count if total_count &gt; 0 else 0
+
+    def marginal_utility(self, base_set, new_demo, validation_examples):
+        """Compute marginal utility of adding new demonstration."""
+
+        # Utility without new demo
+        base_utility = self.compute_utility(base_set, validation_examples)
+
+        # Utility with new demo
+        extended_set = base_set + [new_demo]
+        extended_utility = self.compute_utility(extended_set, validation_examples)
+
+        return extended_utility - base_utility
+
+    def _format_prompt(self, demonstrations, query):
+        """Format prompt with demonstrations."""
+
+        prompt = ""
+        for i, demo in enumerate(demonstrations):
+            prompt += f"Example {i+1}:\n"
+            prompt += f"Input: {demo['input']}\n"
+            prompt += f"Output: {demo['output']}\n\n"
+
+        prompt += f"Input: {query}\nOutput:"
+
+        return prompt
+</code></pre>
+<h3 id="2-information-theoretic-utility"><a class="header" href="#2-information-theoretic-utility">2. Information-theoretic Utility</a></h3>
+<p>Measure information content of demonstrations.</p>
+<pre><code class="language-python">class InformationUtility:
+    """Utility based on information theory metrics."""
+
+    def __init__(self):
+        self.vocab_size = 50000  # Approximate vocabulary size
+
+    def compute_entropy(self, demonstration_set):
+        """Compute entropy of demonstration set."""
+
+        # Collect all tokens
+        all_tokens = []
+        for demo in demonstration_set:
+            all_tokens.extend(self._tokenize(demo['input']))
+            all_tokens.extend(self._tokenize(demo['output']))
+
+        # Compute token frequencies
+        token_counts = {}
+        for token in all_tokens:
+            token_counts[token] = token_counts.get(token, 0) + 1
+
+        # Compute entropy
+        total_tokens = len(all_tokens)
+        entropy = 0
+        for count in token_counts.values():
+            prob = count / total_tokens
+            entropy -= prob * np.log2(prob)
+
+        return entropy
+
+    def compute_mutual_information(self, demo1, demo2):
+        """Compute mutual information between two demonstrations."""
+
+        # Get tokens
+        tokens1 = set(self._tokenize(demo1['input'] + demo1['output']))
+        tokens2 = set(self._tokenize(demo2['input'] + demo2['output']))
+
+        # Compute intersection
+        intersection = len(tokens1 &amp; tokens2)
+        union = len(tokens1 | tokens2)
+
+        # Jaccard similarity as MI approximation
+        mi = intersection / union if union &gt; 0 else 0
+
+        return mi
+
+    def information_gain(self, base_set, new_demo):
+        """Compute information gain from adding demonstration."""
+
+        base_entropy = self.compute_entropy(base_set)
+        new_entropy = self.compute_entropy(base_set + [new_demo])
+
+        return new_entropy - base_entropy
+
+    def _tokenize(self, text):
+        """Simple tokenization."""
+
+        return text.lower().split()
+</code></pre>
+<h3 id="3-coverage-utility"><a class="header" href="#3-coverage-utility">3. Coverage Utility</a></h3>
+<p>Measure how well demonstrations cover the input space.</p>
+<pre><code class="language-python">class CoverageUtility:
+    """Utility based on input space coverage."""
+
+    def __init__(self, feature_extractor=None):
+        self.feature_extractor = feature_extractor or self._default_feature_extractor
+        self.coverage_grid = None
+
+    def compute_coverage(self, demonstration_set, grid_resolution=10):
+        """Compute coverage of demonstration set."""
+
+        # Extract features
+        features = []
+        for demo in demonstration_set:
+            features.append(self.feature_extractor(demo['input']))
+
+        features = np.array(features)
+
+        # Normalize features
+        features = (features - features.mean(axis=0)) / features.std(axis=0)
+
+        # Create grid
+        min_vals = features.min(axis=0)
+        max_vals = features.max(axis=0)
+
+        # Count covered grid cells
+        grid_cells = set()
+        for feature in features:
+            cell = self._discretize_feature(feature, min_vals, max_vals, grid_resolution)
+            grid_cells.add(cell)
+
+        # Coverage = covered cells / total cells
+        total_cells = grid_resolution ** features.shape[1]
+        coverage = len(grid_cells) / total_cells
+
+        return coverage
+
+    def coverage_density(self, demonstration_set, query_point):
+        """Compute coverage density around query point."""
+
+        query_features = self.feature_extractor(query_point)
+        query_features = np.array(query_features).reshape(1, -1)
+
+        demo_features = []
+        for demo in demonstration_set:
+            features = self.feature_extractor(demo['input'])
+            demo_features.append(features)
+
+        demo_features = np.array(demo_features)
+
+        # Compute distances
+        distances = np.linalg.norm(demo_features - query_features, axis=1)
+
+        # Density = 1 / average distance
+        avg_distance = np.mean(distances)
+        density = 1 / (avg_distance + 1e-6)
+
+        return density
+
+    def _discretize_feature(self, feature, min_vals, max_vals, resolution):
+        """Discretize continuous feature to grid cell."""
+
+        normalized = (feature - min_vals) / (max_vals - min_vals + 1e-6)
+        cell_indices = (normalized * resolution).astype(int)
+        cell_indices = np.clip(cell_indices, 0, resolution - 1)
+
+        return tuple(cell_indices)
+
+    def _default_feature_extractor(self, text):
+        """Default feature extraction for text."""
+
+        # Simple features
+        features = [
+            len(text.split()),  # Length
+            text.count('?'),  # Number of questions
+            text.count(','),  # Number of commas
+            sum(1 for c in text if c.isupper()),  # Capital letters
+            len(set(text.split())),  # Unique words
+        ]
+
+        return features
+</code></pre>
+<h2 id="diversity-metrics"><a class="header" href="#diversity-metrics">Diversity Metrics</a></h2>
+<h3 id="1-lexical-diversity"><a class="header" href="#1-lexical-diversity">1. Lexical Diversity</a></h3>
+<p>Measure vocabulary diversity across demonstrations.</p>
+<pre><code class="language-python">class LexicalDiversity:
+    """Measure lexical diversity of demonstrations."""
+
+    def compute_type_token_ratio(self, demonstrations):
+        """Compute type-token ratio (TTR)."""
+
+        all_tokens = []
+        for demo in demonstrations:
+            tokens = self._tokenize(demo['input'] + ' ' + demo['output'])
+            all_tokens.extend(tokens)
+
+        num_types = len(set(all_tokens))
+        num_tokens = len(all_tokens)
+
+        return num_types / num_tokens if num_tokens &gt; 0 else 0
+
+    def compute_mattr(self, demonstrations, window_size=100):
+        """Compute Moving Average Type-Token Ratio (MATTR)."""
+
+        all_tokens = []
+        for demo in demonstrations:
+            tokens = self._tokenize(demo['input'] + ' ' + demo['output'])
+            all_tokens.extend(tokens)
+
+        if len(all_tokens) &lt; window_size:
+            return self.compute_type_token_ratio(demonstrations)
+
+        ttrs = []
+        for i in range(len(all_tokens) - window_size + 1):
+            window = all_tokens[i:i + window_size]
+            ttr = len(set(window)) / window_size
+            ttrs.append(ttr)
+
+        return np.mean(ttrs)
+
+    def compute_vocab_overlap(self, demo1, demo2):
+        """Compute vocabulary overlap between two demonstrations."""
+
+        tokens1 = set(self._tokenize(demo1['input'] + ' ' + demo1['output']))
+        tokens2 = set(self._tokenize(demo2['input'] + ' ' + demo2['output']))
+
+        if not tokens1 or not tokens2:
+            return 0
+
+        intersection = len(tokens1 &amp; tokens2)
+        union = len(tokens1 | tokens2)
+
+        return intersection / union
+
+    def _tokenize(self, text):
+        """Simple tokenization."""
+
+        import re
+        tokens = re.findall(r'\w+', text.lower())
+        return tokens
+</code></pre>
+<h3 id="2-structural-diversity"><a class="header" href="#2-structural-diversity">2. Structural Diversity</a></h3>
+<p>Measure diversity in demonstration structure.</p>
+<pre><code class="language-python">class StructuralDiversity:
+    """Measure structural diversity of demonstrations."""
+
+    def compute_pattern_diversity(self, demonstrations):
+        """Compute diversity of structural patterns."""
+
+        patterns = []
+        for demo in demonstrations:
+            pattern = self._extract_pattern(demo['input'])
+            patterns.append(pattern)
+
+        unique_patterns = len(set(patterns))
+        total_patterns = len(patterns)
+
+        return unique_patterns / total_patterns if total_patterns &gt; 0 else 0
+
+    def compute_length_distribution(self, demonstrations):
+        """Analyze length distribution diversity."""
+
+        lengths = [len(demo['input'].split()) for demo in demonstrations]
+
+        # Compute coefficient of variation
+        mean_length = np.mean(lengths)
+        std_length = np.std(lengths)
+        cv = std_length / mean_length if mean_length &gt; 0 else 0
+
+        return cv
+
+    def compute_complexity_diversity(self, demonstrations):
+        """Compute diversity in complexity scores."""
+
+        complexities = []
+        for demo in demonstrations:
+            complexity = self._compute_complexity(demo['input'])
+            complexities.append(complexity)
+
+        # Range of complexities
+        complexity_range = max(complexities) - min(complexities)
+        max_possible_range = 10  # Normalized range
+
+        return complexity_range / max_possible_range
+
+    def _extract_pattern(self, text):
+        """Extract structural pattern from text."""
+
+        # Simplified pattern extraction
+        pattern = []
+
+        # Check for question marks
+        if '?' in text:
+            pattern.append('question')
+
+        # Check for lists
+        if ':' in text and (',' in text or ';' in text):
+            pattern.append('list')
+
+        # Check for quotes
+        if '"' in text or "'" in text:
+            pattern.append('quotation')
+
+        # Check for numbers
+        if any(c.isdigit() for c in text):
+            pattern.append('numeric')
+
+        return tuple(sorted(pattern))
+
+    def _compute_complexity(self, text):
+        """Compute text complexity score."""
+
+        # Simple complexity metrics
+        avg_word_length = np.mean([len(word) for word in text.split()])
+        sentence_count = text.count('.') + text.count('!') + text.count('?')
+        avg_sentence_length = len(text.split()) / max(sentence_count, 1)
+
+        # Combine metrics
+        complexity = (avg_word_length * 0.3 + avg_sentence_length * 0.7)
+        return min(complexity / 20, 1.0)  # Normalize to [0, 1]
+</code></pre>
+<h2 id="optimization-in-multi-stage-programs"><a class="header" href="#optimization-in-multi-stage-programs">Optimization in Multi-stage Programs</a></h2>
+<h3 id="stage-specific-demonstration-strategies"><a class="header" href="#stage-specific-demonstration-strategies">Stage-specific Demonstration Strategies</a></h3>
+<pre><code class="language-python">class MultiStageDemonstrationOptimizer:
+    """Optimize demonstrations for multi-stage programs."""
+
+    def __init__(self, stage_configs):
+        self.stage_configs = stage_configs
+        self.selectors = {}
+        self.utilities = {}
+
+        # Initialize selectors for each stage
+        for stage_name, config in stage_configs.items():
+            self.selectors[stage_name] = self._create_selector(config['selection_strategy'])
+            self.utilities[stage_name] = self._create_utility(config['utility_function'])
+
+    def optimize_demonstrations(
+        self,
+        pipeline,
+        trainset,
+        demo_budget=50
+    ):
+        """Optimize demonstrations across all stages."""
+
+        optimized_demos = {}
+
+        # Analyze stage dependencies
+        dependencies = self._analyze_dependencies(pipeline)
+
+        # Optimize in dependency order
+        for stage_name in self._topological_sort(dependencies):
+            print(f"Optimizing demonstrations for stage: {stage_name}")
+
+            # Get stage-specific training data
+            stage_data = self._extract_stage_data(
+                stage_name, pipeline, trainset
+            )
+
+            # Allocate budget for this stage
+            stage_budget = self._allocate_budget(
+                stage_name, demo_budget, dependencies
+            )
+
+            # Optimize demonstrations
+            best_demos = self._optimize_stage_demonstrations(
+                stage_name,
+                stage_data,
+                stage_budget
+            )
+
+            optimized_demos[stage_name] = best_demos
+
+            # Update pipeline with new demonstrations
+            pipeline.stages[stage_name].set_demonstrations(best_demos)
+
+        return optimized_demos
+
+    def _optimize_stage_demonstrations(
+        self,
+        stage_name,
+        stage_data,
+        budget
+    ):
+        """Optimize demonstrations for a specific stage."""
+
+        # Get candidate demonstrations
+        candidates = self._get_candidate_demonstrations(stage_data)
+
+        best_set = []
+        best_score = -float('inf')
+
+        # Greedy selection with utility evaluation
+        for _ in range(min(budget, len(candidates))):
+            best_candidate = None
+            best_candidate_score = -float('inf')
+
+            for candidate in candidates:
+                if candidate in best_set:
+                    continue
+
+                # Evaluate utility
+                test_set = best_set + [candidate]
+                score = self.utilities[stage_name].compute_utility(
+                    test_set, stage_data['validation']
+                )
+
+                if score &gt; best_candidate_score:
+                    best_candidate_score = score
+                    best_candidate = candidate
+
+            if best_candidate:
+                best_set.append(best_candidate)
+
+        return best_set
+
+    def _analyze_dependencies(self, pipeline):
+        """Analyze dependencies between stages."""
+
+        dependencies = {}
+        stage_names = list(pipeline.stages.keys())
+
+        for stage_name in stage_names:
+            dependencies[stage_name] = []
+
+            # Check if stage uses outputs from other stages
+            stage_module = pipeline.stages[stage_name]
+            if hasattr(stage_module, 'dependencies'):
+                dependencies[stage_name] = stage_module.dependencies
+
+        return dependencies
+</code></pre>
+<h2 id="practical-considerations"><a class="header" href="#practical-considerations">Practical Considerations</a></h2>
+<h3 id="context-window-management"><a class="header" href="#context-window-management">Context Window Management</a></h3>
+<pre><code class="language-python">class ContextWindowManager:
+    """Manage demonstration selection within context limits."""
+
+    def __init__(self, max_tokens=2048, reserve_tokens=500):
+        self.max_tokens = max_tokens
+        self.reserve_tokens = reserve_tokens
+        self.available_tokens = max_tokens - reserve_tokens
+
+    def select_within_limit(
+        self,
+        demonstrations,
+        query,
+        token_estimator=None
+    ):
+        """Select demonstrations that fit within context limit."""
+
+        if token_estimator is None:
+            token_estimator = self._default_token_estimator
+
+        selected = []
+        used_tokens = token_estimator(query)
+
+        # Sort by some quality metric (e.g., diversity)
+        sorted_demos = self._sort_by_quality(demonstrations)
+
+        for demo in sorted_demos:
+            demo_tokens = token_estimator(
+                f"Input: {demo['input']}\nOutput: {demo['output']}\n\n"
+            )
+
+            if used_tokens + demo_tokens &lt;= self.available_tokens:
+                selected.append(demo)
+                used_tokens += demo_tokens
+            else:
+                break
+
+        return selected
+
+    def _default_token_estimator(self, text):
+        """Simple token estimation."""
+
+        return len(text.split()) * 1.3  # Rough estimate
+
+    def _sort_by_quality(self, demonstrations):
+        """Sort demonstrations by quality."""
+
+        # Simple quality score based on length and complexity
+        scored = []
+        for demo in demonstrations:
+            score = len(demo['input']) + len(demo['output'])
+            scored.append((demo, score))
+
+        scored.sort(key=lambda x: x[1], reverse=True)
+        return [demo for demo, _ in scored]
+</code></pre>
+<h3 id="dynamic-demonstration-updating"><a class="header" href="#dynamic-demonstration-updating">Dynamic Demonstration Updating</a></h3>
+<pre><code class="language-python">class DynamicDemonstrationUpdater:
+    """Dynamically update demonstrations based on performance."""
+
+    def __init__(self, update_threshold=0.1, window_size=100):
+        self.update_threshold = update_threshold
+        self.window_size = window_size
+        self.performance_history = []
+        self.current_demonstrations = []
+
+    def should_update(self, recent_performance):
+        """Determine if demonstrations should be updated."""
+
+        self.performance_history.append(recent_performance)
+
+        if len(self.performance_history) &lt; self.window_size:
+            return False
+
+        # Compute performance trend
+        recent = self.performance_history[-10:]
+        baseline = self.performance_history[-self.window_size:-10]
+
+        avg_recent = np.mean(recent)
+        avg_baseline = np.mean(baseline)
+
+        # Update if performance drop exceeds threshold
+        performance_drop = avg_baseline - avg_recent
+        return performance_drop &gt; self.update_threshold
+
+    def update_demonstrations(
+        self,
+        instruction,
+        examples,
+        selector
+    ):
+        """Update demonstration set."""
+
+        # Use recent examples as candidates
+        candidates = examples[-50:]  # Last 50 examples
+
+        # Select new demonstrations
+        new_demos = selector.select(
+            query=instruction,
+            candidates=candidates,
+            k=5
+        )
+
+        self.current_demonstrations = new_demos
+        return new_demos
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-demonstration-quality-guidelines"><a class="header" href="#1-demonstration-quality-guidelines">1. Demonstration Quality Guidelines</a></h3>
+<ul>
+<li><strong>Accuracy</strong>: Ensure demonstrations are correct</li>
+<li><strong>Clarity</strong>: Make examples easy to understand</li>
+<li><strong>Relevance</strong>: Choose examples similar to target inputs</li>
+<li><strong>Diversity</strong>: Cover different patterns and edge cases</li>
+<li><strong>Consistency</strong>: Align with instruction and task requirements</li>
+</ul>
+<h3 id="2-selection-strategy-tips"><a class="header" href="#2-selection-strategy-tips">2. Selection Strategy Tips</a></h3>
+<ul>
+<li>Use similarity-based selection for homogeneous tasks</li>
+<li>Employ diversity-aware selection for varied inputs</li>
+<li>Apply coverage-based selection for pattern-rich tasks</li>
+<li>Consider learning-based selection for complex scenarios</li>
+</ul>
+<h3 id="3-common-pitfalls"><a class="header" href="#3-common-pitfalls">3. Common Pitfalls</a></h3>
+<ul>
+<li><strong>Overfitting</strong>: Too similar demonstrations limit generalization</li>
+<li><strong>Context Overflow</strong>: Exceeding model context limits</li>
+<li><strong>Poor Quality</strong>: Incorrect examples harm performance</li>
+<li><strong>Imbalance</strong>: Over-representation of certain patterns</li>
+</ul>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Demonstration optimization strategies provide systematic approaches to selecting and improving few-shot examples in language model programs. Key takeaways:</p>
+<ol>
+<li><strong>Multiple Selection Algorithms</strong>: Similarity, diversity, coverage, and learning-based approaches</li>
+<li><strong>Generation Techniques</strong>: Bootstrap and synthetic generation for creating demonstrations</li>
+<li><strong>Utility Functions</strong>: Performance, information-theoretic, and coverage-based utilities</li>
+<li><strong>Diversity Metrics</strong>: Lexical and structural diversity measurements</li>
+<li><strong>Multi-stage Optimization</strong>: Stage-specific strategies and dependency management</li>
+</ol>
+<p>The next section will explore multi-stage program architectures, building on the optimization strategies discussed here to create comprehensive solutions.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/15-instruction-tuning-frameworks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/17-multistage-architectures.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/15-instruction-tuning-frameworks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/17-multistage-architectures.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

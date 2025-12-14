@@ -1,0 +1,697 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Predict Module - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="the-predict-module"><a class="header" href="#the-predict-module">The Predict Module</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./01-module-basics.html">Module Basics</a> - Understanding of module concepts</li>
+<li><strong>Chapter 2</strong>: Signatures - Familiarity with signature design</li>
+<li><strong>Required Knowledge</strong>: Basic DSPy setup and configuration</li>
+<li><strong>Difficulty Level</strong>: Beginner to Intermediate</li>
+<li><strong>Estimated Reading Time</strong>: 35 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master the <code>dspy.Predict</code> module - DSPy’s most fundamental module</li>
+<li>Understand how to use Predict for various simple tasks</li>
+<li>Learn to configure Predict with examples and instructions</li>
+<li>Discover best practices for getting reliable results</li>
+<li>Know when to use Predict versus more complex modules</li>
+</ul>
+<h2 id="introduction-to-dspypredict"><a class="header" href="#introduction-to-dspypredict">Introduction to dspy.Predict</a></h2>
+<p><code>dspy.Predict</code> is the simplest yet most versatile module in DSPy. It creates a direct mapping between inputs and outputs based on a signature, making it perfect for straightforward transformation tasks.</p>
+<h3 id="core-concept"><a class="header" href="#core-concept">Core Concept</a></h3>
+<pre><code>Input(s) → [Predict Module] → Output(s)
+</code></pre>
+<p>Predict takes your signature, constructs an appropriate prompt, sends it to the LLM, and parses the response back into structured outputs according to your signature definition.</p>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="simple-example"><a class="header" href="#simple-example">Simple Example</a></h3>
+<pre><code class="language-python">import dspy
+
+# Define a signature
+class BasicQA(dspy.Signature):
+    """Answer a question based on provided context."""
+    question = dspy.InputField(desc="Question to answer", type=str)
+    context = dspy.InputField(desc="Relevant context", type=str, optional=True)
+    answer = dspy.OutputField(desc="Answer to the question", type=str)
+
+# Create a Predict module
+qa = dspy.Predict(BasicQA)
+
+# Use it
+result = qa(
+    question="What is the capital of France?",
+    context="Paris is the capital city of France."
+)
+
+print(result.answer)  # "Paris"
+</code></pre>
+<h3 id="string-signature-shortcut"><a class="header" href="#string-signature-shortcut">String Signature Shortcut</a></h3>
+<p>For simple cases, you can use string signatures directly:</p>
+<pre><code class="language-python"># Quick and simple
+summarizer = dspy.Predict("long_text -&gt; short_summary")
+
+result = summarizer(
+    long_text="A very long document that needs to be summarized..."
+)
+
+print(result.short_summary)
+</code></pre>
+<h2 id="configuring-predict"><a class="header" href="#configuring-predict">Configuring Predict</a></h2>
+<h3 id="adding-instructions"><a class="header" href="#adding-instructions">Adding Instructions</a></h3>
+<p>Customize how the module approaches the task:</p>
+<pre><code class="language-python"># With custom instructions
+translator = dspy.Predict(
+    "source_text, target_language -&gt; translated_text",
+    instructions="Translate accurately while preserving the original tone and meaning. "
+                 "Consider cultural nuances and idiomatic expressions."
+)
+
+result = translator(
+    source_text="It's raining cats and dogs!",
+    target_language="Spanish"
+)
+</code></pre>
+<h3 id="adding-few-shot-examples"><a class="header" href="#adding-few-shot-examples">Adding Few-Shot Examples</a></h3>
+<p>Improve performance with examples:</p>
+<pre><code class="language-python"># Create examples
+math_examples = [
+    dspy.Example(
+        problem="What is 15 + 27?",
+        answer="42"
+    ),
+    dspy.Example(
+        problem="What is 8 × 9?",
+        answer="72"
+    )
+]
+
+# Create module with examples
+math_solver = dspy.Predict(
+    "math_problem -&gt; answer",
+    demos=math_examples
+)
+
+result = math_solver(problem="What is 23 + 19?")
+print(result.answer)  # 42
+</code></pre>
+<h3 id="setting-temperature-and-other-parameters"><a class="header" href="#setting-temperature-and-other-parameters">Setting Temperature and Other Parameters</a></h3>
+<p>Control randomness and creativity:</p>
+<pre><code class="language-python"># For creative tasks
+creative_writer = dspy.Predict(
+    "prompt -&gt; creative_response",
+    temperature=0.9,
+    max_tokens=500
+)
+
+# For precise tasks
+classifier = dspy.Predict(
+    "text -&gt; category",
+    temperature=0.1,
+    max_tokens=10
+)
+</code></pre>
+<h2 id="real-world-examples"><a class="header" href="#real-world-examples">Real-World Examples</a></h2>
+<h3 id="1-text-classification"><a class="header" href="#1-text-classification">1. Text Classification</a></h3>
+<pre><code class="language-python">import dspy
+from typing import List
+
+class EmailClassifier(dspy.Signature):
+    """Classify emails into categories."""
+    email_text = dspy.InputField(desc="Full email content", type=str)
+    sender_info = dspy.InputField(desc="Information about sender", type=str, optional=True)
+    category = dspy.OutputField(desc="Email category", type=str)
+    urgency = dspy.OutputField(desc="Urgency level (1-5)", type=int)
+    action_required = dspy.OutputField(desc="Whether action is needed", type=bool)
+
+# Create with examples
+email_examples = [
+    dspy.Example(
+        email_text="URGENT: Server is down! We need immediate assistance.",
+        category="technical_support",
+        urgency=5,
+        action_required=True
+    ),
+    dspy.Example(
+        email_text="Thank you for your purchase. Your order has been confirmed.",
+        category="order_confirmation",
+        urgency=1,
+        action_required=False
+    )
+]
+
+# Initialize classifier
+classifier = dspy.Predict(EmailClassifier, demos=email_examples)
+
+# Use it
+result = classifier(
+    email_text="Hi team, I'm having trouble accessing my account. Can you help?",
+    sender_info="Customer from premium tier"
+)
+
+print(f"Category: {result.category}")
+print(f"Urgency: {result.urgency}")
+print(f"Action Needed: {result.action_required}")
+</code></pre>
+<h3 id="2-data-extraction"><a class="header" href="#2-data-extraction">2. Data Extraction</a></h3>
+<pre><code class="language-python">class InformationExtractor(dspy.Signature):
+    """Extract structured information from unstructured text."""
+    document_text = dspy.InputField(desc="Text to extract from", type=str)
+    entity_types = dspy.InputField(desc="Types of entities to find", type=List[str])
+    entities = dspy.OutputField(desc="Extracted entities", type=List[dict])
+    confidence = dspy.OutputField(desc="Confidence in extraction", type=float)
+
+# Extract from business documents
+extractor = dspy.Predict(
+    InformationExtractor,
+    instructions="Extract all specified entities with their locations in the text. "
+                 "Assign confidence scores based on clarity of mention."
+)
+
+result = extractor(
+    document_text="Apple Inc. announced today that CEO Tim Cook would present at the "
+                 "Tech Conference 2024 in San Francisco next month.",
+    entity_types=["organizations", "people", "events", "locations", "dates"]
+)
+
+for entity in result.entities:
+    print(f"{entity['type']}: {entity['text']} (confidence: {entity['confidence']})")
+</code></pre>
+<h3 id="3-text-transformation"><a class="header" href="#3-text-transformation">3. Text Transformation</a></h3>
+<pre><code class="language-python">class TextTransformer(dspy.Signature):
+    """Transform text to different formats or styles."""
+    original_text = dspy.InputField(desc="Text to transform", type=str)
+    transformation_type = dspy.InputField(desc="Type of transformation", type=str)
+    target_audience = dspy.InputField(desc="Target audience", type=str)
+    transformed_text = dspy.OutputField(desc="Transformed text", type=str)
+    changes_made = dspy.OutputField(desc="Summary of changes", type=List[str])
+
+# Multiple transformations in one module
+transformer = dspy.Predict(
+    TextTransformer,
+    temperature=0.3  # Keep changes consistent
+)
+
+# Simplify technical text
+result = transformer(
+    original_text="The implementation utilizes a RESTful API architecture with "
+                 "asynchronous data processing capabilities.",
+    transformation_type="simplify",
+    target_audience="non-technical"
+)
+
+print(result.transformed_text)
+print("Changes:", result.changes_made)
+</code></pre>
+<h2 id="advanced-configuration"><a class="header" href="#advanced-configuration">Advanced Configuration</a></h2>
+<h3 id="multiple-output-formats"><a class="header" href="#multiple-output-formats">Multiple Output Formats</a></h3>
+<pre><code class="language-python">class FlexibleAnalyzer(dspy.Signature):
+    """Analyze text with flexible output options."""
+    text = dspy.InputField(desc="Text to analyze", type=str)
+    analysis_type = dspy.InputField(desc="Type of analysis", type=str)
+    output_format = dspy.InputField(desc="Desired output format", type=str)
+    analysis = dspy.OutputField(desc="Analysis results", type=str)
+    metadata = dspy.OutputField(desc="Analysis metadata", type=dict)
+
+# Can output in different formats
+analyzer = dspy.Predict(
+    FlexibleAnalyzer,
+    instructions="Adapt your analysis output based on the requested format."
+)
+
+# JSON output
+json_result = analyzer(
+    text="The product exceeded all expectations.",
+    analysis_type="sentiment",
+    output_format="json"
+)
+
+# Markdown output
+md_result = analyzer(
+    text="The product exceeded all expectations.",
+    analysis_type="sentiment",
+    output_format="markdown"
+)
+</code></pre>
+<h3 id="conditional-logic-in-signatures"><a class="header" href="#conditional-logic-in-signatures">Conditional Logic in Signatures</a></h3>
+<pre><code class="language-python">class ConditionalProcessor(dspy.Signature):
+    """Process data with conditional outputs."""
+    input_data = dspy.InputField(desc="Data to process", type=str)
+    processing_mode = dspy.InputField(desc="How to process", type=str)
+    requires_escalation = dspy.InputField(desc="Whether escalation needed", type=bool, optional=True)
+    standard_result = dspy.OutputField(desc="Standard processing result", type=str, optional=True)
+    escalated_result = dspy.OutputField(desc="Escalated processing result", type=str, optional=True)
+    escalation_reason = dspy.OutputField(desc="Why escalated", type=str, optional=True)
+
+processor = dspy.Predict(ConditionalProcessor)
+
+# Standard processing
+standard = processor(
+    input_data="Simple customer request",
+    processing_mode="standard"
+)
+
+print(standard.standard_result)
+
+# Escalated processing
+escalated = processor(
+    input_data="Complex issue requiring expert attention",
+    processing_mode="escalate",
+    requires_escalation=True
+)
+
+print(escalated.escalated_result)
+print(escalated.escalation_reason)
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="caching"><a class="header" href="#caching">Caching</a></h3>
+<pre><code class="language-python"># Enable caching for repeated queries
+cached_analyzer = dspy.Predict(
+    "text -&gt; analysis",
+    cache=True  # Automatically cache results
+)
+
+# Or use a custom cache
+import sqlite3
+
+# Create persistent cache
+cache_db = {}
+persistent_analyzer = dspy.Predict(
+    "text -&gt; analysis",
+    cache=cache_db
+)
+</code></pre>
+<h3 id="batch-processing"><a class="header" href="#batch-processing">Batch Processing</a></h3>
+<pre><code class="language-python"># Process multiple items efficiently
+class BatchProcessor(dspy.Signature):
+    """Process multiple items in one call."""
+    items = dspy.InputField(desc="List of items to process", type=list)
+    processing_type = dspy.InputField(desc="How to process items", type=str)
+    results = dspy.OutputField(desc="Processed results", type=list)
+    summary = dspy.OutputField(desc="Processing summary", type=dict)
+
+batch_processor = dspy.Predict(BatchProcessor)
+
+# Process many emails at once
+emails = ["email1 content", "email2 content", "email3 content"]
+batch_result = batch_processor(
+    items=emails,
+    processing_type="classify"
+)
+
+# Returns structured results for all items
+for item_result in batch_result.results:
+    print(item_result)
+</code></pre>
+<h3 id="token-optimization"><a class="header" href="#token-optimization">Token Optimization</a></h3>
+<pre><code class="language-python"># For large inputs, use chunking
+class ChunkedAnalyzer(dspy.Signature):
+    """Analyze large documents in chunks."""
+    document_chunk = dspy.InputField(desc="Chunk of document", type=str)
+    chunk_number = dspy.InputField(desc="Chunk position", type=int)
+    total_chunks = dspy.InputField(desc="Total number of chunks", type=int)
+    chunk_analysis = dspy.OutputField(desc="Analysis of this chunk", type=str)
+
+chunk_analyzer = dspy.Predict(
+    ChunkedAnalyzer,
+    max_tokens=1000  # Keep responses concise
+)
+</code></pre>
+<h2 id="common-use-cases"><a class="header" href="#common-use-cases">Common Use Cases</a></h2>
+<h3 id="1-content-moderation"><a class="header" href="#1-content-moderation">1. Content Moderation</a></h3>
+<pre><code class="language-python">class ContentModerator(dspy.Signature):
+    """Moderate user-generated content."""
+    content = dspy.InputField(desc="Content to moderate", type=str)
+    content_type = dspy.InputField(desc="Type of content", type=str)
+    is_appropriate = dspy.OutputField(desc="Content appropriateness", type=bool)
+    issues = dspy.OutputField(desc="Issues found", type=List[str])
+    confidence = dspy.OutputField(desc="Moderation confidence", type=float)
+
+moderator = dspy.Predict(
+    ContentModerator,
+    instructions="Be fair and consistent in moderation. Consider context and intent."
+)
+</code></pre>
+<h3 id="2-data-validation"><a class="header" href="#2-data-validation">2. Data Validation</a></h3>
+<pre><code class="language-python">class DataValidator(dspy.Signature):
+    """Validate data against schema or rules."""
+    data = dspy.InputField(desc="Data to validate", type=str)
+    schema = dspy.InputField(desc="Validation rules", type=str)
+    is_valid = dspy.OutputField(desc="Whether data is valid", type=bool)
+    errors = dspy.OutputField(desc("Validation errors", type=List[str]))
+    suggestions = dspy.OutputField(desc="How to fix errors", type=List[str])
+
+validator = dspy.Predict(DataValidator)
+</code></pre>
+<h3 id="3-format-conversion"><a class="header" href="#3-format-conversion">3. Format Conversion</a></h3>
+<pre><code class="language-python">class FormatConverter(dspy.Signature):
+    """Convert data between formats."""
+    source_data = dspy.InputField(desc="Data in source format", type=str)
+    source_format = dspy.InputField(desc="Current format", type=str)
+    target_format = dspy.InputField(desc="Desired format", type=str)
+    converted_data = dspy.OutputField(desc="Data in target format", type=str)
+    conversion_notes = dspy.OutputField(desc="Notes about conversion", type=List[str])
+
+converter = dspy.Predict(FormatConverter)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-keep-signatures-focused"><a class="header" href="#1-keep-signatures-focused">1. Keep Signatures Focused</a></h3>
+<pre><code class="language-python"># Good: Single responsibility
+sentiment_analyzer = dspy.Predict("text -&gt; sentiment")
+
+# Avoid: Multiple unrelated tasks
+# bad_module = dspy.Predict("text -&gt; sentiment, translation, summary, classification")
+</code></pre>
+<h3 id="2-use-clear-instructions"><a class="header" href="#2-use-clear-instructions">2. Use Clear Instructions</a></h3>
+<pre><code class="language-python"># Specific instructions help
+classifier = dspy.Predict(
+    "resume_text -&gt; job_category",
+    instructions="Analyze the resume and assign the most appropriate job category. "
+                 "Consider skills, experience, and industry keywords."
+)
+</code></pre>
+<h3 id="3-validate-outputs"><a class="header" href="#3-validate-outputs">3. Validate Outputs</a></h3>
+<pre><code class="language-python">def safe_predict(module, **kwargs):
+    """Wrapper to validate outputs."""
+    result = module(**kwargs)
+
+    # Check required fields
+    if hasattr(result, 'confidence'):
+        if result.confidence &lt; 0.5:
+            print("Low confidence result!")
+
+    return result
+</code></pre>
+<h3 id="4-handle-errors-gracefully"><a class="header" href="#4-handle-errors-gracefully">4. Handle Errors Gracefully</a></h3>
+<pre><code class="language-python">try:
+    result = module(input_data="test")
+    # Process result
+except Exception as e:
+    print(f"Module failed: {e}")
+    # Use fallback or try again
+</code></pre>
+<h2 id="when-to-use-predict"><a class="header" href="#when-to-use-predict">When to Use Predict</a></h2>
+<h3 id="use-dspypredict-when"><a class="header" href="#use-dspypredict-when">Use dspy.Predict when:</a></h3>
+<ol>
+<li><strong>Simple transformations</strong> - Direct input → output mapping</li>
+<li><strong>Classification tasks</strong> - Categorizing text or data</li>
+<li><strong>Extraction tasks</strong> - Pulling specific information</li>
+<li><strong>Format conversions</strong> - Changing data formats</li>
+<li><strong>Quick prototyping</strong> - Fast iteration on ideas</li>
+</ol>
+<h3 id="consider-other-modules-when"><a class="header" href="#consider-other-modules-when">Consider other modules when:</a></h3>
+<ol>
+<li><strong>Complex reasoning needed</strong> → Use ChainOfThought</li>
+<li><strong>External tools required</strong> → Use ReAct</li>
+<li><strong>Multiple approaches to compare</strong> → Use MultiChainComparison</li>
+<li><strong>Step-by-step processing</strong> → Use ProgramOfThought</li>
+</ol>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<ol>
+<li>
+<p><strong>Incorrect output format</strong></p>
+<ul>
+<li>Check signature field types</li>
+<li>Add explicit formatting instructions</li>
+<li>Use examples to demonstrate format</li>
+</ul>
+</li>
+<li>
+<p><strong>Low confidence results</strong></p>
+<ul>
+<li>Add more examples</li>
+<li>Improve instructions</li>
+<li>Increase temperature slightly</li>
+</ul>
+</li>
+<li>
+<p><strong>Slow performance</strong></p>
+<ul>
+<li>Enable caching</li>
+<li>Use smaller model for simple tasks</li>
+<li>Batch process when possible</li>
+</ul>
+</li>
+<li>
+<p><strong>Inconsistent results</strong></p>
+<ul>
+<li>Lower temperature</li>
+<li>Add more consistent examples</li>
+<li>Clarify instructions</li>
+</ul>
+</li>
+</ol>
+<h3 id="debugging-predict"><a class="header" href="#debugging-predict">Debugging Predict</a></h3>
+<pre><code class="language-python"># Enable tracing to see what's happening
+import dspy
+dspy.settings.configure(trace="all")
+
+# Run module
+result = module(input="test")
+
+# Check the generated prompt
+print("Prompt sent to LLM:")
+print(module.lm.last_request_.prompt)
+
+# Check the raw response
+print("Raw response from LLM:")
+print(module.lm.last_request_.response)
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p><code>dspy.Predict</code> is the workhorse module of DSPy:</p>
+<ul>
+<li><strong>Simple to use</strong> - Direct mapping from inputs to outputs</li>
+<li><strong>Highly configurable</strong> - Instructions, examples, parameters</li>
+<li><strong>Versatile</strong> - Handles many types of tasks</li>
+<li><strong>Performant</strong> - Caching and optimization features</li>
+<li><strong>Reliable</strong> - Structured outputs with validation</li>
+</ul>
+<h3 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h3>
+<ol>
+<li><strong>Start simple</strong> with Predict, add complexity as needed</li>
+<li><strong>Use examples</strong> to improve performance significantly</li>
+<li><strong>Configure carefully</strong> for your specific use case</li>
+<li><strong>Validate outputs</strong> to ensure reliability</li>
+<li><strong>Know when to upgrade</strong> to more complex modules</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="./03-chainofthought.html">ChainOfThought Module</a> - Add reasoning capabilities</li>
+<li><a href="./06-composing-modules.html">Module Composition</a> - Combine modules</li>
+<li><a href="../examples/chapter03/">Practical Examples</a> - See Predict in action</li>
+<li><a href="./07-exercises.html">Exercises</a> - Practice with hands-on exercises</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://dspy-docs.vercel.app/docs/deep-dive/predict">DSPy Documentation: Predict</a></li>
+<li><a href="https://dspy-docs.vercel.app/docs/tutorials/prompt-engineering">Prompt Engineering Guide</a></li>
+<li><a href="./01-module-basics.html">Module Comparison</a> - Choose the right module</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../03-modules/01-module-basics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../03-modules/02a-typed-predictor.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../03-modules/01-module-basics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../03-modules/02a-typed-predictor.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

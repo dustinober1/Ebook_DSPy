@@ -1,0 +1,449 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Installation and Setup - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="installation-and-setup"><a class="header" href="#installation-and-setup">Installation and Setup</a></h1>
+<p>Before we can start building with DSPy, let’s make sure your environment is properly configured.</p>
+<blockquote>
+<p><strong>Note</strong>: If you’ve already completed the <a href="../00-frontmatter/03-setup-instructions.html">Setup Instructions</a> from the front matter, you can skip ahead to <a href="#verification">Verification</a> to confirm everything is working.</p>
+</blockquote>
+<hr>
+<h2 id="quick-setup-checklist"><a class="header" href="#quick-setup-checklist">Quick Setup Checklist</a></h2>
+<p>Ensure you have:</p>
+<ul>
+<li><input disabled="" type="checkbox"> Python 3.9 or higher installed</li>
+<li><input disabled="" type="checkbox"> Virtual environment created and activated</li>
+<li><input disabled="" type="checkbox"> DSPy installed (<code>pip install dspy-ai</code>)</li>
+<li><input disabled="" type="checkbox"> LM provider API key configured</li>
+<li><input disabled="" type="checkbox"> <code>python-dotenv</code> installed for environment variables</li>
+</ul>
+<hr>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<h3 id="1-install-dspy"><a class="header" href="#1-install-dspy">1. Install DSPy</a></h3>
+<p>With your virtual environment activated:</p>
+<pre><code class="language-bash">pip install dspy-ai
+</code></pre>
+<p>This installs the latest stable version of DSPy.</p>
+<h3 id="2-install-additional-dependencies"><a class="header" href="#2-install-additional-dependencies">2. Install Additional Dependencies</a></h3>
+<p>For the examples in this chapter:</p>
+<pre><code class="language-bash">pip install openai anthropic python-dotenv
+</code></pre>
+<p><strong>What these provide</strong>:</p>
+<ul>
+<li><code>openai</code>: OpenAI API client (for GPT models)</li>
+<li><code>anthropic</code>: Anthropic API client (for Claude models)</li>
+<li><code>python-dotenv</code>: Load environment variables from <code>.env</code> files</li>
+</ul>
+<hr>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<h3 id="set-up-your-api-key"><a class="header" href="#set-up-your-api-key">Set Up Your API Key</a></h3>
+<p>Create a <code>.env</code> file in your project directory:</p>
+<pre><code class="language-bash"># Create .env file
+touch .env
+</code></pre>
+<p>Add your API key:</p>
+<pre><code>OPENAI_API_KEY=sk-your-actual-api-key-here
+</code></pre>
+<p>Or for Anthropic:</p>
+<pre><code>ANTHROPIC_API_KEY=your-anthropic-api-key-here
+</code></pre>
+<blockquote>
+<p><strong>Security</strong>: Never commit <code>.env</code> files to version control! Add <code>.env</code> to your <code>.gitignore</code>.</p>
+</blockquote>
+<hr>
+<h2 id="verification"><a class="header" href="#verification">Verification</a></h2>
+<p>Let’s verify DSPy is installed correctly.</p>
+<h3 id="check-dspy-version"><a class="header" href="#check-dspy-version">Check DSPy Version</a></h3>
+<pre><code class="language-bash">python -c "import dspy; print(f'DSPy version: {dspy.__version__}')"
+</code></pre>
+<p><strong>Expected output</strong>:</p>
+<pre><code>DSPy version: 2.5.x
+</code></pre>
+<h3 id="quick-test"><a class="header" href="#quick-test">Quick Test</a></h3>
+<p>Create a file <code>test_dspy.py</code>:</p>
+<pre><code class="language-python">"""Quick test to verify DSPy installation."""
+
+import os
+from dotenv import load_dotenv
+import dspy
+
+# Load environment variables
+load_dotenv()
+
+def main():
+    print("Testing DSPy installation...")
+    print(f"DSPy version: {dspy.__version__}")
+
+    # Check if API key is available
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        print("✓ API key found")
+
+        # Try to configure a language model
+        try:
+            lm = dspy.LM(model="openai/gpt-4o-mini", api_key=api_key)
+            dspy.configure(lm=lm)
+            print("✓ Language model configured successfully")
+
+            # Simple test
+            class TestSignature(dspy.Signature):
+                question: str = dspy.InputField()
+                answer: str = dspy.OutputField()
+
+            predictor = dspy.Predict(TestSignature)
+            result = predictor(question="What is 1+1?")
+            print(f"✓ Test prediction: {result.answer}")
+
+            print("\n✅ DSPy is working correctly!")
+
+        except Exception as e:
+            print(f"✗ Error: {e}")
+            print("\n⚠️  Check your API key and internet connection")
+
+    else:
+        print("✗ API key not found")
+        print("Please set OPENAI_API_KEY in your .env file")
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+<p>Run it:</p>
+<pre><code class="language-bash">python test_dspy.py
+</code></pre>
+<p><strong>Expected output</strong>:</p>
+<pre><code>Testing DSPy installation...
+DSPy version: 2.5.x
+✓ API key found
+✓ Language model configured successfully
+✓ Test prediction: 2
+
+✅ DSPy is working correctly!
+</code></pre>
+<hr>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="issue-modulenotfounderror-no-module-named-dspy"><a class="header" href="#issue-modulenotfounderror-no-module-named-dspy">Issue: <code>ModuleNotFoundError: No module named 'dspy'</code></a></h3>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash"># Ensure virtual environment is activated
+source venv/bin/activate  # On macOS/Linux
+# OR
+venv\Scripts\activate     # On Windows
+
+# Reinstall DSPy
+pip install dspy-ai
+</code></pre>
+<h3 id="issue-api-key-not-found"><a class="header" href="#issue-api-key-not-found">Issue: <code>API key not found</code></a></h3>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li>Check <code>.env</code> file exists in your project directory</li>
+<li>Verify format: <code>OPENAI_API_KEY=sk-...</code></li>
+<li>Ensure <code>load_dotenv()</code> is called before using the key</li>
+<li>Check for typos in the variable name</li>
+</ol>
+<h3 id="issue-connection-error-or-authentication-failed"><a class="header" href="#issue-connection-error-or-authentication-failed">Issue: <code>Connection error</code> or <code>Authentication failed</code></a></h3>
+<p><strong>Solution</strong>:</p>
+<ol>
+<li>Verify your API key is valid (not expired/revoked)</li>
+<li>Check internet connectivity</li>
+<li>Ensure you have billing set up with your LM provider</li>
+<li>Try the key in the provider’s web interface to confirm it works</li>
+</ol>
+<h3 id="issue-old-dspy-version"><a class="header" href="#issue-old-dspy-version">Issue: Old DSPy version</a></h3>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash"># Upgrade to latest version
+pip install --upgrade dspy-ai
+</code></pre>
+<hr>
+<h2 id="ide-setup-optional"><a class="header" href="#ide-setup-optional">IDE Setup (Optional)</a></h2>
+<h3 id="visual-studio-code"><a class="header" href="#visual-studio-code">Visual Studio Code</a></h3>
+<p>Install recommended extensions:</p>
+<ol>
+<li><strong>Python</strong> (Microsoft)</li>
+<li><strong>Pylance</strong> (Microsoft)</li>
+<li><strong>Python Indent</strong></li>
+</ol>
+<p>Configure to use your virtual environment:</p>
+<ul>
+<li><code>Cmd/Ctrl + Shift + P</code> → “Python: Select Interpreter”</li>
+<li>Choose the interpreter from your <code>venv</code> directory</li>
+</ul>
+<h3 id="jupyter-notebook-optional"><a class="header" href="#jupyter-notebook-optional">Jupyter Notebook (Optional)</a></h3>
+<p>If you prefer notebooks:</p>
+<pre><code class="language-bash">pip install jupyter ipykernel
+
+# Add your virtual environment as a kernel
+python -m ipykernel install --user --name=dspy-env
+</code></pre>
+<p>Start Jupyter:</p>
+<pre><code class="language-bash">jupyter notebook
+</code></pre>
+<hr>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
+<h3 id="using-env-files-recommended"><a class="header" href="#using-env-files-recommended">Using .env Files (Recommended)</a></h3>
+<pre><code class="language-python">from dotenv import load_dotenv
+import os
+
+# Load .env file
+load_dotenv()
+
+# Access variables
+api_key = os.getenv("OPENAI_API_KEY")
+</code></pre>
+<h3 id="using-system-environment-variables"><a class="header" href="#using-system-environment-variables">Using System Environment Variables</a></h3>
+<p><strong>macOS/Linux</strong> (temporary):</p>
+<pre><code class="language-bash">export OPENAI_API_KEY="sk-your-key"
+</code></pre>
+<p><strong>Windows Command Prompt</strong>:</p>
+<pre><code class="language-bash">set OPENAI_API_KEY=sk-your-key
+</code></pre>
+<p><strong>Windows PowerShell</strong>:</p>
+<pre><code class="language-bash">$env:OPENAI_API_KEY="sk-your-key"
+</code></pre>
+<hr>
+<h2 id="alternative-using-local-models"><a class="header" href="#alternative-using-local-models">Alternative: Using Local Models</a></h2>
+<p>Don’t want to use API-based models? You can use local models with Ollama.</p>
+<h3 id="install-ollama"><a class="header" href="#install-ollama">Install Ollama</a></h3>
+<ol>
+<li>Visit <a href="https://ollama.ai">ollama.ai</a></li>
+<li>Download and install for your OS</li>
+<li>Pull a model:</li>
+</ol>
+<pre><code class="language-bash">ollama pull llama3
+</code></pre>
+<h3 id="configure-dspy-with-ollama"><a class="header" href="#configure-dspy-with-ollama">Configure DSPy with Ollama</a></h3>
+<pre><code class="language-python">import dspy
+
+# No API key needed!
+lm = dspy.LM(model="ollama/llama3", api_base="http://localhost:11434")
+dspy.configure(lm=lm)
+</code></pre>
+<hr>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>Now that DSPy is installed and configured, you’re ready to write your first program!</p>
+<p><strong>Continue to</strong>: <a href="04-first-dspy-program.html">Your First DSPy Program</a></p>
+<hr>
+<h2 id="quick-reference"><a class="header" href="#quick-reference">Quick Reference</a></h2>
+<h3 id="check-version"><a class="header" href="#check-version">Check Version</a></h3>
+<pre><code class="language-bash">python -c "import dspy; print(dspy.__version__)"
+</code></pre>
+<h3 id="upgrade-dspy"><a class="header" href="#upgrade-dspy">Upgrade DSPy</a></h3>
+<pre><code class="language-bash">pip install --upgrade dspy-ai
+</code></pre>
+<h3 id="install-with-all-extras"><a class="header" href="#install-with-all-extras">Install with All Extras</a></h3>
+<pre><code class="language-bash">pip install "dspy-ai[all]"
+</code></pre>
+<h3 id="uninstall-dspy"><a class="header" href="#uninstall-dspy">Uninstall DSPy</a></h3>
+<pre><code class="language-bash">pip uninstall dspy-ai
+</code></pre>
+<hr>
+<h2 id="additional-help"><a class="header" href="#additional-help">Additional Help</a></h2>
+<ul>
+<li><strong>Detailed setup</strong>: <a href="../00-frontmatter/03-setup-instructions.html">Front Matter Setup Instructions</a></li>
+<li><strong>Prerequisites</strong>: <a href="../00-frontmatter/02-prerequisites.html">Front Matter Prerequisites</a></li>
+<li><strong>DSPy docs</strong>: <a href="https://dspy.ai/learn/installation">https://dspy.ai/learn/installation</a></li>
+<li><strong>Troubleshooting</strong>: <a href="../09-appendices/02-troubleshooting.html">Appendix Troubleshooting</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../01-fundamentals/02-programming-vs-prompting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../01-fundamentals/04-first-dspy-program.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../01-fundamentals/02-programming-vs-prompting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../01-fundamentals/04-first-dspy-program.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

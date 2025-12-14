@@ -1,0 +1,669 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>BootstrapFewShot - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="bootstrapfewshot-automatic-few-shot-example-generation"><a class="header" href="#bootstrapfewshot-automatic-few-shot-example-generation">BootstrapFewShot: Automatic Few-Shot Example Generation</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>BootstrapFewShot is one of DSPy’s most powerful optimizers. It automatically generates and selects high-quality few-shot examples to improve your program’s performance. Instead of manually crafting examples, BootstrapFewShot discovers the optimal demonstrations for your specific task.</p>
+<h2 id="weak-supervision-and-the-annotate-method"><a class="header" href="#weak-supervision-and-the-annotate-method">Weak Supervision and the annotate() Method</a></h2>
+<p>A key innovation from the Demonstrate-Search-Predict paper is the concept of <strong>weak supervision</strong> - the ability to train models without hand-labeled intermediate steps. BootstrapFewShot implements this through the <code>annotate()</code> functionality, which allows:</p>
+<ol>
+<li><strong>Automatic annotation of reasoning chains</strong> without manual step-by-step labeling</li>
+<li><strong>Bootstrapping demonstrations</strong> from minimal supervision</li>
+<li><strong>Training with only input-output pairs</strong> (no intermediate reasoning needed)</li>
+</ol>
+<h3 id="the-annotate-mechanism"><a class="header" href="#the-annotate-mechanism">The annotate() Mechanism</a></h3>
+<pre><code class="language-python">from dspy.teleprompter import BootstrapFewShot
+
+# Traditional approach requires manually annotated reasoning
+traditional_training = [
+    dspy.Example(
+        question="What is 15 * 23?",
+        reasoning="Step 1: 15 * 20 = 300\nStep 2: 15 * 3 = 45\nStep 3: 300 + 45 = 345",
+        answer="345"
+    ),
+    # ... many more with detailed reasoning
+]
+
+# With weak supervision (annotate), you only need:
+weak_supervision_training = [
+    dspy.Example(question="What is 15 * 23?", answer="345"),
+    dspy.Example(question="What is 12 * 17?", answer="204"),
+    # ... just input-output pairs
+]
+
+# BootstrapFewShot will automatically generate the reasoning!
+</code></pre>
+<h3 id="how-annotate-works"><a class="header" href="#how-annotate-works">How annotate() Works</a></h3>
+<ol>
+<li>
+<p><strong>Teacher-Student Framework</strong>:</p>
+<ul>
+<li>A teacher model generates full demonstrations</li>
+<li>The student learns from these generated examples</li>
+<li>Only final outputs need to be verified</li>
+</ul>
+</li>
+<li>
+<p><strong>Automatic Reasoning Generation</strong>:</p>
+<pre><code class="language-python">class MathSolver(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.solve = dspy.ChainOfThought("question -&gt; answer")
+
+    def forward(self, question):
+        result = self.solve(question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning=result.rationale  # Automatically generated!
+        )
+</code></pre>
+</li>
+<li>
+<p><strong>Filtering by Ground Truth</strong>:</p>
+<ul>
+<li>Generated demonstrations are validated against known outputs</li>
+<li>Only high-quality demonstrations are kept</li>
+<li>Poor generations are automatically discarded</li>
+</ul>
+</li>
+</ol>
+<h2 id="how-bootstrapfewshot-works"><a class="header" href="#how-bootstrapfewshot-works">How BootstrapFewShot Works</a></h2>
+<h3 id="the-bootstrap-process"><a class="header" href="#the-bootstrap-process">The Bootstrap Process</a></h3>
+<ol>
+<li><strong>Initial Generation</strong>: Uses the unoptimized program to generate candidate examples</li>
+<li><strong>Quality Filtering</strong>: Evaluates generated examples using your metric</li>
+<li><strong>Example Selection</strong>: Chooses the best examples based on performance</li>
+<li><strong>Iterative Refinement</strong>: Repeats the process to improve example quality</li>
+</ol>
+<h3 id="key-components"><a class="header" href="#key-components">Key Components</a></h3>
+<pre><code class="language-python">from dspy.teleprompter import BootstrapFewShot
+
+optimizer = BootstrapFewShot(
+    metric=your_evaluation_metric,     # How to measure success
+    max_bootstrapped_demos=8,          # Maximum examples to generate
+    max_labeled_demos=4,               # Maximum labeled examples to include
+    max_rounds=2                       # Number of bootstrap rounds
+)
+</code></pre>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="simple-example"><a class="header" href="#simple-example">Simple Example</a></h3>
+<pre><code class="language-python">import dspy
+from dspy.teleprompter import BootstrapFewShot
+
+# 1. Define your program
+class SimpleQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.Predict("question -&gt; answer")
+
+    def forward(self, question):
+        return self.generate(question=question)
+
+# 2. Define evaluation metric
+def exact_match(example, pred, trace=None):
+    return example.answer.lower() == pred.answer.lower()
+
+# 3. Prepare training data
+trainset = [
+    dspy.Example(question="What is 2+2?", answer="4"),
+    dspy.Example(question="What is the capital of France?", answer="Paris"),
+    # ... more examples
+]
+
+# 4. Create optimizer and compile
+optimizer = BootstrapFewShot(metric=exact_match, max_bootstrapped_demos=4)
+compiled_qa = optimizer.compile(SimpleQA(), trainset=trainset)
+
+# 5. Use the compiled program
+result = compiled_qa(question="What is 3+3?")
+print(result.answer)  # Should be "6"
+</code></pre>
+<h2 id="advanced-configuration"><a class="header" href="#advanced-configuration">Advanced Configuration</a></h2>
+<h3 id="customizing-the-bootstrap-process"><a class="header" href="#customizing-the-bootstrap-process">Customizing the Bootstrap Process</a></h3>
+<pre><code class="language-python">optimizer = BootstrapFewShot(
+    metric=your_metric,
+    max_bootstrapped_demos=16,      # Generate more examples
+    max_labeled_demos=8,            # Include more labeled examples
+    max_rounds=4,                   # More refinement rounds
+    max_sample_errors=5             # Maximum errors to sample from
+)
+</code></pre>
+<h3 id="using-with-chain-of-thought"><a class="header" href="#using-with-chain-of-thought">Using with Chain of Thought</a></h3>
+<pre><code class="language-python">class CoTQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought("question -&gt; answer")
+
+    def forward(self, question):
+        result = self.generate(question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning=result.rationale
+        )
+
+# Bootstrap with Chain of Thought
+optimizer = BootstrapFewShot(
+    metric=exact_match,
+    max_bootstrapped_demos=8,
+    teacher_settings=dict(lm=dspy.settings.lm)  # Use same LM for generation
+)
+
+compiled_cot = optimizer.compile(CoTQA(), trainset=trainset)
+</code></pre>
+<h3 id="weak-supervision-example-complex-reasoning"><a class="header" href="#weak-supervision-example-complex-reasoning">Weak Supervision Example: Complex Reasoning</a></h3>
+<pre><code class="language-python">class ComplexReasoning(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        # Multi-step reasoning task
+        self.reason = dspy.ChainOfThought(
+            "context, question -&gt; reasoning_steps, answer"
+        )
+
+    def forward(self, context, question):
+        result = self.reason(context=context, question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning_steps=result.rationale  # Will be auto-generated!
+        )
+
+# Training data with ONLY inputs and outputs (weak supervision)
+reasoning_trainset = [
+    dspy.Example(
+        context="Alice is taller than Bob. Bob is taller than Charlie.",
+        question="Who is the tallest?",
+        answer="Alice"
+    ),
+    dspy.Example(
+        context="All mammals are animals. Dogs are mammals.",
+        question="Are dogs animals?",
+        answer="Yes"
+    ),
+    # ... more examples without manually written reasoning steps
+]
+
+# BootstrapFewShot automatically generates the reasoning steps!
+optimizer = BootstrapFewShot(
+    metric=exact_match,
+    max_bootstrapped_demos=6,
+    max_labeled_demos=2  # Keep 2 original examples for stability
+)
+
+# The magic: annotate() happens automatically during compilation
+compiled_reasoner = optimizer.compile(
+    ComplexReasoning(),
+    trainset=reasoning_trainset
+)
+
+# The compiled model now has high-quality demonstrations
+# with automatically generated reasoning steps!
+</code></pre>
+<h3 id="benefits-of-weak-supervision"><a class="header" href="#benefits-of-weak-supervision">Benefits of Weak Supervision</a></h3>
+<ol>
+<li>
+<p><strong>Reduced Annotation Cost</strong>:</p>
+<ul>
+<li>No need to write detailed reasoning chains</li>
+<li>Only final answers need verification</li>
+<li>Scales to thousands of examples easily</li>
+</ul>
+</li>
+<li>
+<p><strong>Consistent Quality</strong>:</p>
+<ul>
+<li>Generated reasoning follows consistent patterns</li>
+<li>Avoids human annotation inconsistencies</li>
+<li>Maintains formatting automatically</li>
+</ul>
+</li>
+<li>
+<p><strong>Rapid Prototyping</strong>:</p>
+<ul>
+<li>Test new tasks with minimal data preparation</li>
+<li>Iterate quickly on task definitions</li>
+<li>Focus on problem formulation, not annotation</li>
+</ul>
+</li>
+<li>
+<p><strong>Better Coverage</strong>:</p>
+<ul>
+<li>Generates diverse reasoning strategies</li>
+<li>Discovers multiple solution paths</li>
+<li>Reduces annotation bias</li>
+</ul>
+</li>
+</ol>
+<h2 id="working-with-different-task-types"><a class="header" href="#working-with-different-task-types">Working with Different Task Types</a></h2>
+<h3 id="classification-tasks"><a class="header" href="#classification-tasks">Classification Tasks</a></h3>
+<pre><code class="language-python">class TextClassifier(dspy.Module):
+    def __init__(self, categories):
+        super().__init__()
+        self.classify = dspy.Predict(
+            f"text, categories[{','.join(categories)}] -&gt; classification"
+        )
+
+    def forward(self, text):
+        return self.classify(text=text)
+
+# Custom metric for classification
+def classification_metric(example, pred, trace=None):
+    return example.category.lower() == pred.classification.lower()
+
+categories = ["positive", "negative", "neutral"]
+trainset = [
+    dspy.Example(text="I love this!", category="positive"),
+    dspy.Example(text="This is terrible.", category="negative"),
+    # ... more examples
+]
+
+optimizer = BootstrapFewShot(metric=classification_metric)
+classifier = optimizer.compile(TextClassifier(categories), trainset=trainset)
+</code></pre>
+<h3 id="multi-modal-tasks"><a class="header" href="#multi-modal-tasks">Multi-Modal Tasks</a></h3>
+<pre><code class="language-python">class ImageCaptioner(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.caption = dspy.Predict("image_description -&gt; caption")
+
+    def forward(self, image_description):
+        return self.caption(image_description=image_description)
+
+# Bootstrap with image descriptions
+image_trainset = [
+    dspy.Example(
+        image_description="A cat sitting on a windowsill",
+        caption="A cat sits on a windowsill looking outside"
+    ),
+    # ... more examples
+]
+
+optimizer = BootstrapFewShot(metric=rouge_score)
+captioner = optimizer.compile(ImageCaptioner(), trainset=image_trainset)
+</code></pre>
+<h2 id="bootstrapfewshot-parameters"><a class="header" href="#bootstrapfewshot-parameters">BootstrapFewShot Parameters</a></h2>
+<h3 id="core-parameters"><a class="header" href="#core-parameters">Core Parameters</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>metric</code></td><td>Callable</td><td>Required</td><td>Function to evaluate example quality</td></tr>
+<tr><td><code>max_bootstrapped_demos</code></td><td>int</td><td>8</td><td>Maximum generated examples</td></tr>
+<tr><td><code>max_labeled_demos</code></td><td>int</td><td>4</td><td>Maximum human-labeled examples</td></tr>
+<tr><td><code>max_rounds</code></td><td>int</td><td>2</td><td>Number of bootstrap iterations</td></tr>
+<tr><td><code>max_sample_errors</code></td><td>int</td><td>None</td><td>Max error examples to use</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="advanced-parameters"><a class="header" href="#advanced-parameters">Advanced Parameters</a></h3>
+<pre><code class="language-python">optimizer = BootstrapFewShot(
+    metric=complex_metric,
+    max_bootstrapped_demos=16,
+    max_labeled_demos=8,
+    max_rounds=4,
+    max_sample_errors=10,
+    learner_class=dspy.teleprompter.BootstrapFewShot,  # Custom learner
+    teacher_settings=dict(temperature=0.7),  # Teacher LM settings
+    promptgen=None,  # Custom prompt generator
+    calibrate=False,  # Calibration mode
+    require_metadata=False,  # Metadata requirements
+    require_guidance=False,  # Guidance requirements
+    language_model=dspy.settings.lm  # Custom LM
+)
+</code></pre>
+<h2 id="metrics-for-bootstrapfewshot"><a class="header" href="#metrics-for-bootstrapfewshot">Metrics for BootstrapFewShot</a></h2>
+<h3 id="exact-match-metrics"><a class="header" href="#exact-match-metrics">Exact Match Metrics</a></h3>
+<pre><code class="language-python">def exact_match_metric(example, pred, trace=None):
+    """Simple exact string match."""
+    return str(example.answer).lower() == str(pred.answer).lower()
+
+def fuzzy_match(example, pred, trace=None):
+    """Fuzzy matching with some tolerance."""
+    from difflib import SequenceMatcher
+    similarity = SequenceMatcher(None, example.answer, pred.answer).ratio()
+    return similarity &gt; 0.9
+</code></pre>
+<h3 id="semantic-metrics"><a class="header" href="#semantic-metrics">Semantic Metrics</a></h3>
+<pre><code class="language-python">from sentence_transformers import SentenceTransformer
+import numpy as np
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+def semantic_similarity(example, pred, trace=None):
+    """Semantic similarity using embeddings."""
+    emb1 = model.encode(str(example.answer))
+    emb2 = model.encode(str(pred.answer))
+    similarity = np.dot(emb1, emb2) / (np.linalg.norm(emb1) * np.linalg.norm(emb2))
+    return similarity &gt; 0.8
+</code></pre>
+<h3 id="task-specific-metrics"><a class="header" href="#task-specific-metrics">Task-Specific Metrics</a></h3>
+<pre><code class="language-python">def qa_f1_metric(example, pred, trace=None):
+    """F1 score for QA tasks."""
+    from collections import Counter
+
+    pred_tokens = Counter(str(pred.answer).lower().split())
+    true_tokens = Counter(str(example.answer).lower().split())
+
+    common = pred_tokens &amp; true_tokens
+    precision = len(common) / len(pred_tokens) if pred_tokens else 0
+    recall = len(common) / len(true_tokens) if true_tokens else 0
+
+    if precision + recall == 0:
+        return 0
+    return 2 * precision * recall / (precision + recall)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-data-quality"><a class="header" href="#1-data-quality">1. Data Quality</a></h3>
+<pre><code class="language-python"># Ensure high-quality training examples
+def clean_dataset(dataset):
+    cleaned = []
+    for example in dataset:
+        if len(str(example.answer).strip()) &gt; 0:
+            cleaned.append(example)
+    return cleaned
+
+trainset = clean_dataset(raw_trainset)
+</code></pre>
+<h3 id="2-balanced-examples"><a class="header" href="#2-balanced-examples">2. Balanced Examples</a></h3>
+<pre><code class="language-python"># Balance different types of examples
+from collections import defaultdict
+
+def balance_dataset(dataset, field):
+    """Balance examples by field values."""
+    groups = defaultdict(list)
+    for example in dataset:
+        groups[getattr(example, field)].append(example)
+
+    min_count = min(len(group) for group in groups.values())
+    balanced = []
+    for group in groups.values():
+        balanced.extend(group[:min_count])
+
+    return balanced
+
+# Balance by category
+balanced_trainset = balance_dataset(trainset, 'category')
+</code></pre>
+<h3 id="3-progressive-compilation"><a class="header" href="#3-progressive-compilation">3. Progressive Compilation</a></h3>
+<pre><code class="language-python"># Start with fewer examples, gradually increase
+def progressive_compile(program, trainset):
+    results = []
+    for num_examples in [4, 8, 12, 16]:
+        subset = trainset[:num_examples]
+        optimizer = BootstrapFewShot(
+            metric=your_metric,
+            max_bootstrapped_demos=num_examples
+        )
+        compiled = optimizer.compile(program, trainset=subset)
+
+        # Evaluate on validation set
+        score = evaluate(compiled, valset)
+        results.append((num_examples, compiled, score))
+
+    # Return best performing version
+    best = max(results, key=lambda x: x[2])
+    return best[1]
+</code></pre>
+<h2 id="common-pitfalls-and-solutions"><a class="header" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a></h2>
+<h3 id="pitfall-1-overfitting"><a class="header" href="#pitfall-1-overfitting">Pitfall 1: Overfitting</a></h3>
+<pre><code class="language-python"># Problem: Too many bootstrapped examples
+optimizer = BootstrapFewShot(max_bootstrapped_demos=50)  # Too many
+
+# Solution: Use reasonable limits
+optimizer = BootstrapFewShot(max_bootstrapped_demos=8)  # Better
+</code></pre>
+<h3 id="pitfall-2-poor-metric-definition"><a class="header" href="#pitfall-2-poor-metric-definition">Pitfall 2: Poor Metric Definition</a></h3>
+<pre><code class="language-python"># Problem: Metric doesn't reflect actual performance
+def bad_metric(example, pred):
+    return len(pred.answer) &gt; 10  # Bad metric
+
+# Solution: Use meaningful metrics
+def good_metric(example, pred):
+    return semantic_similarity(example, pred) &gt; 0.8
+</code></pre>
+<h3 id="pitfall-3-insufficient-data-diversity"><a class="header" href="#pitfall-3-insufficient-data-diversity">Pitfall 3: Insufficient Data Diversity</a></h3>
+<pre><code class="language-python"># Problem: All examples are similar
+similar_examples = [
+    dspy.Example(question="What is 2+2?", answer="4"),
+    dspy.Example(question="What is 3+3?", answer="6"),
+    # ... all simple math
+]
+
+# Solution: Include diverse examples
+diverse_examples = [
+    dspy.Example(question="What is 2+2?", answer="4"),
+    dspy.Example(question="What is the capital of France?", answer="Paris"),
+    dspy.Example(question="Explain photosynthesis", answer="Process by which plants..."),
+    # ... diverse tasks
+]
+</code></pre>
+<h2 id="evaluating-results"><a class="header" href="#evaluating-results">Evaluating Results</a></h2>
+<pre><code class="language-python"># Compare baseline vs compiled
+baseline = SimpleQA()
+compiled = optimizer.compile(SimpleQA(), trainset=trainset)
+
+# Evaluate both
+baseline_score = evaluate(baseline, testset)
+compiled_score = evaluate(compiled, testset)
+
+print(f"Baseline accuracy: {baseline_score:.2%}")
+print(f"Compiled accuracy: {compiled_score:.2%}")
+print(f"Improvement: {compiled_score - baseline_score:.2%}")
+</code></pre>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li>BootstrapFewShot automatically generates high-quality few-shot examples</li>
+<li>It improves performance by discovering optimal demonstrations</li>
+<li>Proper metric definition is crucial for success</li>
+<li>Data quality and diversity matter more than quantity</li>
+<li>Always validate compiled programs on held-out data</li>
+<li>Start with simple configurations and iterate</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>In the next section, we’ll explore MIPRO, an advanced optimizer that goes beyond example selection to optimize instructions and demonstrations together.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/01-compilation-concept.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/02a-copro.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/01-compilation-concept.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/02a-copro.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,853 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Advanced Signatures - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="advanced-signatures"><a class="header" href="#advanced-signatures">Advanced Signatures</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./03-typed-signatures.html">Typed Signatures</a> - Understanding of typed signatures</li>
+<li><strong>Required Knowledge</strong>: Advanced programming concepts, data structures, and system design</li>
+<li><strong>Difficulty Level</strong>: Advanced</li>
+<li><strong>Estimated Reading Time</strong>: 40 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master advanced signature patterns for complex applications</li>
+<li>Understand how to create hierarchical and nested signatures</li>
+<li>Learn techniques for dynamic and conditional signatures</li>
+<li>Be able to design signature systems for production applications</li>
+</ul>
+<h2 id="hierarchical-signatures"><a class="header" href="#hierarchical-signatures">Hierarchical Signatures</a></h2>
+<p>Hierarchical signatures allow you to compose complex workflows from smaller, reusable signature components.</p>
+<h3 id="base-signatures"><a class="header" href="#base-signatures">Base Signatures</a></h3>
+<pre><code class="language-python">import dspy
+from typing import Dict, List, Optional, Union
+
+class BaseExtractor(dspy.Signature):
+    """Base signature for extracting information from text."""
+
+    source_text = dspy.InputField(
+        desc="Source text to extract information from",
+        type=str
+    )
+
+    extraction_confidence = dspy.OutputField(
+        desc="Confidence in extraction quality (0-1)",
+        type=float
+    )
+
+class NamedEntityExtractor(BaseExtractor):
+    """Extract named entities from text."""
+
+    entities = dspy.OutputField(
+        desc="List of named entities with types and positions",
+        type=List[Dict[str, Union[str, int]]],
+        prefix="Named Entities:\n"
+    )
+
+class RelationshipExtractor(BaseExtractor):
+    """Extract relationships between entities."""
+
+    relationships = dspy.OutputField(
+        desc="List of relationships with source, target, and type",
+        type=List[Dict[str, str]],
+        prefix="Relationships:\n"
+    )
+</code></pre>
+<h3 id="composite-signatures"><a class="header" href="#composite-signatures">Composite Signatures</a></h3>
+<pre><code class="language-python">class DocumentAnalyzer(dspy.Signature):
+    """Comprehensive document analysis using multiple extraction methods."""
+
+    document_text = dspy.InputField(
+        desc="Full document text to analyze",
+        type=str
+    )
+
+    analysis_scope = dspy.InputField(
+        desc="Scope of analysis (e.g., 'entities_only', 'full_analysis')",
+        type=str
+    )
+
+    # Use nested signatures
+    entity_extraction = dspy.OutputField(
+        desc="Named entities found in document",
+        type=NamedEntityExtractor,
+        prefix="Entity Extraction:\n"
+    )
+
+    relationship_extraction = dspy.OutputField(
+        desc="Relationships between entities",
+        type=RelationshipExtractor,
+        prefix="Relationship Extraction:\n"
+    )
+
+    document_summary = dspy.OutputField(
+        desc="High-level document summary",
+        type=str,
+        prefix="Document Summary:\n"
+    )
+
+    metadata = dspy.OutputField(
+        desc="Document metadata (length, language, complexity)",
+        type=Dict[str, Union[str, int, float]],
+        prefix="Document Metadata:\n"
+    )
+</code></pre>
+<h2 id="dynamic-signatures"><a class="header" href="#dynamic-signatures">Dynamic Signatures</a></h2>
+<p>Dynamic signatures adapt their structure based on input parameters or runtime conditions.</p>
+<h3 id="template-based-dynamic-signatures"><a class="header" href="#template-based-dynamic-signatures">Template-Based Dynamic Signatures</a></h3>
+<pre><code class="language-python">class DynamicSignatureBuilder:
+    """Build signatures dynamically based on requirements."""
+
+    @staticmethod
+    def create_analysis_signature(schema: Dict[str, str]) -&gt; dspy.Signature:
+        """Create a signature from a schema definition."""
+
+        class DynamicAnalysis(dspy.Signature):
+            """Dynamically created analysis signature."""
+
+            input_data = dspy.InputField(
+                desc="Data to analyze",
+                type=str
+            )
+
+            analysis_instructions = dspy.InputField(
+                desc="Specific analysis instructions",
+                type=str
+            )
+
+            # Dynamically create output fields
+            pass
+
+        # Add dynamic output fields
+        for field_name, field_desc in schema.items():
+            setattr(
+                DynamicAnalysis,
+                field_name,
+                dspy.OutputField(
+                    desc=field_desc,
+                    type=str,
+                    prefix=f"{field_name.replace('_', ' ').title()}:\n"
+                )
+            )
+
+        return DynamicAnalysis
+
+# Usage
+schema = {
+    "sentiment_score": "Sentiment rating from -1 to 1",
+    "key_themes": "Main themes identified",
+    "emotional_tone": "Overall emotional tone",
+    "recommendation": "Recommended action"
+}
+
+dynamic_signature = DynamicSignatureBuilder.create_analysis_signature(schema)
+analyzer = dspy.Predict(dynamic_signature)
+</code></pre>
+<h3 id="conditional-signatures"><a class="header" href="#conditional-signatures">Conditional Signatures</a></h3>
+<pre><code class="language-python">class ConditionalSignature(dspy.Signature):
+    """Signature that changes based on input conditions."""
+
+    input_data = dspy.InputField(
+        desc="Data to process",
+        type=Union[str, dict, list]
+    )
+
+    data_type = dspy.InputField(
+        desc="Type of input data ('text', 'json', 'list')",
+        type=str
+    )
+
+    processing_mode = dspy.InputField(
+        desc="Processing mode ('extract', 'transform', 'analyze')",
+        type=str
+    )
+
+    # Conditional outputs
+    extracted_features = dspy.OutputField(
+        desc="Extracted features (when mode='extract')",
+        type=List[str],
+        optional=True
+    )
+
+    transformed_data = dspy.OutputField(
+        desc="Transformed data (when mode='transform')",
+        type=Union[str, dict],
+        optional=True
+    )
+
+    analysis_results = dspy.OutputField(
+        desc="Analysis results (when mode='analyze')",
+        type=Dict[str, Union[str, float, int]],
+        optional=True
+    )
+
+    processing_metadata = dspy.OutputField(
+        desc="Metadata about processing performed",
+        type=Dict[str, Union[str, int]],
+        prefix="Processing Metadata:\n"
+    )
+</code></pre>
+<h2 id="multi-modal-signatures"><a class="header" href="#multi-modal-signatures">Multi-Modal Signatures</a></h2>
+<p>Signatures that handle different types of data and media.</p>
+<h3 id="image-and-text-signatures"><a class="header" href="#image-and-text-signatures">Image and Text Signatures</a></h3>
+<pre><code class="language-python">class MultiModalAnalyzer(dspy.Signature):
+    """Analyze content across multiple modalities."""
+
+    text_content = dspy.InputField(
+        desc="Text content to analyze",
+        type=str,
+        optional=True
+    )
+
+    image_description = dspy.InputField(
+        desc="Description of image content",
+        type=str,
+        optional=True
+    )
+
+    audio_transcript = dspy.InputField(
+        desc="Transcript of audio content",
+        type=str,
+        optional=True
+    )
+
+    content_type = dspy.InputField(
+        desc="Types of content provided",
+        type=List[str]
+    )
+
+    unified_analysis = dspy.OutputField(
+        desc="Analysis combining all modalities",
+        type=str,
+        prefix="Unified Analysis:\n"
+    )
+
+    cross_modal_insights = dspy.OutputField(
+        desc="Insights from combining different modalities",
+        type=List[str],
+        prefix="Cross-Modal Insights:\n"
+    )
+
+    confidence_scores = dspy.OutputField(
+        desc="Confidence scores for each modality",
+        type=Dict[str, float],
+        prefix="Confidence Scores:\n"
+    )
+</code></pre>
+<h2 id="streaming-and-batch-signatures"><a class="header" href="#streaming-and-batch-signatures">Streaming and Batch Signatures</a></h2>
+<h3 id="batch-processing-signatures"><a class="header" href="#batch-processing-signatures">Batch Processing Signatures</a></h3>
+<pre><code class="language-python">class BatchProcessor(dspy.Signature):
+    """Process multiple items in a batch."""
+
+    batch_items = dspy.InputField(
+        desc="List of items to process",
+        type=List[Union[str, dict]]
+    )
+
+    processing_instructions = dspy.InputField(
+        desc="Instructions for batch processing",
+        type=str
+    )
+
+    batch_size = dspy.InputField(
+        desc="Number of items in this batch",
+        type=int
+    )
+
+    processed_items = dspy.OutputField(
+        desc="List of processed items",
+        type=List[Dict[str, Union[str, int, float]]],
+        prefix="Processed Items:\n"
+    )
+
+    batch_summary = dspy.OutputField(
+        desc="Summary of batch processing results",
+        type=Dict[str, Union[int, float, str]],
+        prefix="Batch Summary:\n"
+    )
+
+    failed_items = dspy.OutputField(
+        desc="Items that failed processing with error messages",
+        type=List[Dict[str, str]],
+        optional=True
+    )
+</code></pre>
+<h3 id="streaming-signatures"><a class="header" href="#streaming-signatures">Streaming Signatures</a></h3>
+<pre><code class="language-python">class StreamProcessor(dspy.Signature):
+    """Process data streams in chunks."""
+
+    chunk_data = dspy.InputField(
+        desc="Current chunk of data to process",
+        type=str
+    )
+
+    chunk_metadata = dspy.InputField(
+        desc="Metadata about current chunk (position, size, etc.)",
+        type=Dict[str, Union[int, str]]
+    )
+
+    is_final_chunk = dspy.InputField(
+        desc="Whether this is the last chunk",
+        type=bool
+    )
+
+    accumulated_context = dspy.InputField(
+        desc="Context from previous chunks",
+        type=str,
+        optional=True
+    )
+
+    processed_chunk = dspy.OutputField(
+        desc="Processed version of current chunk",
+        type=str
+    )
+
+    updated_context = dspy.OutputField(
+        desc="Updated context for next chunk",
+        type=str,
+        optional=True
+    )
+
+    chunk_summary = dspy.OutputField(
+        desc="Summary of this chunk's processing",
+        type=str,
+        optional=True
+    )
+</code></pre>
+<h2 id="recursive-and-self-referential-signatures"><a class="header" href="#recursive-and-self-referential-signatures">Recursive and Self-Referential Signatures</a></h2>
+<p>Signatures that can process hierarchical or nested data structures.</p>
+<h3 id="tree-processing-signatures"><a class="header" href="#tree-processing-signatures">Tree Processing Signatures</a></h3>
+<pre><code class="language-python">class TreeProcessor(dspy.Signature):
+    """Process tree-like data structures."""
+
+    node_data = dspy.InputField(
+        desc="Data for current node",
+        type=Union[str, dict]
+    )
+
+    children_data = dspy.InputField(
+        desc="Data for child nodes",
+        type=List[Union[str, dict]],
+        optional=True
+    )
+
+    node_path = dspy.InputField(
+        desc="Path from root to current node",
+        type=str
+    )
+
+    depth = dspy.InputField(
+        desc="Depth of current node",
+        type=int
+    )
+
+    # Recursive processing
+    node_analysis = dspy.OutputField(
+        desc="Analysis of current node",
+        type=Dict[str, Union[str, int, float]]
+    )
+
+    children_analyses = dspy.OutputField(
+        desc="Analyses of child nodes",
+        type=List[Dict[str, Union[str, int, float]]],
+        optional=True
+    )
+
+    aggregated_analysis = dspy.OutputField(
+        desc="Analysis aggregated from children",
+        type=Dict[str, Union[str, int, float]],
+        optional=True
+    )
+</code></pre>
+<h2 id="domain-specific-advanced-patterns"><a class="header" href="#domain-specific-advanced-patterns">Domain-Specific Advanced Patterns</a></h2>
+<h3 id="medical-diagnosis-pipeline"><a class="header" href="#medical-diagnosis-pipeline">Medical Diagnosis Pipeline</a></h3>
+<pre><code class="language-python">class DiagnosticPipeline(dspy.Signature):
+    """Multi-stage medical diagnosis pipeline."""
+
+    patient_data = dspy.InputField(
+        desc="Comprehensive patient information",
+        type=Dict[str, Union[str, int, float, List[str]]]
+    )
+
+    chief_complaint = dspy.InputField(
+        desc="Primary reason for medical consultation",
+        type=str
+    )
+
+    # Stage 1: Symptom Analysis
+    symptom_analysis = dspy.OutputField(
+        desc="Detailed analysis of presented symptoms",
+        type=Dict[str, Union[str, List[str], float]],
+        prefix="Symptom Analysis:\n"
+    )
+
+    # Stage 2: Differential Diagnosis
+    differential_diagnosis = dspy.OutputField(
+        desc="List of possible diagnoses with probabilities",
+        type=List[Dict[str, Union[str, float, List[str]]]],
+        prefix="Differential Diagnosis:\n"
+    )
+
+    # Stage 3: Recommended Tests
+    recommended_tests = dspy.OutputField(
+        desc="Medical tests to narrow diagnosis",
+        type=Dict[str, Union[str, List[str], float]],
+        prefix="Recommended Tests:\n"
+    )
+
+    # Stage 4: Initial Treatment Plan
+    initial_treatment = dspy.OutputField(
+        desc="Initial treatment recommendations",
+        type=Dict[str, Union[str, List[str], Dict[str, str]]],
+        prefix="Initial Treatment:\n"
+    )
+
+    # Stage 5: Urgency Assessment
+    urgency_level = dspy.OutputField(
+        desc="Medical urgency level (1-5)",
+        type=int,
+        prefix="Urgency Level: "
+    )
+
+    # Meta-information
+    confidence_intervals = dspy.OutputField(
+        desc="Confidence intervals for all probabilistic outputs",
+        type=Dict[str, List[float]],
+        prefix="Confidence Intervals:\n"
+    )
+
+    contraindications = dspy.OutputField(
+        desc="Potential contraindications to consider",
+        type=List[str],
+        prefix="Contraindications:\n"
+    )
+</code></pre>
+<h3 id="legal-document-analysis"><a class="header" href="#legal-document-analysis">Legal Document Analysis</a></h3>
+<pre><code class="language-python">class LegalDocumentAnalyzer(dspy.Signature):
+    """Comprehensive legal document analysis."""
+
+    document_text = dspy.InputField(
+        desc="Full text of legal document",
+        type=str
+    )
+
+    document_type = dspy.InputField(
+        desc="Type of legal document (contract, patent, brief, etc.)",
+        type=str
+    )
+
+    jurisdiction = dspy.InputField(
+        desc="Legal jurisdiction governing the document",
+        type=str
+    )
+
+    # Clauses extraction
+    key_clauses = dspy.OutputField(
+        desc="Important clauses with summaries",
+        type=List[Dict[str, Union[str, int]]],
+        prefix="Key Clauses:\n"
+    )
+
+    # Risk analysis
+    legal_risks = dspy.OutputField(
+        desc="Potential legal risks and liabilities",
+        type=List[Dict[str, Union[str, int, float]]],
+        prefix="Legal Risks:\n"
+    )
+
+    # Obligations and rights
+    obligations = dspy.OutputField(
+        desc="Obligations imposed by the document",
+        type=List[Dict[str, str]],
+        prefix="Obligations:\n"
+    )
+
+    rights = dspy.OutputField(
+        desc="Rights granted by the document",
+        type=List[Dict[str, str]],
+        prefix="Rights:\n"
+    )
+
+    # Compliance check
+    compliance_status = dspy.OutputField(
+        desc="Compliance with relevant laws and regulations",
+        type=Dict[str, Union[bool, str, List[str]]],
+        prefix="Compliance Status:\n"
+    )
+
+    # Recommendations
+    recommendations = dspy.OutputField(
+        desc="Legal recommendations and next steps",
+        type=Dict[str, Union[str, List[str], Dict[str, str]]],
+        prefix="Recommendations:\n"
+    )
+</code></pre>
+<h2 id="performance-optimized-signatures"><a class="header" href="#performance-optimized-signatures">Performance-Optimized Signatures</a></h2>
+<h3 id="caching-and-memoization"><a class="header" href="#caching-and-memoization">Caching and Memoization</a></h3>
+<pre><code class="language-python">class CachedProcessor(dspy.Signature):
+    """Signature with built-in caching awareness."""
+
+    input_data = dspy.InputField(
+        desc="Data to process",
+        type=str
+    )
+
+    cache_key = dspy.InputField(
+        desc="Cache key for this input",
+        type=str,
+        optional=True
+    )
+
+    use_cache = dspy.InputField(
+        desc="Whether to use cached results",
+        type=bool,
+        default=True
+    )
+
+    processing_result = dspy.OutputField(
+        desc="Result of processing",
+        type=Union[str, dict]
+    )
+
+    cache_hit = dspy.OutputField(
+        desc="Whether result came from cache",
+        type=bool,
+        prefix="Cache Hit: "
+    )
+
+    processing_time = dspy.OutputField(
+        desc="Time taken for processing (ms)",
+        type=float,
+        prefix="Processing Time: "
+    )
+</code></pre>
+<h3 id="resource-aware-signatures"><a class="header" href="#resource-aware-signatures">Resource-Aware Signatures</a></h3>
+<pre><code class="language-python">class ResourceAwareProcessor(dspy.Signature):
+    """Signature that adapts based on available resources."""
+
+    input_size = dspy.InputField(
+        desc="Size of input data",
+        type=int
+    )
+
+    available_memory = dspy.InputField(
+        desc="Available memory in MB",
+        type=int
+    )
+
+    time_constraint = dspy.InputField(
+        desc="Maximum processing time in seconds",
+        type=float,
+        optional=True
+    )
+
+    quality_requirement = dspy.InputField(
+        desc="Required quality level (1-10)",
+        type=int,
+        default=7
+    )
+
+    processing_strategy = dspy.OutputField(
+        desc="Chosen processing strategy",
+        type=str,
+        prefix="Processing Strategy: "
+    )
+
+    optimized_result = dspy.OutputField(
+        desc="Result optimized for given constraints",
+        type=Union[str, dict]
+    )
+
+    resource_usage = dspy.OutputField(
+        desc="Actual resource usage statistics",
+        type=Dict[str, Union[int, float, str]],
+        prefix="Resource Usage:\n"
+    )
+
+    quality_metrics = dspy.OutputField(
+        desc="Quality metrics for the result",
+        type=Dict[str, float],
+        prefix="Quality Metrics:\n"
+    )
+</code></pre>
+<h2 id="testing-and-debugging-advanced-signatures"><a class="header" href="#testing-and-debugging-advanced-signatures">Testing and Debugging Advanced Signatures</a></h2>
+<h3 id="self-validating-signatures"><a class="header" href="#self-validating-signatures">Self-Validating Signatures</a></h3>
+<pre><code class="language-python">class ValidatingSignature(dspy.Signature):
+    """Signature that includes validation logic."""
+
+    input_data = dspy.InputField(
+        desc="Data to validate and process",
+        type=Union[str, dict, list]
+    )
+
+    validation_schema = dspy.InputField(
+        desc="Schema for validation",
+        type=dict
+    )
+
+    is_valid = dspy.OutputField(
+        desc="Whether input data is valid",
+        type=bool,
+        prefix="Validation Status: "
+    )
+
+    validation_errors = dspy.OutputField(
+        desc="List of validation errors",
+        type=List[str],
+        optional=True
+    )
+
+    sanitized_data = dspy.OutputField(
+        desc="Sanitized version of input data",
+        type=Union[str, dict, list],
+        optional=True
+    )
+
+    processing_result = dspy.OutputField(
+        desc="Result of processing valid data",
+        type=Union[str, dict],
+        optional=True
+    )
+</code></pre>
+<h2 id="best-practices-for-advanced-signatures"><a class="header" href="#best-practices-for-advanced-signatures">Best Practices for Advanced Signatures</a></h2>
+<h3 id="1-modular-design"><a class="header" href="#1-modular-design">1. Modular Design</a></h3>
+<p>Break complex signatures into smaller, reusable components.</p>
+<h3 id="2-clear-documentation"><a class="header" href="#2-clear-documentation">2. Clear Documentation</a></h3>
+<p>Document complex signatures thoroughly with examples.</p>
+<h3 id="3-error-handling"><a class="header" href="#3-error-handling">3. Error Handling</a></h3>
+<p>Include error outputs and validation in all complex signatures.</p>
+<h3 id="4-performance-considerations"><a class="header" href="#4-performance-considerations">4. Performance Considerations</a></h3>
+<p>Design signatures with resource constraints in mind.</p>
+<h3 id="5-testability"><a class="header" href="#5-testability">5. Testability</a></h3>
+<p>Make signatures easy to test with predictable outputs.</p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Advanced signatures enable:</p>
+<ul>
+<li><strong>Complex workflows</strong> through hierarchical composition</li>
+<li><strong>Dynamic behavior</strong> based on input parameters</li>
+<li><strong>Multi-modal processing</strong> for diverse data types</li>
+<li><strong>Performance optimization</strong> with resource awareness</li>
+<li><strong>Production readiness</strong> with validation and error handling</li>
+</ul>
+<p>These patterns transform DSPy from a simple prompting tool into a comprehensive framework for building sophisticated AI applications.</p>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Compose signatures</strong> like you compose functions</li>
+<li><strong>Design for flexibility</strong> with dynamic and conditional structures</li>
+<li><strong>Handle complexity</strong> with hierarchical patterns</li>
+<li><strong>Optimize for production</strong> with caching and resource awareness</li>
+<li><strong>Include validation</strong> to ensure robust operation</li>
+</ol>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="./05-practical-examples.html">Next Section: Practical Examples</a> - See advanced signatures in action</li>
+<li><a href="../03-modules/">Chapter 3: Modules</a> - Using advanced signatures with DSPy modules</li>
+<li><a href="../05-optimizers/">Chapter 5: Optimizers</a> - Optimizing complex signature chains</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../02-signatures/03-typed-signatures.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../02-signatures/05-practical-examples.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../02-signatures/03-typed-signatures.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../02-signatures/05-practical-examples.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

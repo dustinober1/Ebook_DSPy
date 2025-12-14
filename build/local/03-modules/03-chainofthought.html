@@ -1,0 +1,900 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chain of Thought - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/03-modules/03-chainofthought.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="chain-of-thought-module"><a class="header" href="#chain-of-thought-module">Chain of Thought Module</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./02-predict-module.html">The Predict Module</a> - Understanding of basic modules</li>
+<li><strong>Chapter 2</strong>: Signatures - Familiarity with signature design</li>
+<li><strong>Required Knowledge</strong>: Concept of step-by-step reasoning</li>
+<li><strong>Difficulty Level</strong>: Intermediate</li>
+<li><strong>Estimated Reading Time</strong>: 40 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master the <code>dspy.ChainOfThought</code> module for complex reasoning tasks</li>
+<li>Understand how to elicit step-by-step thinking from language models</li>
+<li>Learn to structure reasoning chains for different types of problems</li>
+<li>Discover techniques to improve reasoning quality and reliability</li>
+<li>Know when Chain of Thought outperforms simple prediction</li>
+</ul>
+<h2 id="introduction-to-chain-of-thought"><a class="header" href="#introduction-to-chain-of-thought">Introduction to Chain of Thought</a></h2>
+<p>Chain of Thought (CoT) is a prompting technique that encourages language models to “think step by step” before providing a final answer. This approach significantly improves performance on complex reasoning tasks that require multiple steps of analysis.</p>
+<h3 id="why-chain-of-thought-works"><a class="header" href="#why-chain-of-thought-works">Why Chain of Thought Works</a></h3>
+<p><strong>Without CoT:</strong></p>
+<pre><code>Question: If a rope is 10 meters long and we cut it into 4 equal pieces, then cut each piece in half, how many pieces do we have?
+Answer: 4  (Wrong - jumps to conclusion)
+</code></pre>
+<p><strong>With CoT:</strong></p>
+<pre><code>Question: If a rope is 10 meters long and we cut it into 4 equal pieces, then cut each piece in half, how many pieces do we have?
+
+Reasoning:
+1. Start with 1 rope
+2. Cut into 4 equal pieces → now we have 4 pieces
+3. Cut each of the 4 pieces in half → each piece becomes 2 pieces
+4. Total pieces = 4 pieces × 2 = 8 pieces
+
+Answer: 8  (Correct - shows reasoning)
+</code></pre>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="simple-cot-example"><a class="header" href="#simple-cot-example">Simple CoT Example</a></h3>
+<pre><code class="language-python">import dspy
+
+# Define a signature that includes reasoning
+class MathProblem(dspy.Signature):
+    """Solve math problems step by step."""
+    problem = dspy.InputField(desc="Math problem to solve", type=str)
+    reasoning = dspy.OutputField(desc="Step-by-step reasoning", type=str)
+    answer = dspy.OutputField(desc="Final answer", type=str)
+
+# Create ChainOfThought module
+math_solver = dspy.ChainOfThought(MathProblem)
+
+# Use it
+result = math_solver(
+    problem="A baker has 24 cupcakes. If she sells them in boxes of 6, how many boxes does she need?"
+)
+
+print("Reasoning:")
+print(result.reasoning)
+print("\nAnswer:")
+print(result.answer)
+</code></pre>
+<h3 id="string-signature-with-cot"><a class="header" href="#string-signature-with-cot">String Signature with CoT</a></h3>
+<pre><code class="language-python"># Quick CoT with string signature
+cot_analyzer = dspy.ChainOfThought(
+    "situation -&gt; reasoning, conclusion"
+)
+
+result = cot_analyzer(
+    situation="The company's revenue increased 20% but expenses increased 30%. Is the company doing better?"
+)
+
+print(result.reasoning)
+print(result.conclusion)
+</code></pre>
+<h2 id="structuring-reasoning-chains"><a class="header" href="#structuring-reasoning-chains">Structuring Reasoning Chains</a></h2>
+<h3 id="1-mathematical-reasoning"><a class="header" href="#1-mathematical-reasoning">1. Mathematical Reasoning</a></h3>
+<pre><code class="language-python">class ComplexMathSolver(dspy.Signature):
+    """Solve complex mathematical problems with detailed reasoning."""
+    problem = dspy.InputField(desc="Complex math problem", type=str)
+    givens = dspy.OutputField(desc="Information given in the problem", type=str)
+    approach = dspy.OutputField(desc="Mathematical approach to solve", type=str)
+    steps = dspy.OutputField(desc="Detailed solution steps", type=str)
+    calculations = dspy.OutputField(desc="Show your work", type=str)
+    answer = dspy.OutputField(desc="Final numerical answer", type=str)
+    verification = dspy.OutputField(desc("Check your answer", type=str))
+
+# Create with examples that show good reasoning
+math_examples = [
+    dspy.Example(
+        problem="A train travels 300 km in 3 hours. What is its speed?",
+        givens="Distance = 300 km, Time = 3 hours",
+        approach="Use the formula: Speed = Distance / Time",
+        steps="1. Identify the formula\n2. Plug in values\n3. Calculate",
+        calculations="Speed = 300 km / 3 hours = 100 km/hour",
+        answer="100 km/hour",
+        verification="Check: 100 km/hour × 3 hours = 300 km ✓"
+    )
+]
+
+math_solver = dspy.ChainOfThought(ComplexMathSolver, demos=math_examples)
+
+# Solve a complex problem
+result = math_solver(
+    problem="If John can paint a house in 6 hours and Mary can paint it in 4 hours, "
+            "how long will it take them to paint it together?"
+)
+
+print(f"Answer: {result.answer}")
+</code></pre>
+<h3 id="2-logical-reasoning"><a class="header" href="#2-logical-reasoning">2. Logical Reasoning</a></h3>
+<pre><code class="language-python">class LogicalReasoner(dspy.Signature):
+    """Apply logical reasoning to solve problems."""
+    scenario = dspy.InputField(desc="Situation requiring logical analysis", type=str)
+    facts = dspy.OutputField(desc="Relevant facts from scenario", type=str)
+    assumptions = dspy.OutputField(desc("Reasonable assumptions made", type=str))
+    logical_steps = dspy.OutputField(desc="Step-by-step logical deduction", type=str)
+    conclusion = dspy.OutputField(desc("Logical conclusion", type=str)
+    confidence = dspy.OutputField(desc("Confidence in conclusion (1-10)", type=int)
+
+logical_solver = dspy.ChainOfThought(
+    LogicalReasoner,
+    instructions="Think carefully and logically. Identify all assumptions you make."
+)
+
+# Solve a logic puzzle
+result = logical_solver(
+    scenario="All employees who work in the IT department must know Python. "
+            "Sarah works in the IT department but doesn't know Python. "
+            "What can we conclude?"
+)
+
+print(f"Facts: {result.facts}")
+print(f"Conclusion: {result.conclusion}")
+print(f"Confidence: {result.confidence}/10")
+</code></pre>
+<h3 id="3-analytical-reasoning"><a class="header" href="#3-analytical-reasoning">3. Analytical Reasoning</a></h3>
+<pre><code class="language-python">class DataAnalyzer(dspy.Signature):
+    """Analyze data and provide insights."""
+    data = dspy.InputField(desc="Data to analyze", type=str)
+    analysis_goal = dspy.InputField(desc="What we want to learn from data", type=str)
+    observations = dspy.OutputField(desc("Key observations from data", type=str)
+    patterns = dspy.OutputField(desc("Patterns or trends identified", type=str)
+    insights = dspy.OutputField(desc("Deep insights from analysis", type=str)
+    limitations = dspy.OutputField(desc("Limitations of analysis", type=str)
+    recommendations = dspy.OutputField(desc("Actionable recommendations", type=str)
+
+data_analyzer = dspy.ChainOfThought(DataAnalyzer)
+
+# Analyze sales data
+result = data_analyzer(
+    data="Q1 Sales: $100k, Q2: $120k, Q3: $110k, Q4: $150k. "
+         "Marketing spend: Q1: $10k, Q2: $15k, Q3: $12k, Q4: $20k",
+    analysis_goal="Understand the effectiveness of marketing spend"
+)
+
+print(f"Key Insight: {result.insights}")
+print(f"Recommendation: {result.recommendations}")
+</code></pre>
+<h2 id="advanced-cot-techniques"><a class="header" href="#advanced-cot-techniques">Advanced CoT Techniques</a></h2>
+<h3 id="1-comparative-reasoning"><a class="header" href="#1-comparative-reasoning">1. Comparative Reasoning</a></h3>
+<pre><code class="language-python">class ComparisonAnalyzer(dspy.Signature):
+    """Compare two or more options with detailed reasoning."""
+    options = dspy.InputField(desc="Options to compare", type=str)
+    criteria = dspy.InputField(desc("Comparison criteria", type=str)
+    analysis_per_option = dspy.OutputField(desc("Analysis of each option", type=str)
+    comparison_matrix = dspy.OutputField(desc("Detailed comparison", type=str)
+    tradeoffs = dspy.OutputField(desc("Trade-offs identified", type=str)
+    recommendation = dspy.OutputField(desc("Recommended choice with reasoning", type=str)
+
+comparator = dspy.ChainOfThought(
+    ComparisonAnalyzer,
+    instructions="Consider all criteria carefully and explain trade-offs clearly."
+)
+
+result = comparator(
+    options="Option A: Cloud-based system with monthly fees\n"
+            "Option B: On-premise system with one-time cost",
+    criteria="Cost, maintenance, scalability, security, performance"
+)
+
+print(f"Recommendation: {result.recommendation}")
+</code></pre>
+<h3 id="2-causal-reasoning"><a class="header" href="#2-causal-reasoning">2. Causal Reasoning</a></h3>
+<pre><code class="language-python">class CausalAnalyzer(dspy.Signature):
+    """Analyze cause and effect relationships."""
+    situation = dspy.InputField(desc("Situation to analyze", type=str)
+    potential_causes = dspy.OutputField(desc("Possible causes to consider", type=str)
+    causal_chain = dspy.OutputField(desc("Step-by-step causal analysis", type=str)
+    evidence = dspy.OutputField(desc("Evidence supporting conclusions", type=str)
+    primary_cause = dspy.OutputField(desc("Most likely primary cause", type=str)
+    secondary_factors = dspy.OutputField(desc("Contributing factors", type=str)
+    prevention = dspy.OutputField(desc("How to prevent recurrence", type=str)
+
+causal_analyzer = dspy.ChainOfThought(CausalAnalyzer)
+
+result = causal_analyzer(
+    situation="Website traffic dropped 50% overnight after a system update"
+)
+
+print(f"Primary Cause: {result.primary_cause}")
+print(f"Prevention: {result.prevention}")
+</code></pre>
+<h3 id="3-creative-problem-solving"><a class="header" href="#3-creative-problem-solving">3. Creative Problem Solving</a></h3>
+<pre><code class="language-python">class CreativeSolver(dspy.Signature):
+    """Generate creative solutions to problems."""
+    problem = dspy.InputField(desc("Problem to solve", type=str)
+    constraints = dspy.InputField(desc("Constraints and limitations", type=str)
+    brainstorming = dspy.OutputField(desc("Initial ideas exploration", type=str)
+    solution_development = dspy.OutputField(desc("Develop promising solutions", type=str)
+    evaluation = dspy.OutputField(desc("Evaluate solutions against criteria", type=str)
+    final_solution = dspy.OutputField(desc("Best solution with implementation plan", type=str)
+    alternatives = dspy.OutputField(desc("Backup solutions", type=str)
+
+creative_solver = dspy.ChainOfThought(
+    CreativeSolver,
+    instructions="Think outside the box while remaining practical."
+)
+
+result = creative_solver(
+    problem="How to reduce plastic waste in a city of 1 million people?",
+    constraints="Limited budget, need public support, implementable within 2 years"
+)
+
+print(f"Solution: {result.final_solution}")
+</code></pre>
+<h2 id="improving-cot-performance"><a class="header" href="#improving-cot-performance">Improving CoT Performance</a></h2>
+<h3 id="1-use-high-quality-examples"><a class="header" href="#1-use-high-quality-examples">1. Use High-Quality Examples</a></h3>
+<pre><code class="language-python"># Examples that demonstrate good reasoning
+cooking_examples = [
+    dspy.Example(
+        recipe="Recipe calls for 2 cups flour but I only have 1 cup",
+        reasoning="1. Need to adjust quantities proportionally\n"
+                "2. Original ratio: 2 cups flour for full recipe\n"
+                "3. Have only 1 cup = 50% of flour\n"
+                "4. Must halve all ingredients",
+        solution="Halve all ingredient quantities"
+    )
+]
+
+recipe_adapter = dspy.ChainOfThought(
+    "recipe_adaptation_problem -&gt; reasoning, solution",
+    demos=cooking_examples
+)
+</code></pre>
+<h3 id="2-add-specific-instructions"><a class="header" href="#2-add-specific-instructions">2. Add Specific Instructions</a></h3>
+<pre><code class="language-python"># Guide the reasoning process
+diagnostic_module = dspy.ChainOfThought(
+    "symptoms -&gt; diagnostic_reasoning, diagnosis",
+    instructions="1. List all possible causes\n"
+                 "2. Eliminate unlikely causes based on symptoms\n"
+                 "3. Consider most probable causes\n"
+                 "4. Provide differential diagnosis"
+)
+</code></pre>
+<h3 id="3-use-structured-prompts"><a class="header" href="#3-use-structured-prompts">3. Use Structured Prompts</a></h3>
+<pre><code class="language-python">class StructuredReasoning(dspy.Signature):
+    """Reason in a highly structured format."""
+    problem = dspy.InputField(desc="Problem to solve", type=str)
+    step1_identify = dspy.OutputField(desc("Step 1: Identify key information", type=str)
+    step2_analyze = dspy.OutputField(desc("Step 2: Analyze relationships", type=str)
+    step3_synthesize = dspy.OutputField(desc("Step 3: Synthesize findings", type=str)
+    step4_conclude = dspy.OutputField(desc("Step 4: Draw conclusions", type=str)
+
+structured_reasoner = dspy.ChainOfThought(StructuredReasoning)
+</code></pre>
+<h2 id="real-world-applications"><a class="header" href="#real-world-applications">Real-World Applications</a></h2>
+<h3 id="1-medical-diagnosis-assistant"><a class="header" href="#1-medical-diagnosis-assistant">1. Medical Diagnosis Assistant</a></h3>
+<pre><code class="language-python">class DiagnosticAssistant(dspy.Signature):
+    """Assist in medical diagnosis with systematic reasoning."""
+    patient_case = dspy.InputField(desc("Patient symptoms and history", type=str)
+    symptom_analysis = dspy.OutputField(desc("Systematic symptom analysis", type=str)
+    differential_diagnosis = dspy.OutputField(desc("Possible conditions with reasoning", type=str)
+    key_findings = dspy.OutputField(desc("Most important clinical findings", type=str)
+    recommended_tests = dspy.OutputField(desc("Diagnostic tests to order", type=str)
+    preliminary_diagnosis = dspy.OutputField(desc("Most likely diagnosis", type=str)
+    reasoning_confidence = dspy.OutputField(desc("Confidence in diagnosis (1-10)", type=int)
+
+diagnostic_assistant = dspy.ChainOfThought(
+    DiagnosticAssistant,
+    instructions="Think like a physician. Consider all relevant information systematically. "
+                 "Always consider multiple possibilities before concluding."
+)
+
+# Note: This is for educational purposes only
+result = diagnostic_assistant(
+    patient_case="45-year-old male, chest pain that worsens with exertion, "
+                 "smoker 20 years, father had heart attack at 55"
+)
+
+print(f"Key Findings: {result.key_findings}")
+print(f"Recommended Tests: {result.recommended_tests}")
+</code></pre>
+<h3 id="2-financial-analysis"><a class="header" href="#2-financial-analysis">2. Financial Analysis</a></h3>
+<pre><code class="language-python">class FinancialAnalyzer(dspy.Signature):
+    """Analyze financial situations with detailed reasoning."""
+    financial_data = dspy.InputField(desc("Financial information", type=str)
+    analysis_objective = dspy.InputField(desc("What we need to determine", type=str)
+    data_breakdown = dspy.OutputField(desc("Break down the financial data", type=str)
+    calculations = dspy.OutputField(desc("Show all calculations", type=str)
+    trends = dspy.OutputField(desc("Identify trends and patterns", type=str)
+    insights = dspy.OutputField(desc("Financial insights discovered", type=str)
+    conclusion = dspy.OutputField(desc("Conclusions with evidence", type=str)
+    recommendations = dspy.OutputField(desc("Actionable recommendations", type=str)
+
+financial_analyzer = dspy.ChainOfThought(FinancialAnalyzer)
+
+result = financial_analyzer(
+    financial_data="Company Revenue: Year 1: $1M, Y2: $1.3M, Y3: $1.5M. "
+                 "Expenses: Y1: $800k, Y2: $1.1M, Y3: $1.4M",
+    analysis_objective="Is the company becoming more profitable?"
+)
+
+print(f"Conclusion: {result.conclusion}")
+print(f"Recommendations: {result.recommendations}")
+</code></pre>
+<h3 id="3-legal-reasoning"><a class="header" href="#3-legal-reasoning">3. Legal Reasoning</a></h3>
+<pre><code class="language-python">class LegalReasoner(dspy.Signature):
+    """Apply legal reasoning to cases."""
+    case_facts = dspy.InputField(desc("Facts of the case", type=str)
+    legal_question = dspy.InputField(desc("Legal question to answer", type=str)
+    relevant_law = dspy.OutputField(desc("Applicable legal principles", type=str)
+    legal_analysis = dspy.OutputField(desc("Step-by-step legal analysis", type=str)
+    precedent_cases = dspy.OutputField(desc("Similar case precedents", type=str)
+    legal_conclusion = dspy.OutputField(desc("Legal conclusion with reasoning", type=str)
+    confidence_level = dspy.OutputField(desc("Confidence in conclusion", type=str)
+
+legal_reasoner = dspy.ChainOfThought(
+    LegalReasoner,
+    instructions="Apply legal principles systematically. Consider precedents and counterarguments."
+)
+
+result = legal_reasoner(
+    case_facts="Employee signed non-compete for 1 year within 50 miles. "
+               "Company is in California. Employee wants to work for competitor 30 miles away.",
+    legal_question="Is the non-compete enforceable?"
+)
+
+print(f"Legal Conclusion: {result.legal_conclusion}")
+</code></pre>
+<h2 id="performance-tips"><a class="header" href="#performance-tips">Performance Tips</a></h2>
+<h3 id="1-temperature-settings"><a class="header" href="#1-temperature-settings">1. Temperature Settings</a></h3>
+<pre><code class="language-python"># Lower temperature for more consistent reasoning
+consistent_reasoner = dspy.ChainOfThought(
+    "problem -&gt; reasoning, answer",
+    temperature=0.1
+)
+
+# Higher temperature for creative problem solving
+creative_reasoner = dspy.ChainOfThought(
+    "problem -&gt; reasoning, solution",
+    temperature=0.8
+)
+</code></pre>
+<h3 id="2-example-quality"><a class="header" href="#2-example-quality">2. Example Quality</a></h3>
+<pre><code class="language-python"># Show the desired reasoning style
+good_example = dspy.Example(
+    problem="If a store sells items at $10 each and offers a 20% discount, "
+            "how much do 5 items cost?",
+    reasoning="1. Original price per item = $10\n"
+             "2. Discount = 20% of $10 = $2\n"
+             "3. Discounted price = $10 - $2 = $8\n"
+             "4. Total for 5 items = 5 × $8 = $40",
+    answer="$40"
+)
+</code></pre>
+<h3 id="3-output-constraints"><a class="header" href="#3-output-constraints">3. Output Constraints</a></h3>
+<pre><code class="language-python"># Specify reasoning length
+concise_reasoner = dspy.ChainOfThought(
+    "question -&gt; reasoning, answer",
+    instructions="Keep reasoning brief but clear (max 3 steps)."
+)
+
+detailed_reasoner = dspy.ChainOfThought(
+    "question -&gt; reasoning, answer",
+    instructions="Provide detailed reasoning showing all work."
+)
+</code></pre>
+<h2 id="common-pitfalls-and-solutions"><a class="header" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a></h2>
+<h3 id="1-circular-reasoning"><a class="header" href="#1-circular-reasoning">1. Circular Reasoning</a></h3>
+<pre><code class="language-python"># Bad: May create circular arguments
+circular_risk = dspy.ChainOfThought("x -&gt; reasoning that x is true because x, answer")
+
+# Good: Independent reasoning
+valid_reasoning = dspy.ChainOfThought(
+    "situation -&gt; evidence_based_reasoning, conclusion",
+    instructions="Base reasoning on evidence, not assumptions."
+)
+</code></pre>
+<h3 id="2-missing-steps"><a class="header" href="#2-missing-steps">2. Missing Steps</a></h3>
+<pre><code class="language-python"># Add explicit step tracking
+class StepTracker(dspy.Signature):
+    problem = dspy.InputField(desc="Problem to solve", type=str)
+    step_count = dspy.OutputField(desc("Number of reasoning steps", type=int)
+    reasoning = dspy.OutputField(desc("Complete reasoning with numbered steps", type=str)
+
+step_tracker = dspy.ChainOfThought(
+    StepTracker,
+    instructions="Use clear numbered steps. Don't skip steps."
+)
+</code></pre>
+<h3 id="3-incorrect-calculations"><a class="header" href="#3-incorrect-calculations">3. Incorrect Calculations</a></h3>
+<pre><code class="language-python"># Add verification step
+verified_solver = dspy.ChainOfThought(
+    "math_problem -&gt; reasoning, calculations, answer, verification",
+    instructions="Always double-check your calculations."
+)
+</code></pre>
+<h2 id="when-to-use-chain-of-thought"><a class="header" href="#when-to-use-chain-of-thought">When to Use Chain of Thought</a></h2>
+<h3 id="use-cot-when"><a class="header" href="#use-cot-when">Use CoT when:</a></h3>
+<ol>
+<li><strong>Multi-step problems</strong> - Problems requiring multiple reasoning steps</li>
+<li><strong>Complex logic</strong> - Tasks with logical dependencies</li>
+<li><strong>Mathematical problems</strong> - Any calculation requiring steps</li>
+<li><strong>Analysis tasks</strong> - Breaking down complex information</li>
+<li><strong>Decision making</strong> - Weighing multiple factors</li>
+</ol>
+<h3 id="consider-predict-when"><a class="header" href="#consider-predict-when">Consider Predict when:</a></h3>
+<ol>
+<li><strong>Simple transformations</strong> - Direct input-output mapping</li>
+<li><strong>Classification tasks</strong> - Simple categorization</li>
+<li><strong>Text generation</strong> - Creative writing without analysis</li>
+<li><strong>Quick responses</strong> - When speed is critical</li>
+<li><strong>High-confidence tasks</strong> - When accuracy is already high</li>
+</ol>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Chain of Thought enables:</p>
+<ul>
+<li><strong>Better reasoning</strong> through step-by-step thinking</li>
+<li><strong>Improved accuracy</strong> on complex problems</li>
+<li><strong>Transparent process</strong> - you can see the reasoning</li>
+<li><strong>Error detection</strong> - steps can be verified</li>
+<li><strong>Teaching opportunities</strong> - shows how to think</li>
+</ul>
+<h2 id="integration-with-assertions"><a class="header" href="#integration-with-assertions">Integration with Assertions</a></h2>
+<p>Combine Chain of Thought with assertions for guaranteed reasoning quality:</p>
+<h3 id="1-validating-reasoning-steps"><a class="header" href="#1-validating-reasoning-steps">1. Validating Reasoning Steps</a></h3>
+<p>Ensure each reasoning step is logical and correct:</p>
+<pre><code class="language-python">import dspy
+
+class ValidatedReasoning(dspy.Signature):
+    """Reason with validated logical steps."""
+    problem = dspy.InputField(desc="Problem to solve", type=str)
+    reasoning_steps = dspy.OutputField(desc="Step-by-step reasoning", type=str)
+    conclusion = dspy.OutputField(desc("Final conclusion", type=str)
+
+# Create CoT module
+reasoner = dspy.ChainOfThought(ValidatedReasoning)
+
+def validate_reasoning_logic(example, pred, trace=None):
+    """Validate the logical flow of reasoning."""
+    steps = pred.reasoning_steps.split('\n')
+
+    # Check minimum number of steps
+    if len(steps) &lt; 2:
+        raise AssertionError("Must include at least 2 reasoning steps")
+
+    # Look for logical connectors
+    connectors = ['therefore', 'because', 'since', 'thus', 'hence', 'so']
+    has_logic = any(connector in pred.reasoning_steps.lower()
+                   for connector in connectors)
+
+    if not has_logic:
+        raise AssertionError("Use logical connectors between steps")
+
+    # Verify conclusion follows from reasoning
+    if pred.conclusion not in pred.reasoning_steps:
+        # Conclusion should be supported by reasoning
+        raise AssertionError("Conclusion must be supported by reasoning")
+
+    return True
+
+# Wrap with assertions
+validated_reasoner = dspy.Assert(
+    reasoner,
+    validation_fn=validate_reasoning_logic,
+    max_attempts=3,
+    recovery_hint="Show clear logical connections between steps"
+)
+
+# Use it
+result = validated_reasoner(
+    problem="If all birds can fly, and a penguin is a bird, what can we conclude?"
+)
+</code></pre>
+<h3 id="2-mathematical-validation"><a class="header" href="#2-mathematical-validation">2. Mathematical Validation</a></h3>
+<p>Ensure calculations are correct:</p>
+<pre><code class="language-python">class MathReasoning(dspy.Signature):
+    """Solve math problems with verified calculations."""
+    math_problem = dspy.InputField(desc="Math problem to solve", type=str)
+    steps = dspy.OutputField(desc("Calculation steps", type=str)
+    answer = dspy.OutputField(desc("Final numerical answer", type=str)
+
+math_solver = dspy.ChainOfThought(MathReasoning)
+
+def validate_math_calculation(example, pred, trace=None):
+    """Verify mathematical calculations."""
+    import re
+    import math
+
+    # Extract numbers from problem and answer
+    problem_nums = [float(n) for n in re.findall(r'\d+\.?\d*', example.math_problem)]
+    answer_num = float(re.search(r'-?\d+\.?\d*', pred.answer).group())
+
+    # Specific problem validation
+    if "sum" in example.math_problem.lower():
+        expected_sum = sum(problem_nums)
+        if abs(answer_num - expected_sum) &gt; 0.01:
+            raise AssertionError(f"Incorrect sum. Expected {expected_sum}, got {answer_num}")
+
+    elif "average" in example.math_problem.lower():
+        expected_avg = sum(problem_nums) / len(problem_nums)
+        if abs(answer_num - expected_avg) &gt; 0.01:
+            raise AssertionError(f"Incorrect average. Expected {expected_avg}, got {answer_num}")
+
+    # Check that steps show calculations
+    if not any(char.isdigit() for char in pred.steps):
+        raise AssertionError("Reasoning steps must show calculations")
+
+    return True
+
+# Create validated math solver
+safe_math_solver = dspy.Assert(
+    math_solver,
+    validation_fn=validate_math_calculation,
+    max_attempts=3
+)
+
+result = safe_math_solver(math_problem="What is the sum of 15, 23, and 42?")
+</code></pre>
+<h3 id="3-multi-step-reasoning-with-checkpoints"><a class="header" href="#3-multi-step-reasoning-with-checkpoints">3. Multi-Step Reasoning with Checkpoints</a></h3>
+<p>Validate reasoning at multiple stages:</p>
+<pre><code class="language-python">class MultiStageReasoning(dspy.Module):
+    """Reasoning with validation checkpoints."""
+
+    def __init__(self):
+        super().__init__()
+        self.analyzer = dspy.ChainOfThought("data -&gt; initial_analysis")
+        self.synthesizer = dspy.ChainOfThought("analysis -&gt; synthesis")
+
+    def forward(self, data):
+        # Stage 1: Analyze with validation
+        def validate_analysis(example, pred, trace=None):
+            if len(pred.initial_analysis) &lt; 100:
+                raise AssertionError("Analysis too brief - be more detailed")
+            if pred.initial_analysis.count('.') &lt; 3:
+                raise AssertionError("Include at least 3 complete sentences")
+            return True
+
+        analyzed = dspy.Assert(
+            self.analyzer,
+            validation_fn=validate_analysis,
+            max_attempts=2
+        )
+
+        analysis_result = analyzed(data=data)
+
+        # Stage 2: Synthesize with validation
+        def validate_synthesis(example, pred, trace=None):
+            synthesis = pred.synthesis
+            analysis = example.initial_analysis  # From previous stage
+
+            # Ensure synthesis references analysis
+            if not any(word in synthesis for word in analysis.split()[:5]):
+                raise AssertionError("Synthesis must build on analysis")
+
+            return True
+
+        synthesized = dspy.Assert(
+            self.synthesizer,
+            validation_fn=validate_synthesis,
+            max_attempts=2
+        )
+
+        result = synthesized(analysis=analysis_result.initial_analysis)
+
+        return dspy.Prediction(
+            analysis=analysis_result.initial_analysis,
+            synthesis=result.synthesis
+        )
+
+# Use multi-stage reasoning
+reasoner = MultiStageReasoning()
+result = reasoner(data="Quarterly sales data shows 15% growth")
+</code></pre>
+<h3 id="4-constraint-driven-reasoning"><a class="header" href="#4-constraint-driven-reasoning">4. Constraint-Driven Reasoning</a></h3>
+<p>Guide reasoning with specific constraints:</p>
+<pre><code class="language-python">class ConstrainedReasoning(dspy.Signature):
+    """Reason within specific constraints."""
+    scenario = dspy.InputField(desc("Scenario to analyze", type=str)
+    constraints = dspy.InputField(desc("Constraints to consider", type=str)
+    reasoning = dspy.OutputField(desc("Constrained reasoning", type=str)
+    solution = dspy.OutputField(desc("Solution respecting constraints", type=str)
+
+constrained_reasoner = dspy.ChainOfThought(ConstrainedReasoning)
+
+def validate_constraint_adherence(example, pred, trace=None):
+    """Ensure solution respects all constraints."""
+    constraints = example.constraints.lower()
+    solution = pred.solution.lower()
+
+    # Check budget constraints
+    if "budget" in constraints or "cost" in constraints:
+        if not any(word in solution for word in ["cost", "budget", "affordable"]):
+            raise AssertionError("Solution must address budget constraints")
+
+    # Check time constraints
+    if "time" in constraints or "deadline" in constraints:
+        if not any(word in solution for word in ["timeline", "schedule", "deadline"]):
+            raise AssertionError("Solution must address time constraints")
+
+    # Check resource constraints
+    if "resource" in constraints or "limited" in constraints:
+        if "resource" not in solution:
+            raise AssertionError("Solution must address resource limitations")
+
+    return True
+
+# Apply constraint validation
+budget_reasoner = dspy.Assert(
+    constrained_reasoner,
+    validation_fn=validate_constraint_adherence,
+    max_attempts=3
+)
+
+result = budget_reasoner(
+    scenario="Plan a marketing campaign",
+    constraints="Budget: $10,000, Time: 3 months, Team: 5 people"
+)
+</code></pre>
+<h3 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h3>
+<ol>
+<li><strong>Always show work</strong> - Make reasoning explicit</li>
+<li><strong>Use examples</strong> to demonstrate desired reasoning style</li>
+<li><strong>Structure reasoning</strong> according to problem type</li>
+<li><strong>Verify conclusions</strong> - Include validation steps</li>
+<li><strong>Know when to use</strong> - Not all tasks need CoT</li>
+<li><strong>Validate with assertions</strong> - Ensure reasoning quality and correctness</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="./04-react-agents.html">ReAct Agents</a> - Add tool-using capabilities</li>
+<li><a href="./06-composing-modules.html">Module Composition</a> - Combine CoT with other modules</li>
+<li><a href="../examples/chapter03/">Practical Examples</a> - See CoT in action</li>
+<li><a href="./07-exercises.html">Exercises</a> - Practice CoT techniques</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2201.11903">Paper: Chain-of-Thought Prompting</a> - Original CoT research</li>
+<li><a href="https://dspy-docs.vercel.app/docs/deep-dive/chain_of_thought">DSPy Documentation: ChainOfThought</a></li>
+<li><a href="../05-optimizers.html">Reasoning Patterns</a> - Advanced reasoning techniques</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../03-modules/02a-typed-predictor.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../03-modules/04-react-agents.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../03-modules/02a-typed-predictor.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../03-modules/04-react-agents.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

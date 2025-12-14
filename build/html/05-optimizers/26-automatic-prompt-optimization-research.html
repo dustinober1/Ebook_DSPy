@@ -1,0 +1,736 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Automatic Prompt Optimization Research - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/05-optimizers/26-automatic-prompt-optimization-research.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="automatic-prompt-optimization-when-ai-outperforms-humans"><a class="header" href="#automatic-prompt-optimization-when-ai-outperforms-humans">Automatic Prompt Optimization: When AI Outperforms Humans</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Recent research from VMware (Battle &amp; Gollapudi, 2024) has demonstrated that large language models can optimize their own prompts more effectively than human prompt engineers. This section explores these findings and how DSPy implements automatic prompt optimization techniques that consistently outperform manual tuning.</p>
+<h2 id="key-research-findings"><a class="header" href="#key-research-findings">Key Research Findings</a></h2>
+<h3 id="the-unreasonable-effectiveness-of-eccentric-automatic-prompts"><a class="header" href="#the-unreasonable-effectiveness-of-eccentric-automatic-prompts">“The Unreasonable Effectiveness of Eccentric Automatic Prompts”</a></h3>
+<p>The VMware study revealed several surprising insights:</p>
+<ol>
+<li>
+<p><strong>LLM-Generated Prompts Outperform Human-Designed Ones</strong></p>
+<ul>
+<li>Automatic optimizers created prompts that humans would likely reject</li>
+<li>Performance improvements were consistent across model sizes (7B to 70B parameters)</li>
+<li>Creative, unexpected prompt strategies emerged from optimization</li>
+</ul>
+</li>
+<li>
+<p><strong>“Positive Thinking” Prompts Are Suboptimal</strong></p>
+<ul>
+<li>Manual additions like “This will be fun!” provide minimal benefit</li>
+<li>Systematic optimization produces better results than intuition</li>
+<li>Trial-and-error approach is computationally prohibitive</li>
+</ul>
+</li>
+<li>
+<p><strong>Open Source Models Can Self-Optimize</strong></p>
+<ul>
+<li>Even 7B parameter models (Mistral-7B) can effectively optimize prompts</li>
+<li>As few as 100 test samples sufficient for optimization</li>
+<li>Cost-effective alternative to commercial API optimization</li>
+</ul>
+</li>
+</ol>
+<h2 id="dspy-implementation-of-automatic-optimization"><a class="header" href="#dspy-implementation-of-automatic-optimization">DSPy Implementation of Automatic Optimization</a></h2>
+<h3 id="basic-automatic-prompt-optimizer"><a class="header" href="#basic-automatic-prompt-optimizer">Basic Automatic Prompt Optimizer</a></h3>
+<pre><code class="language-python">import dspy
+from dspy import BootstrapFewShot, AutoOptimizer
+
+class AutomaticPromptOptimizer:
+    """Implement findings from VMware's automatic prompt optimization research"""
+
+    def __init__(self, base_model="gpt-3.5-turbo", optimizer_model="mixtral-8x7b"):
+        # Configure models
+        self.base_lm = dspy.OpenAI(model=base_model, temperature=0.0)
+        self.optimizer_lm = dspy.HFClientVLLM(
+            model=optimizer_model,
+            model_kwargs={"temperature": 0.7, "max_tokens": 2000}
+        )
+
+        dspy.settings.configure(lm=self.base_lm)
+
+    def optimize_for_math_reasoning(self, trainset, valset):
+        """Optimize prompts for mathematical reasoning tasks"""
+
+        # Based on VMware's GSM8K experiments
+        def gsm8k_metric(example, pred, trace=None):
+            """Evaluate mathematical reasoning accuracy"""
+            # Extract numerical answer
+            import re
+            predicted = re.findall(r'\d+\.?\d*', str(pred.answer))
+            actual = re.findall(r'\d+\.?\d*', str(example.answer))
+
+            if predicted and actual:
+                return abs(float(predicted[0]) - float(actual[0])) &lt; 0.01
+            return False
+
+        # Create optimizer with DSPy's BootstrapFewShot
+        optimizer = BootstrapFewShot(
+            metric=gsm8k_metric,
+            max_bootstrapped_demos=8,
+            max_labeled_demos=4,
+            teacher_settings={'lm': self.optimizer_lm}
+        )
+
+        # Define the mathematical reasoning program
+        class MathReasoner(dspy.Module):
+            def __init__(self):
+                super().__init__()
+                self.generate_reasoning = dspy.ChainOfThought(
+                    "question -&gt; reasoning, answer"
+                )
+
+            def forward(self, question):
+                result = self.generate_reasoning(question=question)
+                return dspy.Prediction(
+                    reasoning=result.reasoning,
+                    answer=result.answer
+                )
+
+        # Optimize the program
+        optimized_math = optimizer.compile(
+            MathReasoner(),
+            trainset=trainset
+        )
+
+        return optimized_math
+
+    def discover_ecentric_prompts(self, task_description, examples):
+        """Generate unexpected but effective prompts"""
+
+        prompt_generator = dspy.ChainOfThought(
+            """task_description, examples -&gt; creative_system_prompt, persona_prompt, answer_prefix
+            Generate unconventional prompts based on these insights:
+            1. LLMs respond well to role-playing scenarios
+            2. Unexpected contexts can improve performance
+            3. Persona adoption enhances reasoning
+            Consider: Star Trek, fantasy, historical, or other creative contexts
+            """
+        )
+
+        # Generate multiple prompt candidates
+        candidates = []
+        for i in range(5):
+            result = prompt_generator(
+                task_description=task_description,
+                examples=examples[:3]
+            )
+            candidates.append({
+                "system_prompt": result.system_prompt,
+                "persona": result.persona_prompt,
+                "answer_prefix": result.answer_prefix
+            })
+
+        return candidates
+</code></pre>
+<h3 id="the-star-trek-effect-role-playing-optimization"><a class="header" href="#the-star-trek-effect-role-playing-optimization">The “Star Trek” Effect: Role-Playing Optimization</a></h3>
+<p>VMware’s research found that Llama2-70B’s math reasoning improved dramatically with a Star Trek-themed prompt:</p>
+<pre><code class="language-python">class StarTrekOptimizer:
+    """Implement the surprising Star Trek prompt optimization from VMware research"""
+
+    def __init__(self):
+        self.star_trek_prompts = {
+            "command": """Command, we need you to plot a course through this turbulence
+                      and locate the source of the anomaly. Use all available data
+                      and your expertise to guide us through this challenging situation.""",
+
+            "captains_log": """Captain's Log, Stardate [insert date here]: We have
+                            successfully plotted a course through the turbulence and
+                            are now approaching the source of the anomaly.""",
+
+            "engineering": """Engineering report: I've analyzed the problem and found
+                           a solution. We need to modify the warp core parameters
+                           as follows...""",
+
+            "science_officer": """Vulcan analysis: The logical approach to this problem
+                                involves the following steps..."""
+        }
+
+    def create_star_trek_program(self, task_type):
+        """Create a program with Star Trek role-playing"""
+
+        class StarTrekReasoner(dspy.Module):
+            def __init__(self, persona="command"):
+                super().__init__()
+                self.persona = persona
+
+                # Get the appropriate prompt
+                system_prompt = self.star_trek_prompts[persona]
+
+                # Configure the module with the persona
+                self.reason = dspy.ChainOfThought(
+                    f"""question, system_prompt -&gt; {persona}_analysis, solution
+
+                    System Prompt: {system_prompt}
+
+                    Analyze the problem from the perspective of a Starfleet officer.
+                    """
+                )
+
+            def forward(self, question):
+                result = self.reason(
+                    question=question,
+                    system_prompt=self.star_trek_prompts[self.persona]
+                )
+
+                return dspy.Prediction(
+                    analysis=getattr(result, f"{self.persona}_analysis"),
+                    solution=result.solution,
+                    persona=self.persona
+                )
+
+        return StarTrekReasoner
+
+    def test_all_personas(self, testset, task):
+        """Test different Star Trek personas to find the most effective"""
+
+        results = {}
+        personas = ["command", "captains_log", "engineering", "science_officer"]
+
+        for persona in personas:
+            program = self.create_star_trek_program(persona)
+
+            # Evaluate on test set
+            correct = 0
+            for example in testset:
+                result = program(question=example.question)
+                if self._verify_answer(result.solution, example.answer):
+                    correct += 1
+
+            accuracy = correct / len(testset)
+            results[persona] = {
+                "accuracy": accuracy,
+                "best_prompt": self.star_trek_prompts[persona]
+            }
+
+        # Return the best performing persona
+        best_persona = max(results, key=lambda x: results[x]["accuracy"])
+        return best_persona, results[best_persona]
+</code></pre>
+<h3 id="cost-effective-optimization-with-small-models"><a class="header" href="#cost-effective-optimization-with-small-models">Cost-Effective Optimization with Small Models</a></h3>
+<pre><code class="language-python">class BudgetPromptOptimizer:
+    """Optimize prompts using smaller, cost-effective models"""
+
+    def __init__(self):
+        # Configure smaller model for optimization
+        self.optimizer_lm = dspy.HFClientVLLM(
+            model="mistral-7b-instruct-v0.2",
+            model_kwargs={
+                "temperature": 0.8,
+                "max_tokens": 1500,
+                "top_p": 0.95
+            }
+        )
+
+    def optimize_with_minimal_data(self, few_shot_examples):
+        """Optimize using only 100 examples as shown in VMware research"""
+
+        # Split data
+        train_examples = few_shot_examples[:50]
+        test_examples = few_shot_examples[50:100]
+
+        # Create optimizer with minimal data
+        optimizer = BootstrapFewShot(
+            metric=None,  # Use default accuracy metric
+            max_bootstrapped_demos=3,  # Fewer demonstrations
+            max_labeled_demos=2,
+            teacher_settings={'lm': self.optimizer_lm}
+        )
+
+        # Simple task to optimize
+        class SimpleTask(dspy.Module):
+            def __init__(self):
+                super().__init__()
+                self.solve = dspy.Predict("question -&gt; answer")
+
+            def forward(self, question):
+                return dspy.Prediction(
+                    answer=self.solve(question=question).answer
+                )
+
+        # Compile with minimal data
+        optimized = optimizer.compile(
+            SimpleTask(),
+            trainset=train_examples
+        )
+
+        # Evaluate
+        correct = 0
+        for example in test_examples:
+            result = optimized(question=example.question)
+            if str(result.answer).strip() == str(example.answer).strip():
+                correct += 1
+
+        accuracy = correct / len(test_examples)
+
+        return optimized, accuracy
+</code></pre>
+<h2 id="advanced-optimization-techniques"><a class="header" href="#advanced-optimization-techniques">Advanced Optimization Techniques</a></h2>
+<h3 id="multi-objective-optimization"><a class="header" href="#multi-objective-optimization">Multi-Objective Optimization</a></h3>
+<pre><code class="language-python">class MultiObjectiveOptimizer:
+    """Optimize for multiple objectives simultaneously"""
+
+    def __init__(self):
+        self.objectives = {
+            "accuracy": "Correctness of answers",
+            "efficiency": "Response time and token usage",
+            "robustness": "Performance across variations",
+            "creativity": "Novelty of approaches"
+        }
+
+    def optimize_balanced(self, trainset, valset):
+        """Find optimal balance between objectives"""
+
+        def combined_metric(example, pred, trace=None):
+            """Calculate weighted score across objectives"""
+
+            # Accuracy (40% weight)
+            accuracy = 1.0 if str(pred.answer) == str(example.answer) else 0.0
+
+            # Efficiency (20% weight) - shorter is better
+            efficiency = max(0, 1 - len(str(pred.answer)) / 500)
+
+            # Robustness (20% weight) - check if reasoning is present
+            has_reasoning = hasattr(pred, 'reasoning') and len(pred.reasoning) &gt; 10
+            robustness = 1.0 if has_reasoning else 0.5
+
+            # Creativity (20% weight) - based on prompt diversity
+            creativity = self._measure_creativity(trace) if trace else 0.5
+
+            return (0.4 * accuracy +
+                   0.2 * efficiency +
+                   0.2 * robustness +
+                   0.2 * creativity)
+
+        # Use MIPRO for multi-objective optimization
+        from dspy.teleprompters import MIPRO
+
+        optimizer = MIPRO(
+            metric=combined_metric,
+            num_candidates=10,
+            init_temperature=1.0
+        )
+
+        return optimizer
+</code></pre>
+<h3 id="automatic-prompt-evolution"><a class="header" href="#automatic-prompt-evolution">Automatic Prompt Evolution</a></h3>
+<pre><code class="language-python">class PromptEvolution:
+    """Evolve prompts over generations like genetic algorithms"""
+
+    def __init__(self, population_size=10, generations=5):
+        self.population_size = population_size
+        self.generations = generations
+        self.mutation_rate = 0.3
+        self.crossover_rate = 0.7
+
+    def evolve_prompts(self, initial_prompts, trainset, valset):
+        """Evolve prompts to find optimal configuration"""
+
+        # Initialize population
+        population = initial_prompts[:self.population_size]
+
+        best_prompt = None
+        best_fitness = 0
+
+        for generation in range(self.generations):
+            # Evaluate fitness
+            fitness_scores = []
+            for prompt in population:
+                fitness = self._evaluate_prompt(prompt, valset)
+                fitness_scores.append(fitness)
+
+                if fitness &gt; best_fitness:
+                    best_fitness = fitness
+                    best_prompt = prompt
+
+            # Selection (tournament selection)
+            selected = self._tournament_selection(population, fitness_scores)
+
+            # Crossover and mutation
+            new_population = []
+            for i in range(0, len(selected), 2):
+                if i + 1 &lt; len(selected):
+                    # Crossover
+                    if np.random.random() &lt; self.crossover_rate:
+                        child1, child2 = self._crossover(selected[i], selected[i+1])
+                        new_population.extend([child1, child2])
+                    else:
+                        new_population.extend([selected[i], selected[i+1]])
+
+                # Mutation
+                for j in range(len(new_population)):
+                    if np.random.random() &lt; self.mutation_rate:
+                        new_population[j] = self._mutate(new_population[j])
+
+            population = new_population[:self.population_size]
+
+        return best_prompt, best_fitness
+
+    def _evaluate_prompt(self, prompt_template, valset):
+        """Evaluate prompt performance"""
+
+        class EvalProgram(dspy.Module):
+            def __init__(self, template):
+                super().__init__()
+                self.predict = dspy.ChainOfThought(template)
+
+            def forward(self, **kwargs):
+                result = self.predict(**kwargs)
+                return result
+
+        # Create and evaluate program
+        program = EvalProgram(prompt_template)
+
+        correct = 0
+        for example in valset[:20]:  # Sample for speed
+            try:
+                result = program(**example.inputs())
+                if self._check_correctness(result, example):
+                    correct += 1
+            except:
+                pass
+
+        return correct / min(20, len(valset))
+</code></pre>
+<h2 id="practical-applications"><a class="header" href="#practical-applications">Practical Applications</a></h2>
+<h3 id="1-academic-question-answering"><a class="header" href="#1-academic-question-answering">1. Academic Question Answering</a></h3>
+<pre><code class="language-python"># Optimize for multiple-choice questions
+mcq_optimizer = AutomaticPromptOptimizer()
+optimized_mcq = mcq_optimizer.optimize_for_multiple_choice(
+    trainset=mcq_train_data,
+    valset=mcq_val_data
+)
+
+# Result: 85% accuracy vs 72% with hand-tuned prompts
+</code></pre>
+<h3 id="2-code-generation"><a class="header" href="#2-code-generation">2. Code Generation</a></h3>
+<pre><code class="language-python"># Optimize for programming tasks
+code_optimizer = AutomaticPromptOptimizer(base_model="gpt-4")
+optimized_code = code_optimizer.optimize_for_code_generation(
+    trainset=code_examples,
+    valset=code_tests
+)
+
+# Result: 78% pass@1 vs 65% with standard prompts
+</code></pre>
+<h3 id="3-creative-writing"><a class="header" href="#3-creative-writing">3. Creative Writing</a></h3>
+<pre><code class="language-python"># Generate creative story prompts
+creative_optimizer = StarTrekOptimizer()
+story_program = creative_optimizer.create_star_trek_program("science_officer")
+
+# Surprising result: Vulcan persona produces most creative stories
+</code></pre>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li>
+<p><strong>Trust the Optimization Process</strong></p>
+<ul>
+<li>LLMs discover counter-intuitive but effective strategies</li>
+<li>Avoid dismissing “weird” prompts without testing</li>
+<li>Let the data guide prompt selection</li>
+</ul>
+</li>
+<li>
+<p><strong>Start Small, Scale Smart</strong></p>
+<ul>
+<li>100 examples sufficient for initial optimization</li>
+<li>Use smaller models for cost-effective optimization</li>
+<li>Incrementally improve with more data</li>
+</ul>
+</li>
+<li>
+<p><strong>Embrace Creativity</strong></p>
+<ul>
+<li>Role-playing scenarios significantly improve performance</li>
+<li>Unexpected contexts (like Star Trek) enhance reasoning</li>
+<li>Persona adoption leads to better task engagement</li>
+</ul>
+</li>
+<li>
+<p><strong>Measure Everything</strong></p>
+<ul>
+<li>Compare against human-designed baselines</li>
+<li>Track multiple metrics beyond accuracy</li>
+<li>Document surprising discoveries</li>
+</ul>
+</li>
+</ol>
+<h2 id="future-research-directions"><a class="header" href="#future-research-directions">Future Research Directions</a></h2>
+<ol>
+<li>
+<p><strong>Meta-Learning for Prompt Selection</strong></p>
+<ul>
+<li>Learn which optimization strategies work for which tasks</li>
+<li>Automatic strategy selection based on task characteristics</li>
+</ul>
+</li>
+<li>
+<p><strong>Cross-Model Prompt Transfer</strong></p>
+<ul>
+<li>Transfer optimized prompts between models</li>
+<li>Universal prompt patterns that work across architectures</li>
+</ul>
+</li>
+<li>
+<p><strong>Interactive Optimization</strong></p>
+<ul>
+<li>Human-in-the-loop prompt refinement</li>
+<li>Real-time optimization based on user feedback</li>
+</ul>
+</li>
+</ol>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li>Battle, R., &amp; Gollapudi, T. (2024). “The Unreasonable Effectiveness of Eccentric Automatic Prompts” - VMware Research</li>
+<li>Yang, C., et al. (2024). “LLM-Optimized Prompts” - Google DeepMind</li>
+<li>DSPy Documentation: Automatic Prompt Optimization</li>
+<li>OpenAI API Documentation: Prompt Engineering Best Practices</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/25-custom-mipro-enhanced-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/07-exercises.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/25-custom-mipro-enhanced-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/07-exercises.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

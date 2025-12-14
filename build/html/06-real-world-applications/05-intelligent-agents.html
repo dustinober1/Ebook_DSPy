@@ -1,0 +1,964 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Intelligent Agents - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/06-real-world-applications/05-intelligent-agents.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="intelligent-agents-building-autonomous-problem-solving-systems"><a class="header" href="#intelligent-agents-building-autonomous-problem-solving-systems">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Intelligent agents represent one of the most exciting applications of language models. These are autonomous systems that can perceive their environment, reason about problems, make decisions, and take actions to achieve specific goals. From customer service bots to research assistants, intelligent agents are transforming how we interact with and leverage AI in real-world scenarios.</p>
+<h2 id="understanding-intelligent-agents"><a class="header" href="#understanding-intelligent-agents">Understanding Intelligent Agents</a></h2>
+<h3 id="core-components-of-an-agent"><a class="header" href="#core-components-of-an-agent">Core Components of an Agent</a></h3>
+<ol>
+<li><strong>Perception</strong>: Understanding the current state and environment</li>
+<li><strong>Planning</strong>: Developing strategies to achieve goals</li>
+<li><strong>Decision Making</strong>: Choosing the best course of action</li>
+<li><strong>Execution</strong>: Carrying out planned actions</li>
+<li><strong>Learning</strong>: Improving from experience and feedback</li>
+<li><strong>Memory</strong>: Maintaining context and knowledge over time</li>
+</ol>
+<h3 id="agent-types"><a class="header" href="#agent-types">Agent Types</a></h3>
+<ul>
+<li><strong>Reactive Agents</strong>: Respond directly to current inputs</li>
+<li><strong>Proactive Agents</strong>: Anticipate future needs and take initiative</li>
+<li><strong>Social Agents</strong>: Understand and respond to human emotions and social cues</li>
+<li><strong>Collaborative Agents</strong>: Work with other agents or humans</li>
+<li><strong>Learning Agents</strong>: Improve performance over time</li>
+</ul>
+<h2 id="building-intelligent-agents-with-dspy"><a class="header" href="#building-intelligent-agents-with-dspy">Building Intelligent Agents with DSPy</a></h2>
+<h3 id="basic-reactive-agent"><a class="header" href="#basic-reactive-agent">Basic Reactive Agent</a></h3>
+<pre><code class="language-python">import dspy
+from typing import List, Dict, Any, Optional
+
+class ReactiveAgent(dspy.Module):
+    def __init__(self, name, capabilities):
+        super().__init__()
+        self.name = name
+        self.capabilities = capabilities
+        self.perceive = dspy.Predict("input -&gt; perceived_state")
+        self.decide = dspy.Predict("state, capabilities -&gt; action, reasoning")
+        self.memory = {}
+
+    def forward(self, input_text):
+        # Perceive the current state
+        perception = self.perceive(input=input_text)
+        current_state = perception.perceived_state
+
+        # Decide on action
+        decision = self.decide(
+            state=current_state,
+            capabilities=", ".join(self.capabilities)
+        )
+
+        # Store in memory
+        self.memory[len(self.memory)] = {
+            "input": input_text,
+            "state": current_state,
+            "action": decision.action,
+            "reasoning": decision.reasoning
+        }
+
+        return dspy.Prediction(
+            agent_name=self.name,
+            perceived_state=current_state,
+            action=decision.action,
+            reasoning=decision.reasoning
+        )
+
+    def get_memory(self, num_recent=5):
+        """Get recent memory entries."""
+        return dict(list(self.memory.items())[-num_recent:])
+</code></pre>
+<h3 id="proactive-agent-with-planning"><a class="header" href="#proactive-agent-with-planning">Proactive Agent with Planning</a></h3>
+<pre><code class="language-python">class ProactiveAgent(dspy.Module):
+    def __init__(self, name, goals, tools):
+        super().__init__()
+        self.name = name
+        self.goals = goals
+        self.tools = tools
+        self.understand_context = dspy.Predict("input -&gt; context, user_intent")
+        self.create_plan = dspy.ChainOfThought("context, intent, goals, tools -&gt; plan")
+        self.execute_step = dspy.Predict("plan, current_step, tools -&gt; action, next_step")
+        self.evaluate_progress = dspy.Predict("goal, current_state -&gt; progress_score, next_objective")
+
+        # Persistent memory
+        self.memory = []
+        self.current_plan = None
+        self.current_step = 0
+
+    def forward(self, input_text):
+        # Understand context and intent
+        understanding = self.understand_context(input=input_text)
+        context = understanding.context
+        intent = understanding.user_intent
+
+        # Create or update plan
+        if not self.current_plan or self._needs_new_plan(intent):
+            planning = self.create_plan(
+                context=context,
+                intent=intent,
+                goals=", ".join(self.goals),
+                tools=", ".join(self.tools)
+            )
+            self.current_plan = planning.plan
+            self.current_step = 0
+
+        # Execute current step
+        execution = self.execute_step(
+            plan=self.current_plan,
+            current_step=str(self.current_step),
+            tools=", ".join(self.tools)
+        )
+
+        # Evaluate progress
+        progress = self.evaluate_progress(
+            goal=self.goals[0],  # Primary goal
+            current_state=context
+        )
+
+        # Update memory
+        self.memory.append({
+            "timestamp": len(self.memory),
+            "input": input_text,
+            "intent": intent,
+            "action_taken": execution.action,
+            "next_step": execution.next_step,
+            "progress": progress.progress_score
+        })
+
+        # Update step
+        if execution.next_step:
+            self.current_step = int(execution.next_step)
+
+        return dspy.Prediction(
+            agent_name=self.name,
+            user_intent=intent,
+            action_taken=execution.action,
+            current_plan=self.current_plan,
+            progress=progress.progress_score,
+            next_objective=progress.next_objective
+        )
+
+    def _needs_new_plan(self, intent):
+        """Check if we need a new plan based on intent."""
+        return "new" in intent.lower() or "different" in intent.lower()
+</code></pre>
+<h3 id="collaborative-agent"><a class="header" href="#collaborative-agent">Collaborative Agent</a></h3>
+<pre><code class="language-python">class CollaborativeAgent(dspy.Module):
+    def __init__(self, name, expertise, team_members=None):
+        super().__init__()
+        self.name = name
+        self.expertise = expertise
+        self.team_members = team_members or []
+        self.analyze_task = dspy.Predict("task -&gt; task_type, complexity, requirements")
+        self.delegate_or_handle = dspy.ChainOfThought(
+            "task, expertise, team_members -&gt; decision, rationale, delegation_details"
+        )
+        self.collaborate = dspy.Predict(
+            "task, member_expertise -&gt; collaboration_message"
+        )
+        self.synthesize_results = dspy.ChainOfThought(
+            "task, individual_results -&gt; final_result, confidence"
+        )
+
+        # Team communication
+        self.messages = []
+        self.shared_context = {}
+
+    def forward(self, task):
+        # Analyze the task
+        analysis = self.analyze_task(task=task)
+
+        # Decide whether to handle or delegate
+        decision = self.delegate_or_handle(
+            task=task,
+            expertise=self.expertise,
+            team_members=", ".join([m["name"] + ":" + m["expertise"] for m in self.team_members])
+        )
+
+        if decision.decision.lower() == "handle myself":
+            # Handle the task personally
+            result = self._handle_task(task)
+        else:
+            # Delegate to team member
+            result = self._delegate_task(
+                task,
+                decision.delegation_details,
+                decision.rationale
+            )
+
+        return dspy.Prediction(
+            agent_name=self.name,
+            task_analysis=analysis,
+            decision=decision.decision,
+            result=result,
+            rationale=decision.rationale
+        )
+
+    def _handle_task(self, task):
+        """Handle task personally based on expertise."""
+        # Implementation would depend on specific expertise
+        return f"Handled {task} using {self.expertise} expertise"
+
+    def _delegate_task(self, task, delegation_details, rationale):
+        """Delegate task to appropriate team member."""
+        # Find appropriate team member
+        for member in self.team_members:
+            if member["expertise"].lower() in delegation_details.lower():
+                # Send collaboration message
+                collab_msg = self.collaborate(
+                    task=task,
+                    member_expertise=member["expertise"]
+                )
+
+                # Record collaboration
+                self.messages.append({
+                    "from": self.name,
+                    "to": member["name"],
+                    "message": collab_msg.collaboration_message,
+                    "task": task
+                })
+
+                return f"Delegated {task} to {member['name']} (Expertise: {member['expertise']})"
+
+        return f"No suitable team member found for: {task}"
+
+    def add_team_member(self, name, expertise):
+        """Add a new team member."""
+        self.team_members.append({"name": name, "expertise": expertise})
+</code></pre>
+<h3 id="learning-agent"><a class="header" href="#learning-agent">Learning Agent</a></h3>
+<pre><code class="language-python">class LearningAgent(dspy.Module):
+    def __init__(self, name, learning_goals):
+        super().__init__()
+        self.name = name
+        self.learning_goals = learning_goals
+        self.process_input = dspy.Predict("input -&gt; processed_input, key_patterns")
+        self.generate_response = dspy.ChainOfThought(
+            "processed_input, past_experiences -&gt; response, confidence"
+        )
+        self.evaluate_outcome = dspy.Predict("response, feedback -&gt; learning_insight, strategy_update")
+        self.reflect = dspy.ChainOfThought("experience, goal -&gt; reflection, improvement_plan")
+
+        # Learning components
+        self.experiences = []  # Store past interactions
+        self.patterns = {}     # Learned patterns
+        self.strategies = {}   # Effective strategies
+        self.performance_history = []
+
+    def forward(self, input_text, feedback=None):
+        # Process input
+        processed = self.process_input(input=input_text)
+
+        # Generate response based on experience
+        relevant_experiences = self._find_relevant_experiences(processed.key_patterns)
+        experiences_text = "\n".join([str(e) for e in relevant_experiences])
+
+        response = self.generate_response(
+            processed_input=processed.processed_input,
+            past_experiences=experiences_text
+        )
+
+        # Store experience
+        experience = {
+            "timestamp": len(self.experiences),
+            "input": input_text,
+            "processed": processed.processed_input,
+            "response": response.response,
+            "confidence": response.confidence,
+            "patterns": processed.key_patterns
+        }
+        self.experiences.append(experience)
+
+        # Learn from feedback if available
+        if feedback:
+            learning = self.evaluate_outcome(
+                response=response.response,
+                feedback=feedback
+            )
+
+            # Update learning
+            self._update_learning(
+                processed.key_patterns,
+                learning.learning_insight,
+                learning.strategy_update
+            )
+
+            # Reflect on the experience
+            reflection = self.reflect(
+                experience=str(experience),
+                goal=self.learning_goals[0]
+            )
+
+            experience["feedback"] = feedback
+            experience["learning"] = learning.learning_insight
+            experience["reflection"] = reflection.reflection
+
+        return dspy.Prediction(
+            agent_name=self.name,
+            response=response.response,
+            confidence=response.confidence,
+            patterns_detected=processed.key_patterns,
+            learning_applied=bool(feedback)
+        )
+
+    def _find_relevant_experiences(self, patterns, max_experiences=3):
+        """Find past experiences with similar patterns."""
+        if not patterns:
+            return []
+
+        pattern_list = patterns.split(", ") if isinstance(patterns, str) else patterns
+        relevant = []
+
+        for exp in self.experiences:
+            exp_patterns = exp.get("patterns", "").split(", ") if exp.get("patterns") else []
+            overlap = len(set(pattern_list) &amp; set(exp_patterns))
+            if overlap &gt; 0:
+                relevant.append((exp, overlap))
+
+        # Sort by relevance and return top matches
+        relevant.sort(key=lambda x: x[1], reverse=True)
+        return [exp[0] for exp in relevant[:max_experiences]]
+
+    def _update_learning(self, patterns, insight, strategy_update):
+        """Update learned patterns and strategies."""
+        # Update patterns
+        for pattern in patterns.split(", "):
+            if pattern not in self.patterns:
+                self.patterns[pattern] = []
+            self.patterns[pattern].append(insight)
+
+        # Update strategies
+        if strategy_update:
+            key = patterns[:50]  # Use first 50 chars as key
+            self.strategies[key] = strategy_update
+
+    def get_learning_summary(self):
+        """Get summary of learning progress."""
+        return {
+            "total_experiences": len(self.experiences),
+            "patterns_learned": len(self.patterns),
+            "strategies_developed": len(self.strategies),
+            "recent_performance": self.performance_history[-5:] if self.performance_history else []
+        }
+</code></pre>
+<h2 id="real-world-agent-applications"><a class="header" href="#real-world-agent-applications">Real-World Agent Applications</a></h2>
+<h3 id="customer-service-agent"><a class="header" href="#customer-service-agent">Customer Service Agent</a></h3>
+<pre><code class="language-python">class CustomerServiceAgent(dspy.Module):
+    def __init__(self, company_name, knowledge_base):
+        super().__init__()
+        self.company_name = company_name
+        self.knowledge_base = knowledge_base
+
+        self.classify_intent = dspy.Predict("customer_message -&gt; intent, urgency, sentiment")
+        self.search_knowledge = dspy.Retrieve(k=3)
+        self.generate_response = dspy.ChainOfThought(
+            "intent, sentiment, knowledge, company_policy -&gt; response, action_needed"
+        )
+        self.escalate = dspy.Predict("issue, customer_details -&gt; escalation_reason, department")
+
+        # Session management
+        self.sessions = {}
+
+    def forward(self, customer_message, session_id=None):
+        # Get or create session
+        if not session_id:
+            session_id = len(self.sessions)
+        session = self.sessions.get(session_id, {"history": [], "context": {}})
+
+        # Classify the customer's intent
+        classification = self.classify_intent(customer_message=customer_message)
+
+        # Search knowledge base
+        relevant_kb = self.search_knowledge(
+            query=f"{classification.intent} {customer_message}"
+        )
+
+        # Generate response
+        response = self.generate_response(
+            intent=classification.intent,
+            sentiment=classification.sentiment,
+            knowledge="\n".join(relevant_kb.passages),
+            company_policy=self.knowledge_base.get("policies", "")
+        )
+
+        # Determine if escalation is needed
+        action_needed = response.action_needed.lower() if response.action_needed else ""
+        if "escalate" in action_needed or "urgent" in classification.urgency.lower():
+            escalation = self.escalate(
+                issue=customer_message,
+                customer_details=str(session["context"])
+            )
+            final_action = f"Escalated to {escalation.department}: {escalation.escalation_reason}"
+        else:
+            final_action = response.action_needed
+
+        # Update session
+        session["history"].append({
+            "timestamp": len(session["history"]),
+            "customer_message": customer_message,
+            "agent_response": response.response,
+            "intent": classification.intent,
+            "sentiment": classification.sentiment,
+            "action": final_action
+        })
+        self.sessions[session_id] = session
+
+        return dspy.Prediction(
+            session_id=session_id,
+            response=response.response,
+            intent=classification.intent,
+            sentiment=classification.sentiment,
+            action_required=final_action,
+            agent_name=f"{self.company_name} Support Agent"
+        )
+</code></pre>
+<h3 id="research-assistant-agent"><a class="header" href="#research-assistant-agent">Research Assistant Agent</a></h3>
+<pre><code class="language-python">class ResearchAssistantAgent(dspy.Module):
+    def __init__(self, research_domains):
+        super().__init__()
+        self.research_domains = research_domains
+        self.plan_research = dspy.ChainOfThought("research_question -&gt; research_plan, methodology")
+        self.search_papers = dspy.Retrieve(k=10)
+        self.analyze_papers = dspy.Predict("papers, research_question -&gt; key_findings, methodologies")
+        self.synthesize_insights = dspy.ChainOfThought(
+            "findings, methodologies, research_question -&gt; synthesis, knowledge_gaps"
+        )
+        self.suggest_next_steps = dspy.Predict("synthesis, gaps -&gt; next_research_steps"
+
+        # Research state
+        self.active_research = {}
+
+    def forward(self, research_question, research_id=None):
+        if not research_id:
+            research_id = len(self.active_research)
+
+        # Plan the research
+        planning = self.plan_research(research_question=research_question)
+
+        # Search for relevant papers
+        search_results = self.search_papers(query=research_question)
+
+        # Analyze the papers
+        analysis = self.analyze_papers(
+            papers="\n".join(search_results.passages),
+            research_question=research_question
+        )
+
+        # Synthesize insights
+        synthesis = self.synthesize_insights(
+            findings=analysis.key_findings,
+            methodologies=analysis.methodologies,
+            research_question=research_question
+        )
+
+        # Suggest next steps
+        next_steps = self.suggest_next_steps(
+            synthesis=synthesis.synthesis,
+            gaps=synthesis.knowledge_gaps
+        )
+
+        # Store research state
+        self.active_research[research_id] = {
+            "question": research_question,
+            "plan": planning.research_plan,
+            "papers_found": search_results.passages,
+            "findings": analysis.key_findings,
+            "synthesis": synthesis.synthesis,
+            "next_steps": next_steps.next_research_steps,
+            "status": "in_progress"
+        }
+
+        return dspy.Prediction(
+            research_id=research_id,
+            research_plan=planning.research_plan,
+            key_findings=analysis.key_findings,
+            synthesis=synthesis.synthesis,
+            knowledge_gaps=synthesis.knowledge_gaps,
+            next_steps=next_steps.next_research_steps,
+            papers_analyzed=len(search_results.passages)
+        )
+</code></pre>
+<h3 id="personal-finance-agent"><a class="header" href="#personal-finance-agent">Personal Finance Agent</a></h3>
+<pre><code class="language-python">class PersonalFinanceAgent(dspy.Module):
+    def __init__(self, user_profile=None):
+        super().__init__()
+        self.user_profile = user_profile or {}
+        self.analyze_transaction = dspy.Predict("transaction -&gt; category, necessity, impact")
+        self.assess_financial_health = dspy.ChainOfThought(
+            "income, expenses, goals -&gt; health_score, recommendations"
+        )
+        self.suggest_optimization = dspy.Predict(
+            "spending_patterns, financial_goals -&gt; optimization_suggestions"
+        )
+        self.predict_future = dspy.Predict("current_trends, income_stability -&gt; future_outlook"
+
+        # Financial data
+        self.transactions = []
+        self.goals = []
+
+    def add_transaction(self, amount, description, date):
+        """Add a financial transaction."""
+        analysis = self.analyze_transaction(
+            transaction=f"{description}: ${amount} on {date}"
+        )
+
+        transaction = {
+            "id": len(self.transactions),
+            "amount": amount,
+            "description": description,
+            "date": date,
+            "category": analysis.category,
+            "necessity": analysis.necessity,
+            "impact": analysis.impact
+        }
+
+        self.transactions.append(transaction)
+        return transaction
+
+    def get_financial_advice(self):
+        """Get personalized financial advice."""
+        # Calculate totals
+        income = sum(t["amount"] for t in self.transactions if t["amount"] &gt; 0)
+        expenses = sum(abs(t["amount"]) for t in self.transactions if t["amount"] &lt; 0)
+
+        # Assess financial health
+        health = self.assess_financial_health(
+            income=str(income),
+            expenses=str(expenses),
+            goals=", ".join(self.goals)
+        )
+
+        # Analyze spending patterns
+        spending_by_category = {}
+        for t in self.transactions:
+            if t["amount"] &lt; 0:  # Expense
+                cat = t["category"]
+                spending_by_category[cat] = spending_by_category.get(cat, 0) + abs(t["amount"])
+
+        # Get optimization suggestions
+        optimization = self.suggest_optimization(
+            spending_patterns=str(spending_by_category),
+            financial_goals=", ".join(self.goals)
+        )
+
+        # Predict future outlook
+        future = self.predict_future(
+            current_trends=str(spending_by_category),
+            income_stability="stable"  # Could be more sophisticated
+        )
+
+        return dspy.Prediction(
+            health_score=health.health_score,
+            recommendations=health.recommendations,
+            optimization_suggestions=optimization.optimization_suggestions,
+            future_outlook=future.future_outlook,
+            spending_breakdown=spending_by_category
+        )
+
+    def set_goal(self, goal_description, target_amount, deadline):
+        """Set a financial goal."""
+        goal = {
+            "id": len(self.goals),
+            "description": goal_description,
+            "target": target_amount,
+            "deadline": deadline,
+            "status": "active"
+        }
+        self.goals.append(goal)
+        return goal
+</code></pre>
+<h2 id="optimizing-agent-behavior"><a class="header" href="#optimizing-agent-behavior">Optimizing Agent Behavior</a></h2>
+<h3 id="using-mipro-for-agent-decision-making"><a class="header" href="#using-mipro-for-agent-decision-making">Using MIPRO for Agent Decision Making</a></h3>
+<pre><code class="language-python">class OptimizedDecisionAgent(dspy.Module):
+    def __init__(self, decision_context):
+        super().__init__()
+        self.context = decision_context
+        self.analyze_situation = dspy.ChainOfThought(
+            "situation, context -&gt; situation_analysis, key_factors"
+        )
+        self.consider_options = dspy.Predict(
+            "analysis, factors, constraints -&gt; options, pros_cons"
+        )
+        self.make_decision = dspy.ChainOfThought(
+            "analysis, options, pros_cons, objectives -&gt; decision, confidence, reasoning"
+        )
+
+    def forward(self, situation, constraints=None, objectives=None):
+        # Analyze the situation
+        analysis = self.analyze_situation(
+            situation=situation,
+            context=self.context
+        )
+
+        # Consider available options
+        options = self.consider_options(
+            analysis=analysis.situation_analysis,
+            factors=analysis.key_factors,
+            constraints=constraints or "No explicit constraints"
+        )
+
+        # Make decision
+        decision = self.make_decision(
+            analysis=analysis.situation_analysis,
+            options=options.options,
+            pros_cons=options.pros_cons,
+            objectives=objectives or "Optimize outcomes"
+        )
+
+        return dspy.Prediction(
+            decision=decision.decision,
+            confidence=decision.confidence,
+            reasoning=decision.reasoning,
+            alternatives=options.options
+        )
+
+# Training data for agent decision making
+decision_trainset = [
+    dspy.Example(
+        situation="Customer reports system downtime affecting 1000 users",
+        context="Technical support with SLA requirements",
+        constraints="Must resolve within 1 hour, limited team available",
+        objectives="Minimize downtime, maintain customer satisfaction",
+        decision="Escalate to senior engineers, provide customer updates",
+        confidence=0.9
+    ),
+    # ... more decision scenarios
+]
+
+# Optimize decision making
+mipro_optimizer = MIPRO(
+    metric=decision_quality_metric,
+    num_candidates=10
+)
+optimized_agent = mipro_optimizer.compile(
+    OptimizedDecisionAgent("Customer Support System"),
+    trainset=decision_trainset
+)
+</code></pre>
+<h2 id="best-practices-for-building-agents"><a class="header" href="#best-practices-for-building-agents">Best Practices for Building Agents</a></h2>
+<h3 id="1-clear-goal-definition"><a class="header" href="#1-clear-goal-definition">1. Clear Goal Definition</a></h3>
+<pre><code class="language-python">class GoalOrientedAgent(dspy.Module):
+    def __init__(self, primary_goal, sub_goals=None):
+        super().__init__()
+        self.primary_goal = primary_goal
+        self.sub_goals = sub_goals or []
+        self.evaluate_alignment = dspy.Predict(
+            "action, goal -&gt; alignment_score, alignment_reason"
+        )
+
+    def is_goal_aligned(self, action):
+        """Check if action aligns with goals."""
+        evaluation = self.evaluate_alignment(
+            action=str(action),
+            goal=self.primary_goal
+        )
+        return float(evaluation.alignment_score) &gt; 0.7
+</code></pre>
+<h3 id="2-robust-error-handling"><a class="header" href="#2-robust-error-handling">2. Robust Error Handling</a></h3>
+<pre><code class="language-python">class ResilientAgent(dspy.Module):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+        self.handle_error = dspy.Predict("error, context -&gt; recovery_action")
+        self.fallback_responses = [
+            "I'm having trouble processing that. Could you rephrase?",
+            "Let me try a different approach.",
+            "I need more information to help with that."
+        ]
+
+    def safe_execute(self, action_func, *args, **kwargs):
+        """Execute action with error handling."""
+        try:
+            return action_func(*args, **kwargs)
+        except Exception as e:
+            # Handle error gracefully
+            recovery = self.handle_error(
+                error=str(e),
+                context=str(args)
+            )
+            return {
+                "success": False,
+                "error": str(e),
+                "recovery_action": recovery.recovery_action
+            }
+</code></pre>
+<h3 id="3-continuous-learning"><a class="header" href="#3-continuous-learning">3. Continuous Learning</a></h3>
+<pre><code class="language-python">class AdaptiveAgent(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.learn_from_feedback = dspy.ChainOfThought(
+            "action, outcome, feedback -&gt; learning_insight, strategy_adjustment"
+        )
+        self.success_patterns = []
+        self.failure_patterns = []
+
+    def process_feedback(self, action, outcome, feedback):
+        """Learn from feedback on actions."""
+        learning = self.learn_from_feedback(
+            action=str(action),
+            outcome=str(outcome),
+            feedback=feedback
+        )
+
+        if "success" in feedback.lower():
+            self.success_patterns.append(learning.learning_insight)
+        else:
+            self.failure_patterns.append(learning.learning_insight)
+
+        return learning
+</code></pre>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Intelligent agents combine</strong> perception, planning, and action</li>
+<li><strong>Different agent types</strong> suit different use cases and requirements</li>
+<li><strong>Memory and learning</strong> are crucial for agent effectiveness</li>
+<li><strong>Real-world agents</strong> must handle uncertainty, errors, and feedback</li>
+<li><strong>Optimization improves</strong> decision-making and problem-solving</li>
+<li><strong>Collaboration enables</strong> agents to tackle complex tasks together</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>In the final section of this chapter, we’ll explore <strong>Code Generation</strong>, showing how to build automated programming assistants that can help developers write, debug, and optimize code.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../06-real-world-applications/04-entity-extraction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../06-real-world-applications/06-code-generation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../06-real-world-applications/04-entity-extraction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../06-real-world-applications/06-code-generation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

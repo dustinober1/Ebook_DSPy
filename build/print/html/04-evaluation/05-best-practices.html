@@ -1,0 +1,753 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Best Practices - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/print-only-ef201963.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-4ea68664.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Chapter 1-3</strong>: DSPy Fundamentals, Signatures, and Modules</li>
+<li><strong>Previous Sections</strong>: Why Evaluation Matters through Evaluation Loops</li>
+<li><strong>Required Knowledge</strong>: Understanding of previous evaluation concepts</li>
+<li><strong>Difficulty Level</strong>: Intermediate-Advanced</li>
+<li><strong>Estimated Reading Time</strong>: 25 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will understand:</p>
+<ul>
+<li>Best practices for dataset curation and management</li>
+<li>Metric design principles that lead to better optimization</li>
+<li>How to avoid data leakage and other common pitfalls</li>
+<li>Techniques for reproducible evaluation</li>
+<li>Continuous evaluation strategies for production systems</li>
+</ul>
+<h2 id="dataset-best-practices"><a class="header" href="#dataset-best-practices">Dataset Best Practices</a></h2>
+<h3 id="1-ensure-representative-data"><a class="header" href="#1-ensure-representative-data">1. Ensure Representative Data</a></h3>
+<p>Your evaluation data must reflect real-world usage:</p>
+<pre><code class="language-python">import dspy
+
+# BAD: Biased dataset
+biased_dataset = [
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    dspy.Example(question="What is 3+3?", answer="6").with_inputs("question"),
+    dspy.Example(question="What is 4+4?", answer="8").with_inputs("question"),
+    # All simple arithmetic - not representative!
+]
+
+# GOOD: Diverse dataset covering real use cases
+representative_dataset = [
+    # Simple questions
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    # Complex reasoning
+    dspy.Example(question="If a train leaves at 3pm traveling 60mph, how far does it travel in 2 hours?",
+                 answer="120 miles").with_inputs("question"),
+    # Ambiguous questions
+    dspy.Example(question="What's the best programming language?",
+                 answer="It depends on the use case").with_inputs("question"),
+    # Edge cases
+    dspy.Example(question="What is infinity minus infinity?",
+                 answer="undefined").with_inputs("question"),
+]
+</code></pre>
+<h3 id="2-include-edge-cases"><a class="header" href="#2-include-edge-cases">2. Include Edge Cases</a></h3>
+<p>Systematically test boundary conditions:</p>
+<pre><code class="language-python">def create_comprehensive_dataset(base_examples):
+    """Add edge cases to base dataset."""
+    dataset = list(base_examples)
+
+    # Add edge cases
+    edge_cases = [
+        # Empty input
+        dspy.Example(question="", answer="Please provide a question").with_inputs("question"),
+
+        # Very long input
+        dspy.Example(question="What is " + " ".join(["the"] * 100) + " answer?",
+                     answer="Please clarify your question").with_inputs("question"),
+
+        # Special characters
+        dspy.Example(question="What's the meaning of @#$%?",
+                     answer="Those are special characters").with_inputs("question"),
+
+        # Multiple languages (if relevant)
+        dspy.Example(question="Qu'est-ce que c'est?",
+                     answer="This means 'What is it?' in French").with_inputs("question"),
+
+        # Numbers and symbols
+        dspy.Example(question="Calculate 1,234.56 + 7,890.12",
+                     answer="9124.68").with_inputs("question"),
+    ]
+
+    dataset.extend(edge_cases)
+    return dataset
+</code></pre>
+<h3 id="3-balance-your-dataset"><a class="header" href="#3-balance-your-dataset">3. Balance Your Dataset</a></h3>
+<p>Ensure fair representation across categories:</p>
+<pre><code class="language-python">from collections import Counter
+
+def analyze_dataset_balance(dataset, category_field='category'):
+    """Check dataset balance across categories."""
+    categories = [getattr(ex, category_field, 'unknown') for ex in dataset]
+    counts = Counter(categories)
+
+    print("Dataset Balance Analysis")
+    print("=" * 40)
+    total = len(dataset)
+    for category, count in sorted(counts.items(), key=lambda x: -x[1]):
+        pct = 100 * count / total
+        bar = "#" * int(pct / 2)
+        print(f"{category:20} {count:5} ({pct:5.1f}%) {bar}")
+
+    # Warn about imbalance
+    max_count = max(counts.values())
+    min_count = min(counts.values())
+    if max_count &gt; 5 * min_count:
+        print("\nWARNING: Dataset is significantly imbalanced!")
+
+    return counts
+
+# Check your dataset
+analyze_dataset_balance(dataset)
+</code></pre>
+<h3 id="4-version-your-datasets"><a class="header" href="#4-version-your-datasets">4. Version Your Datasets</a></h3>
+<p>Track dataset changes over time:</p>
+<pre><code class="language-python">import json
+import hashlib
+from datetime import datetime
+
+def save_dataset_with_metadata(dataset, filepath, version_info):
+    """Save dataset with versioning metadata."""
+    # Create hashable representation
+    data_str = json.dumps([ex.toDict() for ex in dataset], sort_keys=True)
+    data_hash = hashlib.md5(data_str.encode()).hexdigest()[:8]
+
+    metadata = {
+        "version": version_info.get("version", "1.0"),
+        "created": datetime.now().isoformat(),
+        "hash": data_hash,
+        "size": len(dataset),
+        "description": version_info.get("description", ""),
+        "changes": version_info.get("changes", []),
+    }
+
+    output = {
+        "metadata": metadata,
+        "data": [ex.toDict() for ex in dataset]
+    }
+
+    with open(filepath, 'w') as f:
+        json.dump(output, f, indent=2)
+
+    print(f"Saved dataset v{metadata['version']} ({data_hash}) with {len(dataset)} examples")
+    return metadata
+
+# Usage
+save_dataset_with_metadata(
+    dataset,
+    "data/qa_dataset_v2.json",
+    {
+        "version": "2.0",
+        "description": "Added edge cases and multi-hop questions",
+        "changes": ["Added 50 edge cases", "Added 100 multi-hop questions"]
+    }
+)
+</code></pre>
+<h2 id="metric-design-best-practices"><a class="header" href="#metric-design-best-practices">Metric Design Best Practices</a></h2>
+<h3 id="1-measure-what-actually-matters"><a class="header" href="#1-measure-what-actually-matters">1. Measure What Actually Matters</a></h3>
+<pre><code class="language-python"># BAD: Metric measures proxy, not actual goal
+def bad_metric(example, pred, trace=None):
+    # Length doesn't indicate quality!
+    return len(pred.answer) &gt; 50
+
+# GOOD: Metric measures actual goal
+def good_metric(example, pred, trace=None):
+    # Check factual correctness
+    correct = example.answer.lower() in pred.answer.lower()
+    # Check completeness
+    complete = all(
+        key_point.lower() in pred.answer.lower()
+        for key_point in example.key_points
+    )
+    return correct and complete
+</code></pre>
+<h3 id="2-make-metrics-robust"><a class="header" href="#2-make-metrics-robust">2. Make Metrics Robust</a></h3>
+<p>Handle variations and edge cases:</p>
+<pre><code class="language-python">def robust_metric(example, pred, trace=None):
+    """Robust metric with proper handling."""
+    # Handle missing attributes
+    expected = getattr(example, 'answer', None)
+    predicted = getattr(pred, 'answer', None)
+
+    if expected is None or predicted is None:
+        return 0.0
+
+    # Normalize for comparison
+    def normalize(text):
+        if not isinstance(text, str):
+            text = str(text)
+        # Lowercase, strip whitespace, remove punctuation
+        text = text.lower().strip()
+        text = ''.join(c for c in text if c.isalnum() or c.isspace())
+        return ' '.join(text.split())  # Normalize whitespace
+
+    expected_norm = normalize(expected)
+    predicted_norm = normalize(predicted)
+
+    # Flexible matching
+    if expected_norm == predicted_norm:
+        return 1.0
+    elif expected_norm in predicted_norm:
+        return 0.8
+    elif predicted_norm in expected_norm:
+        return 0.6
+    else:
+        return 0.0
+</code></pre>
+<h3 id="3-use-appropriate-granularity"><a class="header" href="#3-use-appropriate-granularity">3. Use Appropriate Granularity</a></h3>
+<pre><code class="language-python"># TOO COARSE: Only binary
+def coarse_metric(example, pred, trace=None):
+    return pred.answer == example.answer  # Only 0 or 1
+
+# TOO FINE: Over-engineered
+def fine_metric(example, pred, trace=None):
+    score = 0
+    score += 0.1 if pred.answer else 0
+    score += 0.1 if len(pred.answer) &gt; 10 else 0
+    score += 0.1 if len(pred.answer) &gt; 50 else 0
+    # ... 20 more tiny adjustments
+    return score  # Hard to interpret
+
+# JUST RIGHT: Meaningful granularity
+def balanced_metric(example, pred, trace=None):
+    # Core correctness (most weight)
+    correct = example.answer.lower() in pred.answer.lower()
+
+    # Quality bonus
+    well_formed = pred.answer.strip().endswith('.')
+    appropriate_length = 20 &lt;= len(pred.answer) &lt;= 200
+
+    if correct:
+        base = 0.8
+        bonus = 0.1 * well_formed + 0.1 * appropriate_length
+        return base + bonus
+    else:
+        return 0.0
+</code></pre>
+<h3 id="4-test-your-metrics"><a class="header" href="#4-test-your-metrics">4. Test Your Metrics</a></h3>
+<p>Validate metric behavior before use:</p>
+<pre><code class="language-python">def test_metric(metric, test_cases):
+    """Test metric on known cases."""
+    print("Metric Test Results")
+    print("=" * 60)
+
+    all_passed = True
+    for i, case in enumerate(test_cases):
+        example = case['example']
+        pred = case['pred']
+        expected = case['expected_score']
+
+        actual = metric(example, pred)
+
+        # Allow small floating point differences
+        passed = abs(actual - expected) &lt; 0.01
+        status = "PASS" if passed else "FAIL"
+        all_passed = all_passed and passed
+
+        print(f"Test {i+1}: {status}")
+        print(f"  Input: {example.question[:50]}...")
+        print(f"  Expected score: {expected}, Actual: {actual}")
+
+    print("=" * 60)
+    print(f"Overall: {'ALL PASSED' if all_passed else 'SOME FAILED'}")
+    return all_passed
+
+# Define test cases
+test_cases = [
+    {
+        'example': dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+        'pred': type('Pred', (), {'answer': "4"})(),
+        'expected_score': 1.0
+    },
+    {
+        'example': dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+        'pred': type('Pred', (), {'answer': "The answer is 4."})(),
+        'expected_score': 0.8  # Partial match
+    },
+    {
+        'example': dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+        'pred': type('Pred', (), {'answer': "5"})(),
+        'expected_score': 0.0
+    },
+]
+
+test_metric(robust_metric, test_cases)
+</code></pre>
+<h2 id="avoiding-data-leakage"><a class="header" href="#avoiding-data-leakage">Avoiding Data Leakage</a></h2>
+<h3 id="what-is-data-leakage"><a class="header" href="#what-is-data-leakage">What is Data Leakage?</a></h3>
+<p>Data leakage occurs when information from the test set influences training:</p>
+<pre><code class="language-python"># DANGEROUS: Data leakage example
+all_data = load_all_examples()
+
+# WRONG: Test data overlaps with training
+trainset = all_data[:800]
+testset = all_data[:200]  # BUG! Overlaps with trainset
+
+# Module sees test examples during training
+# Test score will be artificially high
+</code></pre>
+<h3 id="prevention-strategies"><a class="header" href="#prevention-strategies">Prevention Strategies</a></h3>
+<pre><code class="language-python">import random
+from typing import Tuple, List
+
+def safe_split(data: List, train_ratio=0.6, dev_ratio=0.2, seed=42) -&gt; Tuple[List, List, List]:
+    """Safely split data without leakage."""
+    # Make a copy to avoid modifying original
+    data = list(data)
+
+    # Shuffle with fixed seed
+    random.Random(seed).shuffle(data)
+
+    # Calculate split points
+    n = len(data)
+    train_end = int(n * train_ratio)
+    dev_end = int(n * (train_ratio + dev_ratio))
+
+    # Split
+    trainset = data[:train_end]
+    devset = data[train_end:dev_end]
+    testset = data[dev_end:]
+
+    # Verify no overlap
+    train_ids = {id(ex) for ex in trainset}
+    dev_ids = {id(ex) for ex in devset}
+    test_ids = {id(ex) for ex in testset}
+
+    assert len(train_ids &amp; dev_ids) == 0, "Train/dev overlap!"
+    assert len(train_ids &amp; test_ids) == 0, "Train/test overlap!"
+    assert len(dev_ids &amp; test_ids) == 0, "Dev/test overlap!"
+
+    print(f"Safe split: Train={len(trainset)}, Dev={len(devset)}, Test={len(testset)}")
+
+    return trainset, devset, testset
+</code></pre>
+<h3 id="content-based-deduplication"><a class="header" href="#content-based-deduplication">Content-Based Deduplication</a></h3>
+<p>Prevent near-duplicate leakage:</p>
+<pre><code class="language-python">def content_aware_split(data, key_field='question', similarity_threshold=0.9):
+    """Split data ensuring no similar content across splits."""
+    from difflib import SequenceMatcher
+
+    def similar(a, b):
+        return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+
+    # Build groups of similar items
+    groups = []
+    assigned = set()
+
+    for i, ex1 in enumerate(data):
+        if i in assigned:
+            continue
+
+        group = [i]
+        key1 = getattr(ex1, key_field, '')
+
+        for j, ex2 in enumerate(data[i+1:], i+1):
+            if j in assigned:
+                continue
+            key2 = getattr(ex2, key_field, '')
+
+            if similar(key1, key2) &gt;= similarity_threshold:
+                group.append(j)
+                assigned.add(j)
+
+        groups.append(group)
+        assigned.add(i)
+
+    # Shuffle groups (not individual items)
+    random.shuffle(groups)
+
+    # Assign groups to splits
+    train_groups = groups[:int(len(groups) * 0.6)]
+    dev_groups = groups[int(len(groups) * 0.6):int(len(groups) * 0.8)]
+    test_groups = groups[int(len(groups) * 0.8):]
+
+    trainset = [data[i] for g in train_groups for i in g]
+    devset = [data[i] for g in dev_groups for i in g]
+    testset = [data[i] for g in test_groups for i in g]
+
+    return trainset, devset, testset
+</code></pre>
+<h2 id="reproducibility"><a class="header" href="#reproducibility">Reproducibility</a></h2>
+<h3 id="1-fix-random-seeds"><a class="header" href="#1-fix-random-seeds">1. Fix Random Seeds</a></h3>
+<pre><code class="language-python">import random
+import numpy as np
+
+def set_seeds(seed=42):
+    """Set all random seeds for reproducibility."""
+    random.seed(seed)
+    np.random.seed(seed)
+
+    # If using PyTorch
+    try:
+        import torch
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+    except ImportError:
+        pass
+
+# Always set seeds at the start
+set_seeds(42)
+</code></pre>
+<h3 id="2-log-all-configuration"><a class="header" href="#2-log-all-configuration">2. Log All Configuration</a></h3>
+<pre><code class="language-python">import json
+import dspy
+
+def log_evaluation_config(module, devset, metric, filepath="eval_config.json"):
+    """Log complete evaluation configuration."""
+    config = {
+        "timestamp": datetime.now().isoformat(),
+        "module": {
+            "type": type(module).__name__,
+            "signature": str(getattr(module, 'signature', 'unknown')),
+        },
+        "dataset": {
+            "size": len(devset),
+            "fields": list(devset[0].toDict().keys()) if devset else [],
+        },
+        "metric": {
+            "name": metric.__name__,
+            "doc": metric.__doc__,
+        },
+        "environment": {
+            "dspy_version": dspy.__version__,
+            "lm": str(dspy.settings.lm) if dspy.settings.lm else "not configured",
+        }
+    }
+
+    with open(filepath, 'w') as f:
+        json.dump(config, f, indent=2)
+
+    return config
+</code></pre>
+<h3 id="3-version-control-everything"><a class="header" href="#3-version-control-everything">3. Version Control Everything</a></h3>
+<pre><code class="language-python"># Include in your .gitignore
+# - build/
+# - __pycache__/
+# - .env
+
+# Track in version control:
+# - data/datasets/*.json (versioned datasets)
+# - configs/*.json (evaluation configs)
+# - results/*.json (evaluation results)
+</code></pre>
+<h2 id="continuous-evaluation"><a class="header" href="#continuous-evaluation">Continuous Evaluation</a></h2>
+<h3 id="scheduled-evaluation"><a class="header" href="#scheduled-evaluation">Scheduled Evaluation</a></h3>
+<pre><code class="language-python">import schedule
+import time
+
+def daily_evaluation():
+    """Run daily evaluation on production module."""
+    # Load latest module
+    module = load_production_module()
+
+    # Sample recent data
+    recent_data = sample_production_logs(n=100)
+    devset = convert_to_examples(recent_data)
+
+    # Run evaluation
+    evaluate = dspy.Evaluate(devset=devset, metric=metric)
+    score = evaluate(module)
+
+    # Log results
+    log_to_monitoring(score)
+
+    # Alert if degradation
+    if score &lt; THRESHOLD:
+        send_alert(f"Performance degradation: {score}%")
+
+# Schedule daily at 3 AM
+schedule.every().day.at("03:00").do(daily_evaluation)
+
+# Keep running
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+</code></pre>
+<h3 id="regression-testing"><a class="header" href="#regression-testing">Regression Testing</a></h3>
+<pre><code class="language-python">def regression_test(new_module, baseline_module, devset, metric, tolerance=2.0):
+    """Ensure new module doesn't regress vs baseline."""
+    evaluate = dspy.Evaluate(devset=devset, metric=metric)
+
+    baseline_score = evaluate(baseline_module)
+    new_score = evaluate(new_module)
+
+    regression = baseline_score - new_score
+
+    print(f"Baseline: {baseline_score:.1f}%")
+    print(f"New: {new_score:.1f}%")
+    print(f"Change: {new_score - baseline_score:+.1f}%")
+
+    if regression &gt; tolerance:
+        raise ValueError(
+            f"Regression detected! New module is {regression:.1f}% worse than baseline"
+        )
+
+    return new_score, baseline_score
+</code></pre>
+<h2 id="summary-checklist"><a class="header" href="#summary-checklist">Summary Checklist</a></h2>
+<p>Use this checklist for every evaluation:</p>
+<h3 id="dataset-checklist"><a class="header" href="#dataset-checklist">Dataset Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Data is representative of real usage</li>
+<li><input disabled="" type="checkbox"> Edge cases are included</li>
+<li><input disabled="" type="checkbox"> Data is balanced across categories</li>
+<li><input disabled="" type="checkbox"> No duplicates or near-duplicates</li>
+<li><input disabled="" type="checkbox"> Train/dev/test splits are clean (no leakage)</li>
+<li><input disabled="" type="checkbox"> Dataset is versioned and documented</li>
+</ul>
+<h3 id="metric-checklist"><a class="header" href="#metric-checklist">Metric Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Metric measures actual goal</li>
+<li><input disabled="" type="checkbox"> Metric handles edge cases gracefully</li>
+<li><input disabled="" type="checkbox"> Metric is tested on known cases</li>
+<li><input disabled="" type="checkbox"> Metric behavior is documented</li>
+<li><input disabled="" type="checkbox"> trace parameter is used correctly</li>
+</ul>
+<h3 id="evaluation-checklist"><a class="header" href="#evaluation-checklist">Evaluation Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Random seeds are fixed</li>
+<li><input disabled="" type="checkbox"> Configuration is logged</li>
+<li><input disabled="" type="checkbox"> Results are reproducible</li>
+<li><input disabled="" type="checkbox"> Error analysis is performed</li>
+<li><input disabled="" type="checkbox"> Comparison to baseline is done</li>
+</ul>
+<h3 id="production-checklist"><a class="header" href="#production-checklist">Production Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Continuous evaluation is set up</li>
+<li><input disabled="" type="checkbox"> Regression tests are in place</li>
+<li><input disabled="" type="checkbox"> Alerts are configured for degradation</li>
+<li><input disabled="" type="checkbox"> Results are tracked over time</li>
+</ul>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Representative data</strong> is the foundation of meaningful evaluation</li>
+<li><strong>Robust metrics</strong> handle edge cases and variations</li>
+<li><strong>Data leakage</strong> invalidates all your results - prevent it!</li>
+<li><strong>Reproducibility</strong> requires fixing seeds and logging config</li>
+<li><strong>Continuous evaluation</strong> catches production issues early</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="./06-exercises.html">Exercises</a> - Practice evaluation skills</li>
+<li><a href="../../examples/chapter04/">Examples</a> - See best practices in action</li>
+<li><a href="../05-optimizers/00-chapter-intro.html">Chapter 5: Optimizers</a> - Use evaluation for optimization</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://developers.google.com/machine-learning/testing-debugging">ML Testing Best Practices</a></li>
+<li><a href="https://machinelearningmastery.com/data-leakage-machine-learning/">Data Leakage in ML</a></li>
+<li><a href="https://www.cs.mcgill.ca/~jpineau/ReproducibilityChecklist.pdf">Reproducible ML Research</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../04-evaluation/04-evaluation-loops.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../04-evaluation/07-structured-prompting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../04-evaluation/04-evaluation-loops.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../04-evaluation/07-structured-prompting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+
+
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

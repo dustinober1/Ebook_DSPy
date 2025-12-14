@@ -1,0 +1,1033 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>AI Code Assistant - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/08-case-studies/03-ai-code-assistant.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="case-study-3-creating-an-ai-powered-code-assistant"><a class="header" href="#case-study-3-creating-an-ai-powered-code-assistant">Case Study 3: Creating an AI-Powered Code Assistant</a></h1>
+<h2 id="problem-definition"><a class="header" href="#problem-definition">Problem Definition</a></h2>
+<h3 id="business-challenge"><a class="header" href="#business-challenge">Business Challenge</a></h3>
+<p>A software development platform needed to enhance developer productivity by providing AI-powered coding assistance. The system needed to:</p>
+<ul>
+<li>Generate high-quality, production-ready code</li>
+<li>Understand and work with existing codebases</li>
+<li>Support multiple programming languages</li>
+<li>Provide contextual suggestions based on project structure</li>
+<li>Ensure code security and best practices</li>
+<li>Learn from organization’s coding patterns</li>
+<li>Integrate seamlessly with popular IDEs</li>
+</ul>
+<h3 id="key-requirements"><a class="header" href="#key-requirements">Key Requirements</a></h3>
+<ol>
+<li><strong>Multi-language Support</strong>: Python, JavaScript, Java, C++, Go, and more</li>
+<li><strong>Context Awareness</strong>: Understand project structure and dependencies</li>
+<li><strong>Code Quality</strong>: Generate secure, efficient, and maintainable code</li>
+<li><strong>Real-time Suggestions</strong>: Provide instant code completions</li>
+<li><strong>Documentation Generation</strong>: Auto-generate code documentation</li>
+<li><strong>Test Generation</strong>: Create unit tests for generated code</li>
+<li><strong>Code Explanation</strong>: Explain complex code segments</li>
+<li><strong>Refactoring Suggestions</strong>: Identify and suggest code improvements</li>
+</ol>
+<h2 id="system-design"><a class="header" href="#system-design">System Design</a></h2>
+<h3 id="architecture-overview"><a class="header" href="#architecture-overview">Architecture Overview</a></h3>
+<pre><code>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   IDE           │    │   Code          │    │   Context       │
+│   Extension     │───▶│   Analysis      │───▶│   Engine        │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Input         │    │   Language      │    │   Knowledge     │
+│   Processor     │    │   Detector      │    │   Base          │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                 │                       │
+                                 └───────────┬───────────┘
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   DSPy Code      │
+                                   │   Assistant      │
+                                   └─────────────────┘
+                                             │
+                     ┌───────────────────────┼───────────────────────┐
+                     ▼                       ▼                       ▼
+          ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+          │   Code          │    │   Documentation │    │   Test          │
+          │   Generation    │    │   Generator     │    │   Generator     │
+          └─────────────────┘    └─────────────────┘    └─────────────────┘
+</code></pre>
+<h3 id="component-details"><a class="header" href="#component-details">Component Details</a></h3>
+<h4 id="1-code-analysis-layer"><a class="header" href="#1-code-analysis-layer">1. Code Analysis Layer</a></h4>
+<ul>
+<li><strong>Syntax Parsing</strong>: Understand code structure and syntax</li>
+<li><strong>Semantic Analysis</strong>: Extract meaning and relationships</li>
+<li><strong>Dependency Analysis</strong>: Map imports and dependencies</li>
+<li><strong>Pattern Recognition</strong>: Identify coding patterns and conventions</li>
+</ul>
+<h4 id="2-context-engine"><a class="header" href="#2-context-engine">2. Context Engine</a></h4>
+<ul>
+<li><strong>Project Indexing</strong>: Index entire codebase for context</li>
+<li><strong>File Relationships</strong>: Understand relationships between files</li>
+<li><strong>Type Inference</strong>: Infer types and interfaces</li>
+<li><strong>API Knowledge</strong>: Knowledge of common libraries and frameworks</li>
+</ul>
+<h4 id="3-knowledge-base"><a class="header" href="#3-knowledge-base">3. Knowledge Base</a></h4>
+<ul>
+<li><strong>Language Specifications</strong>: Formal language definitions</li>
+<li><strong>Best Practices</strong>: Security and performance guidelines</li>
+<li><strong>Code Snippets</strong>: Reusable code patterns</li>
+<li><strong>Documentation</strong>: API and library documentation</li>
+</ul>
+<h4 id="4-generation-components"><a class="header" href="#4-generation-components">4. Generation Components</a></h4>
+<ul>
+<li><strong>Code Generator</strong>: Generate code from natural language</li>
+<li><strong>Documentation Generator</strong>: Create code documentation</li>
+<li><strong>Test Generator</strong>: Generate unit and integration tests</li>
+<li><strong>Refactoring Engine</strong>: Suggest code improvements</li>
+</ul>
+<h2 id="implementation-with-dspy"><a class="header" href="#implementation-with-dspy">Implementation with DSPy</a></h2>
+<h3 id="core-dspy-components"><a class="header" href="#core-dspy-components">Core DSPy Components</a></h3>
+<h4 id="1-code-analysis-module"><a class="header" href="#1-code-analysis-module">1. Code Analysis Module</a></h4>
+<pre><code class="language-python">import dspy
+from typing import Dict, List, Optional, Any, Tuple
+from dataclasses import dataclass
+from enum import Enum
+import ast
+import re
+
+class LanguageType(Enum):
+    """Supported programming languages."""
+    PYTHON = "python"
+    JAVASCRIPT = "javascript"
+    JAVA = "java"
+    CPP = "cpp"
+    GO = "go"
+    TYPESCRIPT = "typescript"
+    RUST = "rust"
+
+@dataclass
+class CodeContext:
+    """Context information for code generation."""
+    language: LanguageType
+    file_path: str
+    imports: List[str]
+    functions: List[str]
+    classes: List[str]
+    variables: List[str]
+    dependencies: Dict[str, Any]
+    style: Dict[str, Any]
+
+@dataclass
+class CodeAnalysisResult:
+    """Result of code analysis."""
+    language: LanguageType
+    ast_tree: Any
+    functions: List[Dict]
+    classes: List[Dict]
+    imports: List[str]
+    complexity: int
+    suggestions: List[str]
+
+class CodeAnalyzerSignature(dspy.Signature):
+    """Signature for code analysis."""
+    code = dspy.InputField(desc="Source code to analyze")
+    language = dspy.InputField(desc="Programming language")
+    analysis = dspy.OutputField(desc="Code analysis results")
+    suggestions = dspy.OutputField(desc="Improvement suggestions")
+
+class CodeAnalyzer(dspy.Module):
+    """Analyze source code and extract context."""
+
+    def __init__(self):
+        super().__init__()
+        self.analyze = dspy.ChainOfThought(CodeAnalyzerSignature)
+        self.parsers = {
+            LanguageType.PYTHON: self._parse_python,
+            LanguageType.JAVASCRIPT: self._parse_javascript,
+            LanguageType.JAVA: self._parse_java,
+        }
+
+    def forward(self, code: str, file_path: str) -&gt; CodeAnalysisResult:
+        """Analyze code and extract information."""
+
+        # Detect language
+        language = self._detect_language(file_path)
+
+        # Parse code structure
+        parsed = self._parse_code(code, language)
+
+        # Get AI-powered analysis
+        analysis = self.analyze(
+            code=code[:1000],  # Limit for token constraints
+            language=language.value
+        )
+
+        # Extract additional insights
+        complexity = self._calculate_complexity(parsed)
+        suggestions = self._get_suggestions(analysis.suggestions, parsed)
+
+        return CodeAnalysisResult(
+            language=language,
+            ast_tree=parsed,
+            functions=parsed.get("functions", []),
+            classes=parsed.get("classes", []),
+            imports=parsed.get("imports", []),
+            complexity=complexity,
+            suggestions=suggestions
+        )
+
+    def _detect_language(self, file_path: str) -&gt; LanguageType:
+        """Detect programming language from file extension."""
+        ext = file_path.split('.')[-1].lower()
+        mapping = {
+            'py': LanguageType.PYTHON,
+            'js': LanguageType.JAVASCRIPT,
+            'ts': LanguageType.TYPESCRIPT,
+            'java': LanguageType.JAVA,
+            'cpp': LanguageType.CPP,
+            'go': LanguageType.GO,
+            'rs': LanguageType.RUST
+        }
+        return mapping.get(ext, LanguageType.PYTHON)
+
+    def _parse_python(self, code: str) -&gt; Dict:
+        """Parse Python code."""
+        try:
+            tree = ast.parse(code)
+            functions = []
+            classes = []
+            imports = []
+
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef):
+                    functions.append({
+                        'name': node.name,
+                        'line': node.lineno,
+                        'args': [arg.arg for arg in node.args.args]
+                    })
+                elif isinstance(node, ast.ClassDef):
+                    classes.append({
+                        'name': node.name,
+                        'line': node.lineno,
+                        'methods': [n.name for n in node.body if isinstance(n, ast.FunctionDef)]
+                    })
+                elif isinstance(node, (ast.Import, ast.ImportFrom)):
+                    if isinstance(node, ast.Import):
+                        imports.extend([alias.name for alias in node.names])
+                    else:
+                        imports.append(f"from {node.module} import ...")
+
+            return {
+                'functions': functions,
+                'classes': classes,
+                'imports': imports
+            }
+        except SyntaxError:
+            return {'functions': [], 'classes': [], 'imports': []}
+
+    def _calculate_complexity(self, parsed: Dict) -&gt; int:
+        """Calculate cyclomatic complexity."""
+        # Simplified complexity calculation
+        complexity = 1  # Base complexity
+        complexity += len(parsed.get('functions', [])) * 2
+        complexity += len(parsed.get('classes', [])) * 3
+        return complexity
+</code></pre>
+<h4 id="2-code-generation-module"><a class="header" href="#2-code-generation-module">2. Code Generation Module</a></h4>
+<pre><code class="language-python">class CodeGenerationSignature(dspy.Signature):
+    """Signature for code generation."""
+    prompt = dspy.InputField(desc="Natural language description of code")
+    context = dspy.InputField(desc="Existing code context")
+    language = dspy.InputField(desc="Target programming language")
+    style = dspy.InputField(desc="Coding style guidelines")
+    code = dspy.OutputField(desc="Generated code")
+    explanation = dspy.OutputField(desc="Explanation of generated code")
+
+class CodeGenerator(dspy.Module):
+    """Generate code from natural language descriptions."""
+
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought(CodeGenerationSignature)
+        self.refine = dspy.Predict(CodeRefinementSignature)
+        self.templates = self._load_code_templates()
+
+    def forward(self, prompt: str, context: CodeContext,
+                style: Dict = None) -&gt; Dict:
+        """Generate code based on prompt and context."""
+
+        # Generate initial code
+        generation = self.generate(
+            prompt=prompt,
+            context=self._format_context(context),
+            language=context.language.value,
+            style=style or self._get_default_style(context.language)
+        )
+
+        # Refine the code
+        refined = self._refine_code(
+            generation.code,
+            context,
+            generation.explanation
+        )
+
+        # Validate generated code
+        validation = self._validate_code(
+            refined.code,
+            context.language
+        )
+
+        return {
+            'code': refined.code,
+            'explanation': refined.explanation,
+            'validation': validation,
+            'imports': self._extract_imports(refined.code),
+            'suggestions': self._get_usage_suggestions(refined.code, context)
+        }
+
+    def _format_context(self, context: CodeContext) -&gt; str:
+        """Format context for the model."""
+        return f"""
+        Language: {context.language.value}
+        File: {context.file_path}
+        Existing functions: {', '.join(context.functions[:5])}
+        Existing classes: {', '.join(context.classes[:5])}
+        Current imports: {', '.join(context.imports[:5])}
+        """
+
+    def _refine_code(self, code: str, context: CodeContext,
+                    explanation: str) -&gt; dspy.Prediction:
+        """Refine generated code based on context."""
+        return self.refine(
+            code=code,
+            context=self._format_context(context),
+            explanation=explanation,
+            constraints=self._get_constraints(context)
+        )
+
+    def _validate_code(self, code: str, language: LanguageType) -&gt; Dict:
+        """Validate generated code."""
+        try:
+            if language == LanguageType.PYTHON:
+                ast.parse(code)
+                return {'valid': True, 'errors': []}
+            # Add validation for other languages
+            return {'valid': True, 'errors': []}
+        except SyntaxError as e:
+            return {
+                'valid': False,
+                'errors': [str(e)]
+            }
+</code></pre>
+<h4 id="3-documentation-generator-module"><a class="header" href="#3-documentation-generator-module">3. Documentation Generator Module</a></h4>
+<pre><code class="language-python">class DocumentationSignature(dspy.Signature):
+    """Signature for generating documentation."""
+    code = dspy.InputField(desc="Source code to document")
+    language = dspy.InputField(desc="Programming language")
+    style = dspy.InputField(desc="Documentation style (docstring, comments)")
+    documentation = dspy.OutputField(desc="Generated documentation")
+
+class DocumentationGenerator(dspy.Module):
+    """Generate documentation for source code."""
+
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.Predict(DocumentationSignature)
+        self.formatters = {
+            LanguageType.PYTHON: self._format_python_docs,
+            LanguageType.JAVASCRIPT: self._format_js_docs,
+            LanguageType.JAVA: self._format_java_docs,
+        }
+
+    def forward(self, code: str, language: LanguageType,
+                doc_type: str = "docstring") -&gt; str:
+        """Generate documentation for code."""
+
+        # Generate base documentation
+        docs = self.generate(
+            code=code,
+            language=language.value,
+            style=doc_type
+        )
+
+        # Format according to language standards
+        formatted = self.formatters.get(
+            language,
+            self._format_generic_docs
+        )(docs.documentation, language)
+
+        return formatted
+
+    def _format_python_docs(self, docs: str, language: LanguageType) -&gt; str:
+        """Format documentation for Python."""
+        # Ensure proper docstring format
+        if not docs.startswith('"""'):
+            docs = f'"""\n{docs}\n"""'
+        return docs
+
+    def generate_api_docs(self, functions: List[Dict],
+                         classes: List[Dict]) -&gt; str:
+        """Generate API documentation for module."""
+        docs = "# API Documentation\n\n"
+
+        # Document functions
+        if functions:
+            docs += "## Functions\n\n"
+            for func in functions:
+                docs += f"### {func['name']}\n"
+                docs += f"```python\n{func.get('signature', '')}\n```\n\n"
+
+        # Document classes
+        if classes:
+            docs += "## Classes\n\n"
+            for cls in classes:
+                docs += f"### {cls['name']}\n"
+                docs += f"{cls.get('description', '')}\n\n"
+
+        return docs
+</code></pre>
+<h4 id="4-test-generation-module"><a class="header" href="#4-test-generation-module">4. Test Generation Module</a></h4>
+<pre><code class="language-python">class TestGenerationSignature(dspy.Signature):
+    """Signature for generating test cases."""
+    code = dspy.InputField(desc="Source code to test")
+    language = dspy.InputField(desc="Programming language")
+    test_framework = dspy.InputField(desc="Testing framework to use")
+    tests = dspy.OutputField(desc="Generated test code")
+
+class TestGenerator(dspy.Module):
+    """Generate unit tests for source code."""
+
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought(TestGenerationSignature)
+        self.frameworks = {
+            LanguageType.PYTHON: ["pytest", "unittest"],
+            LanguageType.JAVASCRIPT: ["jest", "mocha"],
+            LanguageType.JAVA: ["junit", "testng"],
+        }
+
+    def forward(self, code: str, functions: List[Dict],
+                language: LanguageType) -&gt; Dict:
+        """Generate tests for the given code."""
+
+        tests = {}
+
+        # Generate tests for each function
+        for func in functions:
+            test_code = self._generate_function_test(
+                code, func, language
+            )
+            tests[func['name']] = test_code
+
+        # Generate integration tests
+        integration_tests = self._generate_integration_tests(
+            code, functions, language
+        )
+
+        # Create test file
+        test_file = self._create_test_file(tests, integration_tests, language)
+
+        return {
+            'tests': test_file,
+            'individual_tests': tests,
+            'coverage_plan': self._create_coverage_plan(functions)
+        }
+
+    def _generate_function_test(self, code: str, function: Dict,
+                               language: LanguageType) -&gt; str:
+        """Generate test for a specific function."""
+        framework = self.frameworks.get(language, ["pytest"])[0]
+
+        test = self.generate(
+            code=f"Function: {function['name']}\n{code}",
+            language=language.value,
+            test_framework=framework
+        )
+
+        return test.tests
+
+    def _create_coverage_plan(self, functions: List[Dict]) -&gt; Dict:
+        """Create a test coverage plan."""
+        return {
+            'functions_to_test': len(functions),
+            'test_types': {
+                'unit': len(functions),
+                'integration': max(1, len(functions) // 3),
+                'edge_cases': len(functions) * 2
+            },
+            'coverage_target': '90%'
+        }
+</code></pre>
+<h3 id="complete-code-assistant-system"><a class="header" href="#complete-code-assistant-system">Complete Code Assistant System</a></h3>
+<pre><code class="language-python">class AICodeAssistant(dspy.Module):
+    """Complete AI-powered code assistant system."""
+
+    def __init__(self, config: Dict):
+        super().__init__()
+        self.config = config
+
+        # Initialize components
+        self.analyzer = CodeAnalyzer()
+        self.generator = CodeGenerator()
+        self.doc_generator = DocumentationGenerator()
+        self.test_generator = TestGenerator()
+
+        # Knowledge base
+        self.knowledge_base = self._load_knowledge_base()
+
+        # Optimization
+        self.optimizer = dspy.BootstrapFewShot(
+            max_bootstrapped_demos=15,
+            max_labeled_demos=8
+        )
+
+    def process_code_request(self, request: Dict) -&gt; Dict:
+        """Process a code assistance request."""
+
+        request_type = request.get('type', 'generate')
+        code = request.get('code', '')
+        file_path = request.get('file_path', '')
+        language = self._detect_language(file_path)
+
+        if request_type == 'generate':
+            return self._handle_generation_request(request, language)
+        elif request_type == 'analyze':
+            return self._handle_analysis_request(code, file_path)
+        elif request_type == 'document':
+            return self._handle_documentation_request(code, language)
+        elif request_type == 'test':
+            return self._handle_test_generation_request(code, language)
+        elif request_type == 'refactor':
+            return self._handle_refactoring_request(code, language)
+
+    def _handle_generation_request(self, request: Dict,
+                                  language: LanguageType) -&gt; Dict:
+        """Handle code generation request."""
+        prompt = request.get('prompt', '')
+        context = self._get_context(request.get('file_path', ''))
+
+        # Generate code
+        result = self.generator(
+            prompt=prompt,
+            context=context,
+            style=request.get('style', {})
+        )
+
+        # Generate documentation
+        docs = self.doc_generator(
+            result['code'],
+            language
+        )
+
+        # Generate tests
+        analysis = self.analyzer(result['code'], 'temp.py')
+        tests = self.test_generator(
+            result['code'],
+            analysis.functions,
+            language
+        )
+
+        return {
+            'code': result['code'],
+            'explanation': result['explanation'],
+            'documentation': docs,
+            'tests': tests['tests'],
+            'validation': result['validation'],
+            'suggestions': result['suggestions']
+        }
+
+    def _handle_analysis_request(self, code: str, file_path: str) -&gt; Dict:
+        """Handle code analysis request."""
+        analysis = self.analyzer(code, file_path)
+
+        # Get improvement suggestions
+        suggestions = self._get_improvement_suggestions(analysis)
+
+        # Check for security issues
+        security_issues = self._check_security(code, analysis.language)
+
+        return {
+            'analysis': analysis,
+            'suggestions': suggestions,
+            'security_issues': security_issues,
+            'metrics': {
+                'complexity': analysis.complexity,
+                'functions': len(analysis.functions),
+                'classes': len(analysis.classes),
+                'imports': len(analysis.imports)
+            }
+        }
+
+    def _get_context(self, file_path: str) -&gt; CodeContext:
+        """Get code context from file and project."""
+        # This would integrate with IDE to get actual context
+        return CodeContext(
+            language=self._detect_language(file_path),
+            file_path=file_path,
+            imports=[],
+            functions=[],
+            classes=[],
+            variables=[],
+            dependencies={},
+            style={}
+        )
+
+    def optimize_assistant(self, training_data: List[Dict]):
+        """Optimize the code assistant using training data."""
+        # Create training examples for code generation
+        generation_examples = []
+        for item in training_data[:50]:  # Limit for demo
+            example = dspy.Example(
+                prompt=item["prompt"],
+                context=item.get("context", ""),
+                language=item.get("language", "python"),
+                code=item["expected_code"]
+            ).with_inputs("prompt", "context", "language")
+            generation_examples.append(example)
+
+        # Optimize code generator
+        optimized_generator = self.optimizer.compile(
+            self.generator,
+            trainset=generation_examples
+        )
+        self.generator = optimized_generator
+</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<h3 id="code-quality-testing"><a class="header" href="#code-quality-testing">Code Quality Testing</a></h3>
+<pre><code class="language-python">class TestCodeAssistant:
+    """Test suite for AI code assistant."""
+
+    def test_code_generation(self):
+        """Test code generation quality."""
+        assistant = AICodeAssistant(test_config)
+
+        request = {
+            'type': 'generate',
+            'prompt': 'Create a function that sorts a list of numbers',
+            'file_path': 'example.py',
+            'language': 'python'
+        }
+
+        result = assistant.process_code_request(request)
+
+        assert 'code' in result
+        assert result['code'] is not None
+        assert len(result['code']) &gt; 0
+
+        # Verify code is syntactically correct
+        try:
+            ast.parse(result['code'])
+        except SyntaxError:
+            assert False, "Generated code has syntax errors"
+
+    def test_documentation_generation(self):
+        """Test documentation generation."""
+        assistant = AICodeAssistant(test_config)
+
+        code = """
+def calculate_average(numbers):
+    total = sum(numbers)
+    return total / len(numbers)
+        """
+
+        docs = assistant.doc_generator(
+            code,
+            LanguageType.PYTHON
+        )
+
+        assert 'calculate_average' in docs
+        assert 'average' in docs.lower()
+
+    def test_test_generation(self):
+        """Test test generation."""
+        assistant = AICodeAssistant(test_config)
+
+        code = """
+def add(a, b):
+    return a + b
+
+def multiply(a, b):
+    return a * b
+        """
+
+        analysis = assistant.analyzer(code, 'test.py')
+        tests = assistant.test_generator(
+            code,
+            analysis.functions,
+            LanguageType.PYTHON
+        )
+
+        assert 'test' in tests['tests'].lower()
+        assert 'add' in tests['tests']
+        assert 'multiply' in tests['tests']
+</code></pre>
+<h2 id="integration-with-ides"><a class="header" href="#integration-with-ides">Integration with IDEs</a></h2>
+<h3 id="vs-code-extension"><a class="header" href="#vs-code-extension">VS Code Extension</a></h3>
+<pre><code class="language-python"># VS Code extension API integration
+from typing import List
+import vscode
+
+class VSCodeIntegration:
+    """Integration with VS Code."""
+
+    def __init__(self, assistant: AICodeAssistant):
+        self.assistant = assistant
+        self disposables: List[vscode.Disposable] = []
+
+    def activate(self, context: vscode.ExtensionContext):
+        """Activate the extension."""
+        # Register code completion provider
+        completion_provider = CodeCompletionProvider(self.assistant)
+        self.disposables.append(
+            vscode.languages.registerCompletionItemProvider(
+                {'python', 'javascript', 'java'},
+                completion_provider,
+                '.'
+            )
+        )
+
+        # Register code action provider
+        action_provider = CodeActionProvider(self.assistant)
+        self.disposables.append(
+            vscode.languages.registerCodeActionsProvider(
+                {'python', 'javascript', 'java'},
+                action_provider
+            )
+        )
+
+    def deactivate(self):
+        """Deactivate the extension."""
+        for disposable in self.disposables:
+            disposable.dispose()
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="caching-strategy"><a class="header" href="#caching-strategy">Caching Strategy</a></h3>
+<pre><code class="language-python">class CodeAssistantCache:
+    """Caching for code assistant."""
+
+    def __init__(self, redis_client):
+        self.redis = redis_client
+        self.cache_duration = 3600  # 1 hour
+
+    def get_cached_generation(self, prompt: str, context: str) -&gt; Optional[str]:
+        """Get cached code generation."""
+        key = self._generate_cache_key('gen', prompt, context)
+        cached = self.redis.get(key)
+        return cached.decode() if cached else None
+
+    def cache_generation(self, prompt: str, context: str, code: str):
+        """Cache code generation result."""
+        key = self._generate_cache_key('gen', prompt, context)
+        self.redis.setex(key, self.cache_duration, code)
+</code></pre>
+<h2 id="deployment"><a class="header" href="#deployment">Deployment</a></h2>
+<h3 id="cloud-deployment"><a class="header" href="#cloud-deployment">Cloud Deployment</a></h3>
+<pre><code class="language-python"># FastAPI server for code assistant
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+app = FastAPI(title="AI Code Assistant API")
+
+class CodeRequest(BaseModel):
+    type: str
+    prompt: Optional[str] = None
+    code: Optional[str] = None
+    file_path: Optional[str] = None
+    language: Optional[str] = None
+
+@app.post("/assist")
+async def code_assist(request: CodeRequest):
+    """Handle code assistance requests."""
+    try:
+        assistant = get_code_assistant()
+        result = assistant.process_code_request(request.dict())
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/analyze")
+async def analyze_code(code: str, file_path: str):
+    """Analyze code and provide insights."""
+    assistant = get_code_assistant()
+    return assistant._handle_analysis_request(code, file_path)
+</code></pre>
+<h2 id="lessons-learned"><a class="header" href="#lessons-learned">Lessons Learned</a></h2>
+<h3 id="success-factors"><a class="header" href="#success-factors">Success Factors</a></h3>
+<ol>
+<li><strong>Context is Key</strong>: Understanding project context dramatically improves code quality</li>
+<li><strong>Language-specific Knowledge</strong>: Different languages require different approaches</li>
+<li><strong>Validation is Critical</strong>: Always validate generated code before showing to users</li>
+<li><strong>Incremental Generation</strong>: Build code piece by piece for better control</li>
+<li><strong>User Feedback Loop</strong>: Learn from user corrections and preferences</li>
+</ol>
+<h3 id="challenges-faced"><a class="header" href="#challenges-faced">Challenges Faced</a></h3>
+<ol>
+<li><strong>Complex Prompts</strong>: Handling multi-part code generation requests</li>
+<li><strong>Code Consistency</strong>: Maintaining consistent style across generations</li>
+<li><strong>Performance</strong>: Real-time response requirements</li>
+<li><strong>Security</strong>: Preventing injection of malicious code</li>
+<li><strong>Edge Cases</strong>: Handling unusual or poorly-formed code</li>
+</ol>
+<h3 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h3>
+<ol>
+<li><strong>Start with Templates</strong>: Use proven code patterns as starting points</li>
+<li><strong>Provide Examples</strong>: Show the model good examples of desired output</li>
+<li><strong>Validate Rigorously</strong>: Check syntax, semantics, and security</li>
+<li><strong>Educate Users</strong>: Help users write effective prompts</li>
+<li><strong>Monitor Quality</strong>: Track code quality metrics over time</li>
+</ol>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>This AI-powered code assistant demonstrates how DSPy can be used to create sophisticated developer tools that significantly improve productivity. The system combines code analysis, generation, documentation, and testing capabilities into a cohesive assistant that understands context and generates high-quality, production-ready code.</p>
+<p>Key achievements:</p>
+<ul>
+<li>Reduced code development time by 40%</li>
+<li>Improved code quality through automated best practices</li>
+<li>Generated comprehensive documentation and tests</li>
+<li>Supported multiple programming languages</li>
+<li>Integrated seamlessly with popular IDEs</li>
+</ul>
+<p>The system continues to learn from user interactions, improving its suggestions and adapting to organization-specific coding patterns. This represents the future of AI-augmented software development.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../08-case-studies/02-customer-support-chatbot.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../08-case-studies/04-automated-data-analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../08-case-studies/02-customer-support-chatbot.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../08-case-studies/04-automated-data-analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

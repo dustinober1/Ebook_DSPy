@@ -1,0 +1,1170 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Instruction-Demonstration Interactions - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/05-optimizers/19-instruction-demonstration-interactions.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="instruction-and-demonstration-interaction-effects"><a class="header" href="#instruction-and-demonstration-interaction-effects">Instruction and Demonstration Interaction Effects</a></h1>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ul>
+<li>Understand how instructions and demonstrations interact in language model prompting</li>
+<li>Analyze synergy and redundancy between instruction and demonstration components</li>
+<li>Apply empirical methods to measure interaction effects</li>
+<li>Optimize instruction-demonstration combinations for maximum performance</li>
+<li>Balance trade-offs in multi-stage program optimization</li>
+</ul>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Instructions and demonstrations are the two primary components that guide language model behavior, yet they are often optimized independently. Research shows that these components have complex interactions:</p>
+<ol>
+<li><strong>Synergistic Effects</strong>: Well-aligned instructions and demonstrations can amplify each other’s effectiveness</li>
+<li><strong>Redundancy Conflicts</strong>: Overlapping information can lead to diminishing returns</li>
+<li><strong>Context Dependencies</strong>: The optimal demonstration set depends on instruction specificity</li>
+<li><strong>Stage-specific Dynamics</strong>: Different stages in multi-stage programs exhibit different interaction patterns</li>
+</ol>
+<p>Understanding these effects is crucial for effective multi-stage optimization, where the interplay between instructions and demonstrations can significantly impact overall performance.</p>
+<h2 id="theoretical-foundations"><a class="header" href="#theoretical-foundations">Theoretical Foundations</a></h2>
+<h3 id="interaction-framework"><a class="header" href="#interaction-framework">Interaction Framework</a></h3>
+<p>Consider a language model’s response as a function of both instruction (I) and demonstration set (D):</p>
+<pre><code>Response = f(Model, I, D, Query)
+</code></pre>
+<p>The interaction effects can be decomposed as:</p>
+<pre><code>Effect = α * InstructionEffect + β * DemonstrationEffect + γ * InteractionEffect + ε
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>α, β are main effect coefficients</li>
+<li>γ captures the interaction effect</li>
+<li>ε represents noise and unmodeled factors</li>
+</ul>
+<h3 id="types-of-interactions"><a class="header" href="#types-of-interactions">Types of Interactions</a></h3>
+<ol>
+<li><strong>Complementary</strong>: Instructions and demonstrations provide different, complementary information</li>
+<li><strong>Redundant</strong>: Similar information in both components</li>
+<li><strong>Contradictory</strong>: Conflicting signals between instruction and demonstrations</li>
+<li><strong>Hierarchical</strong>: Instructions constrain how demonstrations are interpreted</li>
+</ol>
+<h3 id="mathematical-modeling"><a class="header" href="#mathematical-modeling">Mathematical Modeling</a></h3>
+<p>The expected performance can be modeled as:</p>
+<pre><code>E[Performance] = μ + I_main + D_main + I×D + ε
+</code></pre>
+<p>Where:</p>
+<ul>
+<li>μ = baseline performance</li>
+<li>I_main = main effect of instruction quality</li>
+<li>D_main = main effect of demonstration quality</li>
+<li>I×D = interaction term</li>
+<li>ε = random error</li>
+</ul>
+<h2 id="empirical-analysis-of-interactions"><a class="header" href="#empirical-analysis-of-interactions">Empirical Analysis of Interactions</a></h2>
+<h3 id="controlled-experimentation-framework"><a class="header" href="#controlled-experimentation-framework">Controlled Experimentation Framework</a></h3>
+<pre><code class="language-python">class InteractionAnalyzer:
+    """Analyze instruction-demonstration interactions."""
+
+    def __init__(self, model, metric):
+        self.model = model
+        self.metric = metric
+
+    def analyze_interactions(
+        self,
+        base_instruction,
+        instruction_variants,
+        base_demonstrations,
+        demonstration_variants,
+        test_queries
+    ):
+        """Analyze interactions through controlled experiments."""
+
+        results = {
+            'main_effects': {},
+            'interaction_effects': {},
+            'optimal_combinations': []
+        }
+
+        # Test all combinations
+        for i, inst_variant in enumerate(instruction_variants):
+            for d, demo_variant in enumerate(demonstration_variants):
+                # Evaluate combination
+                score = self._evaluate_combination(
+                    inst_variant,
+                    demo_variant,
+                    test_queries
+                )
+
+                results[f'combo_{i}_{d}'] = {
+                    'instruction_id': i,
+                    'demonstration_id': d,
+                    'score': score
+                }
+
+        # Analyze main effects
+        results['main_effects'] = self._compute_main_effects(results)
+
+        # Compute interaction effects
+        results['interaction_effects'] = self._compute_interaction_effects(results)
+
+        # Find optimal combinations
+        results['optimal_combinations'] = self._find_optimal_combinations(results)
+
+        # Generate insights
+        results['insights'] = self._generate_insights(results)
+
+        return results
+
+    def _evaluate_combination(self, instruction, demonstrations, queries):
+        """Evaluate specific instruction-demonstration combination."""
+
+        total_score = 0
+
+        for query in queries:
+            # Create prompt with instruction and demonstrations
+            prompt = self._format_prompt(instruction, demonstrations, query)
+
+            # Generate response
+            response = self.model.generate(prompt)
+
+            # Score response
+            score = self.metric(response, query['expected'])
+            total_score += score
+
+        return total_score / len(queries)
+
+    def _compute_main_effects(self, results):
+        """Compute main effects of instructions and demonstrations."""
+
+        # Collect scores by instruction and demonstration
+        instruction_scores = {}
+        demonstration_scores = {}
+
+        for combo_key, combo_data in results.items():
+            if combo_key.startswith('combo_'):
+                inst_id = combo_data['instruction_id']
+                demo_id = combo_data['demonstration_id']
+                score = combo_data['score']
+
+                instruction_scores[inst_id] = instruction_scores.get(inst_id, []) + [score]
+                demonstration_scores[demo_id] = demonstration_scores.get(demo_id, []) + [score]
+
+        # Compute averages
+        main_effects = {
+            'instructions': {
+                str(i): np.mean(scores)
+                for i, scores in instruction_scores.items()
+            },
+            'demonstrations': {
+                str(d): np.mean(scores)
+                for d, scores in demonstration_scores.items()
+            }
+        }
+
+        return main_effects
+
+    def _compute_interaction_effects(self, results):
+        """Compute interaction effects between instructions and demonstrations."""
+
+        interaction_matrix = {}
+
+        for combo_key, combo_data in results.items():
+            if combo_key.startswith('combo_'):
+                inst_id = str(combo_data['instruction_id'])
+                demo_id = str(combo_data['demonstration_id'])
+                score = combo_data['score']
+
+                # Expected additive score
+                inst_main = results['main_effects']['instructions'][inst_id]
+                demo_main = results['main_effects']['demonstrations'][demo_id]
+                expected = inst_main + demo_main
+
+                # Interaction effect
+                interaction = score - expected
+
+                if inst_id not in interaction_matrix:
+                    interaction_matrix[inst_id] = {}
+                interaction_matrix[inst_id][demo_id] = interaction
+
+        return interaction_matrix
+</code></pre>
+<h3 id="synergy-detection"><a class="header" href="#synergy-detection">Synergy Detection</a></h3>
+<p>Identify instruction-demonstration pairs that work exceptionally well together.</p>
+<pre><code class="language-python">class SynergyDetector:
+    """Detect synergistic instruction-demonstration pairs."""
+
+    def __init__(self, synergy_threshold=0.1):
+        self.synergy_threshold = synergy_threshold
+
+    def detect_synergies(self, interaction_data):
+        """Detect synergistic pairs from interaction data."""
+
+        synergies = []
+        conflicts = []
+
+        interaction_effects = interaction_data['interaction_effects']
+
+        for inst_id, demo_interactions in interaction_effects.items():
+            for demo_id, interaction_score in demo_interactions.items():
+                if interaction_score &gt; self.synergy_threshold:
+                    synergies.append({
+                        'instruction_id': inst_id,
+                        'demonstration_id': demo_id,
+                        'synergy_score': interaction_score,
+                        'type': 'positive_synergy'
+                    })
+                elif interaction_score &lt; -self.synergy_threshold:
+                    conflicts.append({
+                        'instruction_id': inst_id,
+                        'demonstration_id': demo_id,
+                        'conflict_score': interaction_score,
+                        'type': 'negative_interaction'
+                    })
+
+        return {
+            'synergies': synergies,
+            'conflicts': conflicts,
+            'synergy_summary': self._summarize_synergies(synergies),
+            'conflict_summary': self._summarize_conflicts(conflicts)
+        }
+
+    def analyze_synergy_patterns(self, synergies):
+        """Analyze patterns in synergistic pairs."""
+
+        patterns = {
+            'instruction_clusters': [],
+            'demonstration_clusters': [],
+            'common_properties': []
+        }
+
+        if synergies:
+            # Cluster instructions that show similar synergy patterns
+            inst_patterns = self._cluster_instructions(synergies)
+            patterns['instruction_clusters'] = inst_patterns
+
+            # Cluster demonstrations
+            demo_patterns = self._cluster_demonstrations(synergies)
+            patterns['demonstration_clusters'] = demo_patterns
+
+            # Find common properties
+            common_props = self._identify_common_properties(synergies)
+            patterns['common_properties'] = common_props
+
+        return patterns
+
+    def _cluster_instructions(self, synergies):
+        """Cluster instructions based on synergy patterns."""
+
+        # Build instruction synergy profiles
+        inst_profiles = {}
+
+        for synergy in synergies:
+            inst_id = synergy['instruction_id']
+            demo_id = synergy['demonstration_id']
+            score = synergy['synergy_score']
+
+            if inst_id not in inst_profiles:
+                inst_profiles[inst_id] = {}
+            inst_profiles[inst_id][demo_id] = score
+
+        # Simple clustering based on similar patterns
+        clusters = []
+
+        # This is a simplified implementation
+        # In practice, you might use proper clustering algorithms
+        processed = set()
+        for inst_id, profile in inst_profiles.items():
+            if inst_id in processed:
+                continue
+
+            cluster = [inst_id]
+            processed.add(inst_id)
+
+            # Find similar profiles
+            for other_id, other_profile in inst_profiles.items():
+                if other_id in processed:
+                    continue
+
+                similarity = self._compute_profile_similarity(profile, other_profile)
+                if similarity &gt; 0.7:  # High similarity threshold
+                    cluster.append(other_id)
+                    processed.add(other_id)
+
+            clusters.append(cluster)
+
+        return clusters
+
+    def _compute_profile_similarity(self, profile1, profile2):
+        """Compute similarity between two instruction profiles."""
+
+        # Get common demonstration IDs
+        common_demos = set(profile1.keys()) &amp; set(profile2.keys())
+
+        if not common_demos:
+            return 0
+
+        # Compute correlation
+        scores1 = [profile1[demo] for demo in common_demos]
+        scores2 = [profile2[demo] for demo in common_demos]
+
+        correlation = np.corrcoef(scores1, scores2)[0, 1]
+        return correlation if not np.isnan(correlation) else 0
+</code></pre>
+<h2 id="redundancy-analysis"><a class="header" href="#redundancy-analysis">Redundancy Analysis</a></h2>
+<h3 id="information-overlap-detection"><a class="header" href="#information-overlap-detection">Information Overlap Detection</a></h3>
+<p>Identify redundant information between instructions and demonstrations.</p>
+<pre><code class="language-python">class RedundancyAnalyzer:
+    """Analyze redundancy between instructions and demonstrations."""
+
+    def __init__(self, embedding_model=None):
+        self.embedding_model = embedding_model
+
+    def compute_redundancy_matrix(
+        self,
+        instruction_variants,
+        demonstration_variants
+    ):
+        """Compute redundancy matrix."""
+
+        redundancy_matrix = {}
+
+        for i, instruction in enumerate(instruction_variants):
+            redundancy_matrix[str(i)] = {}
+
+            for d, demonstrations in enumerate(demonstration_variants):
+                # Convert demonstrations to text
+                demo_text = self._demonstrations_to_text(demonstrations)
+
+                # Compute redundancy score
+                redundancy = self._compute_redundancy(instruction, demo_text)
+                redundancy_matrix[str(i)][str(d)] = redundancy
+
+        return redundancy_matrix
+
+    def _compute_redundancy(self, instruction, demonstration_text):
+        """Compute redundancy between instruction and demonstration."""
+
+        if self.embedding_model:
+            # Semantic similarity using embeddings
+            inst_emb = self.embedding_model.encode(instruction)
+            demo_emb = self.embedding_model.encode(demonstration_text)
+
+            # Cosine similarity
+            similarity = np.dot(inst_emb, demo_emb) / (
+                np.linalg.norm(inst_emb) * np.linalg.norm(demo_emb)
+            )
+            return similarity
+        else:
+            # N-gram overlap
+            return self._ngram_overlap(instruction, demonstration_text)
+
+    def _ngram_overlap(self, text1, text2, n=2):
+        """Compute n-gram overlap between texts."""
+
+        def get_ngrams(text, n):
+            words = text.lower().split()
+            ngrams = []
+            for i in range(len(words) - n + 1):
+                ngrams.append(tuple(words[i:i+n]))
+            return set(ngrams)
+
+        ngrams1 = get_ngrams(text1, n)
+        ngrams2 = get_ngrams(text2, n)
+
+        if not ngrams1 or not ngrams2:
+            return 0
+
+        intersection = len(ngrams1 &amp; ngrams2)
+        union = len(ngrams1 | ngrams2)
+
+        return intersection / union
+
+    def identify_redundant_combinations(
+        self,
+        redundancy_matrix,
+        threshold=0.7
+    ):
+        """Identify highly redundant combinations."""
+
+        redundant_pairs = []
+
+        for inst_id, demo_redundancies in redundancy_matrix.items():
+            for demo_id, redundancy in demo_redundancies.items():
+                if redundancy &gt; threshold:
+                    redundant_pairs.append({
+                        'instruction_id': inst_id,
+                        'demonstration_id': demo_id,
+                        'redundancy_score': redundancy
+                    })
+
+        # Sort by redundancy score
+        redundant_pairs.sort(key=lambda x: x['redundancy_score'], reverse=True)
+
+        return redundant_pairs
+
+    def suggest_deduplication_strategies(self, redundant_pairs):
+        """Suggest strategies to reduce redundancy."""
+
+        strategies = []
+
+        # Strategy 1: Simplify instructions
+        if redundant_pairs:
+            strategies.append({
+                'name': 'simplify_instructions',
+                'description': 'Reduce instruction complexity when demonstrations are clear',
+                'affected_pairs': len(redundant_pairs),
+                'expected_gain': 'Reduced token usage, clearer signals'
+            })
+
+        # Strategy 2: Remove redundant demonstrations
+        strategies.append({
+            'name': 'selective_demonstrations',
+            'description': 'Remove demonstrations that duplicate instruction content',
+            'implementation': 'Filter demonstrations by information overlap',
+            'expected_gain': 'Focus on complementary examples'
+        })
+
+        # Strategy 3: Complementary selection
+        strategies.append({
+            'name': 'complementary_selection',
+            'description': 'Select instruction-demonstration pairs with minimal redundancy',
+            'implementation': 'Optimize for information complementarity',
+            'expected_gain': 'Better information coverage'
+        })
+
+        return strategies
+</code></pre>
+<h2 id="optimization-with-interaction-awareness"><a class="header" href="#optimization-with-interaction-awareness">Optimization with Interaction Awareness</a></h2>
+<h3 id="joint-optimization-framework"><a class="header" href="#joint-optimization-framework">Joint Optimization Framework</a></h3>
+<p>Optimize instructions and demonstrations simultaneously considering their interactions.</p>
+<pre><code class="language-python">class InteractionAwareOptimizer:
+    """Optimizer that considers instruction-demonstration interactions."""
+
+    def __init__(self, model, optimization_metric):
+        self.model = model
+        self.metric = optimization_metric
+        self.interaction_cache = {}
+
+    def optimize_with_interactions(
+        self,
+        base_instruction,
+        instruction_candidates,
+        demonstration_pool,
+        trainset,
+        val_set,
+        max_combinations=100
+    ):
+        """Optimize considering interactions."""
+
+        # Phase 1: Pre-screen candidates
+        screened_instructions = self._screen_instructions(
+            base_instruction,
+            instruction_candidates,
+            trainset[:10]  # Use subset for screening
+        )
+
+        # Phase 2: Evaluate promising combinations
+        best_combination = None
+        best_score = -float('inf')
+
+        # Generate combinations strategically
+        combinations = self._generate_strategic_combinations(
+            screened_instructions,
+            demonstration_pool,
+            max_combinations
+        )
+
+        for instruction, demonstrations in combinations:
+            # Evaluate with interaction awareness
+            score = self._evaluate_with_interaction_model(
+                instruction,
+                demonstrations,
+                val_set
+            )
+
+            if score &gt; best_score:
+                best_score = score
+                best_combination = {
+                    'instruction': instruction,
+                    'demonstrations': demonstrations,
+                    'score': score
+                }
+
+        # Phase 3: Refine best combination
+        refined_combination = self._refine_combination(
+            best_combination,
+            val_set
+        )
+
+        return refined_combination
+
+    def _generate_strategic_combinations(
+        self,
+        instructions,
+        demonstration_pool,
+        max_combinations
+    ):
+        """Generate strategic combinations based on interaction potential."""
+
+        combinations = []
+        combination_scores = []
+
+        # Score instructions by complexity and clarity
+        instruction_scores = self._score_instructions(instructions)
+
+        # Score demonstration sets by diversity and coverage
+        demo_set_scores = self._score_demonstration_sets(demonstration_pool)
+
+        # Generate combinations
+        for instruction in instructions:
+            # Select compatible demonstration sets
+            compatible_demos = self._find_compatible_demonstrations(
+                instruction,
+                demonstration_pool
+            )
+
+            for demo_set in compatible_demos[:5]:  # Top 5 per instruction
+                # Compute interaction potential
+                interaction_potential = self._estimate_interaction_potential(
+                    instruction,
+                    demo_set,
+                    instruction_scores[instruction],
+                    demo_set_scores[tuple(d['id'] for d in demo_set)]
+                )
+
+                combinations.append((instruction, demo_set))
+                combination_scores.append(interaction_potential)
+
+        # Sort by interaction potential
+        sorted_combinations = [
+            combo for _, combo in sorted(
+                zip(combination_scores, combinations),
+                key=lambda x: x[0],
+                reverse=True
+            )
+        ]
+
+        return sorted_combinations[:max_combinations]
+
+    def _estimate_interaction_potential(
+        self,
+        instruction,
+        demonstration_set,
+        instruction_score,
+        demo_set_score
+    ):
+        """Estimate interaction potential for a combination."""
+
+        # Base scores
+        base_potential = instruction_score * demo_set_score
+
+        # Interaction factors
+        complementarity = self._estimate_complementarity(
+            instruction, demonstration_set
+        )
+
+        # Balance between instruction and demonstration strength
+        balance_factor = 1 - abs(instruction_score - demo_set_score) / 2
+
+        # Combine factors
+        potential = base_potential * (1 + complementarity) * balance_factor
+
+        return potential
+
+    def _estimate_complementarity(self, instruction, demonstration_set):
+        """Estimate how complementary instruction and demonstrations are."""
+
+        # Low redundancy indicates high complementarity
+        redundancy = self._compute_redundancy(instruction, demonstration_set)
+        complementarity = 1 - redundancy
+
+        # Consider instruction specificity
+        instruction_specificity = self._measure_specificity(instruction)
+
+        # Specific instructions work better with diverse demonstrations
+        if instruction_specificity &gt; 0.7:
+            diversity_bonus = self._measure_diversity(demonstration_set)
+            complementarity = complementarity * (1 + diversity_bonus * 0.2)
+
+        return complementarity
+
+    def _refine_combination(self, combination, val_set):
+        """Refine the best combination through local optimization."""
+
+        instruction = combination['instruction']
+        demonstrations = combination['demonstrations']
+
+        # Refine instruction
+        refined_instruction = self._refine_instruction(
+            instruction,
+            demonstrations,
+            val_set
+        )
+
+        # Refine demonstrations
+        refined_demonstrations = self._refine_demonstrations(
+            refined_instruction,
+            demonstrations,
+            val_set
+        )
+
+        # Evaluate refined combination
+        refined_score = self._evaluate_combination(
+            refined_instruction,
+            refined_demonstrations,
+            val_set
+        )
+
+        return {
+            'original': combination,
+            'refined': {
+                'instruction': refined_instruction,
+                'demonstrations': refined_demonstrations,
+                'score': refined_score
+            },
+            'improvement': refined_score - combination['score']
+        }
+</code></pre>
+<h2 id="stage-specific-interaction-patterns"><a class="header" href="#stage-specific-interaction-patterns">Stage-specific Interaction Patterns</a></h2>
+<h3 id="analysis-by-stage-type"><a class="header" href="#analysis-by-stage-type">Analysis by Stage Type</a></h3>
+<p>Different stages in multi-stage programs exhibit different interaction patterns.</p>
+<pre><code class="language-python">class StageInteractionAnalyzer:
+    """Analyze interaction patterns specific to different stage types."""
+
+    def __init__(self):
+        self.stage_patterns = {
+            'decomposition': self._analyze_decomposition_patterns,
+            'retrieval': self._analyze_retrieval_patterns,
+            'synthesis': self._analyze_synthesis_patterns,
+            'refinement': self._analyze_refinement_patterns
+        }
+
+    def analyze_stage_patterns(
+        self,
+        pipeline_stages,
+        interaction_data
+    ):
+        """Analyze patterns for each stage type."""
+
+        stage_analysis = {}
+
+        for stage_name, stage_module in pipeline_stages.items():
+            # Determine stage type
+            stage_type = self._classify_stage_type(stage_module)
+
+            if stage_type in self.stage_patterns:
+                # Get stage-specific interaction data
+                stage_data = self._extract_stage_interaction_data(
+                    stage_name,
+                    interaction_data
+                )
+
+                # Analyze patterns
+                patterns = self.stage_patterns[stage_type](stage_data)
+
+                stage_analysis[stage_name] = {
+                    'type': stage_type,
+                    'patterns': patterns,
+                    'recommendations': self._generate_stage_recommendations(
+                        stage_type,
+                        patterns
+                    )
+                }
+
+        return stage_analysis
+
+    def _analyze_decomposition_patterns(self, stage_data):
+        """Analyze patterns for decomposition stages."""
+
+        patterns = {
+            'instruction_characteristics': [],
+            'demonstration_requirements': [],
+            'interaction_tendencies': []
+        }
+
+        # Instructions should be clear and specific
+        patterns['instruction_characteristics'] = [
+            'High specificity needed for decomposition',
+            'Clear task boundaries improve performance',
+            'Hierarchical instructions work better'
+        ]
+
+        # Demonstrations should show decomposition examples
+        patterns['demonstration_requirements'] = [
+            'Show input-to-component mapping',
+            'Include edge cases',
+            'Demonstrate different decomposition strategies'
+        ]
+
+        # Interaction patterns
+        patterns['interaction_tendencies'] = [
+            'Strong positive interaction with aligned examples',
+            'Negative interaction with contradictory demonstrations',
+            'Synergy increases with instruction specificity'
+        ]
+
+        return patterns
+
+    def _analyze_retrieval_patterns(self, stage_data):
+        """Analyze patterns for retrieval stages."""
+
+        patterns = {
+            'instruction_characteristics': [
+                'Focus on relevance criteria',
+                'Specify query formulation guidelines',
+                'Include relevance scoring explanation'
+            ],
+            'demonstration_requirements': [
+                'Show query-document relevance',
+                'Include positive and negative examples',
+                'Demonstrate query expansion'
+            ],
+            'interaction_tendencies': [
+                'Demonstrations critical for understanding relevance',
+                'Instructions guide but examples dominate learning',
+                'High redundancy can confuse the model'
+            ]
+        }
+
+        return patterns
+
+    def _generate_stage_recommendations(self, stage_type, patterns):
+        """Generate stage-specific recommendations."""
+
+        recommendations = []
+
+        if stage_type == 'decomposition':
+            recommendations.extend([
+                'Use highly specific instructions with clear boundaries',
+                'Select demonstrations showing diverse decomposition strategies',
+                'Minimize redundancy between instruction and examples'
+            ])
+        elif stage_type == 'retrieval':
+            recommendations.extend([
+                'Focus demonstrations on relevance patterns',
+                'Keep instructions concise but precise',
+                'Include negative examples to clarify boundaries'
+            ])
+        elif stage_type == 'synthesis':
+            recommendations.extend([
+                'Instructions should emphasize synthesis principles',
+                'Demonstrations should show information integration',
+                'Balance breadth and depth in examples'
+            ])
+
+        return recommendations
+</code></pre>
+<h2 id="practical-guidelines"><a class="header" href="#practical-guidelines">Practical Guidelines</a></h2>
+<h3 id="optimization-decision-framework"><a class="header" href="#optimization-decision-framework">Optimization Decision Framework</a></h3>
+<pre><code class="language-python">class InteractionOptimizationDecisionFramework:
+    """Framework for making optimization decisions based on interaction analysis."""
+
+    def __init__(self):
+        self.decision_rules = self._initialize_decision_rules()
+
+    def recommend_optimization_strategy(
+        self,
+        interaction_analysis,
+        stage_info,
+        constraints
+    ):
+        """Recommend optimization strategy based on analysis."""
+
+        recommendations = {
+            'primary_strategy': None,
+            'secondary_strategies': [],
+            'avoid_strategies': [],
+            'priority_actions': []
+        }
+
+        # Analyze interaction strength
+        avg_interaction = self._compute_average_interaction(
+            interaction_analysis['interaction_effects']
+        )
+
+        # Analyze redundancy
+        avg_redundancy = self._compute_average_redundancy(
+            interaction_analysis['redundancy_matrix']
+        )
+
+        # Stage-specific considerations
+        stage_type = stage_info.get('type', 'unknown')
+
+        # Primary strategy selection
+        if avg_interaction &gt; 0.2:  # Strong positive interactions
+            recommendations['primary_strategy'] = 'joint_optimization'
+            recommendations['priority_actions'].append(
+                'Focus on instruction-demonstration alignment'
+            )
+        elif avg_redundancy &gt; 0.7:  # High redundancy
+            recommendations['primary_strategy'] = 'redundancy_reduction'
+            recommendations['priority_actions'].append(
+                'Simplify instructions or select complementary demonstrations'
+            )
+        elif stage_type in ['retrieval', 'classification']:
+            recommendations['primary_strategy'] = 'demonstration_focused'
+            recommendations['priority_actions'].append(
+                'Prioritize high-quality, diverse demonstrations'
+            )
+        else:
+            recommendations['primary_strategy'] = 'balanced_approach'
+
+        # Resource constraints
+        if constraints.get('computation_limited', False):
+            recommendations['secondary_strategies'].append(
+                'incremental_optimization'
+            )
+            recommendations['avoid_strategies'].append(
+                'exhaustive_search'
+            )
+
+        if constraints.get('time_critical', False):
+            recommendations['priority_actions'].append(
+                'Use pre-computed interaction patterns'
+            )
+
+        return recommendations
+
+    def _initialize_decision_rules(self):
+        """Initialize decision rules for optimization."""
+
+        return {
+            'high_interaction_threshold': 0.2,
+            'low_interaction_threshold': -0.1,
+            'high_redundancy_threshold': 0.7,
+            'low_diversity_threshold': 0.3
+        }
+</code></pre>
+<h2 id="case-studies"><a class="header" href="#case-studies">Case Studies</a></h2>
+<h3 id="case-study-1-multi-hop-qa-system"><a class="header" href="#case-study-1-multi-hop-qa-system">Case Study 1: Multi-hop QA System</a></h3>
+<pre><code class="language-python">def multi_hop_qa_interaction_case_study():
+    """Case study on instruction-demonstration interactions in multi-hop QA."""
+
+    case_study = {
+        'task': 'Multi-hop Question Answering',
+        'stages': ['query_decomposition', 'information_retrieval', 'answer_synthesis'],
+        'findings': {},
+        'recommendations': []
+    }
+
+    # Findings
+    case_study['findings'] = {
+        'decomposition_stage': {
+            'optimal_interaction': 'High specificity + diverse decomposition examples',
+            'common_pitfall': 'Overly detailed instructions with simple examples',
+            'best_practice': 'Match instruction complexity to example diversity'
+        },
+        'retrieval_stage': {
+            'optimal_interaction': 'Clear relevance criteria + mixed positive/negative examples',
+            'common_pitfall': 'Generic instructions with domain-specific examples',
+            'best_practice': 'Let examples demonstrate domain-specific patterns'
+        },
+        'synthesis_stage': {
+            'optimal_interaction': 'Principled instructions + integration examples',
+            'common_pitfall': 'Too many examples overwhelming the instruction',
+            'best_practice': 'Use 2-3 high-quality examples with clear instructions'
+        }
+    }
+
+    # Quantitative insights
+    case_study['performance_insights'] = {
+        'interaction_correlation': 0.65,  # Strong correlation between interaction score and performance
+        'optimal_redundancy_range': (0.3, 0.5),  # Sweet spot for information overlap
+        'synergy_threshold': 0.15  # Minimum synergy for meaningful improvement
+    }
+
+    return case_study
+</code></pre>
+<h2 id="best-practices-summary"><a class="header" href="#best-practices-summary">Best Practices Summary</a></h2>
+<h3 id="1-general-guidelines"><a class="header" href="#1-general-guidelines">1. General Guidelines</a></h3>
+<ul>
+<li><strong>Always measure interactions</strong>: Don’t assume independence</li>
+<li><strong>Start with complementary pairs</strong>: Select instructions and demonstrations that cover different aspects</li>
+<li><strong>Monitor redundancy</strong>: Too much overlap reduces efficiency</li>
+<li><strong>Consider stage type</strong>: Different stages have different optimal patterns</li>
+<li><strong>Iterate jointly</strong>: Refine both components together</li>
+</ul>
+<h3 id="2-stage-specific-recommendations"><a class="header" href="#2-stage-specific-recommendations">2. Stage-specific Recommendations</a></h3>
+<p><strong>Decomposition Stages</strong>:</p>
+<ul>
+<li>High instruction specificity</li>
+<li>Diverse decomposition strategies in demonstrations</li>
+<li>Clear task boundaries</li>
+</ul>
+<p><strong>Retrieval Stages</strong>:</p>
+<ul>
+<li>Focus demonstrations on relevance patterns</li>
+<li>Include both positive and negative examples</li>
+<li>Keep instructions precise but concise</li>
+</ul>
+<p><strong>Synthesis Stages</strong>:</p>
+<ul>
+<li>Emphasize integration principles</li>
+<li>Show information combination patterns</li>
+<li>Balance breadth and depth</li>
+</ul>
+<p><strong>Refinement Stages</strong>:</p>
+<ul>
+<li>Targeted improvement instructions</li>
+<li>Before/after examples</li>
+<li>Quality-focused demonstrations</li>
+</ul>
+<h3 id="3-optimization-workflow"><a class="header" href="#3-optimization-workflow">3. Optimization Workflow</a></h3>
+<ol>
+<li><strong>Analyze baseline</strong>: Measure current interaction effects</li>
+<li><strong>Identify patterns</strong>: Find synergies and redundancies</li>
+<li><strong>Generate candidates</strong>: Create instruction and demonstration variants</li>
+<li><strong>Evaluate combinations</strong>: Test promising pairs</li>
+<li><strong>Refine jointly</strong>: Optimize selected combination</li>
+<li><strong>Validate</strong>: Test on held-out data</li>
+</ol>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>Understanding and optimizing instruction-demonstration interactions is crucial for effective multi-stage language model programs. Key insights:</p>
+<ol>
+<li><strong>Interaction Effects</strong>: Instructions and demonstrations have complex, non-linear interactions</li>
+<li><strong>Synergy Detection</strong>: Identifying highly compatible pairs can significantly boost performance</li>
+<li><strong>Redundancy Management</strong>: Balancing overlap and complementarity is essential</li>
+<li><strong>Stage-specific Patterns</strong>: Different stages require different optimization strategies</li>
+<li><strong>Joint Optimization</strong>: Simultaneous optimization yields better results than independent tuning</li>
+</ol>
+<p>By considering these interaction effects, practitioners can build more effective and efficient multi-stage programs that leverage the full potential of both instruction and demonstration components.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/18-complex-pipeline-optimization.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/20-prompts-as-hyperparameters.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/18-complex-pipeline-optimization.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/20-prompts-as-hyperparameters.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

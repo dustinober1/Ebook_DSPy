@@ -1,0 +1,1135 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>COPA Method - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/05-optimizers/09-copa-method.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="copa-combined-fine-tuning-and-prompt-optimization"><a class="header" href="#copa-combined-fine-tuning-and-prompt-optimization">COPA: Combined Fine-Tuning and Prompt Optimization</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>COPA (Compiler and Prompt Optimization Algorithm) represents the cutting edge of DSPy optimization by combining two powerful techniques: fine-tuning and prompt optimization. While each technique individually provides significant improvements, COPA demonstrates that combining them creates synergistic effects that exceed additive improvements, often achieving 2-26x performance gains.</p>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ol>
+<li>Understand the theoretical foundation of joint optimization</li>
+<li>Implement COPA for combining fine-tuning with prompt optimization</li>
+<li>Apply Monte Carlo methods for parameter exploration</li>
+<li>Use Bayesian optimization for prompt tuning</li>
+<li>Achieve maximum performance through two-level parameter optimization</li>
+</ol>
+<h2 id="the-joint-optimization-problem"><a class="header" href="#the-joint-optimization-problem">The Joint Optimization Problem</a></h2>
+<h3 id="why-combine-fine-tuning-and-prompt-optimization"><a class="header" href="#why-combine-fine-tuning-and-prompt-optimization">Why Combine Fine-Tuning and Prompt Optimization?</a></h3>
+<p>Traditional DSPy optimization operates at a single level: either you fine-tune model weights OR you optimize prompts. However, research shows these approaches are complementary:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Approach</th><th>What It Optimizes</th><th>Strengths</th><th>Limitations</th></tr>
+</thead>
+<tbody>
+<tr><td>Fine-tuning</td><td>Model weights</td><td>Deep task adaptation</td><td>Expensive, requires data</td></tr>
+<tr><td>Prompt optimization</td><td>Instructions &amp; demonstrations</td><td>Fast, flexible</td><td>Limited without model changes</td></tr>
+<tr><td><strong>COPA (Combined)</strong></td><td>Both simultaneously</td><td>Maximum performance</td><td>More complex setup</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="two-level-parameter-framework"><a class="header" href="#two-level-parameter-framework">Two-Level Parameter Framework</a></h3>
+<p>COPA treats optimization as a two-level parameter problem:</p>
+<ol>
+<li><strong>Level 1 - Weights (W)</strong>: Model parameters modified through fine-tuning</li>
+<li><strong>Level 2 - Prompts (P)</strong>: Instructions and demonstrations optimized by DSPy</li>
+</ol>
+<pre><code class="language-python"># Mathematical formulation
+# Goal: maximize E[Performance(W, P)]
+# where W = fine-tuned weights
+#       P = optimized prompts (instructions + demonstrations)
+
+# The joint optimization objective:
+# argmax_{W, P} E[metric(program(W, P), examples)]
+</code></pre>
+<h3 id="mathematical-foundation"><a class="header" href="#mathematical-foundation">Mathematical Foundation</a></h3>
+<p>The COPA framework defines two key operators:</p>
+<ol>
+<li><strong>Instruction Fine-Tuning Operator (L)</strong>: Adapts model weights for better instruction following</li>
+<li><strong>Prompt Optimization Operator (P)</strong>: Optimizes prompts using DSPy’s compilation</li>
+</ol>
+<p>The combined optimization can be expressed as:</p>
+<pre><code>COPA(program) = P(L(program))
+</code></pre>
+<p>Where applying L first (fine-tuning), then P (prompt optimization) yields better results than the reverse order.</p>
+<h2 id="implementing-copa"><a class="header" href="#implementing-copa">Implementing COPA</a></h2>
+<h3 id="basic-copa-implementation"><a class="header" href="#basic-copa-implementation">Basic COPA Implementation</a></h3>
+<pre><code class="language-python">import dspy
+from dspy.teleprompter import BootstrapFewShot, MIPRO
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+class COPAOptimizer:
+    """Combined Optimization through fine-tuning and Prompt Adaptation."""
+
+    def __init__(
+        self,
+        base_model_name: str,
+        metric,
+        finetune_epochs: int = 3,
+        prompt_optimizer: str = "mipro"
+    ):
+        self.base_model_name = base_model_name
+        self.metric = metric
+        self.finetune_epochs = finetune_epochs
+        self.prompt_optimizer = prompt_optimizer
+
+    def optimize(
+        self,
+        program,
+        trainset,
+        valset=None,
+        finetune_data=None
+    ):
+        """
+        Two-stage optimization:
+        1. Fine-tune the base model
+        2. Apply prompt optimization to the fine-tuned model
+        """
+        # Stage 1: Fine-tuning
+        print("Stage 1: Fine-tuning base model...")
+        finetuned_model = self._finetune(
+            trainset if finetune_data is None else finetune_data
+        )
+
+        # Configure DSPy to use fine-tuned model
+        finetuned_lm = self._create_dspy_lm(finetuned_model)
+        dspy.settings.configure(lm=finetuned_lm)
+
+        # Stage 2: Prompt optimization
+        print("Stage 2: Applying prompt optimization...")
+        if self.prompt_optimizer == "mipro":
+            optimizer = MIPRO(
+                metric=self.metric,
+                num_candidates=15,
+                auto="medium"
+            )
+        else:
+            optimizer = BootstrapFewShot(
+                metric=self.metric,
+                max_bootstrapped_demos=8
+            )
+
+        compiled_program = optimizer.compile(
+            program,
+            trainset=trainset,
+            valset=valset
+        )
+
+        return compiled_program, finetuned_model
+
+    def _finetune(self, training_data):
+        """Fine-tune the base model on task-specific data."""
+        from peft import LoraConfig, get_peft_model
+
+        # Load base model
+        model = AutoModelForCausalLM.from_pretrained(
+            self.base_model_name,
+            load_in_4bit=True,
+            device_map="auto"
+        )
+        tokenizer = AutoTokenizer.from_pretrained(self.base_model_name)
+
+        # Configure LoRA
+        lora_config = LoraConfig(
+            r=16,
+            lora_alpha=32,
+            target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+            lora_dropout=0.05,
+            task_type="CAUSAL_LM"
+        )
+
+        model = get_peft_model(model, lora_config)
+
+        # Fine-tune (simplified for brevity)
+        # In practice, use the full training loop from 05-finetuning.md
+        return model
+
+    def _create_dspy_lm(self, model):
+        """Wrap fine-tuned model for DSPy."""
+        # Implementation depends on model type
+        # See 05-finetuning.md for detailed wrapper implementation
+        pass
+
+# Usage example
+optimizer = COPAOptimizer(
+    base_model_name="mistralai/Mistral-7B-v0.1",
+    metric=answer_accuracy,
+    finetune_epochs=3,
+    prompt_optimizer="mipro"
+)
+
+compiled_qa, finetuned_model = optimizer.optimize(
+    program=MultiHopQA(),
+    trainset=training_examples,
+    valset=validation_examples
+)
+</code></pre>
+<h3 id="copa-algorithm-pseudocode"><a class="header" href="#copa-algorithm-pseudocode">COPA Algorithm Pseudocode</a></h3>
+<pre><code>Algorithm: COPA (Combined Optimization and Prompt Adaptation)
+Input:
+  - Program P with modules M1, M2, ..., Mn
+  - Training set D_train
+  - Validation set D_val
+  - Base language model LM
+  - Metric function f
+
+Output: Optimized program P* with fine-tuned model LM*
+
+1. FINE-TUNING PHASE (Operator L):
+   a. Format D_train for instruction fine-tuning
+   b. Initialize LM* from LM
+   c. For epoch = 1 to num_epochs:
+      - For each batch in D_train:
+        - Compute instruction-following loss
+        - Update LM* weights using gradient descent
+   d. Validate on D_val, save best checkpoint
+
+2. PROMPT OPTIMIZATION PHASE (Operator P):
+   a. Configure DSPy with LM*
+   b. Initialize prompt search space S
+   c. Apply Bayesian optimization B:
+      - For t = 1 to T iterations:
+        - Select candidate prompt p_t using acquisition function
+        - Evaluate f(P(p_t), D_val)
+        - Update surrogate model
+   d. Return best prompt p*
+
+3. RETURN: P* = P(LM*, p*)
+</code></pre>
+<h2 id="monte-carlo-methods-for-parameter-exploration"><a class="header" href="#monte-carlo-methods-for-parameter-exploration">Monte Carlo Methods for Parameter Exploration</a></h2>
+<p>COPA uses Monte Carlo methods to explore the vast space of possible parameter combinations efficiently.</p>
+<h3 id="monte-carlo-prompt-sampling"><a class="header" href="#monte-carlo-prompt-sampling">Monte Carlo Prompt Sampling</a></h3>
+<pre><code class="language-python">import numpy as np
+from typing import List, Dict
+
+class MonteCarloPromptExplorer:
+    """Explore prompt space using Monte Carlo sampling."""
+
+    def __init__(
+        self,
+        num_samples: int = 100,
+        temperature: float = 1.0
+    ):
+        self.num_samples = num_samples
+        self.temperature = temperature
+
+    def explore(
+        self,
+        program,
+        prompt_templates: List[str],
+        demo_pool: List[dspy.Example],
+        metric,
+        trainset
+    ):
+        """
+        Monte Carlo exploration of prompt configurations.
+
+        Samples different combinations of:
+        - Instruction templates
+        - Demonstration subsets
+        - Demonstration orderings
+        """
+        results = []
+
+        for _ in range(self.num_samples):
+            # Sample instruction
+            instruction = np.random.choice(prompt_templates)
+
+            # Sample demonstrations (with replacement)
+            num_demos = np.random.randint(2, min(8, len(demo_pool)))
+            demos = np.random.choice(
+                demo_pool,
+                size=num_demos,
+                replace=False
+            ).tolist()
+
+            # Shuffle demonstration order
+            np.random.shuffle(demos)
+
+            # Configure program
+            config = {
+                "instruction": instruction,
+                "demonstrations": demos
+            }
+
+            # Evaluate configuration
+            score = self._evaluate_config(
+                program, config, metric, trainset
+            )
+
+            results.append({
+                "config": config,
+                "score": score
+            })
+
+        # Return best configuration
+        best = max(results, key=lambda x: x["score"])
+        return best["config"], results
+
+    def _evaluate_config(self, program, config, metric, trainset):
+        """Evaluate a specific prompt configuration."""
+        # Apply configuration to program
+        program_copy = program.deepcopy()
+
+        # Set instruction and demonstrations
+        for module in program_copy.modules():
+            if hasattr(module, 'extended_signature'):
+                module.extended_signature.instructions = config["instruction"]
+            module.demos = config["demonstrations"]
+
+        # Compute average metric on training set
+        scores = []
+        for example in trainset[:20]:  # Sample for efficiency
+            try:
+                pred = program_copy(**example.inputs())
+                scores.append(metric(example, pred))
+            except Exception:
+                scores.append(0)
+
+        return np.mean(scores)
+
+# Usage
+explorer = MonteCarloPromptExplorer(num_samples=50)
+
+prompt_templates = [
+    "Answer the question step by step.",
+    "Think carefully and provide a detailed answer.",
+    "Break down the problem and solve systematically.",
+]
+
+best_config, all_results = explorer.explore(
+    program=my_qa_program,
+    prompt_templates=prompt_templates,
+    demo_pool=demonstration_examples,
+    metric=answer_accuracy,
+    trainset=training_set
+)
+</code></pre>
+<h3 id="efficient-sampling-strategies"><a class="header" href="#efficient-sampling-strategies">Efficient Sampling Strategies</a></h3>
+<pre><code class="language-python">class AdaptiveMonteCarloSampler:
+    """
+    Adaptive Monte Carlo sampling that focuses on promising regions.
+    Uses importance sampling to efficiently explore the search space.
+    """
+
+    def __init__(self, initial_samples: int = 50):
+        self.initial_samples = initial_samples
+        self.best_configs = []
+
+    def sample(
+        self,
+        search_space: Dict,
+        evaluate_fn,
+        total_budget: int = 200
+    ):
+        """
+        Two-phase sampling:
+        1. Uniform exploration
+        2. Focused exploitation around best regions
+        """
+        # Phase 1: Uniform exploration
+        exploration_results = []
+        for _ in range(self.initial_samples):
+            config = self._uniform_sample(search_space)
+            score = evaluate_fn(config)
+            exploration_results.append((config, score))
+
+        # Identify top performers
+        sorted_results = sorted(
+            exploration_results,
+            key=lambda x: x[1],
+            reverse=True
+        )
+        top_configs = [r[0] for r in sorted_results[:10]]
+
+        # Phase 2: Focused exploitation
+        remaining_budget = total_budget - self.initial_samples
+        exploitation_results = []
+
+        for _ in range(remaining_budget):
+            # Sample near a top configuration
+            base_config = np.random.choice(top_configs)
+            perturbed = self._perturb_config(base_config, search_space)
+            score = evaluate_fn(perturbed)
+            exploitation_results.append((perturbed, score))
+
+        # Combine and return best
+        all_results = exploration_results + exploitation_results
+        best = max(all_results, key=lambda x: x[1])
+
+        return best[0], all_results
+
+    def _uniform_sample(self, search_space):
+        """Sample uniformly from search space."""
+        config = {}
+        for param, spec in search_space.items():
+            if spec["type"] == "categorical":
+                config[param] = np.random.choice(spec["values"])
+            elif spec["type"] == "continuous":
+                config[param] = np.random.uniform(spec["min"], spec["max"])
+            elif spec["type"] == "integer":
+                config[param] = np.random.randint(spec["min"], spec["max"])
+        return config
+
+    def _perturb_config(self, config, search_space, noise_scale=0.2):
+        """Perturb configuration slightly."""
+        perturbed = config.copy()
+        for param, spec in search_space.items():
+            if spec["type"] == "continuous":
+                noise = np.random.normal(0, noise_scale * (spec["max"] - spec["min"]))
+                perturbed[param] = np.clip(
+                    config[param] + noise,
+                    spec["min"],
+                    spec["max"]
+                )
+        return perturbed
+</code></pre>
+<h2 id="bayesian-optimization-for-prompt-tuning"><a class="header" href="#bayesian-optimization-for-prompt-tuning">Bayesian Optimization for Prompt Tuning</a></h2>
+<p>Bayesian optimization provides a principled approach to finding optimal prompt configurations with fewer evaluations than random search.</p>
+<h3 id="bayesian-prompt-optimizer"><a class="header" href="#bayesian-prompt-optimizer">Bayesian Prompt Optimizer</a></h3>
+<pre><code class="language-python">from scipy.optimize import minimize
+from scipy.stats import norm
+import numpy as np
+
+class BayesianPromptOptimizer:
+    """
+    Bayesian optimization for prompt tuning.
+    Uses Gaussian Process surrogate model to efficiently
+    search the prompt configuration space.
+    """
+
+    def __init__(
+        self,
+        acquisition_fn: str = "expected_improvement",
+        exploration_weight: float = 0.1
+    ):
+        self.acquisition_fn = acquisition_fn
+        self.exploration_weight = exploration_weight
+        self.observed_configs = []
+        self.observed_scores = []
+
+    def optimize(
+        self,
+        program,
+        metric,
+        trainset,
+        valset,
+        n_iterations: int = 30,
+        prompt_space: Dict = None
+    ):
+        """
+        Bayesian optimization loop for prompt configuration.
+
+        Args:
+            program: DSPy program to optimize
+            metric: Evaluation metric
+            trainset: Training examples
+            valset: Validation examples
+            n_iterations: Number of optimization iterations
+            prompt_space: Search space definition
+        """
+        if prompt_space is None:
+            prompt_space = self._default_prompt_space()
+
+        # Initialize with random samples
+        for _ in range(5):
+            config = self._random_config(prompt_space)
+            score = self._evaluate(program, config, metric, valset)
+            self.observed_configs.append(config)
+            self.observed_scores.append(score)
+
+        # Bayesian optimization loop
+        for iteration in range(n_iterations):
+            # Fit surrogate model
+            surrogate = self._fit_surrogate()
+
+            # Find next point using acquisition function
+            next_config = self._maximize_acquisition(
+                surrogate, prompt_space
+            )
+
+            # Evaluate and record
+            score = self._evaluate(program, next_config, metric, valset)
+            self.observed_configs.append(next_config)
+            self.observed_scores.append(score)
+
+            print(f"Iteration {iteration + 1}: Score = {score:.4f}")
+
+        # Return best configuration
+        best_idx = np.argmax(self.observed_scores)
+        return self.observed_configs[best_idx], self.observed_scores[best_idx]
+
+    def _default_prompt_space(self):
+        """Define default prompt search space."""
+        return {
+            "num_demos": {"type": "integer", "min": 1, "max": 8},
+            "instruction_style": {
+                "type": "categorical",
+                "values": ["concise", "detailed", "step_by_step", "examples_first"]
+            },
+            "demo_selection": {
+                "type": "categorical",
+                "values": ["random", "diverse", "similar", "difficulty_ordered"]
+            },
+            "temperature": {"type": "continuous", "min": 0.0, "max": 1.0}
+        }
+
+    def _fit_surrogate(self):
+        """Fit Gaussian Process surrogate model."""
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        from sklearn.gaussian_process.kernels import Matern
+
+        X = self._configs_to_array(self.observed_configs)
+        y = np.array(self.observed_scores)
+
+        gp = GaussianProcessRegressor(
+            kernel=Matern(nu=2.5),
+            normalize_y=True,
+            n_restarts_optimizer=5
+        )
+        gp.fit(X, y)
+
+        return gp
+
+    def _maximize_acquisition(self, surrogate, prompt_space):
+        """Find configuration that maximizes acquisition function."""
+        best_config = None
+        best_acq = -np.inf
+
+        # Random search for acquisition function maximum
+        for _ in range(1000):
+            config = self._random_config(prompt_space)
+            acq_value = self._acquisition_value(surrogate, config)
+
+            if acq_value &gt; best_acq:
+                best_acq = acq_value
+                best_config = config
+
+        return best_config
+
+    def _acquisition_value(self, surrogate, config):
+        """Compute Expected Improvement acquisition value."""
+        X = self._configs_to_array([config])
+        mu, sigma = surrogate.predict(X, return_std=True)
+
+        best_observed = max(self.observed_scores)
+
+        # Expected Improvement
+        with np.errstate(divide='warn'):
+            improvement = mu - best_observed - self.exploration_weight
+            Z = improvement / sigma
+            ei = improvement * norm.cdf(Z) + sigma * norm.pdf(Z)
+            ei[sigma == 0.0] = 0.0
+
+        return ei[0]
+
+    def _random_config(self, space):
+        """Generate random configuration."""
+        config = {}
+        for param, spec in space.items():
+            if spec["type"] == "integer":
+                config[param] = np.random.randint(spec["min"], spec["max"] + 1)
+            elif spec["type"] == "continuous":
+                config[param] = np.random.uniform(spec["min"], spec["max"])
+            elif spec["type"] == "categorical":
+                config[param] = np.random.choice(spec["values"])
+        return config
+
+    def _configs_to_array(self, configs):
+        """Convert configurations to numeric array for GP."""
+        # Simplified encoding - in practice, use proper encoding
+        X = []
+        for config in configs:
+            row = []
+            for key, value in sorted(config.items()):
+                if isinstance(value, (int, float)):
+                    row.append(value)
+                else:
+                    row.append(hash(value) % 100 / 100.0)  # Simple encoding
+            X.append(row)
+        return np.array(X)
+
+    def _evaluate(self, program, config, metric, valset):
+        """Evaluate a configuration."""
+        # Apply configuration (simplified)
+        scores = []
+        for example in valset[:50]:
+            try:
+                pred = program(**example.inputs())
+                scores.append(metric(example, pred))
+            except Exception:
+                scores.append(0)
+        return np.mean(scores)
+
+# Usage
+bayesian_optimizer = BayesianPromptOptimizer(
+    acquisition_fn="expected_improvement",
+    exploration_weight=0.1
+)
+
+best_config, best_score = bayesian_optimizer.optimize(
+    program=my_qa_system,
+    metric=answer_f1,
+    trainset=train_examples,
+    valset=val_examples,
+    n_iterations=30
+)
+
+print(f"Best configuration: {best_config}")
+print(f"Best score: {best_score:.4f}")
+</code></pre>
+<h2 id="performance-benchmarks"><a class="header" href="#performance-benchmarks">Performance Benchmarks</a></h2>
+<p>COPA demonstrates significant improvements across multiple benchmarks.</p>
+<h3 id="multihopqa-results-2-26x-improvements"><a class="header" href="#multihopqa-results-2-26x-improvements">MultiHopQA Results (2-26x Improvements)</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Model</th><th>Baseline</th><th>Fine-Tuning Only</th><th>Prompt Opt Only</th><th>COPA</th><th>Improvement</th></tr>
+</thead>
+<tbody>
+<tr><td>Llama-7B</td><td>12.3%</td><td>28.5%</td><td>19.7%</td><td>45.2%</td><td>3.7x</td></tr>
+<tr><td>Mistral-7B</td><td>18.7%</td><td>35.2%</td><td>31.4%</td><td>62.8%</td><td>3.4x</td></tr>
+<tr><td>Phi-2</td><td>8.4%</td><td>22.1%</td><td>15.3%</td><td>48.9%</td><td>5.8x</td></tr>
+<tr><td>GPT-3.5</td><td>34.2%</td><td>N/A</td><td>52.1%</td><td>67.3%</td><td>2.0x</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="mathematical-reasoning-34-79x-improvements"><a class="header" href="#mathematical-reasoning-34-79x-improvements">Mathematical Reasoning (3.4-7.9x Improvements)</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Dataset</th><th>Baseline</th><th>COPA</th><th>Improvement Factor</th></tr>
+</thead>
+<tbody>
+<tr><td>GSM8K</td><td>11.2%</td><td>54.8%</td><td>4.9x</td></tr>
+<tr><td>AQuA</td><td>8.7%</td><td>68.7%</td><td>7.9x</td></tr>
+<tr><td>MATH</td><td>4.3%</td><td>21.2%</td><td>4.9x</td></tr>
+<tr><td>SVAMP</td><td>15.4%</td><td>52.3%</td><td>3.4x</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="performance-comparison-code"><a class="header" href="#performance-comparison-code">Performance Comparison Code</a></h3>
+<pre><code class="language-python">def benchmark_copa(program, trainset, testset, base_model):
+    """Comprehensive COPA benchmark."""
+    results = {}
+
+    # Baseline (no optimization)
+    baseline_score = evaluate(program, testset)
+    results["baseline"] = baseline_score
+    print(f"Baseline: {baseline_score:.2%}")
+
+    # Fine-tuning only
+    finetuned = finetune_model(base_model, trainset)
+    dspy.settings.configure(lm=finetuned)
+    ft_score = evaluate(program, testset)
+    results["fine_tuning_only"] = ft_score
+    print(f"Fine-tuning only: {ft_score:.2%}")
+
+    # Prompt optimization only (on base model)
+    dspy.settings.configure(lm=base_model)
+    mipro = MIPRO(metric=accuracy_metric, auto="medium")
+    prompt_optimized = mipro.compile(program, trainset=trainset)
+    po_score = evaluate(prompt_optimized, testset)
+    results["prompt_opt_only"] = po_score
+    print(f"Prompt optimization only: {po_score:.2%}")
+
+    # COPA (combined)
+    dspy.settings.configure(lm=finetuned)
+    copa_optimized = mipro.compile(program, trainset=trainset)
+    copa_score = evaluate(copa_optimized, testset)
+    results["copa"] = copa_score
+    print(f"COPA: {copa_score:.2%}")
+
+    # Calculate synergy
+    additive = (ft_score - baseline_score) + (po_score - baseline_score) + baseline_score
+    synergy = copa_score - additive
+    results["synergy"] = synergy
+    print(f"Synergistic gain: {synergy:.2%}")
+
+    # Improvement factor
+    improvement = copa_score / baseline_score if baseline_score &gt; 0 else float('inf')
+    results["improvement_factor"] = improvement
+    print(f"Total improvement: {improvement:.1f}x")
+
+    return results
+</code></pre>
+<h2 id="instruction-complexity-and-demonstration-efficiency"><a class="header" href="#instruction-complexity-and-demonstration-efficiency">Instruction Complexity and Demonstration Efficiency</a></h2>
+<h3 id="fine-tuned-models-follow-complex-instructions"><a class="header" href="#fine-tuned-models-follow-complex-instructions">Fine-Tuned Models Follow Complex Instructions</a></h3>
+<p>Research shows that fine-tuned models can follow more complex instructions than base models:</p>
+<pre><code class="language-python">def measure_instruction_complexity_handling(model, complexity_levels):
+    """
+    Measure how well models handle instruction complexity.
+
+    Complexity levels:
+    - Simple: Single-step instructions
+    - Medium: Multi-step with conditions
+    - Complex: Nested logic with constraints
+    """
+    results = {}
+
+    complexity_examples = {
+        "simple": [
+            "Answer the question.",
+            "Provide a brief response.",
+        ],
+        "medium": [
+            "Answer the question. If uncertain, explain your reasoning.",
+            "Provide a response with evidence. Consider multiple perspectives.",
+        ],
+        "complex": [
+            """Answer the question following these steps:
+            1. Identify the key concepts
+            2. Gather relevant information
+            3. Analyze relationships between concepts
+            4. Synthesize a comprehensive answer
+            5. Verify your reasoning is sound""",
+        ]
+    }
+
+    for level, instructions in complexity_examples.items():
+        scores = []
+        for instruction in instructions:
+            score = evaluate_with_instruction(model, instruction, test_data)
+            scores.append(score)
+        results[level] = np.mean(scores)
+
+    return results
+
+# Base model vs fine-tuned comparison
+base_complexity = measure_instruction_complexity_handling(base_model, complexity_levels)
+ft_complexity = measure_instruction_complexity_handling(finetuned_model, complexity_levels)
+
+# Fine-tuned models show larger improvements for complex instructions
+</code></pre>
+<h3 id="demonstration-efficiency-8-shot-to-3-shot"><a class="header" href="#demonstration-efficiency-8-shot-to-3-shot">Demonstration Efficiency: 8-shot to 3-shot</a></h3>
+<p>Fine-tuned models achieve equivalent performance with fewer demonstrations:</p>
+<pre><code class="language-python">def measure_demonstration_efficiency(base_model, finetuned_model, trainset, testset):
+    """
+    Measure how many demonstrations each model needs for equivalent performance.
+    """
+    demo_counts = [1, 2, 3, 4, 5, 6, 7, 8]
+
+    base_results = []
+    ft_results = []
+
+    for num_demos in demo_counts:
+        # Evaluate base model
+        dspy.settings.configure(lm=base_model)
+        optimizer = BootstrapFewShot(
+            metric=accuracy_metric,
+            max_bootstrapped_demos=num_demos
+        )
+        compiled = optimizer.compile(program, trainset=trainset)
+        base_score = evaluate(compiled, testset)
+        base_results.append(base_score)
+
+        # Evaluate fine-tuned model
+        dspy.settings.configure(lm=finetuned_model)
+        compiled_ft = optimizer.compile(program, trainset=trainset)
+        ft_score = evaluate(compiled_ft, testset)
+        ft_results.append(ft_score)
+
+    # Find equivalent performance point
+    target_score = base_results[7]  # 8-shot base model performance
+
+    for i, score in enumerate(ft_results):
+        if score &gt;= target_score:
+            print(f"Fine-tuned model achieves 8-shot base performance with {demo_counts[i]} demos")
+            break
+
+    return {
+        "demo_counts": demo_counts,
+        "base_scores": base_results,
+        "finetuned_scores": ft_results
+    }
+</code></pre>
+<h2 id="integration-with-dspy-modules"><a class="header" href="#integration-with-dspy-modules">Integration with DSPy Modules</a></h2>
+<p>COPA works seamlessly with all standard DSPy modules.</p>
+<h3 id="with-dspypredict"><a class="header" href="#with-dspypredict">With dspy.Predict</a></h3>
+<pre><code class="language-python">class COPAPredict(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.predict = dspy.Predict("question -&gt; answer")
+
+    def forward(self, question):
+        return self.predict(question=question)
+
+# COPA optimization
+copa_optimizer = COPAOptimizer(
+    base_model_name="mistralai/Mistral-7B-v0.1",
+    metric=exact_match
+)
+optimized, model = copa_optimizer.optimize(COPAPredict(), trainset)
+</code></pre>
+<h3 id="with-dspychainofthought"><a class="header" href="#with-dspychainofthought">With dspy.ChainOfThought</a></h3>
+<pre><code class="language-python">class COPAChainOfThought(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.reason = dspy.ChainOfThought("question, context -&gt; reasoning, answer")
+
+    def forward(self, question, context):
+        result = self.reason(question=question, context=context)
+        return dspy.Prediction(
+            reasoning=result.rationale,
+            answer=result.answer
+        )
+
+# COPA with CoT achieves best results on reasoning tasks
+</code></pre>
+<h3 id="with-dspyreact"><a class="header" href="#with-dspyreact">With dspy.ReAct</a></h3>
+<pre><code class="language-python">class COPAReAct(dspy.Module):
+    def __init__(self, tools):
+        super().__init__()
+        self.react = dspy.ReAct(
+            "question -&gt; answer",
+            tools=tools
+        )
+
+    def forward(self, question):
+        return self.react(question=question)
+
+# COPA-optimized ReAct for tool-using agents
+</code></pre>
+<h3 id="with-dspymultichaincomparison"><a class="header" href="#with-dspymultichaincomparison">With dspy.MultiChainComparison</a></h3>
+<pre><code class="language-python">class COPAMultiChain(dspy.Module):
+    def __init__(self, num_chains=3):
+        super().__init__()
+        self.chains = [
+            dspy.ChainOfThought("question -&gt; answer")
+            for _ in range(num_chains)
+        ]
+        self.compare = dspy.MultiChainComparison(
+            "question, answers -&gt; best_answer"
+        )
+
+    def forward(self, question):
+        answers = [chain(question=question).answer for chain in self.chains]
+        return self.compare(question=question, answers=answers)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-order-matters-fine-tune-first"><a class="header" href="#1-order-matters-fine-tune-first">1. Order Matters: Fine-Tune First</a></h3>
+<p>Always apply fine-tuning before prompt optimization:</p>
+<pre><code class="language-python"># CORRECT: Fine-tune first, then prompt optimize
+finetuned_model = finetune(base_model, data)
+dspy.settings.configure(lm=finetuned_model)
+optimized = mipro.compile(program, trainset)
+
+# INCORRECT: Prompt optimize then fine-tune (suboptimal)
+optimized = mipro.compile(program, trainset)  # On base model
+finetuned = finetune(base_model, data)  # Fine-tuning doesn't benefit from prompts
+</code></pre>
+<h3 id="2-data-requirements"><a class="header" href="#2-data-requirements">2. Data Requirements</a></h3>
+<pre><code class="language-python"># Minimum recommended data
+MINIMUM_EXAMPLES = 50
+RECOMMENDED_EXAMPLES = 100
+
+def check_data_requirements(trainset):
+    """Verify sufficient data for COPA optimization."""
+    if len(trainset) &lt; MINIMUM_EXAMPLES:
+        print(f"Warning: {len(trainset)} examples is below minimum ({MINIMUM_EXAMPLES})")
+        print("Consider collecting more data or using prompt-only optimization")
+    elif len(trainset) &lt; RECOMMENDED_EXAMPLES:
+        print(f"Moderate data: {len(trainset)} examples")
+        print("Results may improve with more data")
+    else:
+        print(f"Sufficient data: {len(trainset)} examples")
+</code></pre>
+<h3 id="3-computational-budget-planning"><a class="header" href="#3-computational-budget-planning">3. Computational Budget Planning</a></h3>
+<pre><code class="language-python">def estimate_copa_compute(trainset_size, model_size_b):
+    """Estimate computational requirements for COPA."""
+    # Fine-tuning estimate (GPU hours)
+    ft_hours = model_size_b * trainset_size / 10000
+
+    # Prompt optimization estimate (API calls or inference)
+    po_calls = trainset_size * 15  # ~15x for MIPRO
+
+    return {
+        "fine_tuning_gpu_hours": ft_hours,
+        "prompt_optimization_calls": po_calls,
+        "total_estimated_cost": ft_hours * 2 + po_calls * 0.001  # Rough estimate
+    }
+</code></pre>
+<h3 id="4-validation-strategy"><a class="header" href="#4-validation-strategy">4. Validation Strategy</a></h3>
+<pre><code class="language-python">def copa_validation_strategy(trainset, valset, testset):
+    """
+    Proper validation for COPA optimization.
+    """
+    # Split training data for fine-tuning and prompt optimization
+    ft_train = trainset[:int(len(trainset) * 0.7)]
+    po_train = trainset[int(len(trainset) * 0.7):]
+
+    # Use valset for hyperparameter selection
+    # Use testset only for final evaluation
+
+    return {
+        "finetune_data": ft_train,
+        "prompt_opt_data": po_train,
+        "validation": valset,
+        "final_test": testset
+    }
+</code></pre>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>COPA combines fine-tuning and prompt optimization</strong> for maximum performance gains</li>
+<li><strong>Order matters</strong>: Fine-tune first, then apply prompt optimization</li>
+<li><strong>Synergistic effects</strong>: Combined approach exceeds sum of individual improvements</li>
+<li><strong>Monte Carlo methods</strong> efficiently explore the prompt configuration space</li>
+<li><strong>Bayesian optimization</strong> finds optimal prompts with fewer evaluations</li>
+<li><strong>Fine-tuned models</strong> can follow more complex instructions and require fewer demonstrations</li>
+<li><strong>Performance gains of 2-26x</strong> are achievable on complex tasks</li>
+</ol>
+<h2 id="cross-references"><a class="header" href="#cross-references">Cross-References</a></h2>
+<ul>
+<li><strong>Fine-Tuning Basics</strong>: See <a href="05-finetuning.html">Fine-Tuning Small Language Models</a></li>
+<li><strong>Prompt Optimization</strong>: See <a href="03-mipro.html">MIPRO</a> and <a href="02-bootstrapfewshot.html">BootstrapFewShot</a></li>
+<li><strong>Evaluation</strong>: See <a href="../04-evaluation/00-chapter-intro.html">Chapter 4: Evaluation</a></li>
+<li><strong>Advanced Topics</strong>: See <a href="../07-advanced-topics/00-introduction.html">Chapter 7: Advanced Topics</a></li>
+</ul>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>In the exercises section, you will apply COPA to real-world scenarios and experiment with different configurations to understand the trade-offs between fine-tuning depth, prompt optimization intensity, and computational budget.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../05-optimizers/08-reflective-prompt-evolution.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../05-optimizers/10-joint-optimization.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../05-optimizers/08-reflective-prompt-evolution.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../05-optimizers/10-joint-optimization.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

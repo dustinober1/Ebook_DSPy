@@ -1,0 +1,1795 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Assertions - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/03-modules/08-assertions.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="assertions-module"><a class="header" href="#assertions-module">Assertions Module</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./06-composing-modules.html">Composing Modules</a> - Understanding of module composition</li>
+<li><strong>Chapter 2</strong>: Signatures - Strong familiarity with signature design</li>
+<li><strong>Required Knowledge</strong>: Constraint validation, error handling patterns</li>
+<li><strong>Difficulty Level</strong>: Advanced</li>
+<li><strong>Estimated Reading Time</strong>: 60 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master the <code>dspy.Assert</code> and <code>dspy.Suggest</code> constraint system</li>
+<li>Learn to implement runtime validation for AI outputs</li>
+<li>Build self-refining pipelines with automatic error recovery</li>
+<li>Understand the computational constraints framework</li>
+<li>Design robust AI applications with guaranteed output quality</li>
+</ul>
+<h2 id="introduction-to-assertions"><a class="header" href="#introduction-to-assertions">Introduction to Assertions</a></h2>
+<p>Assertions in DSPy provide a powerful mechanism for ensuring the quality and correctness of AI-generated outputs. They act as runtime validators that check if the model’s output meets specified constraints, and can automatically trigger refinement when constraints are violated.</p>
+<h3 id="why-assertions-matter"><a class="header" href="#why-assertions-matter">Why Assertions Matter</a></h3>
+<p><strong>Without Assertions:</strong></p>
+<pre><code class="language-python"># Brittle - no validation
+qa = dspy.Predict("question -&gt; answer")
+result = qa(question="What is 2+2?")
+# Model might return "4", "Four", "The answer is 4", or even hallucinate
+</code></pre>
+<p><strong>With Assertions:</strong></p>
+<pre><code class="language-python"># Robust - guaranteed format and correctness
+qa = dspy.Predict("question -&gt; answer")
+
+def validate_numeric_answer(example, pred, trace=None):
+    # Check if answer is a number
+    assert pred.answer.isdigit(), "Answer must be numeric"
+    # Check if it's actually correct
+    assert int(pred.answer) == 4, "Answer must be correct"
+    return True
+
+# Configure assertion
+qa = dspy.Assert(
+    qa,
+    validation_fn=validate_numeric_answer,
+    max_attempts=3
+)
+
+result = qa(question="What is 2+2?")
+# Guaranteed: result.answer is "4"
+</code></pre>
+<h2 id="core-assertion-types"><a class="header" href="#core-assertion-types">Core Assertion Types</a></h2>
+<h3 id="1-dspyassert---hard-constraints"><a class="header" href="#1-dspyassert---hard-constraints">1. dspy.Assert - Hard Constraints</a></h3>
+<p><code>dspy.Assert</code> enforces strict constraints that must be satisfied. If a constraint fails, the system automatically retries with refined instructions.</p>
+<pre><code class="language-python">import dspy
+
+class CodeGenerator(dspy.Signature):
+    """Generate Python code for the given task."""
+    task = dspy.InputField(desc="Programming task to implement", type=str)
+    code = dspy.OutputField(desc="Valid Python code", type=str)
+
+# Create the module
+coder = dspy.ChainOfThought(CodeGenerator)
+
+# Define assertion function
+def validate_syntax(example, pred, trace=None):
+    """Ensure generated code has valid Python syntax."""
+    try:
+        compile(pred.code, '&lt;string&gt;', 'exec')
+        return True
+    except SyntaxError as e:
+        # Provide helpful error message
+        raise AssertionError(f"Syntax error in generated code: {e}")
+
+# Wrap with assertion
+safe_coder = dspy.Assert(
+    coder,
+    validation_fn=validate_syntax,
+    max_attempts=3,
+    backtrack=True  # Try different approach on failure
+)
+
+# Use it
+result = safe_coder(task="Create a function to calculate factorial")
+print(result.code)  # Guaranteed to be syntactically valid
+</code></pre>
+<h3 id="2-dspysuggest---soft-constraints"><a class="header" href="#2-dspysuggest---soft-constraints">2. dspy.Suggest - Soft Constraints</a></h3>
+<p><code>dspy.Suggest</code> provides gentle guidance for improving outputs without strict enforcement.</p>
+<pre><code class="language-python">class EssayWriter(dspy.Signature):
+    """Write an essay on the given topic."""
+    topic = dspy.InputField(desc="Essay topic", type=str)
+    essay = dspy.OutputField(desc="Well-written essay", type=str)
+
+writer = dspy.Predict(EssayWriter)
+
+def suggest_improvements(example, pred, trace=None):
+    """Suggest improvements for better essays."""
+    suggestions = []
+
+    if len(pred.essay.split()) &lt; 200:
+        suggestions.append("Essay should be at least 200 words")
+
+    if not any(punc in pred.essay for punc in '.!?'):
+        suggestions.append("Include proper punctuation")
+
+    if len([s for s in pred.essay.split() if s[0].isupper()]) &lt; 3:
+        suggestions.append("Start sentences with capital letters")
+
+    if suggestions:
+        return False, f"Please improve: {'; '.join(suggestions)}"
+    return True, None
+
+# Wrap with suggestions
+improved_writer = dspy.Suggest(
+    writer,
+    validation_fn=suggest_improvements,
+    max_attempts=2,
+    recovery_hint="Focus on clarity, grammar, and completeness"
+)
+
+result = improved_writer(topic="The importance of sleep")
+</code></pre>
+<h3 id="3-multiple-assertions"><a class="header" href="#3-multiple-assertions">3. Multiple Assertions</a></h3>
+<p>Chain multiple assertions for comprehensive validation:</p>
+<pre><code class="language-python">class DataProcessor(dspy.Signature):
+    """Process and analyze data."""
+    raw_data = dspy.InputField(desc="Raw input data", type=str)
+    processed_data = dspy.OutputField(desc="Processed output", type=str)
+    insights = dspy.OutputField(desc="Key insights from data", type=str)
+
+processor = dspy.Predict(DataProcessor)
+
+# Assertion 1: JSON format
+def validate_json_format(example, pred, trace=None):
+    import json
+    try:
+        json.loads(pred.processed_data)
+        return True
+    except:
+        raise AssertionError("Processed data must be valid JSON")
+
+# Assertion 2: Required fields
+def validate_required_fields(example, pred, trace=None):
+    import json
+    data = json.loads(pred.processed_data)
+    required = ['id', 'timestamp', 'value']
+    missing = [f for f in required if f not in data]
+    if missing:
+        raise AssertionError(f"Missing required fields: {missing}")
+    return True
+
+# Assertion 3: Insights quality
+def validate_insights(example, pred, trace=None):
+    if len(pred.insights) &lt; 50:
+        raise AssertionError("Insights must be detailed (min 50 characters)")
+    return True
+
+# Chain all assertions
+robust_processor = processor.with_assertions([
+    validate_json_format,
+    validate_required_fields,
+    validate_insights
+])
+</code></pre>
+<h2 id="constraint-types"><a class="header" href="#constraint-types">Constraint Types</a></h2>
+<h3 id="1-format-constraints"><a class="header" href="#1-format-constraints">1. Format Constraints</a></h3>
+<p>Ensure outputs follow specific structural requirements:</p>
+<pre><code class="language-python">class APIResponse(dspy.Signature):
+    """Generate API responses."""
+    request = dspy.InputField(desc="API request details", type=str)
+    response = dspy.OutputField(desc="JSON API response", type=str)
+
+def validate_api_response(example, pred, trace=None):
+    """Ensure valid API response format."""
+    import json
+    import re
+
+    try:
+        data = json.loads(pred.response)
+
+        # Check required structure
+        assert 'status' in data, "Missing 'status' field"
+        assert 'data' in data, "Missing 'data' field"
+
+        # Check status codes
+        assert data['status'] in [200, 201, 400, 404, 500], \
+               f"Invalid status code: {data['status']}"
+
+        # Check data types
+        assert isinstance(data['status'], int), "Status must be integer"
+        assert isinstance(data['data'], (dict, list)), "Data must be object or array"
+
+        return True
+
+    except json.JSONDecodeError:
+        raise AssertionError("Response must be valid JSON")
+
+api_generator = dspy.Assert(
+    dspy.Predict(APIResponse),
+    validation_fn=validate_api_response,
+    max_attempts=3
+)
+</code></pre>
+<h3 id="2-semantic-constraints"><a class="header" href="#2-semantic-constraints">2. Semantic Constraints</a></h3>
+<p>Validate the meaning and correctness of outputs:</p>
+<pre><code class="language-python">class MathTutor(dspy.Signature):
+    """Solve math problems with explanations."""
+    problem = dspy.InputField(desc="Math problem to solve", type=str)
+    solution = dspy.OutputField(desc="Step-by-step solution", type=str)
+    answer = dspy.OutputField(desc="Final numerical answer", type=str)
+
+def validate_math_solution(example, pred, trace=None):
+    """Validate mathematical correctness."""
+    import re
+    import math
+
+    # Extract numerical answer
+    numbers = re.findall(r'-?\d+\.?\d*', pred.answer)
+    if not numbers:
+        raise AssertionError("Answer must contain a number")
+
+    model_answer = float(numbers[-1])
+
+    # Verify with actual calculation
+    if "square root" in example.problem.lower():
+        num = re.search(r'square root of (\d+)', example.problem.lower())
+        if num:
+            correct = math.sqrt(int(num.group(1)))
+            if abs(model_answer - correct) &gt; 0.01:
+                raise AssertionError("Incorrect square root calculation")
+
+    # Check if solution explains steps
+    if len(pred.solution.split('\n')) &lt; 2:
+        raise AssertionError("Solution must show multiple steps")
+
+    return True
+
+math_tutor = dspy.Assert(
+    dspy.Predict(MathTutor),
+    validation_fn=validate_math_solution,
+    max_attempts=3
+)
+</code></pre>
+<h3 id="3-consistency-constraints"><a class="header" href="#3-consistency-constraints">3. Consistency Constraints</a></h3>
+<p>Ensure consistency between multiple outputs:</p>
+<pre><code class="language-python">class StoryGenerator(dspy.Signature):
+    """Generate a coherent story."""
+    prompt = dspy.InputField(desc="Story prompt", type=str)
+    title = dspy.OutputField(desc="Story title", type=str)
+    summary = dspy.OutputField(desc="Brief summary", type=str)
+    content = dspy.OutputField(desc="Full story content", type=str)
+
+def validate_story_consistency(example, pred, trace=None):
+    """Ensure story elements are consistent."""
+
+    # Title should reflect content
+    title_words = set(pred.title.lower().split())
+    content_words = set(pred.content.lower().split()[:50])  # First 50 words
+    overlap = len(title_words.intersection(content_words))
+
+    if overlap &lt; 2:
+        raise AssertionError("Title doesn't match story content")
+
+    # Summary should match content
+    if pred.summary not in pred.content:
+        # Allow for paraphrasing by checking key concepts
+        summary_concepts = pred.summary.lower().split()
+        content_lower = pred.content.lower()
+
+        for concept in summary_concepts:
+            if len(concept) &gt; 4 and concept not in content_lower:
+                raise AssertionError(f"Summary mentions '{concept}' not in story")
+
+    # Check story length
+    if len(pred.content) &lt; 500:
+        raise AssertionError("Story too short (minimum 500 characters)")
+
+    return True
+
+story_generator = dspy.Assert(
+    dspy.ChainOfThought(StoryGenerator),
+    validation_fn=validate_story_consistency,
+    max_attempts=2
+)
+</code></pre>
+<h2 id="advanced-assertion-patterns"><a class="header" href="#advanced-assertion-patterns">Advanced Assertion Patterns</a></h2>
+<h3 id="1-self-refining-pipelines"><a class="header" href="#1-self-refining-pipelines">1. Self-Refining Pipelines</a></h3>
+<p>Build pipelines that improve themselves based on assertion feedback:</p>
+<pre><code class="language-python">class SelfImprovingWriter(dspy.Module):
+    """A writer that improves its output based on quality metrics."""
+
+    def __init__(self):
+        super().__init__()
+        self.writer = dspy.ChainOfThought("topic -&gt; draft")
+        self.critic = dspy.ChainOfThought("draft, criteria -&gt; critique")
+        self.improver = dspy.ChainOfThought("draft, critique -&gt; improved_draft")
+
+    def forward(self, topic):
+        # Initial draft
+        draft = self.writer(topic=topic)
+
+        # Quality criteria
+        criteria = """
+        1. Clarity: Is the writing clear and easy to understand?
+        2. Completeness: Does it fully address the topic?
+        3. Engagement: Is it interesting to read?
+        4. Accuracy: Are all statements factual?
+        """
+
+        # Critique the draft
+        critique = self.critic(draft=draft.draft, criteria=criteria)
+
+        # Improve based on critique
+        improved = self.improver(draft=draft.draft, critique=critique.critique)
+
+        # Assert quality
+        def validate_quality(example, pred, trace=None):
+            word_count = len(pred.improved_draft.split())
+            assert word_count &gt; 100, "Draft too short"
+            assert len(pred.improved_draft.split('\n')) &gt; 3, "Add more paragraphs"
+            return True
+
+        # Apply assertion with self-refinement
+        result = dspy.Assert(
+            self,
+            validation_fn=validate_quality,
+            max_attempts=3
+        )
+
+        return dspy.Prediction(improved_draft=improved.improved_draft)
+
+# Use the self-improving writer
+writer = SelfImprovingWriter()
+result = writer(topic="The benefits of renewable energy")
+</code></pre>
+<h3 id="2-contextual-assertions"><a class="header" href="#2-contextual-assertions">2. Contextual Assertions</a></h3>
+<p>Adapt validation based on input context:</p>
+<pre><code class="language-python">class AdaptiveValidator:
+    """Validates outputs based on input context."""
+
+    def __init__(self):
+        self.rules = {
+            'technical': self.validate_technical,
+            'creative': self.validate_creative,
+            'formal': self.validate_formal,
+            'casual': self.validate_casual
+        }
+
+    def get_style(self, text):
+        """Determine writing style from input."""
+        text = text.lower()
+        if any(word in text for word in ['code', 'algorithm', 'technical']):
+            return 'technical'
+        elif any(word in text for word in ['story', 'poem', 'creative']):
+            return 'creative'
+        elif any(word in text for word in ['report', 'formal', 'business']):
+            return 'formal'
+        else:
+            return 'casual'
+
+    def validate_technical(self, example, pred, trace=None):
+        """Validate technical content."""
+        assert '}' in pred.output or ';' in pred.output, \
+               "Technical content should include code examples"
+        assert any(word in pred.output.lower()
+                  for word in ['implementation', 'example', 'function']), \
+               "Include practical implementation details"
+        return True
+
+    def validate_creative(self, example, pred, trace=None):
+        """Validate creative content."""
+        assert len(pred.output) &gt; 200, "Creative content should be substantial"
+        sentences = pred.output.split('.')
+        assert len(sentences) &gt; 5, "Include multiple sentences"
+        return True
+
+    def validate_formal(self, example, pred, trace=None):
+        """Validate formal content."""
+        assert not any(word in pred.output.lower()
+                      for word in ['hey', 'guys', 'awesome']), \
+               "Avoid informal language in formal writing"
+        return True
+
+    def validate_casual(self, example, pred, trace=None):
+        """Validate casual content."""
+        return True  # No strict requirements
+
+    def validate(self, example, pred, trace=None):
+        """Route to appropriate validator based on context."""
+        style = self.get_style(example.input)
+        validator = self.rules.get(style, self.validate_casual)
+        return validator(example, pred, trace)
+
+# Use adaptive validation
+validator = AdaptiveValidator()
+
+adaptive_writer = dspy.Assert(
+    dspy.Predict("input -&gt; output"),
+    validation_fn=validator.validate,
+    max_attempts=2
+)
+</code></pre>
+<h3 id="3-multi-output-assertions"><a class="header" href="#3-multi-output-assertions">3. Multi-Output Assertions</a></h3>
+<p>Validate relationships between multiple output fields:</p>
+<pre><code class="language-python">class MovieReview(dspy.Signature):
+    """Generate a comprehensive movie review."""
+    movie = dspy.InputField(desc="Movie title", type=str)
+    rating = dspy.OutputField(desc="Rating 1-10", type=int)
+    summary = dspy.OutputField(desc="Brief summary", type=str)
+    detailed_review = dspy.OutputField(desc="Full review", type=str)
+
+def validate_review_consistency(example, pred, trace=None):
+    """Ensure all parts of the review are consistent."""
+
+    # Rating must be in valid range
+    assert 1 &lt;= pred.rating &lt;= 10, f"Rating {pred.rating} out of range"
+
+    # High ratings should have positive content
+    if pred.rating &gt;= 7:
+        positive_words = ['excellent', 'amazing', 'brilliant', 'outstanding']
+        assert any(word in pred.detailed_review.lower()
+                  for word in positive_words), \
+               "High rating should include positive language"
+
+    # Low ratings should include criticism
+    if pred.rating &lt;= 4:
+        negative_words = ['disappointing', 'flawed', 'lacking', 'weak']
+        assert any(word in pred.detailed_review.lower()
+                  for word in negative_words), \
+               "Low rating should include constructive criticism"
+
+    # Summary should reflect rating
+    if pred.rating &gt;= 8 and 'not' in pred.summary:
+        raise AssertionError("Summary conflicts with high rating")
+
+    if pred.rating &lt;= 3 and ('great' in pred.summary or 'excellent' in pred.summary):
+        raise AssertionError("Summary conflicts with low rating")
+
+    # Detailed review must be longer than summary
+    assert len(pred.detailed_review) &gt; len(pred.summary), \
+           "Detailed review should be longer than summary"
+
+    return True
+
+review_generator = dspy.Assert(
+    dspy.Predict(MovieReview),
+    validation_fn=validate_review_consistency,
+    max_attempts=3
+)
+</code></pre>
+<h2 id="integration-with-existing-modules"><a class="header" href="#integration-with-existing-modules">Integration with Existing Modules</a></h2>
+<h3 id="1-assertions-with-chainofthought"><a class="header" href="#1-assertions-with-chainofthought">1. Assertions with ChainOfThought</a></h3>
+<p>Add assertions to reasoning chains:</p>
+<pre><code class="language-python">class LogicalReasoning(dspy.Signature):
+    """Solve logic puzzles with step-by-step reasoning."""
+    puzzle = dspy.InputField(desc="Logic puzzle", type=str)
+    reasoning = dspy.OutputField(desc="Step-by-step logical reasoning", type=str)
+    conclusion = dspy.OutputField(desc="Final conclusion", type=str)
+    confidence = dspy.OutputField(desc="Confidence level (1-10)", type=int)
+
+reasoner = dspy.ChainOfThought(LogicalReasoning)
+
+def validate_logical_reasoning(example, pred, trace=None):
+    """Ensure reasoning is logically sound."""
+
+    # Check for reasoning steps
+    steps = pred.reasoning.split('\n')
+    assert len(steps) &gt;= 3, "Include at least 3 reasoning steps"
+
+    # Look for logical connectors
+    connectors = ['therefore', 'because', 'since', 'thus', 'hence']
+    has_logic = any(connector in pred.reasoning.lower()
+                   for connector in connectors)
+    assert has_logic, "Use logical connectors in reasoning"
+
+    # Conclusion should follow from reasoning
+    if pred.confidence &gt;= 8:
+        assert len(pred.conclusion) &gt; 20, \
+               "High confidence conclusions should be well-justified"
+
+    return True
+
+logical_reasoner = dspy.Assert(
+    reasoner,
+    validation_fn=validate_logical_reasoning,
+    max_attempts=3
+)
+</code></pre>
+<h3 id="2-assertions-with-react"><a class="header" href="#2-assertions-with-react">2. Assertions with ReAct</a></h3>
+<p>Validate agent actions and observations:</p>
+<pre><code class="language-python">class ResearchAgent(dspy.Module):
+    """An agent that performs research with validated findings."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("query -&gt; findings")
+
+    def forward(self, query):
+        def validate_research(example, pred, trace=None):
+            """Validate research quality."""
+
+            # Must have taken some actions
+            if trace and 'tool_calls' not in str(trace):
+                raise AssertionError("Must use search tools for research")
+
+            # Findings should be substantial
+            assert len(pred.findings) &gt; 100, "Research findings too brief"
+
+            # Should include sources or evidence
+            evidence_words = ['according', 'research shows', 'study', 'data']
+            has_evidence = any(word in pred.findings.lower()
+                             for word in evidence_words)
+            assert has_evidence, "Include evidence or sources in findings"
+
+            return True
+
+        # Apply assertion
+        validated_react = dspy.Assert(
+            self.react,
+            validation_fn=validate_research,
+            max_attempts=3
+        )
+
+        return validated_react(query=query)
+
+# Use the validated research agent
+researcher = ResearchAgent()
+result = researcher(query="Impact of AI on job markets")
+</code></pre>
+<h3 id="3-custom-assertion-handlers"><a class="header" href="#3-custom-assertion-handlers">3. Custom Assertion Handlers</a></h3>
+<p>Create specialized assertion handlers for complex scenarios:</p>
+<pre><code class="language-python">import datetime
+import time
+
+class AssertionHandler:
+    """Custom handler for complex assertion scenarios."""
+
+    def __init__(self):
+        self.attempt_history = []
+
+    def handle_assertion_failure(self, assertion_type, error_msg, attempt):
+        """Custom logic for handling assertion failures."""
+        self.attempt_history.append({
+            'attempt': attempt,
+            'type': assertion_type,
+            'error': error_msg,
+            'timestamp': datetime.now()
+        })
+
+        # Different recovery strategies based on error type
+        if "format" in error_msg.lower():
+            return "Please ensure strict adherence to the required format."
+        elif "length" in error_msg.lower():
+            return "Make your response more detailed and comprehensive."
+        elif "accuracy" in error_msg.lower():
+            return "Double-check your facts and calculations."
+        else:
+            return "Review your response for completeness and accuracy."
+
+    def generate_recovery_prompt(self, original_input, failed_output, error_msg):
+        """Generate a refined prompt for retry attempts."""
+        recovery_instruction = self.handle_assertion_failure(
+            "validation", error_msg, len(self.attempt_history)
+        )
+
+        return f"""
+        Original task: {original_input}
+
+        Your previous attempt: {failed_output}
+
+        Error: {error_msg}
+
+        {recovery_instruction}
+
+        Please provide an improved response that addresses the issue.
+        """
+
+# Use custom handler
+handler = AssertionHandler()
+
+custom_assert = dspy.Assert(
+    dspy.Predict("task -&gt; result"),
+    validation_fn=lambda ex, pred, tr: validate_output(ex, pred, tr),
+    max_attempts=3,
+    error_handler=handler.handle_assertion_failure
+)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-design-effective-validators"><a class="header" href="#1-design-effective-validators">1. Design Effective Validators</a></h3>
+<pre><code class="language-python"># Good: Specific and actionable error messages
+def validate_email(example, pred, trace=None):
+    import re
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(pattern, pred.email):
+        raise AssertionError(
+            f"'{pred.email}' is not a valid email. "
+            f"Must follow format: user@domain.com"
+        )
+    return True
+
+# Bad: Generic errors
+def validate_email_bad(example, pred, trace=None):
+    if '@' not in pred.email:
+        raise AssertionError("Invalid email")  # Not helpful
+    return True
+</code></pre>
+<h3 id="2-balance-strictness-and-flexibility"><a class="header" href="#2-balance-strictness-and-flexibility">2. Balance Strictness and Flexibility</a></h3>
+<pre><code class="language-python"># Use suggestions for preferences, assertions for requirements
+def generate_content(topic):
+    # Hard requirement: must have title
+    assert hasattr(pred, 'title'), "Content must have a title"
+
+    # Soft suggestion: prefer subheadings (not mandatory)
+    suggest_add_subheadings(pred.content)
+</code></pre>
+<h3 id="3-handle-edge-cases"><a class="header" href="#3-handle-edge-cases">3. Handle Edge Cases</a></h3>
+<pre><code class="language-python">def robust_validator(example, pred, trace=None):
+    try:
+        # Main validation logic
+        validate_main_logic(example, pred, trace)
+        return True
+    except AttributeError:
+        raise AssertionError("Required field missing from output")
+    except (TypeError, ValueError):
+        raise AssertionError("Output has incorrect type or format")
+    except Exception as e:
+        raise AssertionError(f"Validation error: {str(e)}")
+</code></pre>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<h3 id="1-assertion-overhead"><a class="header" href="#1-assertion-overhead">1. Assertion Overhead</a></h3>
+<p>Each assertion adds computational overhead. Use judiciously:</p>
+<pre><code class="language-python"># Good: Critical assertions
+validate_safety = dspy.Assert(safety_module, validate_safety_constraints)
+
+# Consider: Performance-critical paths might use lighter validation
+quick_validate = lambda ex, pred: len(pred.output) &gt; 10  # Simple check
+</code></pre>
+<h3 id="2-caching-validation-results"><a class="header" href="#2-caching-validation-results">2. Caching Validation Results</a></h3>
+<p>Cache expensive validation operations:</p>
+<pre><code class="language-python">from functools import lru_cache
+
+@lru_cache(maxsize=100)
+def cached_syntax_check(code_hash):
+    """Cache syntax validation for identical code."""
+    # Check syntax...
+    pass
+</code></pre>
+<h3 id="3-progressive-validation"><a class="header" href="#3-progressive-validation">3. Progressive Validation</a></h3>
+<p>Validate in order of cost:</p>
+<pre><code class="language-python">def progressive_validate(example, pred, trace=None):
+    # Fast checks first
+    assert len(pred.output) &gt; 0, "Empty output"
+
+    # Medium checks
+    assert pred.output.count('\n') &gt; 2, "Need multiple paragraphs"
+
+    # Expensive checks last
+    validate_semantics(pred.output)  # Slow operation
+    return True
+</code></pre>
+<h2 id="debugging-assertions"><a class="header" href="#debugging-assertions">Debugging Assertions</a></h2>
+<h3 id="1-trace-inspection"><a class="header" href="#1-trace-inspection">1. Trace Inspection</a></h3>
+<p>Examine assertion failures for debugging:</p>
+<pre><code class="language-python">def debug_assertion(example, pred, trace=None):
+    """Debug assertion with detailed information."""
+    print(f"Input: {example}")
+    print(f"Output: {pred}")
+    print(f"Trace: {trace}")
+
+    # Perform validation
+    result = actual_validation(example, pred, trace)
+
+    if not result:
+        print("Validation failed!")
+        # Analyze why...
+
+    return result
+</code></pre>
+<h3 id="2-assertion-metrics"><a class="header" href="#2-assertion-metrics">2. Assertion Metrics</a></h3>
+<p>Track assertion performance:</p>
+<pre><code class="language-python">class AssertionMetrics:
+    def __init__(self):
+        self.stats = {
+            'total_attempts': 0,
+            'failures': 0,
+            'retries': 0,
+            'success_rate': 0
+        }
+
+    def record_attempt(self, success, retries):
+        self.stats['total_attempts'] += 1
+        if not success:
+            self.stats['failures'] += 1
+        self.stats['retries'] += retries
+        self.stats['success_rate'] = (
+            (self.stats['total_attempts'] - self.stats['failures']) /
+            self.stats['total_attempts']
+        )
+</code></pre>
+<h2 id="advanced-assertion-patterns-1"><a class="header" href="#advanced-assertion-patterns-1">Advanced Assertion Patterns</a></h2>
+<h3 id="1-hierarchical-assertions"><a class="header" href="#1-hierarchical-assertions">1. Hierarchical Assertions</a></h3>
+<p>Multi-level validation with cascading constraints:</p>
+<pre><code class="language-python">from typing import TypeVar, Generic
+from abc import ABC, abstractmethod
+
+T = TypeVar('T')
+
+class HierarchicalAssertion(Generic[T], ABC):
+    """Base class for hierarchical assertion systems."""
+
+    def __init__(self, name: str, level: int = 0):
+        self.name = name
+        self.level = level
+        self.children = []
+        self.parent = None
+
+    def add_child(self, child: 'HierarchicalAssertion'):
+        """Add child assertion."""
+        child.parent = self
+        child.level = self.level + 1
+        self.children.append(child)
+
+    def validate_hierarchy(self, example, pred, trace=None) -&gt; Tuple[bool, List[str]]:
+        """Validate entire hierarchy."""
+        errors = []
+
+        # Validate current level
+        local_valid, local_errors = self.validate(example, pred, trace)
+        if not local_valid:
+            errors.extend([f"[{self.name}] {e}" for e in local_errors])
+
+        # Validate children if current level passes
+        if local_valid:
+            for child in self.children:
+                child_valid, child_errors = child.validate_hierarchy(
+                    example, pred, trace
+                )
+                if not child_valid:
+                    errors.extend(child_errors)
+
+        return len(errors) == 0, errors
+
+    @abstractmethod
+    def validate(self, example, pred, trace=None) -&gt; Tuple[bool, List[str]]:
+        """Validate at this level."""
+        pass
+
+# Example: Document validation hierarchy
+class DocumentAssertion(HierarchicalAssertion):
+    """Top-level document validation."""
+
+    def __init__(self):
+        super().__init__("document", level=0)
+
+        # Add child assertions
+        self.add_child(StructureAssertion())
+        self.add_child(ContentAssertion())
+        self.add_child(FormatAssertion())
+
+    def validate(self, example, pred, trace=None):
+        """Validate document-level constraints."""
+        errors = []
+
+        # Basic document checks
+        if not hasattr(pred, 'content'):
+            return False, ["Missing content field"]
+
+        if len(pred.content) &lt; 100:
+            errors.append("Document too short (minimum 100 characters)")
+
+        if len(pred.content) &gt; 10000:
+            errors.append("Document too long (maximum 10000 characters)")
+
+        return len(errors) == 0, errors
+
+class StructureAssertion(HierarchicalAssertion):
+    """Validate document structure."""
+
+    def __init__(self):
+        super().__init__("structure")
+
+    def validate(self, example, pred, trace=None):
+        """Validate structural elements."""
+        errors = []
+        content = pred.content
+
+        # Check for sections
+        if '#' not in content:
+            errors.append("Document missing section headers")
+
+        # Check for paragraphs
+        paragraphs = content.split('\n\n')
+        if len(paragraphs) &lt; 3:
+            errors.append("Document needs at least 3 paragraphs")
+
+        # Check for flow
+        if not self.has_logical_flow(content):
+            errors.append("Document lacks logical flow")
+
+        return len(errors) == 0, errors
+
+    def has_logical_flow(self, content: str) -&gt; bool:
+        """Check if content has logical flow."""
+        # Simple heuristic: look for transition words
+        transitions = ['however', 'therefore', 'furthermore', 'consequently']
+        return any(word in content.lower() for word in transitions)
+
+# Use hierarchical assertions
+doc_validator = DocumentAssertion()
+
+# Wrap with hierarchical validation
+class DocumentGenerator(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generator = dspy.Predict("topic -&gt; content")
+        self.hierarchical_validator = doc_validator
+
+    def forward(self, topic):
+        result = self.generator(topic=topic)
+
+        # Validate hierarchy
+        is_valid, errors = self.hierarchical_validator.validate_hierarchy(
+            example=None, pred=result
+        )
+
+        if not is_valid:
+            # Refine based on hierarchical feedback
+            refined_result = self.refine_hierarchically(
+                result, errors, self.hierarchical_validator
+            )
+            return refined_result
+
+        return result
+</code></pre>
+<h3 id="2-probabilistic-assertions"><a class="header" href="#2-probabilistic-assertions">2. Probabilistic Assertions</a></h3>
+<p>Assertions with confidence-based validation:</p>
+<pre><code class="language-python">from scipy import stats
+import numpy as np
+
+class ProbabilisticAssertion:
+    """Assertions with probabilistic validation."""
+
+    def __init__(self, confidence_threshold=0.95):
+        self.confidence_threshold = confidence_threshold
+        self.validation_history = []
+
+    def validate_with_confidence(self, example, pred, trace=None) -&gt; Tuple[bool, float, str]:
+        """Validate with confidence scoring."""
+        # Calculate confidence score
+        confidence = self.calculate_confidence(example, pred, trace)
+
+        # Determine if passes threshold
+        passes = confidence &gt;= self.confidence_threshold
+
+        # Generate explanation
+        explanation = self.generate_explanation(confidence, pred)
+
+        # Record for learning
+        self.validation_history.append({
+            'confidence': confidence,
+            'passed': passes,
+            'explanation': explanation
+        })
+
+        return passes, confidence, explanation
+
+    def calculate_confidence(self, example, pred, trace=None):
+        """Calculate confidence score for validation."""
+        confidence_factors = []
+
+        # Factor 1: Structural consistency
+        struct_confidence = self.check_structural_consistency(pred)
+        confidence_factors.append(struct_confidence)
+
+        # Factor 2: Semantic coherence
+        semantic_confidence = self.check_semantic_coherence(pred)
+        confidence_factors.append(semantic_confidence)
+
+        # Factor 3: Historical performance
+        history_confidence = self.get_historical_confidence()
+        confidence_factors.append(history_confidence)
+
+        # Combine factors (weighted average)
+        weights = [0.4, 0.4, 0.2]  # Adjust as needed
+        confidence = sum(w * c for w, c in zip(weights, confidence_factors))
+
+        return confidence
+
+    def check_structural_consistency(self, pred) -&gt; float:
+        """Check structural consistency of output."""
+        score = 0.0
+
+        # Check required fields
+        required_fields = getattr(pred, '_required_fields', [])
+        for field in required_fields:
+            if hasattr(pred, field) and getattr(pred, field):
+                score += 1.0 / len(required_fields)
+
+        # Check field consistency
+        if hasattr(pred, 'answer') and hasattr(pred, 'confidence'):
+            # Higher confidence should correlate with longer answers
+            if pred.confidence &gt; 0.8 and len(pred.answer) &lt; 10:
+                score *= 0.5  # Penalize inconsistency
+
+        return min(score, 1.0)
+
+    def check_semantic_coherence(self, pred) -&gt; float:
+        """Check semantic coherence using NLP techniques."""
+        # Simplified coherence check
+        if not hasattr(pred, 'answer'):
+            return 0.0
+
+        answer = pred.answer
+
+        # Check for repeated phrases
+        words = answer.lower().split()
+        unique_words = set(words)
+        repetition_ratio = len(unique_words) / len(words) if words else 0
+
+        # Check sentence structure
+        sentences = answer.split('.')
+        avg_sentence_length = np.mean([len(s.split()) for s in sentences if s])
+
+        # Combine factors
+        coherence_score = 0.0
+        coherence_score += repetition_ratio * 0.4
+        coherence_score += min(avg_sentence_length / 15, 1.0) * 0.3
+        coherence_score += 0.3 if 5 &lt;= len(sentences) &lt;= 10 else 0.1
+
+        return coherence_score
+
+    def get_historical_confidence(self) -&gt; float:
+        """Calculate confidence based on historical performance."""
+        if not self.validation_history:
+            return 0.5  # Neutral for no history
+
+        # Recent performance more important
+        recent_history = self.validation_history[-10:]
+        success_rate = sum(1 for h in recent_history if h['passed']) / len(recent_history)
+
+        return success_rate
+
+class AdaptiveThreshold:
+    """Adaptive confidence threshold based on context."""
+
+    def __init__(self, initial_threshold=0.95):
+        self.base_threshold = initial_threshold
+        self.context_adjustments = {}
+        self.performance_feedback = []
+
+    def get_threshold(self, context: dict) -&gt; float:
+        """Get adjusted threshold for context."""
+        threshold = self.base_threshold
+
+        # Adjust based on context
+        context_key = self.get_context_key(context)
+        if context_key in self.context_adjustments:
+            threshold *= self.context_adjustments[context_key]
+
+        # Adjust based on recent performance
+        if self.performance_feedback:
+            recent_performance = np.mean(self.performance_feedback[-5:])
+            if recent_performance &lt; 0.8:
+                threshold *= 0.9  # Lower threshold if struggling
+            elif recent_performance &gt; 0.95:
+                threshold *= 1.1  # Raise threshold if doing well
+
+        return min(max(threshold, 0.5), 0.99)  # Keep within bounds
+
+    def update_adjustment(self, context: dict, adjustment: float):
+        """Update context adjustment based on feedback."""
+        context_key = self.get_context_key(context)
+        self.context_adjustments[context_key] = adjustment
+
+    def get_context_key(self, context: dict) -&gt; str:
+        """Generate key for context lookup."""
+        # Simplified context key generation
+        key_parts = []
+        if 'domain' in context:
+            key_parts.append(context['domain'])
+        if 'complexity' in context:
+            key_parts.append(f"complexity_{context['complexity']}")
+        return "_".join(key_parts) or "default"
+
+# Usage with probabilistic assertions
+probabilistic_assert = ProbabilisticAssertion(confidence_threshold=0.9)
+adaptive_threshold = AdaptiveThreshold()
+
+class ProbabilisticValidator(dspy.Module):
+    def __init__(self, base_module):
+        super().__init__()
+        self.base_module = base_module
+        self.prob_assert = probabilistic_assert
+        self.adaptive_threshold = adaptive_threshold
+
+    def forward(self, **kwargs):
+        # Get context
+        context = {
+            'domain': kwargs.get('domain', 'general'),
+            'complexity': kwargs.get('complexity', 'medium')
+        }
+
+        # Get adaptive threshold
+        threshold = self.adaptive_threshold.get_threshold(context)
+
+        # Generate result
+        result = self.base_module(**kwargs)
+
+        # Validate with confidence
+        passes, confidence, explanation = self.prob_assert.validate_with_confidence(
+            example=None, pred=result
+        )
+
+        # Check against adaptive threshold
+        if confidence &lt; threshold:
+            # Provide feedback for learning
+            self.adaptive_threshold.update_adjustment(
+                context,
+                threshold / confidence  # Adjustment factor
+            )
+
+            # Try to improve
+            improved = self.improve_result(result, explanation)
+            if improved:
+                result = improved
+
+        return result
+</code></pre>
+<h3 id="3-distributed-assertions"><a class="header" href="#3-distributed-assertions">3. Distributed Assertions</a></h3>
+<p>Assertions across multiple model calls:</p>
+<pre><code class="language-python">from typing import Dict, List, Any
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+
+class DistributedAssertionSystem:
+    """Manages assertions across distributed model calls."""
+
+    def __init__(self, assertion_nodes: Dict[str, 'AssertionNode']):
+        self.assertion_nodes = assertion_nodes
+        self.communication_bus = AssertionCommunicationBus()
+        self.coordinator = AssertionCoordinator(assertion_nodes)
+
+    def validate_distributed(self, inputs: Dict[str, Any]) -&gt; Dict[str, Any]:
+        """Coordinate distributed validation."""
+        # Create validation plan
+        plan = self.coordinator.create_validation_plan(inputs)
+
+        # Execute in parallel where possible
+        results = self.execute_validation_plan(plan)
+
+        # Aggregate results
+        aggregated = self.coordinator.aggregate_results(results)
+
+        # Resolve conflicts
+        resolved = self.coordinator.resolve_conflicts(aggregated)
+
+        return resolved
+
+    def execute_validation_plan(self, plan: Dict) -&gt; Dict:
+        """Execute validation plan with parallel execution."""
+        results = {}
+
+        # Identify parallelizable tasks
+        parallel_tasks = []
+        sequential_tasks = []
+
+        for task_id, task in plan.items():
+            if task.get('parallelizable', False):
+                parallel_tasks.append((task_id, task))
+            else:
+                sequential_tasks.append((task_id, task))
+
+        # Execute parallel tasks
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            future_to_task = {
+                executor.submit(self.execute_task, task): task_id
+                for task_id, task in parallel_tasks
+            }
+
+            for future in concurrent.futures.as_completed(future_to_task):
+                task_id = future_to_task[future]
+                try:
+                    results[task_id] = future.result()
+                except Exception as e:
+                    results[task_id] = {'error': str(e)}
+
+        # Execute sequential tasks
+        for task_id, task in sequential_tasks:
+            results[task_id] = self.execute_task(task)
+
+        return results
+
+class AssertionNode:
+    """Individual assertion node in distributed system."""
+
+    def __init__(self, node_id: str, assertions: List[dspy.Assert]):
+        self.node_id = node_id
+        self.assertions = assertions
+        self.local_cache = {}
+
+    def validate(self, data: Dict[str, Any], context: Dict = None) -&gt; Dict:
+        """Validate with local assertions."""
+        results = {
+            'node_id': self.node_id,
+            'validations': [],
+            'overall_status': 'passed',
+            'metadata': {
+                'validation_count': len(self.assertions),
+                'execution_time': 0
+            }
+        }
+
+        start_time = time.time()
+
+        for assertion in self.assertions:
+            try:
+                # Check cache first
+                cache_key = self.get_cache_key(data, assertion)
+                if cache_key in self.local_cache:
+                    validation_result = self.local_cache[cache_key]
+                else:
+                    # Execute assertion
+                    validation_result = self.execute_assertion(
+                        assertion, data, context
+                    )
+                    # Cache result
+                    self.local_cache[cache_key] = validation_result
+
+                results['validations'].append({
+                    'assertion_id': id(assertion),
+                    'result': validation_result,
+                    'cached': cache_key in self.local_cache
+                })
+
+                if not validation_result['passed']:
+                    results['overall_status'] = 'failed'
+
+            except Exception as e:
+                results['validations'].append({
+                    'assertion_id': id(assertion),
+                    'error': str(e),
+                    'passed': False
+                })
+                results['overall_status'] = 'error'
+
+        results['metadata']['execution_time'] = time.time() - start_time
+
+        return results
+
+# Example: Multi-modal validation system
+class MultiModalValidationSystem:
+    """Validates outputs across different modalities."""
+
+    def __init__(self):
+        # Create assertion nodes for each modality
+        self.text_node = AssertionNode(
+            'text_validation',
+            [
+                dspy.Assert(validate_text_coherence),
+                dspy.Assert(validate_text_quality),
+                dspy.Assert(validate_text_length)
+            ]
+        )
+
+        self.image_node = AssertionNode(
+            'image_validation',
+            [
+                dspy.Assert(validate_image_quality),
+                dspy.Assert(validate_image_content),
+                dspy.Assert(validate_image_style)
+            ]
+        )
+
+        self.multimodal_node = AssertionNode(
+            'multimodal_validation',
+            [
+                dspy.Assert(validate_text_image_consistency),
+                dspy.Assert(validate_modality_balance)
+            ]
+        )
+
+        # Create distributed system
+        self.distributed_system = DistributedAssertionSystem({
+            'text': self.text_node,
+            'image': self.image_node,
+            'multimodal': self.multimodal_node
+        })
+
+    def validate_multimodal_output(self, output: Dict[str, Any]):
+        """Validate multimodal output."""
+        # Prepare inputs for each node
+        inputs = {
+            'text': {'text_data': output.get('text', '')},
+            'image': {'image_data': output.get('image', None)},
+            'multimodal': {
+                'text_data': output.get('text', ''),
+                'image_data': output.get('image', None)
+            }
+        }
+
+        # Execute distributed validation
+        results = self.distributed_system.validate_distributed(inputs)
+
+        # Generate comprehensive report
+        report = self.generate_validation_report(results)
+
+        return report
+
+    def generate_validation_report(self, results: Dict) -&gt; Dict:
+        """Generate comprehensive validation report."""
+        report = {
+            'overall_status': 'passed',
+            'modality_results': {},
+            'cross_modality_issues': [],
+            'recommendations': []
+        }
+
+        # Process individual modality results
+        for modality, result in results.items():
+            if 'error' in result:
+                report['modality_results'][modality] = {
+                    'status': 'error',
+                    'message': result['error']
+                }
+                report['overall_status'] = 'failed'
+            else:
+                report['modality_results'][modality] = {
+                    'status': result.get('overall_status', 'unknown'),
+                    'validations_passed': sum(
+                        1 for v in result.get('validations', [])
+                        if v.get('result', {}).get('passed', False)
+                    ),
+                    'total_validations': len(result.get('validations', [])),
+                    'execution_time': result.get('metadata', {}).get('execution_time', 0)
+                }
+
+                if result.get('overall_status') != 'passed':
+                    report['overall_status'] = 'failed'
+
+        # Cross-modality analysis
+        if 'text' in results and 'image' in results:
+            text_issues = self.extract_issues(results['text'])
+            image_issues = self.extract_issues(results['image'])
+
+            # Find related issues
+            for text_issue in text_issues:
+                for image_issue in image_issues:
+                    if self.are_related_issues(text_issue, image_issue):
+                        report['cross_modality_issues'].append({
+                            'type': 'related',
+                            'text_issue': text_issue,
+                            'image_issue': image_issue,
+                            'severity': 'high'
+                        })
+
+        # Generate recommendations
+        report['recommendations'] = self.generate_recommendations(report)
+
+        return report
+
+# Usage
+multimodal_validator = MultiModalValidationSystem()
+
+# Validate multimodal output
+output = {
+    'text': 'A beautiful sunset over the mountains',
+    'image': generated_image
+}
+
+validation_report = multimodal_validator.validate_multimodal_output(output)
+print(f"Overall status: {validation_report['overall_status']}")
+</code></pre>
+<h3 id="4-learning-assertions"><a class="header" href="#4-learning-assertions">4. Learning Assertions</a></h3>
+<p>Assertions that improve over time:</p>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+import joblib
+from pathlib import Path
+
+class LearningAssertion:
+    """Assertions that learn from validation history."""
+
+    def __init__(self, assertion_name: str, model_path: str = None):
+        self.assertion_name = assertion_name
+        self.model_path = model_path or f"models/{assertion_name}_model.pkl"
+        self.model = self.load_or_create_model()
+        self.training_data = []
+        self.feature_extractor = AssertionFeatureExtractor()
+
+    def load_or_create_model(self):
+        """Load existing model or create new one."""
+        if Path(self.model_path).exists():
+            return joblib.load(self.model_path)
+        else:
+            return RandomForestClassifier(n_estimators=100, random_state=42)
+
+    def validate_with_learning(self, example, pred, trace=None):
+        """Validate using learned patterns."""
+        # Extract features
+        features = self.feature_extractor.extract(example, pred, trace)
+
+        # Predict validation outcome
+        prediction = self.model.predict([features])[0]
+        confidence = self.model.predict_proba([features])[0].max()
+
+        # Get feature importance
+        feature_importance = self.get_feature_importance(features)
+
+        return {
+            'passed': bool(prediction),
+            'confidence': float(confidence),
+            'feature_importance': feature_importance,
+            'learned': True
+        }
+
+    def learn_from_feedback(self, example, pred, actual_outcome, trace=None):
+        """Learn from actual validation outcomes."""
+        # Extract features
+        features = self.feature_extractor.extract(example, pred, trace)
+
+        # Add to training data
+        self.training_data.append({
+            'features': features,
+            'outcome': actual_outcome
+        })
+
+        # Retrain if enough data
+        if len(self.training_data) &gt;= 50:
+            self.retrain_model()
+
+    def retrain_model(self):
+        """Retrain the assertion model."""
+        if not self.training_data:
+            return
+
+        # Prepare training data
+        X = [d['features'] for d in self.training_data]
+        y = [d['outcome'] for d in self.training_data]
+
+        # Retrain
+        self.model.fit(X, y)
+
+        # Save model
+        joblib.dump(self.model, self.model_path)
+
+        # Clear training data to save memory
+        self.training_data = []
+
+    def get_feature_importance(self, features):
+        """Get importance of each feature for this prediction."""
+        if not hasattr(self.model, 'feature_importances_'):
+            return {}
+
+        feature_names = self.feature_extractor.get_feature_names()
+        importances = self.model.feature_importances_
+
+        return {
+            name: float(imp)
+            for name, imp in zip(feature_names, importances)
+        }
+
+class AssertionFeatureExtractor:
+    """Extracts features for learning assertions."""
+
+    def __init__(self):
+        self.feature_cache = {}
+
+    def extract(self, example, pred, trace=None):
+        """Extract comprehensive features."""
+        features = {}
+
+        # Text features
+        if hasattr(pred, 'answer'):
+            text_features = self.extract_text_features(pred.answer)
+            features.update({f"text_{k}": v for k, v in text_features.items()})
+
+        # Structural features
+        struct_features = self.extract_structural_features(pred)
+        features.update({f"struct_{k}": v for k, v in struct_features.items()})
+
+        # Context features
+        if example:
+            context_features = self.extract_context_features(example, pred)
+            features.update({f"context_{k}": v for k, v in context_features.items()})
+
+        # Trace features
+        if trace:
+            trace_features = self.extract_trace_features(trace)
+            features.update({f"trace_{k}": v for k, v in trace_features.items()})
+
+        return features
+
+    def extract_text_features(self, text: str) -&gt; Dict:
+        """Extract text-based features."""
+        features = {}
+
+        # Basic statistics
+        words = text.split()
+        sentences = text.split('.')
+        paragraphs = text.split('\n\n')
+
+        features['word_count'] = len(words)
+        features['sentence_count'] = len(sentences)
+        features['paragraph_count'] = len(paragraphs)
+        features['avg_word_length'] = np.mean([len(w) for w in words]) if words else 0
+        features['avg_sentence_length'] = np.mean([len(s.split()) for s in sentences if s]) if sentences else 0
+
+        # Vocabulary diversity
+        unique_words = set(words)
+        features['vocab_diversity'] = len(unique_words) / len(words) if words else 0
+
+        # Punctuation patterns
+        features['exclamation_count'] = text.count('!')
+        features['question_count'] = text.count('?')
+        features['comma_count'] = text.count(',')
+
+        # Readability approximation
+        features['readability_score'] = self.calculate_readability(text)
+
+        return features
+
+    def extract_structural_features(self, pred) -&gt; Dict:
+        """Extract structural features."""
+        features = {}
+
+        # Field presence
+        all_fields = dir(pred)
+        features['field_count'] = len(all_fields)
+        features['has_confidence'] = hasattr(pred, 'confidence')
+        features['has_reasoning'] = hasattr(pred, 'reasoning')
+
+        # Field consistency
+        if hasattr(pred, 'confidence') and hasattr(pred, 'answer'):
+            # High confidence with short answer might be suspicious
+            if pred.confidence &gt; 0.9 and len(pred.answer) &lt; 10:
+                features['confidence_consistency'] = 0
+            else:
+                features['confidence_consistency'] = 1
+
+        return features
+
+    def calculate_readability(self, text: str) -&gt; float:
+        """Simple readability score."""
+        # Simplified Flesch Reading Ease
+        words = text.split()
+        sentences = text.split('.')
+
+        if not words or not sentences:
+            return 0
+
+        avg_sentence_length = len(words) / len(sentences)
+        avg_syllables = np.mean([self.count_syllables(w) for w in words])
+
+        readability = 206.835 - 1.015 * avg_sentence_length - 84.6 * avg_syllables
+        return max(0, min(100, readability))
+
+    def count_syllables(self, word: str) -&gt; int:
+        """Approximate syllable count."""
+        vowels = "aeiouy"
+        word = word.lower()
+        syllables = 0
+        prev_was_vowel = False
+
+        for char in word:
+            is_vowel = char in vowels
+            if is_vowel and not prev_was_vowel:
+                syllables += 1
+            prev_was_vowel = is_vowel
+
+        # Adjust for silent e
+        if word.endswith('e') and syllables &gt; 1:
+            syllables -= 1
+
+        return max(1, syllables)
+
+# Usage with learning assertions
+learning_assertion = LearningAssertion("answer_quality")
+
+class AdaptiveQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.qa = dspy.ChainOfThought("question -&gt; answer")
+        self.learning_assertion = learning_assertion
+
+    def forward(self, question):
+        result = self.qa(question=question)
+
+        # Validate with learning
+        validation = self.learning_assertion.validate_with_learning(
+            example={'question': question},
+            pred=result
+        )
+
+        if not validation['passed'] and validation['confidence'] &gt; 0.8:
+            # High confidence failure - likely an error
+            print(f"Validation failed with high confidence: {validation['feature_importance']}")
+
+            # Learn from this
+            self.learning_assertion.learn_from_feedback(
+                example={'question': question},
+                pred=result,
+                actual_outcome=False  # Failed
+            )
+
+            # Try again
+            result = self.qa(question=question)
+
+        return result
+
+# Later, with human feedback
+# learning_assertion.learn_from_feedback(
+#     example=example,
+#     pred=prediction,
+#     actual_outcome=True  # Human confirmed it was good
+# )
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>DSPy Assertions provide:</p>
+<ul>
+<li><strong>Runtime validation</strong> of model outputs</li>
+<li><strong>Automatic refinement</strong> when constraints fail</li>
+<li><strong>Flexible constraint types</strong> - hard and soft constraints</li>
+<li><strong>Self-improving systems</strong> through iterative refinement</li>
+<li><strong>Production reliability</strong> through guaranteed output quality</li>
+<li><strong>Hierarchical validation</strong> for complex requirements</li>
+<li><strong>Probabilistic assertions</strong> with confidence-based decisions</li>
+<li><strong>Distributed assertions</strong> across multiple model calls</li>
+<li><strong>Learning assertions</strong> that improve from experience</li>
+</ul>
+<h3 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h3>
+<ol>
+<li><strong>Use Assert for requirements</strong> - Critical constraints that must pass</li>
+<li><strong>Use Suggest for preferences</strong> - Guidance for improving quality</li>
+<li><strong>Write clear error messages</strong> - Help the model understand failures</li>
+<li><strong>Balance validation cost</strong> - Consider performance implications</li>
+<li><strong>Compose multiple assertions</strong> - Build comprehensive validation</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="../07-advanced-topics/07-self-refining-pipelines.html">Self-Refining Pipelines</a> - Learn advanced patterns</li>
+<li><a href="../05-optimizers/07-constraint-driven-optimization.html">Constraint-Driven Optimization</a> - Optimize with constraints</li>
+<li><a href="../08-case-studies/06-assertion-driven-applications.html">Assertion-Driven Applications</a> - Real-world examples</li>
+<li><a href="./07-exercises.html">Exercises</a> - Practice assertion techniques</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://dspy-docs.vercel.app/docs/deep-dive/assertions">DSPy Documentation: Assertions</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Constraint_programming">Constraint Programming</a> - Theoretical foundation</li>
+<li><a href="https://en.wikipedia.org/wiki/Runtime_verification">Runtime Verification</a> - Validation techniques</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../03-modules/06-composing-modules.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../03-modules/07-exercises.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../03-modules/06-composing-modules.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../03-modules/07-exercises.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

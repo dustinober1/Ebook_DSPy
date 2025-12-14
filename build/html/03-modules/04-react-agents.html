@@ -1,0 +1,1120 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>ReAct Agents - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-5fe0be54.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/03-modules/04-react-agents.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="react-agents"><a class="header" href="#react-agents">ReAct Agents</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li><strong>Previous Section</strong>: <a href="./03-chainofthought.html">Chain of Thought Module</a> - Understanding of reasoning modules</li>
+<li><strong>Chapter 2</strong>: Signatures - Familiarity with signature design</li>
+<li><strong>Required Knowledge</strong>: Concept of agents and tool usage</li>
+<li><strong>Difficulty Level</strong>: Intermediate to Advanced</li>
+<li><strong>Estimated Reading Time</strong>: 45 minutes</li>
+</ul>
+<h2 id="learning-objectives"><a class="header" href="#learning-objectives">Learning Objectives</a></h2>
+<p>By the end of this section, you will:</p>
+<ul>
+<li>Master the <code>dspy.ReAct</code> module for building tool-using agents</li>
+<li>Understand the ReAct (Reasoning and Acting) paradigm</li>
+<li>Learn to integrate external tools and APIs with DSPy</li>
+<li>Design agents that can search, calculate, and interact with systems</li>
+<li>Build sophisticated agentic workflows for complex tasks</li>
+</ul>
+<h2 id="introduction-to-react"><a class="header" href="#introduction-to-react">Introduction to ReAct</a></h2>
+<p>ReAct (Reasoning and Acting) is a paradigm that enables language models to use external tools by interleaving reasoning traces with task-specific actions. Unlike simple Chain of Thought where the model only “thinks,” ReAct agents can both think and act.</p>
+<h3 id="the-react-cycle"><a class="header" href="#the-react-cycle">The ReAct Cycle</a></h3>
+<pre><code>Think (Reason) → Act (Use Tool) → Observe (Get Result) → Think (Reason) → ...
+</code></pre>
+<p>This cycle allows agents to:</p>
+<ol>
+<li><strong>Reason</strong> about what to do next</li>
+<li><strong>Act</strong> by calling external tools</li>
+<li><strong>Observe</strong> the results of those actions</li>
+<li><strong>Reason</strong> about the observations</li>
+<li><strong>Repeat</strong> until the task is complete</li>
+</ol>
+<h3 id="why-react-matters"><a class="header" href="#why-react-matters">Why ReAct Matters</a></h3>
+<p><strong>Traditional LLM Limitation:</strong></p>
+<pre><code>Q: What's the current stock price of Apple?
+A: I don't have access to real-time data.
+</code></pre>
+<p><strong>With ReAct:</strong></p>
+<pre><code>Think: I need to find the current stock price of Apple. I should use a stock price tool.
+Act: Search for "AAPL stock price"
+Observe: Apple (AAPL) is trading at $178.52
+Think: I found the stock price. I can now answer the user.
+Answer: Apple (AAPL) is currently trading at $178.52.
+</code></pre>
+<h2 id="basic-react-implementation"><a class="header" href="#basic-react-implementation">Basic ReAct Implementation</a></h2>
+<h3 id="simple-react-example"><a class="header" href="#simple-react-example">Simple ReAct Example</a></h3>
+<pre><code class="language-python">import dspy
+
+# Define a ReAct signature
+class BasicReAct(dspy.Signature):
+    """Use tools to answer questions."""
+    question = dspy.InputField(desc="Question to answer", type=str)
+    reasoning = dspy.OutputField(desc="Step-by-step reasoning", type=str)
+    answer = dspy.OutputField(desc="Final answer", type=str)
+
+# Create a ReAct module with tools
+agent = dspy.ReAct(BasicReAct, tools=[dspy.WebSearch()])
+
+# Use the agent
+result = agent(
+    question="What was the last movie directed by Christopher Nolan?"
+)
+
+print("Reasoning:")
+print(result.reasoning)
+print("\nAnswer:")
+print(result.answer)
+</code></pre>
+<h3 id="the-react-workflow"><a class="header" href="#the-react-workflow">The ReAct Workflow</a></h3>
+<pre><code class="language-python"># ReAct automatically generates a trace like:
+"""
+Thought 1: I need to find information about Christopher Nolan's latest movie.
+Action 1: Search[Christopher Nolan latest movie 2023 2024]
+Observation 1: Oppenheimer (2023) is Christopher Nolan's most recent film.
+Thought 2: I have found that Oppenheimer is his latest movie. I can now answer.
+Action 2: Finish[Oppenheimer (2023) is Christopher Nolan's most recent film.]
+"""
+</code></pre>
+<h2 id="built-in-tools"><a class="header" href="#built-in-tools">Built-in Tools</a></h2>
+<h3 id="1-web-search"><a class="header" href="#1-web-search">1. Web Search</a></h3>
+<pre><code class="language-python"># Web search tool
+search_tool = dspy.WebSearch()
+
+# Create ReAct agent with search
+researcher = dspy.ReAct(
+    "query -&gt; reasoning, answer",
+    tools=[search_tool]
+)
+
+# Research a topic
+result = researcher(
+    query="What are the main advantages of quantum computing?"
+)
+</code></pre>
+<h3 id="2-calculator"><a class="header" href="#2-calculator">2. Calculator</a></h3>
+<pre><code class="language-python"># Calculator tool
+calc_tool = dspy.Calculator()
+
+# Create math agent
+math_agent = dspy.ReAct(
+    "math_problem -&gt; reasoning, solution",
+    tools=[calc_tool]
+)
+
+# Solve complex math
+result = math_agent(
+    math_problem="Calculate the compound interest on $10,000 at 5% for 3 years."
+)
+</code></pre>
+<h3 id="3-multiple-tools"><a class="header" href="#3-multiple-tools">3. Multiple Tools</a></h3>
+<pre><code class="language-python"># Combine multiple tools
+agent = dspy.ReAct(
+    "complex_query -&gt; reasoning, detailed_answer",
+    tools=[
+        dspy.WebSearch(),
+        dspy.Calculator(),
+        dspy.ProgramInterpreter()  # For code execution
+    ]
+)
+
+# Query requiring multiple tools
+result = agent(
+    complex_query="What's the population of Tokyo, and what's the per capita GDP "
+                   "if the GDP is $2 trillion?"
+)
+</code></pre>
+<h2 id="custom-tools"><a class="header" href="#custom-tools">Custom Tools</a></h2>
+<h3 id="creating-your-own-tool"><a class="header" href="#creating-your-own-tool">Creating Your Own Tool</a></h3>
+<pre><code class="language-python">from dspy.predict.react import Tool
+
+class WeatherTool(Tool):
+    name = "weather"
+    description = "Get current weather for a location"
+    parameters = {
+        "location": "The city name",
+        "units": "Temperature units (celsius or fahrenheit, default: celsius)"
+    }
+
+    def forward(self, location, units="celsius"):
+        """Simulate weather API call."""
+        # In reality, this would call a real weather API
+        import random
+        temp = random.uniform(-10, 35) if units == "celsius" else random.uniform(14, 95)
+
+        return f"Weather in {location}: {temp:.1f}°{units[0].upper()}, cloudy"
+
+# Use custom tool
+weather_agent = dspy.ReAct(
+    "weather_question -&gt; reasoning, weather_info",
+    tools=[WeatherTool()]
+)
+
+result = weather_agent(
+    weather_question="What's the weather like in London?"
+)
+</code></pre>
+<h3 id="api-integration-tool"><a class="header" href="#api-integration-tool">API Integration Tool</a></h3>
+<pre><code class="language-python">class APITool(Tool):
+    """Template for API integration tools."""
+
+    def __init__(self, api_config):
+        super().__init__()
+        self.api_config = api_config
+
+    def make_api_call(self, endpoint, params=None):
+        """Make API call with error handling."""
+        import requests
+
+        try:
+            response = requests.get(
+                f"{self.api_config['base_url']}/{endpoint}",
+                params=params,
+                headers=self.api_config.get('headers', {})
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            return f"API Error: {str(e)}"
+
+# Example: GitHub API tool
+class GitHubTool(APITool):
+    name = "github"
+    description = "Search GitHub repositories"
+    parameters = {
+        "query": "Search query for repositories",
+        "sort": "Sort order (stars, forks, updated)"
+    }
+
+    def __init__(self, github_token=None):
+        config = {
+            "base_url": "https://api.github.com",
+            "headers": {"Authorization": f"token {github_token}"} if github_token else {}
+        }
+        super().__init__(config)
+
+    def forward(self, query, sort="stars"):
+        """Search GitHub repositories."""
+        return self.make_api_call(
+            "search/repositories",
+            params={"q": query, "sort": sort, "per_page": 5}
+        )
+
+# Use GitHub tool
+github_agent = dspy.ReAct(
+    "github_search -&gt; reasoning, repo_info",
+    tools=[GitHubTool()]
+)
+
+result = github_agent(
+    github_search="Find popular machine learning libraries on GitHub"
+)
+</code></pre>
+<h2 id="advanced-react-patterns"><a class="header" href="#advanced-react-patterns">Advanced ReAct Patterns</a></h2>
+<h3 id="1-multi-step-research"><a class="header" href="#1-multi-step-research">1. Multi-Step Research</a></h3>
+<pre><code class="language-python">class ResearchAgent(dspy.Signature):
+    """Conduct comprehensive research on a topic."""
+    research_topic = dspy.InputField(desc="Topic to research", type=str)
+    research_depth = dspy.InputField(desc="How deep to research", type=str)
+    findings = dspy.OutputField(desc="Key findings from research", type=str)
+    sources = dspy.OutputField(desc="Sources used", type=str)
+    gaps = dspy.OutputField(desc="Information gaps identified", type=str)
+    next_steps = dspy.OutputField(desc="Suggested further research", type=str)
+
+# Enhanced research agent
+researcher = dspy.ReAct(
+    ResearchAgent,
+    tools=[
+        dspy.WebSearch(max_results=10),
+        dspy.WebPageScraper(),  # Custom tool for extracting content
+        dspy.ProgramInterpreter()  # For data analysis
+    ],
+    max_steps=10  # Allow more thinking/acting cycles
+)
+
+# Deep research
+result = researcher(
+    research_topic="The impact of AI on job markets",
+    research_depth="comprehensive"
+)
+
+print(f"Key Findings: {result.findings}")
+print(f"Sources: {result.sources}")
+</code></pre>
+<h3 id="2-data-analysis-agent"><a class="header" href="#2-data-analysis-agent">2. Data Analysis Agent</a></h3>
+<pre><code class="language-python">class DataAnalysisAgent(dspy.Signature):
+    """Analyze data and generate insights."""
+    dataset_description = dspy.InputField(desc="Description of dataset", type=str)
+    analysis_goal = dspy.InputField(desc="What to learn from data", type=str)
+    data_exploration = dspy.OutputField(desc="Steps taken to explore data", type=str)
+    insights = dspy.OutputField(desc="Key insights discovered", type=str)
+    visualizations = dspy.OutputField(desc="Suggested visualizations", type=str)
+    limitations = dspy.OutputField(desc="Analysis limitations", type=str)
+
+# Data analysis agent with programming capability
+data_analyst = dspy.ReAct(
+    DataAnalysisAgent,
+    tools=[
+        dspy.ProgramInterpreter(),  # For Python execution
+        dspy.Calculator(),
+        dspy.FileOperation()  # Custom tool for file operations
+    ]
+)
+
+result = data_analyst(
+    dataset_description="Sales data with columns: date, product, region, amount",
+    analysis_goal="Find top performing products and regions"
+)
+</code></pre>
+<h3 id="3-decision-support-agent"><a class="header" href="#3-decision-support-agent">3. Decision Support Agent</a></h3>
+<pre><code class="language-python">class DecisionAgent(dspy.Signature):
+    """Help make informed decisions."""
+    decision_context = dspy.InputField(desc("Context for the decision", type=str)
+    options = dspy.InputField(desc("Available options", type=str)
+    criteria = dspy.InputField(desc("Decision criteria", type=str)
+    analysis = dspy.OutputField(desc("Analysis of each option", type=str)
+    recommendation = dspy.OutputField(desc("Recommended choice", type=str)
+    confidence = dspy.OutputField(desc("Confidence in recommendation", type=str)
+    risks = dspy.OutputField(desc("Potential risks", type=str)
+
+# Decision agent with research capability
+decision_helper = dspy.ReAct(
+    DecisionAgent,
+    tools=[
+        dspy.WebSearch(),  # Research options
+        dspy.Calculator(),  # Calculate metrics
+        dspy.ComparisonTool()  # Custom comparison tool
+    ]
+)
+
+result = decision_helper(
+    decision_context="Choosing a cloud provider for our startup",
+    options="AWS, Google Cloud, Azure",
+    criteria="Cost, scalability, ease of use, support"
+)
+</code></pre>
+<h2 id="building-complex-agent-workflows"><a class="header" href="#building-complex-agent-workflows">Building Complex Agent Workflows</a></h2>
+<h3 id="1-agent-orchestration"><a class="header" href="#1-agent-orchestration">1. Agent Orchestration</a></h3>
+<pre><code class="language-python">class OrchestratorAgent(dspy.Signature):
+    """Orchestrate multiple specialized agents."""
+    task = dspy.InputField(desc("Complex task to complete", type=str)
+    subtasks = dspy.OutputField(desc("Identified subtasks", type=str)
+    agent_assignments = dspy.OutputField(desc("Which agent handles each subtask", type=str)
+    coordination = dspy.OutputField(desc="How agents coordinate", type=str)
+    final_result = dspy.OutputField(desc="Combined result from all agents", type=str)
+
+# Specialized agents
+researcher = dspy.ReAct(
+    "research_query -&gt; research_result",
+    tools=[dspy.WebSearch()],
+    max_steps=5
+)
+
+analyst = dspy.ReAct(
+    "analysis_query -&gt; analysis_result",
+    tools=[dspy.ProgramInterpreter(), dspy.Calculator()],
+    max_steps=5
+)
+
+writer = dspy.ReAct(
+    "writing_task -&gt; written_content",
+    tools=[dspy.WebSearch()],  # For research while writing
+    max_steps=3
+)
+
+# Orchestrator
+orchestrator = dspy.ReAct(
+    OrchestratorAgent,
+    tools=[
+        Tool(researcher),  # Sub-agents as tools
+        Tool(analyst),
+        Tool(writer)
+    ]
+)
+</code></pre>
+<h3 id="2-hierarchical-agents"><a class="header" href="#2-hierarchical-agents">2. Hierarchical Agents</a></h3>
+<pre><code class="language-python">class ManagerAgent(dspy.Signature):
+    """Manage and delegate to worker agents."""
+    objective = dspy.InputField(desc("High-level objective", type=str)
+    delegation_plan = dspy.OutputField(desc("How to delegate work", type=str)
+    monitoring = dspy.OutputField(desc("How to monitor progress", type=str)
+    integration = dspy.OutputField(desc("How to integrate results", type=str)
+    final_report = dspy.OutputField(desc("Complete report", type=str)
+
+# Worker agents with specific expertise
+market_researcher = dspy.ReAct(
+    "market_research_task -&gt; market_insights",
+    tools=[dspy.WebSearch(), dspy.DataAnalyzer()]
+)
+
+financial_analyst = dspy.ReAct(
+    "financial_analysis_task -&gt; financial_report",
+    tools=[dspy.Calculator(), dspy.ExcelTool()]
+)
+
+# Manager orchestrates workers
+manager = dspy.ReAct(
+    ManagerAgent,
+    tools=[
+        Tool(market_researcher),
+        Tool(financial_analyst)
+    ],
+    max_steps=15
+)
+</code></pre>
+<h2 id="tool-best-practices"><a class="header" href="#tool-best-practices">Tool Best Practices</a></h2>
+<h3 id="1-error-handling"><a class="header" href="#1-error-handling">1. Error Handling</a></h3>
+<pre><code class="language-python">class RobustTool(Tool):
+    """Tool with comprehensive error handling."""
+
+    def forward(self, **kwargs):
+        try:
+            result = self.execute(**kwargs)
+            return result
+        except Exception as e:
+            # Log error
+            self.log_error(e)
+            # Return helpful error message
+            return f"Error in {self.name}: {str(e)}. Please check your inputs and try again."
+
+    def log_error(self, error):
+        """Log errors for debugging."""
+        import datetime
+        timestamp = datetime.datetime.now().isoformat()
+        print(f"[{timestamp}] {self.name} Error: {error}")
+</code></pre>
+<h3 id="2-input-validation"><a class="header" href="#2-input-validation">2. Input Validation</a></h3>
+<pre><code class="language-python">class ValidatedTool(Tool):
+    """Tool with input validation."""
+
+    def validate_inputs(self, **kwargs):
+        """Validate inputs before execution."""
+        # Implement validation logic
+        pass
+
+    def forward(self, **kwargs):
+        # Validate first
+        if not self.validate_inputs(**kwargs):
+            return "Invalid inputs provided"
+
+        # Execute if valid
+        return self.execute(**kwargs)
+</code></pre>
+<h3 id="3-caching-results"><a class="header" href="#3-caching-results">3. Caching Results</a></h3>
+<pre><code class="language-python">class CachedTool(Tool):
+    """Tool with caching capability."""
+
+    def __init__(self, cache_ttl=3600):
+        super().__init__()
+        self.cache = {}
+        self.cache_ttl = cache_ttl
+
+    def forward(self, **kwargs):
+        # Generate cache key
+        cache_key = self.generate_cache_key(**kwargs)
+
+        # Check cache
+        if cache_key in self.cache:
+            cached_result, timestamp = self.cache[cache_key]
+            if self.is_cache_valid(timestamp):
+                return cached_result
+
+        # Execute and cache result
+        result = self.execute(**kwargs)
+        self.cache[cache_key] = (result, time.time())
+
+        return result
+</code></pre>
+<h2 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h2>
+<h3 id="1-efficient-tool-selection"><a class="header" href="#1-efficient-tool-selection">1. Efficient Tool Selection</a></h3>
+<pre><code class="language-python"># Choose tools wisely
+efficient_agent = dspy.ReAct(
+    "query -&gt; reasoning, answer",
+    tools=[
+        dspy.WebSearch(max_results=3),  # Limit results
+        dspy.Calculator(),
+        # Don't include unnecessary tools
+    ],
+    max_steps=5,  # Limit reasoning steps
+    temperature=0.1  # More predictable
+)
+</code></pre>
+<h3 id="2-parallel-tool-execution"><a class="header" href="#2-parallel-tool-execution">2. Parallel Tool Execution</a></h3>
+<pre><code class="language-python">class ParallelReAct(dspy.ReAct):
+    """ReAct that can execute tools in parallel when possible."""
+
+    def plan_parallel_actions(self, reasoning):
+        """Identify actions that can be executed in parallel."""
+        # Analyze reasoning to find parallelizable actions
+        pass
+
+    def execute_parallel(self, actions):
+        """Execute multiple tools simultaneously."""
+        # Use threading or asyncio
+        pass
+</code></pre>
+<h3 id="3-smart-caching"><a class="header" href="#3-smart-caching">3. Smart Caching</a></h3>
+<pre><code class="language-python"># Cache at multiple levels
+smart_agent = dspy.ReAct(
+    "query -&gt; reasoning, answer",
+    tools=[
+        dspy.CachedWebSearch(cache_file="search_cache.db"),
+        dspy.CachedCalculator(cache_file="calc_cache.db")
+    ],
+    cache=True  # Enable module-level caching
+)
+</code></pre>
+<h2 id="common-react-patterns"><a class="header" href="#common-react-patterns">Common ReAct Patterns</a></h2>
+<h3 id="1-research--synthesize"><a class="header" href="#1-research--synthesize">1. Research → Synthesize</a></h3>
+<pre><code class="language-python"># Pattern: Gather information, then synthesize
+research_pattern = dspy.ReAct(
+    "research_question -&gt; reasoning, synthesis",
+    tools=[dspy.WebSearch(max_results=5)],
+    instructions="1. Search for information\n2. Analyze findings\n3. Synthesize into coherent answer"
+)
+</code></pre>
+<h3 id="2-calculate--interpret"><a class="header" href="#2-calculate--interpret">2. Calculate → Interpret</a></h3>
+<pre><code class="language-python"># Pattern: Perform calculations, then interpret
+calculation_pattern = dspy.ReAct(
+    "calculation_problem -&gt; reasoning, interpretation",
+    tools=[dspy.Calculator()],
+    instructions="1. Identify calculations needed\n2. Perform calculations\n3. Interpret results in context"
+)
+</code></pre>
+<h3 id="3-verify--conclude"><a class="header" href="#3-verify--conclude">3. Verify → Conclude</a></h3>
+<pre><code class="language-python"># Pattern: Verify information, then conclude
+verification_pattern = dspy.ReAct(
+    "claim -&gt; reasoning, verified_conclusion",
+    tools=[dspy.WebSearch()],
+    instructions="1. Break down claim into verifiable parts\n2. Search for evidence\n3. Verify each part\n4. Draw conclusion"
+)
+</code></pre>
+<h2 id="troubleshooting-react"><a class="header" href="#troubleshooting-react">Troubleshooting ReAct</a></h2>
+<h3 id="1-agent-gets-stuck"><a class="header" href="#1-agent-gets-stuck">1. Agent Gets Stuck</a></h3>
+<pre><code class="language-python"># Add timeouts and step limits
+bounded_agent = dspy.ReAct(
+    "task -&gt; reasoning, result",
+    tools=[dspy.WebSearch()],
+    max_steps=7,  # Limit reasoning steps
+    timeout=30    # Time limit per step
+)
+</code></pre>
+<h3 id="2-tool-not-used-correctly"><a class="header" href="#2-tool-not-used-correctly">2. Tool Not Used Correctly</a></h3>
+<pre><code class="language-python"># Add clear tool instructions
+guided_agent = dspy.ReAct(
+    "task -&gt; reasoning, result",
+    tools=[dspy.Calculator()],
+    instructions="When you need to calculate something, always use the calculator tool. "
+                 "Show your calculation steps clearly."
+)
+</code></pre>
+<h3 id="3-inconsistent-results"><a class="header" href="#3-inconsistent-results">3. Inconsistent Results</a></h3>
+<pre><code class="language-python"># Add deterministic mode
+deterministic_agent = dspy.ReAct(
+    "task -&gt; reasoning, result",
+    tools=[dspy.WebSearch()],
+    temperature=0.1,  # Lower temperature
+    seed=42           # Fixed seed
+)
+</code></pre>
+<h2 id="when-to-use-react"><a class="header" href="#when-to-use-react">When to Use ReAct</a></h2>
+<h3 id="use-react-when"><a class="header" href="#use-react-when">Use ReAct when:</a></h3>
+<ol>
+<li><strong>External information needed</strong> - Requires web search, APIs</li>
+<li><strong>Complex calculations</strong> - Needs computational tools</li>
+<li><strong>Multi-step tasks</strong> - Tasks requiring multiple actions</li>
+<li><strong>Real-time data</strong> - Needs current information</li>
+<li><strong>Interactive tasks</strong> - Requires tool interaction</li>
+</ol>
+<h3 id="consider-predict-or-chainofthought-when"><a class="header" href="#consider-predict-or-chainofthought-when">Consider Predict or ChainOfThought when:</a></h3>
+<ol>
+<li><strong>Static knowledge</strong> - Information already in the model</li>
+<li><strong>Simple reasoning</strong> - No external tools needed</li>
+<li><strong>Fast response required</strong> - ReAct adds latency</li>
+<li><strong>Reliable knowledge</strong> - Model’s knowledge is sufficient</li>
+</ol>
+<h2 id="integration-with-assertions"><a class="header" href="#integration-with-assertions">Integration with Assertions</a></h2>
+<p>Combine ReAct agents with assertions for reliable tool usage and validated outputs:</p>
+<h3 id="1-tool-usage-validation"><a class="header" href="#1-tool-usage-validation">1. Tool Usage Validation</a></h3>
+<p>Ensure agents use tools appropriately and effectively:</p>
+<pre><code class="language-python">import dspy
+
+class ValidatedResearchAgent(dspy.Module):
+    """Research agent with validated tool usage."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("query -&gt; research_findings")
+
+    def forward(self, query):
+        # Validate tool usage
+        def validate_tool_usage(example, pred, trace=None):
+            # Check if tools were actually used
+            if not trace or 'tool_calls' not in str(trace):
+                raise AssertionError("Must use search tools for research")
+
+            # Check for sufficient tool interactions
+            tool_calls = str(trace).count('Action:')
+            if tool_calls &lt; 2:
+                raise AssertionError("Make multiple searches for comprehensive research")
+
+            # Verify findings incorporate tool results
+            if len(pred.research_findings) &lt; 200:
+                raise AssertionError("Research findings too brief - use more sources")
+
+            return True
+
+        # Apply assertion
+        validated_react = dspy.Assert(
+            self.react,
+            validation_fn=validate_tool_usage,
+            max_attempts=3,
+            recovery_hint="Use search tools to gather information from multiple sources"
+        )
+
+        return validated_react(query=query)
+
+# Use validated research agent
+researcher = ValidatedResearchAgent()
+result = researcher(query="Impact of AI on job markets in 2024")
+</code></pre>
+<h3 id="2-output-source-verification"><a class="header" href="#2-output-source-verification">2. Output Source Verification</a></h3>
+<p>Ensure agent outputs properly cite sources from tool usage:</p>
+<pre><code class="language-python">class SourceAwareAgent(dspy.Module):
+    """Agent that must cite sources from tools."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("question -&gt; answer_with_sources")
+
+    def forward(self, question):
+        def validate_source_citation(example, pred, trace=None):
+            answer = pred.answer_with_sources
+
+            # Check for citations
+            citation_patterns = ['Source:', '[', 'According to', 'Based on']
+            has_citations = any(pattern in answer for pattern in citation_patterns)
+
+            if not has_citations:
+                raise AssertionError(
+                    "Answer must include sources. Use patterns like 'Source: [URL]'"
+                )
+
+            # Extract citations and verify they match tool results
+            if trace:
+                # This would parse trace to match URLs with tool calls
+                tool_urls = extract_tool_urls(trace)
+                answer_urls = extract_citation_urls(answer)
+
+                if not answer_urls:
+                    raise AssertionError("No valid source citations found in answer")
+
+                # Ensure at least one citation matches tool usage
+                if not any(url in str(tool_urls) for url in answer_urls):
+                    raise AssertionError("Citations must match tool search results")
+
+            return True
+
+        # Apply source validation
+        with_sources = dspy.Assert(
+            self.react,
+            validation_fn=validate_source_citation,
+            max_attempts=3
+        )
+
+        return with_sources(question=question)
+
+def extract_tool_urls(trace):
+    """Extract URLs from tool trace."""
+    import re
+    urls = []
+    trace_str = str(trace)
+    url_pattern = r'https?://[^\s&lt;&gt;"{}|\\^`\[\]]+'
+    urls.extend(re.findall(url_pattern, trace_str))
+    return urls
+
+def extract_citation_urls(text):
+    """Extract URLs from citations in answer."""
+    import re
+    urls = []
+    # Find URLs in brackets or after "Source:"
+    bracket_pattern = r'\[(https?://[^\]]+)\]'
+    source_pattern = r'Source:\s*(https?://[^\s]+)'
+
+    urls.extend(re.findall(bracket_pattern, text))
+    urls.extend(re.findall(source_pattern, text))
+    return urls
+</code></pre>
+<h3 id="3-step-by-step-action-validation"><a class="header" href="#3-step-by-step-action-validation">3. Step-by-Step Action Validation</a></h3>
+<p>Validate the agent’s reasoning and action sequence:</p>
+<pre><code class="language-python">class StepValidatedAgent(dspy.Module):
+    """Agent with validated reasoning steps."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("task -&gt; solution")
+
+    def forward(self, task):
+        def validate_action_sequence(example, pred, trace=None):
+            if not trace:
+                return True  # No trace to validate
+
+            # Parse the thought-action-observation sequence
+            steps = parse_trace_steps(trace)
+
+            # Check for minimum steps
+            if len(steps) &lt; 3:
+                raise AssertionError("Need more reasoning steps - show your work")
+
+            # Verify thought precedes each action
+            for i, step in enumerate(steps):
+                if 'Action:' in step and i &gt; 0:
+                    prev_step = steps[i-1]
+                    if 'Thought:' not in prev_step:
+                        raise AssertionError(
+                            "Explain your reasoning (Thought:) before taking action"
+                        )
+
+            # Check if observations are used in subsequent thoughts
+            for i, step in enumerate(steps):
+                if 'Observation:' in step and i &lt; len(steps) - 1:
+                    next_step = steps[i+1]
+                    # Simple check - in practice, this would be more sophisticated
+                    if 'Thought:' in next_step and len(next_step) &lt; 50:
+                        raise AssertionError(
+                            "Reflect on observations before proceeding"
+                        )
+
+            return True
+
+        def parse_trace_steps(trace):
+            """Parse trace into individual steps."""
+            import re
+            # Simple parsing - split by Thought/Action/Observation markers
+            pattern = r'(Thought:|Action:|Observation:)'
+            parts = re.split(pattern, str(trace))
+
+            steps = []
+            for i in range(1, len(parts), 2):
+                if i &lt; len(parts):
+                    steps.append(parts[i] + parts[i+1])
+            return steps
+
+        # Apply step validation
+        step_validated = dspy.Assert(
+            self.react,
+            validation_fn=validate_action_sequence,
+            max_attempts=2,
+            recovery_hint="Show clear Thought: Action: Observation: sequence"
+        )
+
+        return step_validated(task=task)
+</code></pre>
+<h3 id="4-error-recovery-and-retry-logic"><a class="header" href="#4-error-recovery-and-retry-logic">4. Error Recovery and Retry Logic</a></h3>
+<p>Build agents that recover from failures gracefully:</p>
+<pre><code class="language-python">class ResilientAgent(dspy.Module):
+    """Agent with error recovery capabilities."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct("goal -&gt; result")
+
+    def forward(self, goal):
+        def validate_completion(example, pred, trace=None):
+            # Check if goal was actually achieved
+            if not assess_goal_achievement(goal, pred.result):
+                raise AssertionError(
+                    "Goal not fully achieved. Review your approach and try alternative actions."
+                )
+
+            # Check for proper error handling in trace
+            if trace and 'error' in str(trace).lower():
+                # Should see recovery attempts after errors
+                if 'Thought:' not in str(trace).split('error')[-1]:
+                    raise AssertionError(
+                        "After an error, show recovery reasoning before continuing"
+                    )
+
+            return True
+
+        def assess_goal_achievement(goal, result):
+            """Assess if the agent achieved its goal."""
+            # Simple heuristic - could be more sophisticated
+            goal_words = set(goal.lower().split())
+            result_words = set(result.lower().split())
+
+            # Check if key goal terms appear in result
+            overlap = len(goal_words.intersection(result_words))
+            return overlap &gt; len(goal_words) * 0.3
+
+        # Custom error handler for assertion failures
+        def custom_error_handler(assertion_type, error_msg, attempt):
+            """Provide specific recovery hints based on error type."""
+            if "Goal not fully achieved" in error_msg:
+                return """
+                Review the original goal and your current result.
+                Identify what's missing and plan specific actions to address gaps.
+                Consider: What specific information or actions are still needed?
+                """
+            elif "error" in error_msg.lower():
+                return """
+                You encountered an error. Analyze what went wrong and choose:
+                1. Try the same action with different parameters
+                2. Use an alternative tool or approach
+                3. Modify your strategy based on the error
+                """
+            else:
+                return "Review your actions and ensure they address the goal."
+
+        # Apply with custom error handling
+        resilient_react = dspy.Assert(
+            self.react,
+            validation_fn=validate_completion,
+            max_attempts=3,
+            error_handler=custom_error_handler
+        )
+
+        return resilient_react(goal=goal)
+</code></pre>
+<h3 id="5-multi-tool-coordination-validation"><a class="header" href="#5-multi-tool-coordination-validation">5. Multi-Tool Coordination Validation</a></h3>
+<p>Ensure agents coordinate multiple tools effectively:</p>
+<pre><code class="language-python">class MultiToolAgent(dspy.Module):
+    """Agent that must use multiple tools in coordination."""
+
+    def __init__(self):
+        super().__init__()
+        self.react = dspy.ReAct(
+            "analysis_request -&gt; comprehensive_analysis",
+            tools=[
+                dspy.WebSearch(),      # For recent information
+                dspy.Calculator(),     # For calculations
+                CustomAPITool()        # Custom data source
+            ]
+        )
+
+    def forward(self, analysis_request):
+        def validate_tool_coordination(example, pred, trace=None):
+            if not trace:
+                return True
+
+            # Check for usage of different tool types
+            used_search = 'search' in str(trace).lower()
+            used_calc = 'calculator' in str(trace).lower() or 'calculate' in str(trace).lower()
+            used_api = 'api' in str(trace).lower()
+
+            tool_count = sum([used_search, used_calc, used_api])
+
+            # Require at least 2 different tools for comprehensive analysis
+            if tool_count &lt; 2:
+                raise AssertionError(
+                    "Use multiple tools (search, calculator, API) for comprehensive analysis"
+                )
+
+            # Validate tool use sequence makes sense
+            if used_calc and not used_search:
+                # If doing calculations, should have data first
+                if 'Action:' in str(trace).split('calculator')[0]:
+                    raise AssertionError(
+                        "Gather data with search before performing calculations"
+                    )
+
+            return True
+
+        # Apply multi-tool validation
+        coordinated_agent = dspy.Assert(
+            self.react,
+            validation_fn=validate_tool_coordination,
+            max_attempts=3,
+            recovery_hint="Coordinate multiple tools: gather data, analyze, calculate"
+        )
+
+        return coordinated_agent(analysis_request=analysis_request)
+
+class CustomAPITool:
+    """Example custom tool for demonstration."""
+    def __call__(self, query):
+        # Simulate API call
+        return f"API result for: {query}"
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>ReAct agents enable:</p>
+<ul>
+<li><strong>Tool usage</strong> - Connect to external systems and APIs</li>
+<li><strong>Dynamic reasoning</strong> - Adapt based on tool results</li>
+<li><strong>Complex problem solving</strong> - Handle multi-step tasks</li>
+<li><strong>Real-time capabilities</strong> - Access current information</li>
+<li><strong>Extensibility</strong> - Easy to add new tools</li>
+<li><strong>Reliability with assertions</strong> - Guaranteed tool usage and output quality</li>
+</ul>
+<h3 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h3>
+<ol>
+<li><strong>Think-Act-Observe</strong> cycle is the core of ReAct</li>
+<li><strong>Choose tools wisely</strong> based on task requirements</li>
+<li><strong>Handle errors gracefully</strong> - tools can fail</li>
+<li><strong>Limit complexity</strong> - too many tools can confuse the agent</li>
+<li><strong>Cache results</strong> - improve performance and reduce costs</li>
+<li><strong>Validate with assertions</strong> - Ensure proper tool usage and reliable outputs</li>
+<li><strong>Require citations</strong> - Always source information from tools</li>
+<li><strong>Check action sequences</strong> - Validate reasoning steps</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<ul>
+<li><a href="./05-custom-modules.html">Custom Modules</a> - Build your own module types</li>
+<li><a href="./06-composing-modules.html">Module Composition</a> - Combine modules effectively</li>
+<li><a href="../examples/chapter03/">Practical Examples</a> - See ReAct in action</li>
+<li><a href="./07-exercises.html">Exercises</a> - Practice building agents</li>
+</ul>
+<h2 id="further-reading"><a class="header" href="#further-reading">Further Reading</a></h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2210.03629">Paper: ReAct: Synergizing Reasoning and Acting</a> - Original ReAct research</li>
+<li><a href="https://dspy-docs.vercel.app/docs/deep-dive/react">DSPy Documentation: ReAct</a> - Technical details</li>
+<li><a href="../07-advanced-topics.html">Tool Integration Guide</a> - Advanced tool patterns</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../03-modules/03-chainofthought.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../03-modules/05-custom-modules.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../03-modules/03-chainofthought.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../03-modules/05-custom-modules.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

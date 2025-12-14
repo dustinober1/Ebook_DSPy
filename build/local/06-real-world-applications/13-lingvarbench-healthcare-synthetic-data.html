@@ -1,0 +1,745 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>LingVarBench: Synthetic Healthcare Transcript Generation - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/06-real-world-applications/13-lingvarbench-healthcare-synthetic-data.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="lingvarbench-synthetic-healthcare-transcript-generation"><a class="header" href="#lingvarbench-synthetic-healthcare-transcript-generation">LingVarBench: Synthetic Healthcare Transcript Generation</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p><strong>LingVarBench</strong> is a groundbreaking framework for generating synthetic healthcare phone transcripts that addresses the critical challenge of data privacy in medical NLP. By leveraging DSPy’s <strong>SIMBA (Stochastic Introspective Mini-Batch Ascent)</strong> optimizer, LingVarBench creates high-quality, HIPAA-compliant synthetic data that preserves the linguistic patterns and clinical relevance of real healthcare conversations while eliminating privacy risks.</p>
+<h2 id="key-innovation"><a class="header" href="#key-innovation">Key Innovation</a></h2>
+<p>The framework introduces a novel approach to synthetic data generation that:</p>
+<ul>
+<li>Maintains clinical accuracy and linguistic diversity</li>
+<li>Preserves patient privacy through complete HIPAA compliance</li>
+<li>Enables robust NER model training without access to real patient data</li>
+<li>Achieves 90%+ accuracy on real healthcare transcripts using only synthetic data</li>
+</ul>
+<h2 id="architecture"><a class="header" href="#architecture">Architecture</a></h2>
+<h3 id="1-data-generation-pipeline"><a class="header" href="#1-data-generation-pipeline">1. Data Generation Pipeline</a></h3>
+<pre><code class="language-python">import dspy
+from typing import List, Dict, Optional
+import random
+from dataclasses import dataclass
+
+@dataclass
+class MedicalEntity:
+    """Represents a medical entity with protected health information."""
+    entity_type: str  # MEDICATION, CONDITION, PROCEDURE, etc.
+    original_text: str
+    deidentified_text: str
+    confidence: float
+
+class SyntheticTranscriptGenerator(dspy.Module):
+    """Generates synthetic healthcare transcripts using DSPy optimization."""
+
+    def __init__(self, entity_types: List[str]):
+        super().__init__()
+        self.entity_types = entity_types
+
+        # Initialize SIMBA optimizer for prompt synthesis
+        self.simba_optimizer = SIMBAOptimizer(
+            population_size=20,
+            generations=50,
+            mutation_rate=0.1,
+            crossover_rate=0.8
+        )
+
+        # Core generation module
+        self.transcript_generator = dspy.ChainOfThought(
+            """Generate a realistic phone conversation between a patient
+            and healthcare provider about {topic}.
+
+            Requirements:
+            - Include {num_entities} medical entities from: {entity_types}
+            - Maintain natural conversation flow
+            - Use appropriate medical terminology
+            - Create realistic patient symptoms/concerns
+            - Ensure provider responses are clinically appropriate
+            - Deidentify all PHI while preserving meaning
+
+            Entities to include: {required_entities}
+
+            Generate conversation:
+            {conversation}"""
+        )
+
+        # Entity deidentification module
+        self.deidentifier = dspy.Predict(
+            "conversation_with_phi -&gt; conversation_without_phi"
+        )
+
+    def generate_transcript(self, topic: str, num_entities: int = 5) -&gt; Dict:
+        """Generate a synthetic healthcare transcript."""
+        # Select random entities for this transcript
+        required_entities = random.sample(self.entity_types,
+                                       min(num_entities, len(self.entity_types)))
+
+        # Generate conversation with entities
+        conversation = self.transcript_generator(
+            topic=topic,
+            num_entities=num_entities,
+            entity_types=", ".join(self.entity_types),
+            required_entities=", ".join(required_entities)
+        )
+
+        # Deidentify PHI while preserving entity types
+        deidentified = self.deidentifier(
+            conversation_with_phi=conversation.conversation
+        )
+
+        return {
+            "original": conversation.conversation,
+            "deidentified": deidentified.conversation_without_phi,
+            "entities": self._extract_entities(deidentified.conversation_without_phi),
+            "phi_removed": True
+        }
+
+    def _extract_entities(self, transcript: str) -&gt; List[MedicalEntity]:
+        """Extract and classify medical entities from the transcript."""
+        # Implementation depends on your entity extraction approach
+        pass
+</code></pre>
+<h3 id="2-simba-optimization-for-prompt-synthesis"><a class="header" href="#2-simba-optimization-for-prompt-synthesis">2. SIMBA Optimization for Prompt Synthesis</a></h3>
+<pre><code class="language-python">class SIMBAOptimizer:
+    """Stochastic Introspective Mini-Batch Ascent for prompt optimization."""
+
+    def __init__(self, population_size: int = 20, generations: int = 50,
+                 mutation_rate: float = 0.1, crossover_rate: float = 0.8):
+        self.population_size = population_size
+        self.generations = generations
+        self.mutation_rate = mutation_rate
+        self.crossover_rate = crossover_rate
+
+    def optimize_prompt(self, base_prompt: str,
+                       evaluation_data: List[Dict]) -&gt; str:
+        """Optimize prompt using evolutionary approach."""
+
+        # Initialize population with prompt variations
+        population = self._initialize_population(base_prompt)
+
+        for generation in range(self.generations):
+            # Evaluate fitness of each prompt
+            fitness_scores = []
+            for prompt in population:
+                score = self._evaluate_prompt(prompt, evaluation_data)
+                fitness_scores.append(score)
+
+            # Select best performers
+            selected = self._select_parents(population, fitness_scores)
+
+            # Create next generation through crossover and mutation
+            population = self._create_generation(selected)
+
+            # Track best performer
+            best_idx = fitness_scores.index(max(fitness_scores))
+            best_prompt = population[best_idx]
+            best_score = max(fitness_scores)
+
+            print(f"Generation {generation}: Best score = {best_score:.3f}")
+
+        return best_prompt
+
+    def _evaluate_prompt(self, prompt: str, data: List[Dict]) -&gt; float:
+        """Evaluate prompt quality on synthetic data generation metrics."""
+
+        # Test prompt on evaluation data
+        generated_samples = []
+        for example in data[:10]:  # Sample for efficiency
+            # Use prompt to generate transcript
+            generator = dspy.ChainOfThought(prompt)
+            result = generator(**example)
+            generated_samples.append(result)
+
+        # Calculate metrics
+        entity_coverage = self._calculate_entity_coverage(generated_samples, data)
+        naturalness_score = self._evaluate_naturalness(generated_samples)
+        privacy_preservation = self._check_privacy_compliance(generated_samples)
+
+        # Combine metrics with weights
+        total_score = (
+            0.4 * entity_coverage +
+            0.4 * naturalness_score +
+            0.2 * privacy_preservation
+        )
+
+        return total_score
+</code></pre>
+<h3 id="3-privacy-preserving-entity-generation"><a class="header" href="#3-privacy-preserving-entity-generation">3. Privacy-Preserving Entity Generation</a></h3>
+<pre><code class="language-python">class HIPAACompliantEntityGenerator(dspy.Module):
+    """Generates realistic medical entities while preserving privacy."""
+
+    def __init__(self):
+        super().__init__()
+
+        # Entity generation templates
+        self.medication_template = dspy.Predict(
+            """Generate a realistic {medication_type} medication name.
+            Requirements:
+            - Must sound authentic but be synthetic
+            - Follow pharmaceutical naming conventions
+            - Not match any real medication
+
+            Medication name:"""
+        )
+
+        self.condition_template = dspy.Predict(
+            """Generate a realistic medical condition description.
+            Requirements:
+            - Describe common symptoms
+            - Use appropriate medical terminology
+            - Be specific enough for NER training
+            - Not reveal any identifying information
+
+            Condition description:"""
+        )
+
+        # PHI detection and removal
+        self.phi_detector = dspy.ChainOfThought(
+            """Analyze text for Protected Health Information (PHI).
+
+            PHI types to detect:
+            - Names (person, provider, facility)
+            - Dates (birth, admission, visit)
+            - Locations (address, city, state)
+            - Contact information (phone, email)
+            - ID numbers (SSN, MRN, insurance)
+
+            Text: {text}
+
+            List all PHI found and suggest replacements:"""
+        )
+
+    def generate_safe_entity(self, entity_type: str) -&gt; str:
+        """Generate a synthetic medical entity."""
+
+        if entity_type == "MEDICATION":
+            result = self.medication_template(medication_type="common")
+            return result.medication_name
+
+        elif entity_type == "CONDITION":
+            result = self.condition_template()
+            return result.condition_description
+
+        # Additional entity types...
+
+    def ensure_privacy_compliance(self, transcript: str) -&gt; str:
+        """Remove or replace all PHI from transcript."""
+
+        phi_analysis = self.phi_detector(text=transcript)
+
+        # Apply replacements for detected PHI
+        cleaned_transcript = transcript
+        for phi_item in phi_analysis.phi_found:
+            replacement = self._generate_replacement(phi_item)
+            cleaned_transcript = cleaned_transcript.replace(phi_item, replacement)
+
+        return cleaned_transcript
+</code></pre>
+<h2 id="evaluation-protocol"><a class="header" href="#evaluation-protocol">Evaluation Protocol</a></h2>
+<h3 id="1-synthetic-to-real-transfer-learning"><a class="header" href="#1-synthetic-to-real-transfer-learning">1. Synthetic-to-Real Transfer Learning</a></h3>
+<pre><code class="language-python">class SyntheticToRealEvaluator:
+    """Evaluates how well models trained on synthetic data perform on real data."""
+
+    def __init__(self, synthetic_generator, real_dataset):
+        self.synthetic_generator = synthetic_generator
+        self.real_dataset = real_dataset
+
+    def evaluate_transfer_learning(self, num_synthetic_samples: int = 1000):
+        """Test transfer learning performance."""
+
+        # Generate synthetic training data
+        synthetic_data = []
+        for _ in range(num_synthetic_samples):
+            transcript = self.synthetic_generator.generate_transcript(
+                topic=random.choice(["medication refill", "symptom inquiry",
+                                  "appointment scheduling", "lab results"])
+            )
+            synthetic_data.append(transcript)
+
+        # Train NER model on synthetic data only
+        synthetic_model = self._train_ner_model(synthetic_data)
+
+        # Evaluate on real healthcare transcripts
+        real_performance = self._evaluate_on_real_data(
+            synthetic_model, self.real_dataset
+        )
+
+        # Compare with model trained on real data (if available)
+        # real_to_real = self._train_and_evaluate_on_real()
+
+        return {
+            "synthetic_to_real_accuracy": real_performance,
+            "synthetic_samples_used": len(synthetic_data),
+            "entity_f1_scores": self._calculate_entity_f1(synthetic_model),
+            "privacy_compliance": self._verify_no_phi_leakage(synthetic_data)
+        }
+
+    def _verify_no_phi_leakage(self, synthetic_data: List[Dict]) -&gt; bool:
+        """Ensure no real PHI is present in synthetic data."""
+
+        # Check for common PHI patterns
+        phi_patterns = [
+            r'\b\d{2}/\d{2}/\d{4}\b',  # Dates
+            r'\b\d{3}-\d{2}-\d{4}\b',   # SSN
+            r'\b\d{10}\b',              # Phone numbers
+            r'\b[A-Z][a-z]+ [A-Z][a-z]+\b'  # Names (simplified)
+        ]
+
+        for sample in synthetic_data:
+            text = sample["deidentified"]
+            for pattern in phi_patterns:
+                if re.search(pattern, text):
+                    return False
+
+        return True
+</code></pre>
+<h3 id="2-quality-metrics-for-synthetic-data"><a class="header" href="#2-quality-metrics-for-synthetic-data">2. Quality Metrics for Synthetic Data</a></h3>
+<pre><code class="language-python">class SyntheticDataQualityMetrics:
+    """Comprehensive metrics for evaluating synthetic healthcare data."""
+
+    def __init__(self):
+        self.naturalness_evaluator = dspy.Predict(
+            "transcript -&gt; naturalness_score(1-10)"
+        )
+
+        self.medical_accuracy_checker = dspy.ChainOfThought(
+            """Verify medical accuracy in healthcare conversation.
+
+            Check:
+            - Symptoms match described conditions
+            - Medications are appropriate for conditions
+            - Provider advice is medically sound
+            - Terminology is used correctly
+
+            Conversation: {conversation}
+
+            Medical accuracy assessment:"""
+        )
+
+    def evaluate_synthetic_sample(self, sample: Dict) -&gt; Dict:
+        """Evaluate quality of a single synthetic transcript."""
+
+        transcript = sample["deidentified"]
+
+        # Naturalness evaluation
+        naturalness = self.naturalness_evaluator(transcript=transcript)
+
+        # Medical accuracy check
+        accuracy = self.medical_accuracy_checker(conversation=transcript)
+
+        # Entity diversity
+        entity_diversity = self._calculate_entity_diversity(sample["entities"])
+
+        # Linguistic features
+        linguistic_score = self._analyze_linguistic_features(transcript)
+
+        return {
+            "naturalness_score": naturalness.naturalness_score / 10.0,
+            "medical_accuracy": self._parse_accuracy_score(accuracy),
+            "entity_diversity": entity_diversity,
+            "linguistic_appropriateness": linguistic_score,
+            "overall_quality": self._calculate_overall_score(
+                naturalness.naturalness_score / 10.0,
+                self._parse_accuracy_score(accuracy),
+                entity_diversity,
+                linguistic_score
+            )
+        }
+
+    def _calculate_entity_diversity(self, entities: List[Dict]) -&gt; float:
+        """Calculate diversity of entity types in transcript."""
+        if not entities:
+            return 0.0
+
+        unique_types = set(e["entity_type"] for e in entities)
+        return len(unique_types) / len(entities)
+
+    def _analyze_linguistic_features(self, transcript: str) -&gt; float:
+        """Analyze linguistic appropriateness for healthcare context."""
+
+        # Check for appropriate formality level
+        # Verify medical terminology usage
+        # Assess conversation flow
+
+        # Simplified implementation
+        features = {
+            "formality": self._check_formality(transcript),
+            "terminology": self._check_medical_terminology(transcript),
+            "flow": self._check_conversation_flow(transcript)
+        }
+
+        return sum(features.values()) / len(features)
+</code></pre>
+<h2 id="implementation-guide"><a class="header" href="#implementation-guide">Implementation Guide</a></h2>
+<h3 id="1-setting-up-lingvarbench"><a class="header" href="#1-setting-up-lingvarbench">1. Setting Up LingVarBench</a></h3>
+<pre><code class="language-python"># Initialize the framework
+entity_types = [
+    "MEDICATION", "CONDITION", "PROCEDURE",
+    "SYMPTOM", "DEVICE", "MEASUREMENT"
+]
+
+generator = SyntheticTranscriptGenerator(entity_types)
+
+# Optimize prompts using SIMBA
+training_scenarios = [
+    {"topic": "medication refill", "num_entities": 3},
+    {"topic": "symptom inquiry", "num_entities": 4},
+    {"topic": "appointment scheduling", "num_entities": 2}
+]
+
+optimized_generator = simba_optimizer.optimize_prompt(
+    base_prompt=generator.transcript_generator.prompt,
+    evaluation_data=training_scenarios
+)
+</code></pre>
+<h3 id="2-training-ner-models-with-synthetic-data"><a class="header" href="#2-training-ner-models-with-synthetic-data">2. Training NER Models with Synthetic Data</a></h3>
+<pre><code class="language-python"># Generate synthetic training set
+synthetic_train_data = []
+for i in range(5000):
+    sample = generator.generate_transcript(
+        topic=random.choice(list_of_topics),
+        num_entities=random.randint(2, 6)
+    )
+
+    # Convert to NER training format
+    ner_sample = convert_to_ner_format(sample)
+    synthetic_train_data.append(ner_sample)
+
+# Train model using only synthetic data
+ner_model = train_ner_model(synthetic_train_data)
+
+# Evaluate on real healthcare transcripts (unseen during training)
+test_performance = evaluate_model(ner_model, real_test_set)
+
+print(f"Performance on real data: {test_performance['f1']:.3f}")
+# Expected: &gt;0.90 F1 score as demonstrated in the paper
+</code></pre>
+<h3 id="3-integration-with-existing-dspy-pipelines"><a class="header" href="#3-integration-with-existing-dspy-pipelines">3. Integration with Existing DSPy Pipelines</a></h3>
+<pre><code class="language-python">class HealthcareNERPipeline(dspy.Module):
+    """Complete NER pipeline for healthcare transcripts."""
+
+    def __init__(self, synthetic_generator=None):
+        super().__init__()
+
+        # Use synthetic data for training if real data unavailable
+        if synthetic_generator is None:
+            synthetic_generator = SyntheticTranscriptGenerator(entity_types)
+
+        self.ner_extractor = dspy.Predict(
+            """Extract medical entities from healthcare transcript.
+
+            Entity types: {entity_types}
+
+            Transcript: {transcript}
+
+            Extracted entities:"""
+        )
+
+        self.entity_classifier = dspy.ChainOfThought(
+            """Classify extracted medical entities.
+
+            Entity: {entity}
+            Context: {context}
+
+            Classification (type and confidence):"""
+        )
+
+    def forward(self, transcript: str) -&gt; Dict:
+        """Extract and classify medical entities."""
+
+        # Extract entities
+        extraction_result = self.ner_extractor(
+            transcript=transcript,
+            entity_types=", ".join(entity_types)
+        )
+
+        # Classify each entity
+        classified_entities = []
+        for entity in extraction_result.extracted_entities:
+            classification = self.entity_classifier(
+                entity=entity,
+                context=transcript
+            )
+            classified_entities.append({
+                "text": entity,
+                "type": classification.entity_type,
+                "confidence": classification.confidence,
+                "reasoning": classification.reasoning
+            })
+
+        return {
+            "entities": classified_entities,
+            "transcript": transcript,
+            "phi_compliant": True
+        }
+</code></pre>
+<h2 id="key-results-from-paper"><a class="header" href="#key-results-from-paper">Key Results from Paper</a></h2>
+<ol>
+<li><strong>Synthetic Data Quality</strong>: Achieved 92% naturalness score in human evaluations</li>
+<li><strong>Privacy Preservation</strong>: 0% PHI leakage in 10,000 generated transcripts</li>
+<li><strong>Transfer Learning</strong>: Models trained on synthetic data achieved 91.3% F1 on real data</li>
+<li><strong>Data Efficiency</strong>: 50% less training data needed compared to real data training</li>
+<li><strong>Cost Reduction</strong>: 80% lower cost than manual data annotation</li>
+</ol>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ol>
+<li><strong>Always verify HIPAA compliance</strong> before deployment</li>
+<li><strong>Use diverse seed examples</strong> for SIMBA optimization</li>
+<li><strong>Regularly evaluate</strong> on real data to prevent synthetic-to-real gap</li>
+<li><strong>Combine with real data</strong> when available for best performance</li>
+<li><strong>Implement robust PHI detection</strong> as a safety layer</li>
+</ol>
+<h2 id="limitations-and-considerations"><a class="header" href="#limitations-and-considerations">Limitations and Considerations</a></h2>
+<ul>
+<li>Synthetic data may not capture rare medical conditions</li>
+<li>Requires careful prompt engineering to maintain medical accuracy</li>
+<li>May need domain expert validation for critical applications</li>
+<li>Performance can vary with different medical specialties</li>
+</ul>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>LingVarBench demonstrates the power of combining DSPy’s optimization capabilities with privacy-preserving synthetic data generation. The SIMBA optimizer enables automatic creation of high-quality prompts that generate realistic healthcare transcripts without compromising patient privacy. This approach opens new possibilities for medical NLP research while maintaining strict HIPAA compliance.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../06-real-world-applications/12-ir-model-training-scratch.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../06-real-world-applications/14-scientific-figure-caption-generation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../06-real-world-applications/12-ir-model-training-scratch.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../06-real-world-applications/14-scientific-figure-caption-generation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>

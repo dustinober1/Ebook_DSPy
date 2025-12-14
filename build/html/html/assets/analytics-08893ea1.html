@@ -1,0 +1,260 @@
+<!-- Analytics and Tracking for DSPy Ebook -->
+
+<!-- Google Analytics (Gtag.js) - Replace GA_MEASUREMENT_ID with your actual ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  // Note: Replace GA_MEASUREMENT_ID with your actual Google Analytics Measurement ID
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'GA_MEASUREMENT_ID', {
+    'anonymize_ip': true,
+    'cookie_flags': 'SameSite=None;Secure'
+  });
+
+  // Custom event tracking for ebook interactions
+  function trackEbookEvent(action, category, label, value) {
+    gtag('event', action, {
+      'event_category': category,
+      'event_label': label,
+      'value': value
+    });
+  }
+
+  // Track chapter views
+  document.addEventListener('DOMContentLoaded', function() {
+    // Track page view
+    gtag('event', 'page_view', {
+      'page_title': document.title,
+      'page_location': window.location.href
+    });
+
+    // Track chapter from URL
+    const pathParts = window.location.pathname.split('/');
+    const chapterIndex = pathParts.findIndex(part => part.match(/^\d{2}-/));
+    if (chapterIndex !== -1) {
+      const chapter = pathParts[chapterIndex];
+      trackEbookEvent('chapter_view', 'engagement', chapter, 1);
+    }
+
+    // Track external link clicks
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+      link.addEventListener('click', function() {
+        trackEbookEvent('external_link', 'navigation', this.href);
+      });
+    });
+
+    // Track code example views
+    document.querySelectorAll('pre').forEach((codeBlock, index) => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            trackEbookEvent('code_view', 'engagement', `code_example_${index}`, 1);
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+      observer.observe(codeBlock);
+    });
+
+    // Track time spent on page
+    let startTime = Date.now();
+    window.addEventListener('beforeunload', function() {
+      const timeSpent = Math.round((Date.now() - startTime) / 1000);
+      trackEbookEvent('time_spent', 'engagement', window.location.pathname, timeSpent);
+    });
+  });
+</script>
+
+<!-- Fathom Analytics (Alternative to Google Analytics) -->
+<!--
+<script src="https://cdn.usefathom.com/script.js" data-site="YOUR_FATHOM_SITE_ID" defer></script>
+-->
+
+<!-- Plausible Analytics (Privacy-focused alternative) -->
+<!--
+<script defer data-domain="dustinober1.github.io" src="https://plausible.io/js/plausible.js"></script>
+-->
+
+<!-- Umami Analytics (Self-hosted alternative) -->
+<!--
+<script async defer data-website-id="YOUR_UMAMI_ID" src="https://umami.is/script.js"></script>
+-->
+
+<!-- Custom DSPy Ebook Tracking -->
+<script>
+// DSPy Ebook specific tracking
+window.DSPyEbook = {
+  // Track reading progress
+  trackReadingProgress: function() {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPosition = window.scrollY;
+    const progress = Math.round((scrollPosition / scrollHeight) * 100);
+
+    // Track milestones at 25%, 50%, 75%, and 100%
+    const milestones = [25, 50, 75, 100];
+    milestones.forEach(milestone => {
+      if (progress >= milestone && !this[`tracked_${milestone}`]) {
+        this[`tracked_${milestone}`] = true;
+        trackEbookEvent('reading_progress', 'engagement', `${milestone}%`, milestone);
+      }
+    });
+  },
+
+  // Track chapter completion
+  trackChapterComplete: function(chapterId) {
+    trackEbookEvent('chapter_complete', 'engagement', chapterId, 1);
+
+    // Store completion in localStorage for progress tracking
+    const completedChapters = JSON.parse(localStorage.getItem('completedChapters') || '[]');
+    if (!completedChapters.includes(chapterId)) {
+      completedChapters.push(chapterId);
+      localStorage.setItem('completedChapters', JSON.stringify(completedChapters));
+    }
+  },
+
+  // Track download attempts
+  trackDownload: function(format, version) {
+    trackEbookEvent('download', 'conversion', format, 1);
+
+    // Track downloads in local storage for analytics
+    const downloads = JSON.parse(localStorage.getItem('downloads') || '{}');
+    if (!downloads[format]) {
+      downloads[format] = 0;
+    }
+    downloads[format]++;
+    localStorage.setItem('downloads', JSON.stringify(downloads));
+  },
+
+  // Track search usage
+  trackSearch: function(query, resultCount) {
+    trackEbookEvent('search', 'navigation', query, resultCount);
+  },
+
+  // Initialize all tracking
+  init: function() {
+    // Track reading progress on scroll
+    window.addEventListener('scroll', () => this.trackReadingProgress());
+
+    // Add "Mark as Complete" buttons to chapters
+    this.addCompleteButtons();
+
+    // Track print attempts
+    window.addEventListener('beforeprint', () => {
+      trackEbookEvent('print', 'conversion', 'html_to_pdf', 1);
+    });
+  },
+
+  // Add completion tracking to chapters
+  addCompleteButtons: function() {
+    const chapters = document.querySelectorAll('h1[id], h2[id]');
+    chapters.forEach(chapter => {
+      const id = chapter.id;
+      if (id && id.match(/^\d{2}-/)) {
+        // Check if already completed
+        const completedChapters = JSON.parse(localStorage.getItem('completedChapters') || '[]');
+        const isCompleted = completedChapters.includes(id);
+
+        // Add visual indicator for completed chapters
+        if (isCompleted) {
+          chapter.style.color = '#4CAF50';
+          chapter.title = '✓ Completed';
+        }
+      }
+    });
+  }
+};
+
+// Initialize tracking when page loads
+window.addEventListener('DOMContentLoaded', function() {
+  DSPyEbook.init();
+});
+
+// Export for manual tracking
+window.trackDownload = DSPyEbook.trackDownload.bind(DSPyEbook);
+window.trackChapterComplete = DSPyEbook.trackChapterComplete.bind(DSPyEbook);
+</script>
+
+<!-- Heatmap and session recording (Optional - uncomment if needed) -->
+<!--
+<script>
+  (function(h,o,t,j,a,r){
+    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+    h._hjSettings={hjid:YOUR_HOTJAR_ID,hjsv:6};
+    a=o.getElementsByTagName('head')[0];
+    r=o.createElement('script');r.async=1;
+    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+    a.appendChild(r);
+  })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+-->
+
+<!-- Custom consent banner (GDPR compliance) -->
+<style>
+.consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1E88E5;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  z-index: 9999;
+  display: none;
+}
+
+.consent-banner button {
+  background: white;
+  color: #1E88E5;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.consent-banner button:hover {
+  background: #f5f5f5;
+}
+</style>
+
+<div id="consent-banner" class="consent-banner">
+  <p>This website uses analytics to understand how you use the ebook. By continuing to use this site, you agree to our <a href="https://github.com/dustinober1/Ebook_DSPy/blob/main/PRIVACY.md" style="color: white;">Privacy Policy</a>.</p>
+  <button onclick="acceptAnalytics()">Accept</button>
+  <button onclick="rejectAnalytics()">Reject</button>
+</div>
+
+<script>
+// Analytics consent management
+function hasConsent() {
+  return localStorage.getItem('analytics-consent') === 'accepted';
+}
+
+function setConsent(accepted) {
+  localStorage.setItem('analytics-consent', accepted ? 'accepted' : 'rejected');
+  document.getElementById('consent-banner').style.display = 'none';
+
+  if (!accepted) {
+    // Disable analytics if consent is rejected
+    window['ga-disable-GA_MEASUREMENT_ID'] = true;
+  }
+}
+
+function acceptAnalytics() {
+  setConsent(true);
+  trackEbookEvent('consent_accepted', 'privacy', null, 1);
+}
+
+function rejectAnalytics() {
+  setConsent(false);
+}
+
+// Show consent banner on first visit
+if (!localStorage.getItem('analytics-consent')) {
+  document.getElementById('consent-banner').style.display = 'block';
+} else {
+  document.getElementById('consent-banner').style.display = 'none';
+}
+</script>

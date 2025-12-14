@@ -1,0 +1,1027 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Entity Extraction - DSPy: A Practical Guide</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="The most comprehensive DSPy guide with complete coverage of 9 research papers, advanced optimization techniques, and production-ready applications">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-ae938929.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../assets/custom-837cb9c5.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex-8a4736e7.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-90eb277b.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">DSPy: A Practical Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/dustinober1/Ebook_DSPy/edit/main/src/06-real-world-applications/04-entity-extraction.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="entity-extraction-mining-structured-information-from-text"><a class="header" href="#entity-extraction-mining-structured-information-from-text">Entity Extraction: Mining Structured Information from Text</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>Entity extraction (also known as Named Entity Recognition or NER) is the process of identifying and categorizing specific pieces of information from unstructured text. This critical technology powers everything from resume parsing and contract analysis to medical record processing and financial document extraction. DSPy provides robust tools for building sophisticated entity extraction systems that can handle complex, real-world scenarios.</p>
+<h2 id="understanding-entity-extraction"><a class="header" href="#understanding-entity-extraction">Understanding Entity Extraction</a></h2>
+<h3 id="common-entity-types"><a class="header" href="#common-entity-types">Common Entity Types</a></h3>
+<ol>
+<li><strong>Person</strong>: Names of individuals (John Smith, Dr. Sarah Johnson)</li>
+<li><strong>Organization</strong>: Companies, institutions (Google, Microsoft, Stanford University)</li>
+<li><strong>Location</strong>: Places, addresses (New York, 123 Main Street)</li>
+<li><strong>Date/Time</strong>: Temporal expressions (January 15, 2024, 3:30 PM)</li>
+<li><strong>Money</strong>: Monetary values ($50,000, €1.2 million)</li>
+<li><strong>Product</strong>: Commercial products (iPhone 15, Toyota Camry)</li>
+<li><strong>Event</strong>: Named events (World War II, Olympics 2024)</li>
+<li><strong>Custom</strong>: Domain-specific entities (Medical codes, Legal references)</li>
+</ol>
+<h3 id="real-world-applications"><a class="header" href="#real-world-applications">Real-World Applications</a></h3>
+<ul>
+<li><strong>Resume Processing</strong>: Extract skills, experience, education</li>
+<li><strong>Contract Analysis</strong>: Identify parties, dates, clauses</li>
+<li><strong>Medical Records</strong>: Extract diagnoses, medications, procedures</li>
+<li><strong>Financial Documents</strong>: Extract amounts, dates, companies</li>
+<li><strong>News Articles</strong>: Identify people, organizations, events</li>
+<li><strong>Customer Reviews</strong>: Extract products, features, sentiments</li>
+</ul>
+<h2 id="building-entity-extractors"><a class="header" href="#building-entity-extractors">Building Entity Extractors</a></h2>
+<h3 id="basic-entity-extractor"><a class="header" href="#basic-entity-extractor">Basic Entity Extractor</a></h3>
+<pre><code class="language-python">import dspy
+from typing import List, Dict, Any
+
+class BasicEntityExtractor(dspy.Module):
+    def __init__(self, entity_types):
+        super().__init__()
+        self.entity_types = entity_types
+        types_str = ", ".join(entity_types)
+        self.extract = dspy.Predict(
+            f"text, entity_types[{types_str}] -&gt; entities"
+        )
+
+    def forward(self, text):
+        result = self.extract(
+            text=text,
+            entity_types=", ".join(self.entity_types)
+        )
+
+        # Parse the extracted entities
+        entities = self._parse_entities(result.entities)
+
+        return dspy.Prediction(
+            entities=entities,
+            raw_output=result.entities
+        )
+
+    def _parse_entities(self, entities_text):
+        """Parse raw entity text into structured format."""
+        entities = []
+        if not entities_text:
+            return entities
+
+        # Simple parsing - assumes format: "TYPE: entity1, entity2"
+        lines = entities_text.strip().split('\n')
+        for line in lines:
+            if ':' in line:
+                entity_type, entity_list = line.split(':', 1)
+                entity_type = entity_type.strip()
+                for entity in entity_list.split(','):
+                    entity = entity.strip()
+                    if entity:
+                        entities.append({
+                            "text": entity,
+                            "type": entity_type,
+                            "confidence": 0.8  # Default confidence
+                        })
+
+        return entities
+</code></pre>
+<h3 id="advanced-entity-extractor-with-context"><a class="header" href="#advanced-entity-extractor-with-context">Advanced Entity Extractor with Context</a></h3>
+<pre><code class="language-python">class AdvancedEntityExtractor(dspy.Module):
+    def __init__(self, entity_types, context_window=100):
+        super().__init__()
+        self.entity_types = entity_types
+        self.context_window = context_window
+        types_str = ", ".join(entity_types)
+
+        self.find_entities = dspy.ChainOfThought(
+            f"text, context, entity_types[{types_str}] -&gt; entities_with_positions"
+        )
+
+        self.validate_entities = dspy.Predict(
+            "entity, text_context -&gt; is_valid, corrected_entity, confidence"
+        )
+
+        self.disambiguate = dspy.Predict(
+            "entity, context, possible_meanings -&gt; disambiguated_entity, reasoning"
+        )
+
+    def forward(self, text, document_context=None):
+        if document_context:
+            context = document_context[-self.context_window:]
+        else:
+            context = text
+
+        # Find entities with positions
+        extraction = self.find_entities(
+            text=text,
+            context=context,
+            entity_types=", ".join(self.entity_types)
+        )
+
+        # Parse and validate entities
+        entities = []
+        for entity_info in self._parse_entities_with_positions(extraction.entities_with_positions):
+            # Validate each entity
+            validation = self.validate_entities(
+                entity=entity_info["text"],
+                text_context=text[max(0, entity_info["start"]-50):entity_info["end"]+50]
+            )
+
+            if validation.is_valid.lower() == "yes":
+                # Disambiguate if needed
+                if entity_info["type"] in ["PERSON", "ORGANIZATION"]:
+                    disambiguation = self.disambiguate(
+                        entity=validation.corrected_entity,
+                        context=context,
+                        possible_meanings="Multiple possible matches"
+                    )
+                    final_entity = disambiguation.disambiguated_entity
+                else:
+                    final_entity = validation.corrected_entity
+
+                entities.append({
+                    "text": final_entity,
+                    "type": entity_info["type"],
+                    "start": entity_info["start"],
+                    "end": entity_info["end"],
+                    "confidence": float(validation.confidence),
+                    "original": entity_info["text"]
+                })
+
+        return dspy.Prediction(
+            entities=entities,
+            extraction_reasoning=extraction.rationale
+        )
+
+    def _parse_entities_with_positions(self, entities_text):
+        """Parse entities with their positions."""
+        # Assuming format: "TYPE: entity (start-end), entity (start-end)"
+        entities = []
+        lines = entities_text.strip().split('\n')
+
+        for line in lines:
+            if ':' in line:
+                entity_type, entities_list = line.split(':', 1)
+                entity_type = entity_type.strip()
+
+                for entity_match in entities_list.split(','):
+                    entity_match = entity_match.strip()
+                    if '(' in entity_match and ')' in entity_match:
+                        entity_text = entity_match[:entity_match.rfind('(')].strip()
+                        positions = entity_match[entity_match.rfind('(')+1:-1].split('-')
+                        if len(positions) == 2:
+                            entities.append({
+                                "text": entity_text,
+                                "type": entity_type,
+                                "start": int(positions[0]),
+                                "end": int(positions[1])
+                            })
+
+        return entities
+</code></pre>
+<h3 id="relation-extractor"><a class="header" href="#relation-extractor">Relation Extractor</a></h3>
+<pre><code class="language-python">class RelationExtractor(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.extract_relations = dspy.ChainOfThought(
+            "entities, text -&gt; relations"
+        )
+
+    def forward(self, text, entities):
+        # Prepare entities context
+        entities_context = "\n".join([
+            f"{e['type']}: {e['text']} (position: {e.get('start', 'N/A')})"
+            for e in entities
+        ])
+
+        # Extract relations between entities
+        relations = self.extract_relations(
+            entities=entities_context,
+            text=text
+        )
+
+        parsed_relations = self._parse_relations(relations.relations)
+
+        return dspy.Prediction(
+            relations=parsed_relations,
+            reasoning=relations.rationale
+        )
+
+    def _parse_relations(self, relations_text):
+        """Parse relations text into structured format."""
+        relations = []
+        if not relations_text:
+            return relations
+
+        # Assuming format: "SUBJECT -&gt; RELATION -&gt; OBJECT"
+        lines = relations_text.strip().split('\n')
+        for line in lines:
+            if '-&gt;' in line:
+                parts = [p.strip() for p in line.split('-&gt;')]
+                if len(parts) == 3:
+                    relations.append({
+                        "subject": parts[0],
+                        "relation": parts[1],
+                        "object": parts[2]
+                    })
+
+        return relations
+</code></pre>
+<h2 id="specialized-entity-extraction-applications"><a class="header" href="#specialized-entity-extraction-applications">Specialized Entity Extraction Applications</a></h2>
+<h3 id="resumecv-parser"><a class="header" href="#resumecv-parser">Resume/CV Parser</a></h3>
+<pre><code class="language-python">class ResumeParser(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.contact_info = dspy.Predict(
+            "resume_text -&gt; name, email, phone, location, linkedin"
+        )
+
+        self.extract_sections = dspy.Predict(
+            "resume_text -&gt; work_experience, education, skills, certifications"
+        )
+
+        self.parse_experience = dspy.ChainOfThought(
+            "experience_section -&gt; detailed_experiences"
+        )
+
+        self.parse_education = dspy.Predict(
+            "education_section -&gt; schools, degrees, graduation_years"
+        )
+
+    def forward(self, resume_text):
+        # Extract contact information
+        contact = self.contact_info(resume_text=resume_text)
+
+        # Identify and extract sections
+        sections = self.extract_sections(resume_text=resume_text)
+
+        # Parse work experience
+        experience_details = []
+        if sections.work_experience:
+            exp_parsed = self.parse_experience(experience_section=sections.work_experience)
+            experience_details = self._parse_experience_details(exp_parsed.detailed_experiences)
+
+        # Parse education
+        education_details = []
+        if sections.education:
+            edu_parsed = self.parse_education(education_section=sections.education)
+            education_details = self._parse_education_details(edu_parsed)
+
+        # Parse skills
+        skills = []
+        if sections.skills:
+            skills = [s.strip() for s in sections.skills.split(',')]
+
+        return dspy.Prediction(
+            contact_info={
+                "name": contact.name,
+                "email": contact.email,
+                "phone": contact.phone,
+                "location": contact.location,
+                "linkedin": contact.linkedin
+            },
+            work_experience=experience_details,
+            education=education_details,
+            skills=skills,
+            certifications=sections.certifications.split(',') if sections.certifications else []
+        )
+
+    def _parse_experience_details(self, experience_text):
+        """Parse detailed work experience."""
+        experiences = []
+        # Parse each job entry
+        for job in experience_text.split('\n\n'):
+            if job.strip():
+                experiences.append(self._parse_single_job(job))
+        return experiences
+
+    def _parse_single_job(self, job_text):
+        """Parse a single job entry."""
+        # Simple parsing - in practice, would be more sophisticated
+        lines = job_text.split('\n')
+        title_company = lines[0] if lines else ""
+        return {
+            "title_company": title_company,
+            "details": lines[1:] if len(lines) &gt; 1 else []
+        }
+
+    def _parse_education_details(self, education_text):
+        """Parse education information."""
+        schools = []
+        for school in education_text.schools.split(','):
+            schools.append({"name": school.strip()})
+        return schools
+</code></pre>
+<h3 id="contract-analyzer"><a class="header" href="#contract-analyzer">Contract Analyzer</a></h3>
+<pre><code class="language-python">class ContractAnalyzer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.extract_parties = dspy.Predict(
+            "contract_text -&gt; parties, roles"
+        )
+
+        self.extract_dates = dspy.Predict(
+            "contract_text -&gt; effective_date, termination_date, key_dates"
+        )
+
+        self.extract_financials = dspy.Predict(
+            "contract_text -&gt; payment_terms, amounts, penalties"
+        )
+
+        self.identify_clauses = dspy.ChainOfThought(
+            "contract_text -&gt; important_clauses, obligations"
+        )
+
+    def forward(self, contract_text):
+        # Extract parties involved
+        parties = self.extract_parties(contract_text=contract_text)
+
+        # Extract important dates
+        dates = self.extract_dates(contract_text=contract_text)
+
+        # Extract financial information
+        financials = self.extract_financials(contract_text=contract_text)
+
+        # Identify key clauses
+        clauses = self.identify_clauses(contract_text=contract_text)
+
+        return dspy.Prediction(
+            parties={
+                "entities": parties.parties.split(','),
+                "roles": parties.roles
+            },
+            dates={
+                "effective_date": dates.effective_date,
+                "termination_date": dates.termination_date,
+                "key_dates": dates.key_dates.split(',') if dates.key_dates else []
+            },
+            financials={
+                "payment_terms": financials.payment_terms,
+                "amounts": financials.amounts.split(',') if financials.amounts else [],
+                "penalties": financials.penalties
+            },
+            clauses={
+                "important": self._parse_clauses(clauses.important_clauses),
+                "obligations": self._parse_obligations(clauses.obligations)
+            },
+            reasoning=clauses.rationale
+        )
+
+    def _parse_clauses(self, clauses_text):
+        """Parse contract clauses."""
+        return [c.strip() for c in clauses_text.split(';') if c.strip()]
+
+    def _parse_obligations(self, obligations_text):
+        """Parse contractual obligations."""
+        obligations = []
+        for obligation in obligations_text.split('\n'):
+            if obligation.strip():
+                obligations.append(obligation.strip())
+        return obligations
+</code></pre>
+<h3 id="medical-record-processor"><a class="header" href="#medical-record-processor">Medical Record Processor</a></h3>
+<pre><code class="language-python">class MedicalRecordProcessor(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.extract_patient_info = dspy.Predict(
+            "medical_record -&gt; patient_name, age, gender, id"
+        )
+
+        self.extract_diagnoses = dspy.Predict(
+            "medical_record -&gt; diagnoses, icd_codes, symptoms"
+        )
+
+        self.extract_medications = dspy.Predict(
+            "medical_record -&gt; medications, dosages, frequencies"
+        )
+
+        self.extract_procedures = dspy.Predict(
+            "medical_record -&gt; procedures, dates, providers"
+        )
+
+        self.extract_vitals = dspy.Predict(
+            "medical_record -&gt; vital_signs, values, dates"
+        )
+
+    def forward(self, medical_record):
+        # Extract patient demographics
+        patient = self.extract_patient_info(medical_record=medical_record)
+
+        # Extract medical information
+        diagnoses = self.extract_diagnoses(medical_record=medical_record)
+        medications = self.extract_medications(medical_record=medical_record)
+        procedures = self.extract_procedures(medical_record=medical_record)
+        vitals = self.extract_vitals(medical_record=medical_record)
+
+        return dspy.Prediction(
+            patient_info={
+                "name": patient.patient_name,
+                "age": patient.age,
+                "gender": patient.gender,
+                "medical_id": patient.id
+            },
+            medical_info={
+                "diagnoses": self._parse_medical_list(diagnoses.diagnoses),
+                "icd_codes": diagnoses.icd_codes.split(',') if diagnoses.icd_codes else [],
+                "symptoms": self._parse_medical_list(diagnoses.symptoms)
+            },
+            medications=self._parse_medications(medications.medications, medications.dosages, medications.frequencies),
+            procedures=self._parse_procedures(procedures.procedures, procedures.dates, procedures.providers),
+            vitals=self._parse_vitals(vitals.vital_signs, vitals.values, vitals.dates)
+        )
+
+    def _parse_medical_list(self, list_text):
+        """Parse comma-separated medical items."""
+        return [item.strip() for item in list_text.split(',') if item.strip()]
+
+    def _parse_medications(self, meds_text, dosages_text, frequencies_text):
+        """Parse medication information."""
+        medications = []
+        meds = meds_text.split(',') if meds_text else []
+        dosages = dosages_text.split(',') if dosages_text else []
+        frequencies = frequencies_text.split(',') if frequencies_text else []
+
+        for i, med in enumerate(meds):
+            medication = {"name": med.strip()}
+            if i &lt; len(dosages):
+                medication["dosage"] = dosages[i].strip()
+            if i &lt; len(frequencies):
+                medication["frequency"] = frequencies[i].strip()
+            medications.append(medication)
+
+        return medications
+
+    def _parse_procedures(self, procedures_text, dates_text, providers_text):
+        """Parse procedure information."""
+        procedures = []
+        proc_list = procedures_text.split(';') if procedures_text else []
+        dates = dates_text.split(';') if dates_text else []
+        providers = providers_text.split(';') if providers_text else []
+
+        for i, proc in enumerate(proc_list):
+            procedure = {"name": proc.strip()}
+            if i &lt; len(dates):
+                procedure["date"] = dates[i].strip()
+            if i &lt; len(providers):
+                procedure["provider"] = providers[i].strip()
+            procedures.append(procedure)
+
+        return procedures
+
+    def _parse_vitals(self, vitals_text, values_text, dates_text):
+        """Parse vital signs information."""
+        vitals = {}
+        vitals_list = vitals_text.split(',') if vitals_text else []
+        values = values_text.split(',') if values_text else []
+
+        for i, vital in enumerate(vitals_list):
+            key = vital.strip()
+            if i &lt; len(values):
+                vitals[key] = values[i].strip()
+
+        return vitals
+</code></pre>
+<h3 id="financial-document-analyzer"><a class="header" href="#financial-document-analyzer">Financial Document Analyzer</a></h3>
+<pre><code class="language-python">class FinancialAnalyzer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.extract_companies = dspy.Predict(
+            "document_text -&gt; companies, stock_symbols, exchanges"
+        )
+
+        self.extract_financials = dspy.Predict(
+            "document_text -&gt; revenues, profits, expenses, assets"
+        )
+
+        self.extract_transactions = dspy.Predict(
+            "document_text -&gt; transactions, amounts, dates, parties"
+        )
+
+        self.identify_risks = dspy.ChainOfThought(
+            "document_text, financial_data -&gt; risk_factors, concerns"
+        )
+
+    def forward(self, document_text):
+        # Extract company information
+        companies = self.extract_companies(document_text=document_text)
+
+        # Extract financial data
+        financials = self.extract_financials(document_text=document_text)
+
+        # Extract transactions
+        transactions = self.extract_transactions(document_text=document_text)
+
+        # Identify risks
+        risks = self.identify_risks(
+            document_text=document_text,
+            financial_data=str(financials)
+        )
+
+        return dspy.Prediction(
+            entities={
+                "companies": companies.companies.split(',') if companies.companies else [],
+                "stock_symbols": companies.stock_symbols.split(',') if companies.stock_symbols else [],
+                "exchanges": companies.exchanges.split(',') if companies.exchanges else []
+            },
+            financials={
+                "revenues": self._parse_financial_amounts(financials.revenues),
+                "profits": self._parse_financial_amounts(financials.profits),
+                "expenses": self._parse_financial_amounts(financials.expenses),
+                "assets": self._parse_financial_amounts(financials.assets)
+            },
+            transactions=self._parse_transactions(
+                transactions.transactions,
+                transactions.amounts,
+                transactions.dates,
+                transactions.parties
+            ),
+            risks={
+                "factors": self._parse_list(risks.risk_factors),
+                "concerns": self._parse_list(risks.concerns)
+            },
+            reasoning=risks.rationale
+        )
+
+    def _parse_financial_amounts(self, amounts_text):
+        """Parse financial amounts."""
+        if not amounts_text:
+            return []
+        return [amount.strip() for amount in amounts_text.split(',')]
+
+    def _parse_transactions(self, trans_text, amounts_text, dates_text, parties_text):
+        """Parse transaction data."""
+        transactions = []
+        trans_list = trans_text.split('|') if trans_text else []
+        amounts = amounts_text.split('|') if amounts_text else []
+        dates = dates_text.split('|') if dates_text else []
+        parties = parties_text.split('|') if parties_text else []
+
+        for i, trans in enumerate(trans_list):
+            transaction = {"description": trans.strip()}
+            if i &lt; len(amounts):
+                transaction["amount"] = amounts[i].strip()
+            if i &lt; len(dates):
+                transaction["date"] = dates[i].strip()
+            if i &lt; len(parties):
+                transaction["parties"] = parties[i].strip()
+            transactions.append(transaction)
+
+        return transactions
+
+    def _parse_list(self, list_text):
+        """Parse semicolon-separated lists."""
+        if not list_text:
+            return []
+        return [item.strip() for item in list_text.split(';') if item.strip()]
+</code></pre>
+<h2 id="optimizing-entity-extraction"><a class="header" href="#optimizing-entity-extraction">Optimizing Entity Extraction</a></h2>
+<h3 id="using-bootstrapfewshot-for-entity-extraction"><a class="header" href="#using-bootstrapfewshot-for-entity-extraction">Using BootstrapFewShot for Entity Extraction</a></h3>
+<pre><code class="language-python">class OptimizedEntityExtractor(dspy.Module):
+    def __init__(self, entity_types):
+        super().__init__()
+        self.entity_types = entity_types
+        types_str = ", ".join(entity_types)
+        self.extract = dspy.ChainOfThought(
+            f"text, entity_types[{types_str}] -&gt; entities_with_confidence"
+        )
+
+    def forward(self, text):
+        result = self.extract(
+            text=text,
+            entity_types=", ".join(self.entity_types)
+        )
+
+        entities = self._parse_entities_with_confidence(result.entities_with_confidence)
+
+        return dspy.Prediction(
+            entities=entities,
+            reasoning=result.rationale
+        )
+
+    def _parse_entities_with_confidence(self, entities_text):
+        """Parse entities with confidence scores."""
+        entities = []
+        # Format: "ENTITY_TYPE: entity1 (0.9), entity2 (0.8)"
+        lines = entities_text.strip().split('\n')
+        for line in lines:
+            if ':' in line:
+                entity_type, entity_list = line.split(':', 1)
+                entity_type = entity_type.strip()
+
+                for entity_match in entity_list.split(','):
+                    entity_match = entity_match.strip()
+                    if '(' in entity_match and ')' in entity_match:
+                        entity_text = entity_match[:entity_match.rfind('(')].strip()
+                        confidence = float(entity_match[entity_match.rfind('(')+1:-1])
+                        entities.append({
+                            "text": entity_text,
+                            "type": entity_type,
+                            "confidence": confidence
+                        })
+
+        return entities
+
+# Training data
+entity_trainset = [
+    dspy.Example(
+        text="Apple Inc. announced Q2 earnings of $24.6 billion on April 27, 2023.",
+        entities=[
+            {"text": "Apple Inc.", "type": "ORGANIZATION", "confidence": 0.95},
+            {"text": "$24.6 billion", "type": "MONEY", "confidence": 0.90},
+            {"text": "April 27, 2023", "type": "DATE", "confidence": 0.95}
+        ]
+    ),
+    # ... more examples
+]
+
+# Evaluation metric
+def entity_extraction_metric(example, pred, trace=None):
+    """Calculate F1 score for entity extraction."""
+    pred_entities = set((e["text"], e["type"]) for e in pred.entities)
+    true_entities = set((e["text"], e["type"]) for e in example.entities)
+
+    # Precision and Recall
+    tp = len(pred_entities &amp; true_entities)
+    fp = len(pred_entities - true_entities)
+    fn = len(true_entities - pred_entities)
+
+    precision = tp / (tp + fp) if (tp + fp) &gt; 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) &gt; 0 else 0
+
+    # F1 Score
+    if precision + recall == 0:
+        return 0
+    return 2 * precision * recall / (precision + recall)
+
+# Optimize
+optimizer = BootstrapFewShot(
+    metric=entity_extraction_metric,
+    max_bootstrapped_demos=4,
+    max_labeled_demos=4
+)
+optimized_extractor = optimizer.compile(
+    OptimizedEntityExtractor(["PERSON", "ORGANIZATION", "LOCATION", "DATE", "MONEY"]),
+    trainset=entity_trainset
+)
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="1-handle-entity-ambiguity"><a class="header" href="#1-handle-entity-ambiguity">1. Handle Entity Ambiguity</a></h3>
+<pre><code class="language-python">def disambiguate_entity(entity, context):
+    """Disambiguate entities based on context."""
+    # Example: "Apple" could be company or fruit
+    if entity.lower() == "apple":
+        if any(word in context.lower() for word in ["inc", "corp", "company", "stock", "earnings"]):
+            return "Apple Inc."
+        elif any(word in context.lower() for word in ["fruit", "food", "eat", "tree"]):
+            return "apple (fruit)"
+    return entity
+</code></pre>
+<h3 id="2-validate-extracted-entities"><a class="header" href="#2-validate-extracted-entities">2. Validate Extracted Entities</a></h3>
+<pre><code class="language-python">def validate_entity(entity, entity_type):
+    """Validate entity based on type-specific rules."""
+    if entity_type == "DATE":
+        # Validate date format
+        import re
+        return bool(re.match(r'\d{1,2}[/-]\d{1,2}[/-]\d{2,4}', entity))
+    elif entity_type == "EMAIL":
+        # Validate email format
+        return "@" in entity and "." in entity.split("@")[-1]
+    elif entity_type == "PHONE":
+        # Validate phone format
+        import re
+        return bool(re.match(r'[\d\-\+\(\)\s]+', entity))
+    return True
+</code></pre>
+<h3 id="3-handle-nested-entities"><a class="header" href="#3-handle-nested-entities">3. Handle Nested Entities</a></h3>
+<pre><code class="language-python">def resolve_nested_entities(entities):
+    """Resolve overlapping or nested entities."""
+    # Sort by start position, then by length (longer first)
+    sorted_entities = sorted(
+        entities,
+        key=lambda e: (e.get("start", 0), -len(e["text"]))
+    )
+
+    resolved = []
+    for entity in sorted_entities:
+        # Check for overlap
+        overlap = False
+        for existing in resolved:
+            if (entity.get("start", 0) &lt; existing.get("end", float('inf')) and
+                entity.get("end", float('inf')) &gt; existing.get("start", 0)):
+                overlap = True
+                break
+
+        if not overlap:
+            resolved.append(entity)
+
+    return resolved
+</code></pre>
+<h2 id="evaluation-techniques"><a class="header" href="#evaluation-techniques">Evaluation Techniques</a></h2>
+<h3 id="comprehensive-entity-evaluation"><a class="header" href="#comprehensive-entity-evaluation">Comprehensive Entity Evaluation</a></h3>
+<pre><code class="language-python">def evaluate_entity_extraction(extractor, testset):
+    """Comprehensive evaluation of entity extraction."""
+    results = {
+        "precision": [],
+        "recall": [],
+        "f1": [],
+        "type_wise": {}
+    }
+
+    for example in testset:
+        prediction = extractor(text=example.text)
+
+        # Calculate precision, recall, F1
+        pred_entities = set((e["text"], e["type"]) for e in prediction.entities)
+        true_entities = set((e["text"], e["type"]) for e in example.entities)
+
+        tp = len(pred_entities &amp; true_entities)
+        fp = len(pred_entities - true_entities)
+        fn = len(true_entities - pred_entities)
+
+        precision = tp / (tp + fp) if (tp + fp) &gt; 0 else 0
+        recall = tp / (tp + fn) if (tp + fn) &gt; 0 else 0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) &gt; 0 else 0
+
+        results["precision"].append(precision)
+        results["recall"].append(recall)
+        results["f1"].append(f1)
+
+        # Type-wise evaluation
+        for entity_type in set(e["type"] for e in example.entities):
+            if entity_type not in results["type_wise"]:
+                results["type_wise"][entity_type] = {"tp": 0, "fp": 0, "fn": 0}
+
+            pred_type = set(e for e in pred_entities if e[1] == entity_type)
+            true_type = set(e for e in true_entities if e[1] == entity_type)
+
+            results["type_wise"][entity_type]["tp"] += len(pred_type &amp; true_type)
+            results["type_wise"][entity_type]["fp"] += len(pred_type - true_type)
+            results["type_wise"][entity_type]["fn"] += len(true_type - pred_type)
+
+    # Calculate averages
+    for key in ["precision", "recall", "f1"]:
+        results[key] = sum(results[key]) / len(results[key])
+
+    # Calculate type-wise metrics
+    for entity_type, counts in results["type_wise"].items():
+        precision = counts["tp"] / (counts["tp"] + counts["fp"]) if (counts["tp"] + counts["fp"]) &gt; 0 else 0
+        recall = counts["tp"] / (counts["tp"] + counts["fn"]) if (counts["tp"] + counts["fn"]) &gt; 0 else 0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) &gt; 0 else 0
+
+        results["type_wise"][entity_type] = {
+            "precision": precision,
+            "recall": recall,
+            "f1": f1
+        }
+
+    return results
+</code></pre>
+<h2 id="key-takeaways"><a class="header" href="#key-takeaways">Key Takeaways</a></h2>
+<ol>
+<li><strong>Entity extraction transforms</strong> unstructured text into structured data</li>
+<li><strong>Different applications</strong> require different entity types and extraction strategies</li>
+<li><strong>Context is crucial</strong> for accurate entity extraction and disambiguation</li>
+<li><strong>Optimization improves</strong> extraction accuracy and consistency</li>
+<li><strong>Real-world systems</strong> must handle ambiguity, validation, and edge cases</li>
+<li><strong>Comprehensive evaluation</strong> includes precision, recall, and type-wise metrics</li>
+</ol>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>In the next section, we’ll explore <strong>Intelligent Agents</strong>, showing how to build autonomous systems that can reason, plan, and execute complex tasks independently.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../06-real-world-applications/03-classification-tasks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../06-real-world-applications/05-intelligent-agents.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../06-real-world-applications/03-classification-tasks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../06-real-world-applications/05-intelligent-agents.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="../ace-2a3cd908.js"></script>
+        <script src="../mode-rust-2c9d5c9a.js"></script>
+        <script src="../editor-16ca416c.js"></script>
+        <script src="../theme-dawn-4493f9c8.js"></script>
+        <script src="../theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../assets/analytics-08893ea1.html"></script>
+
+
+
+    </div>
+    </body>
+</html>
