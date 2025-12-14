@@ -42,6 +42,7 @@ This page curates essential resources to deepen your DSPy knowledge and connect 
    - Authors: Omar Khattab, Arnab Nandi, Christopher Potts, Matei Zaharia
    - ArXiv: https://arxiv.org/abs/2310.03714
    - Introduces the DSPy framework and compilation concept
+   - Foundation paper for algorithmic LM programming and prompt optimization
 
 2. **"In-Context Learning for Few-Shot Dialogue State Tracking"** (2023)
    - Related to DSPy's few-shot optimization
@@ -320,6 +321,20 @@ The DSPy ebook integrates findings from these cutting-edge papers:
   - GEPA optimization improved performance: Diabetes 90.72%→98.9%, COPD 89.44%→94.22%
   - Architecture: Expert sub-agents with vector search tools orchestrated by lead agent
   - GEPA's student/judge/teacher optimization process explained with code examples
+
+#### Tutorials and Walkthroughs
+
+- **[The Data Quarry: "Learning DSPy (3): Working with optimizers"](https://thedataquarry.com/blog/learning-dspy-3-working-with-optimizers/)** (2025)
+  - Comprehensive walkthrough of BootstrapFewShot and GEPA optimizers
+  - Step-by-step implementation with practical examples
+  - Code snippets demonstrating optimizer configuration and usage
+  - Performance comparison between different optimization strategies
+
+- **[Newline.co: "Automatic Prompt Engineering Validation from DSPy"](https://www.newline.co/@Dipen/automatic-prompt-engineering-validation-from-dspy--efb90116)** (2024)
+  - Real-world deployment of DSPy for prompt validation
+  - Automated prompt engineering workflows
+  - Production patterns and best practices
+  - Performance metrics and validation strategies
 
 ## Language Model Providers
 
