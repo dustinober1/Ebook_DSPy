@@ -68,14 +68,12 @@ graph LR
 
 <div align="center">
 
-```mermaid
-pie title Python Proficiency Needed
-    "Basic Syntax" : 30
-    "OOP Concepts" : 25
-    "Modules & Packages" : 20
-    "Error Handling" : 15
-    "Data Structures" : 10
-```
+**Python Proficiency Breakdown:**
+- Basic Syntax: 30%
+- Object-Oriented Programming: 25%
+- Modules & Packages: 20%
+- Error Handling: 15%
+- Data Structures: 10%
 
 </div>
 
@@ -249,34 +247,15 @@ graph LR
 
 ### Nice-to-Have Skills
 
-```mermaid
-mindmap
-  root((Bonus Skills))
-    Machine Learning
-      Metrics
-        Accuracy
-        F1 Score
-      Train/Test Split
-      Optimization
-    Natural Language Processing
-      Text Processing
-      Embeddings
-      Tokenization
-    Software Engineering
-      Version Control
-        Git
-        GitHub
-      Testing
-        Unit Tests
-        Integration
-      APIs
-        REST
-        Web Services
-```
+**Helpful Bonus Skills:**
+- Machine Learning: Metrics, Train/Test Splits, Optimization
+- Natural Language Processing: Text Processing, Embeddings, Tokenization
+- Software Engineering: Version Control (Git), Testing, APIs
+
+*These are completely optional - the book introduces concepts as needed!*
 
 </div>
 
-**These are completely optional** - the book introduces concepts as needed!
 
 ---
 
@@ -540,9 +519,9 @@ graph TD
 |---------|---------|
 | **Cost** | Free (uses your computer) |
 | **Hardware** | CPU works, GPU recommended |
-| **Models** | Llama, Mistral, others |
+| **Recommended Model** | qwen2.5:0.5b (only 0.5GB!) |
 | **Tools** | Ollama, LM Studio, LocalAI |
-| **Best For** | Privacy, offline work |
+| **Best For** | Privacy, offline work, learning without costs |
 
 </div>
 
@@ -608,33 +587,21 @@ graph TD
 
 ### Your Learning Timeline
 
-```mermaid
-gantt
-    title DSPy Learning Timeline
-    dateFormat  YYYY-MM-DD
-    section Beginner Path
-      Foundation Building      :a1, 2024-01-01, 14d
-      Core Concepts          :a2, after a1, 21d
-      Application Building   :a3, after a2, 14d
-      Project Work           :a4, after a3, 14d
-    section Intermediate Path
-      Quick Review           :b1, 2024-01-01, 7d
-      Deep Dive              :b2, after b1, 14d
-      Applied Learning       :b3, after b2, 7d
-    section Advanced Path
-      Topic Selection        :c1, 2024-01-01, 2d
-      Problem Solving        :c2, after c1, 18d
-```
+**Choose a path that fits your schedule:**
+
+| Learning Path | Total Hours | Weekly Pace | Duration |
+|---------------|-------------|-------------|----------|
+| **Complete Beginner** | 40-60 hours | 5-10 hours | 6-8 weeks |
+| **Intermediate** | 20-30 hours | 5-10 hours | 3-4 weeks |
+| **Advanced/Reference** | 5-20 hours | As needed | Variable |
 
 </div>
 
-### Realistic Commitment Levels
+### Commitment Guidelines
 
-| Learning Path | Total Hours | Weekly Pace | Duration | Intensity |
-|---------------|-------------|-------------|----------|-----------|
-| **Complete Beginner** | 40-60 hours | 5-10 hours | 6-8 weeks | Comprehensive |
-| **Intermediate** | 20-30 hours | 5-10 hours | 3-4 weeks | Focused |
-| **Advanced/Reference** | 5-20 hours | As needed | Variable | On-demand |
+- **Beginners**: Plan 6-8 weeks for comprehensive learning
+- **Intermediates**: 3-4 weeks for focused skill building
+- **Advanced**: Learn at your own pace as needed
 
 ---
 

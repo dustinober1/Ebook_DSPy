@@ -32,24 +32,7 @@ Welcome to your DSPy development setup! This guide will walk you through every s
 
 ### The 7 Steps to DSPy Success
 
-```mermaid
-gantt
-    title DSPy Setup Timeline
-    dateFormat  SS
-    axisFormat %Ss
-
-    section Quick Setup
-      Verify Python     :a1, 0, 5s
-      Create Project   :a2, after a1, 3s
-      Virtual Env      :a3, after a2, 7s
-      Install Packages :a4, after a3, 10s
-      Configure API     :a5, after a4, 5s
-      Run Test         :a6, after a5, 10s
-      Get Examples     :a7, after a6, 5s
-
-    section Total Time
-      Complete Setup   :milestone, m1, after a7, 0s
-```
+**Complete your DSPy setup in just 15-25 minutes!**
 
 </div>
 
@@ -424,19 +407,15 @@ OPENAI_API_KEY=sk-your-actual-api-key-here
 
 **Using Ollama for local models:**
 
-```mermaid
-graph TD
-    A[Install Ollama] --> B[Pull Model]
-    B --> C[Run Locally]
-    C --> D[No API Key Needed!]
-
-    style A fill:#42a5f5
-    style D fill:#66bb6a
-```
-
 1. **Install**: [ollama.ai](https://ollama.ai/)
-2. **Pull model**: `ollama pull llama3`
+2. **Pull lightweight model**: `ollama pull qwen2.5:0.5b`
 3. **Use locally**: No costs, no API keys!
+
+**Why qwen2.5:0.5b?**
+- ✅ Only ~0.5GB in size
+- ✅ Runs on most computers (CPU-only fine)
+- ✅ Surprisingly capable for learning
+- ✅ Free and private
 
 </div>
 

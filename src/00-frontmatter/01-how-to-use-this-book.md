@@ -112,24 +112,11 @@ graph TD
 
 <div align="center">
 
-```mermaid
-journey
-    title Your DSPy Learning Journey
-    section Complete Beginner
-      Understanding Basics: 5: You
-      First Program: 3: You
-      Core Concepts: 4: You
-      Building Projects: 5: You
-    section Intermediate Developer
-      Quick Review: 5: You
-      Deep Dive Concepts: 5: You
-      Optimization: 4: You
-      Real Applications: 5: You
-    section Advanced Expert
-      Problem Solving: 5: You
-      Advanced Patterns: 5: You
-      Production Systems: 5: You
-```
+**Your Learning Journey by Level:**
+
+- **Complete Beginner**: Understanding basics → First program → Core concepts → Building projects
+- **Intermediate Developer**: Quick review → Deep dive concepts → Optimization → Real applications
+- **Advanced Expert**: Problem solving → Advanced patterns → Production systems
 
 </div>
 
@@ -210,13 +197,11 @@ graph LR
 
 <div align="center">
 
-```mermaid
-pie title Where to Focus
-    "Case Studies" : 40
-    "Advanced Patterns" : 25
-    "Optimization" : 20
-    "Production" : 15
-```
+**Advanced Path Focus Areas:**
+- Case Studies: 40%
+- Advanced Patterns: 25%
+- Optimization: 20%
+- Production: 15%
 
 </div>
 
