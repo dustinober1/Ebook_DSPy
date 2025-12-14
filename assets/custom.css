@@ -1,3 +1,70 @@
 /* Custom DSPy Ebook Styles */
 
-/* Add any custom CSS here */
+/* Print optimizations */
+@media print {
+    /* Remove unnecessary elements */
+    .header,
+    .sidebar,
+    .nav-chapters,
+    .search,
+    .buttons,
+    .theme-picker {
+        display: none !important;
+    }
+
+    /* Optimize text */
+    body {
+        font-size: 11pt;
+        line-height: 1.4;
+        color: black;
+        background: white;
+    }
+
+    /* Optimize headings */
+    h1 { font-size: 18pt; page-break-after: avoid; }
+    h2 { font-size: 16pt; page-break-after: avoid; }
+    h3 { font-size: 14pt; page-break-after: avoid; }
+
+    /* Optimize code blocks */
+    pre {
+        font-size: 9pt;
+        line-height: 1.2;
+        page-break-inside: avoid;
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+        padding: 8px;
+    }
+
+    code {
+        font-size: 10pt;
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Avoid breaking inside these elements */
+    table, figure, blockquote {
+        page-break-inside: avoid;
+    }
+
+    /* Optimize spacing */
+    p {
+        orphans: 2;
+        widows: 2;
+        margin-bottom: 0.75em;
+    }
+
+    /* Add page numbers */
+    @page {
+        margin: 1.5cm;
+        @bottom-center {
+            content: counter(page);
+            font-size: 10pt;
+        }
+    }
+}
+
+/* For better readability on devices */
+@media screen {
+    .content {
+        max-width: none;
+    }
+}
