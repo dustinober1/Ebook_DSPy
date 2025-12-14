@@ -136,3 +136,168 @@ This adds a subtle orange background with left border.
 - `.section-content` - Content wrapper for h4/p/code
 - `.no-icons` - Modifier for lists without icons
 - `.problem-note` - Warning/note styling with orange background
+
+---
+
+# Ebook-Specific Best Practices
+
+## Content Structure
+
+### Keep Sections Focused
+- Each section should cover ONE concept or topic
+- Break long explanations into multiple sections
+- Use clear, descriptive headings (h2, h3, h4)
+
+### Progressive Disclosure
+- Start with simple concepts, build to complex
+- Use "Key Takeaways" sections to summarize
+- Provide "What You'll Learn" at chapter start
+- Include "Continue to..." navigation at chapter end
+
+### Code Examples
+- **Always** include working, runnable code
+- Add comments explaining key lines
+- Show both input and expected output when relevant
+- Use realistic examples, not just "foo/bar"
+
+```html
+<!-- GOOD: Realistic example with context -->
+<div class="command-box">
+    <pre><code class="language-python"># Create a question-answering module
+class QA(dspy.Signature):
+    """Answer questions based on context."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+qa = dspy.ChainOfThought(QA)
+result = qa(context="Paris is the capital of France", 
+            question="What is the capital of France?")
+print(result.answer)  # Output: Paris</code></pre>
+</div>
+```
+
+## Readability Guidelines
+
+### Typography
+- Use short paragraphs (2-4 sentences max)
+- Break up walls of text with:
+  - Subheadings
+  - Lists
+  - Code examples
+  - Visual callouts (tip boxes, warning boxes)
+
+### Lists
+- Use bulleted lists for unordered items
+- Use the `.chapter-sections-list` component for feature/benefit lists
+- Avoid numbered lists in titles (use icons instead)
+
+### Emphasis
+- Use `<strong>` for important terms on first use
+- Use `<em>` for emphasis or technical terms
+- Use `<code>` for inline code, class names, function names
+
+## Visual Hierarchy
+
+### Headings
+- **h1**: Page title only (in hero section)
+- **h2**: Major section headings
+- **h3**: Subsection headings
+- **h4**: Component titles (in cards/lists)
+- **h5**: Comparison labels (Traditional vs DSPy)
+
+### Spacing
+- Use `content-block` class for major sections
+- This provides consistent spacing and bottom borders
+- Don't add manual spacing with `<br>` tags
+
+## Interactive Elements
+
+### Navigation
+- Every chapter page should have:
+  - Sidebar navigation to all sections
+  - "Continue to..." button at the end
+  - Breadcrumb or chapter label in hero
+  
+### Links
+- External links should open in new tab: `target="_blank"`
+- Internal navigation uses sidebar (no inline links to other sections)
+- Use descriptive link text, not "click here"
+
+## Accessibility
+
+### Semantic HTML
+- Use proper heading hierarchy (don't skip levels)
+- Use `<code>` for code, not just styling
+- Use `<pre><code>` for code blocks
+- Use semantic elements: `<article>`, `<section>`, `<aside>`
+
+### Alt Text and Labels
+- All images need descriptive alt text
+- Buttons need aria-labels when icon-only
+- Code examples should specify language for syntax highlighting
+
+## Performance
+
+### Code Highlighting
+- Use Prism.js for syntax highlighting
+- Always specify language: `class="language-python"`
+- Supported languages: python, javascript, bash, json
+
+### Images
+- Optimize images before adding
+- Use appropriate formats (WebP for photos, SVG for diagrams)
+- Lazy load images below the fold
+
+## Consistency Checklist
+
+Before completing a chapter page, verify:
+
+- [ ] All sections use `chapter-sections-list` for icon+text layouts
+- [ ] No numbered lists in titles (1., 2., 3.)
+- [ ] Icons are used consistently (features, benefits, stages)
+- [ ] Code examples are complete and runnable
+- [ ] Navigation works (sidebar, continue button)
+- [ ] Headings follow proper hierarchy
+- [ ] No hyperlinks in section cards (use sidebar instead)
+- [ ] Syntax highlighting is applied to code blocks
+- [ ] Page has meta description and title
+- [ ] Reading time estimate is accurate
+
+## Common Patterns
+
+### Comparison Sections
+Use side-by-side comparison for Traditional vs DSPy:
+
+```html
+<div class="comparison-container">
+    <div class="comparison-side traditional">
+        <h5>Traditional Approach</h5>
+        <!-- content -->
+    </div>
+    <div class="comparison-side dspy">
+        <h5>DSPy Approach</h5>
+        <!-- content -->
+    </div>
+</div>
+```
+
+### Tip/Warning Boxes
+```html
+<div class="tip-box">
+    <span class="tip-icon">💡</span>
+    <p><strong>Pro Tip:</strong> Your tip here</p>
+</div>
+```
+
+### Summary Sections
+Use `.no-icons` pattern for key takeaways:
+
+```html
+<div class="content-block summary-block">
+    <h2>📝 Key Takeaways</h2>
+    <div class="chapter-sections-list no-icons">
+        <!-- items here -->
+    </div>
+</div>
+```
