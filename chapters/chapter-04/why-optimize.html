@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Optimize? | Chapter 4 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Understand why DSPy optimization beats manual prompt engineering and how it improves LM performance.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 4</h2>
+                <span class="sidebar-subtitle">Optimizers</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="why-optimize">
+                        <a href="why-optimize.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Why Optimize?</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="metrics">
+                        <a href="metrics.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Metrics & Evaluation</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="bootstrap-fewshot">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced-optimizers">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-05/index.html" class="next-chapter-btn">
+                    Next: Chapter 05 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 4 · Section 2</span>
+                    <h1 class="chapter-title">Why Optimize?</h1>
+                    <p class="chapter-description">Manual prompt engineering is tedious and unreliable. DSPy
+                        optimization offers a better way.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~10 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="why-optimize" data-section="why-optimize">
+                        <div class="markdown-content" id="why-optimize-content">
+
+                            <!-- The Problem -->
+                            <div class="content-block">
+                                <h2>😫 The Problem with Manual Prompting</h2>
+
+                                <p>Every developer using LLMs has experienced this:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">1️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Write a prompt</h4>
+                                            <p>"Summarize this text in 2 sentences."</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">2️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Test it</h4>
+                                            <p>Works on 3 examples... fails on the 4th.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">3️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Tweak the prompt</h4>
+                                            <p>"Summarize in exactly 2 concise sentences, focusing on key points."</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">4️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Repeat...</h4>
+                                            <p>Hours of trial and error with no guarantee of improvement.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>The painful truth:</strong> A prompt that works great on your test
+                                        examples may fail catastrophically on new data.</p>
+                                </div>
+                            </div>
+
+                            <!-- Why Manual Fails -->
+                            <div class="content-block">
+                                <h2>📉 Why Manual Optimization Fails</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎯</span>
+                                        <div class="section-content">
+                                            <h4>Limited Testing</h4>
+                                            <p>You can only manually test on a handful of examples, missing edge
+                                                cases.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧠</span>
+                                        <div class="section-content">
+                                            <h4>Human Intuition Often Wrong</h4>
+                                            <p>What sounds like a "better prompt" to us may not work better for the
+                                                LM.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔄</span>
+                                        <div class="section-content">
+                                            <h4>Model Updates Break Prompts</h4>
+                                            <p>When the LM is updated, your carefully crafted prompts may stop
+                                                working.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>No Systematic Evaluation</h4>
+                                            <p>Without metrics, you're guessing whether one prompt is better than
+                                                another.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- What Optimization Provides -->
+                            <div class="content-block">
+                                <h2>✅ What DSPy Optimization Provides</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Define your task
+class QA(dspy.Signature):
+    """Answer the question based on the context."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+# Create a module
+qa_module = dspy.ChainOfThought(QA)
+
+# Provide training data
+trainset = [
+    dspy.Example(context="...", question="...", answer="...").with_inputs("context", "question"),
+    # ... more examples
+]
+
+# Define how to measure success
+def metric(example, pred, trace=None):
+    return example.answer.lower() == pred.answer.lower()
+
+# Let DSPy optimize
+optimizer = dspy.BootstrapFewShot(metric=metric)
+optimized_qa = optimizer.compile(qa_module, trainset=trainset)
+
+# Now use the optimized version
+result = optimized_qa(context="...", question="...")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>Data-Driven Decisions</h4>
+                                            <p>Optimization uses actual performance metrics, not human intuition.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔄</span>
+                                        <div class="section-content">
+                                            <h4>Systematic Search</h4>
+                                            <p>The optimizer tries many variations to find what works best.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">♻️</span>
+                                        <div class="section-content">
+                                            <h4>Reproducible Results</h4>
+                                            <p>Run the same optimization again and get consistent improvements.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔧</span>
+                                        <div class="section-content">
+                                            <h4>Adaptable to Changes</h4>
+                                            <p>Re-run optimization when models or requirements change.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- What Gets Optimized -->
+                            <div class="content-block">
+                                <h2>🎛️ What Gets Optimized?</h2>
+
+                                <p>DSPy optimizers can improve several aspects of your program:</p>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Component</th>
+                                                <th>What Changes</th>
+                                                <th>Optimizer</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Few-shot Examples</strong></td>
+                                                <td>Which examples to include in the prompt</td>
+                                                <td>BootstrapFewShot</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Instructions</strong></td>
+                                                <td>The task description and guidance</td>
+                                                <td>MIPRO, COPRO</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Model Weights</strong></td>
+                                                <td>Fine-tune a smaller model</td>
+                                                <td>BootstrapFinetune</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Pipeline Structure</strong></td>
+                                                <td>Which modules to use in what order</td>
+                                                <td>Manual + metrics</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- The Optimization Loop -->
+                            <div class="content-block">
+                                <h2>🔄 The Optimization Loop</h2>
+
+                                <p>Here's how DSPy optimization works at a high level:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">┌─────────────────────────────────────────────────────────────┐
+│  1. Run module on training examples                         │
+│     ↓                                                       │
+│  2. Measure performance using metric                        │
+│     ↓                                                       │
+│  3. Find successful examples (high metric score)            │
+│     ↓                                                       │
+│  4. Add successful examples as "demonstrations"             │
+│     ↓                                                       │
+│  5. Repeat until performance plateaus                       │
+│     ↓                                                       │
+│  6. Return optimized module                                 │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+                                </div>
+
+                                <p>The key insight: <strong>demonstrations that worked before help the LM succeed on
+                                        new examples</strong>.</p>
+                            </div>
+
+                            <!-- Real Results -->
+                            <div class="content-block">
+                                <h2>📈 Real-World Results</h2>
+
+                                <p>DSPy optimization typically delivers:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>10-30% Accuracy Improvement</h4>
+                                            <p>On complex reasoning tasks with good metrics.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⏱️</span>
+                                        <div class="section-content">
+                                            <h4>Hours → Minutes</h4>
+                                            <p>Optimization in 30 minutes vs. days of manual tweaking.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💰</span>
+                                        <div class="section-content">
+                                            <h4>Cost Reduction</h4>
+                                            <p>Optimized programs often use fewer tokens per request.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key insight:</strong> The quality of your metric determines the quality
+                                        of optimization. We'll learn how to create great metrics in the next section.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- When to Optimize -->
+                            <div class="content-block">
+                                <h2>⏰ When to Optimize</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Good candidates for optimization</h4>
+                                            <p>Tasks with clear success criteria, available training data, and
+                                                measurable outputs.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚠️</span>
+                                        <div class="section-content">
+                                            <h4>May not need optimization</h4>
+                                            <p>Simple tasks where zero-shot works well, or creative tasks without
+                                                clear metrics.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Manual prompting is unreliable</strong> and doesn't scale.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>DSPy optimization is data-driven</strong> and systematic.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Optimizers can tune examples, instructions, or weights</strong>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Good metrics are essential</strong> for good optimization.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="metrics.html" class="continue-btn">
+                                        <span>Continue to Metrics & Evaluation</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

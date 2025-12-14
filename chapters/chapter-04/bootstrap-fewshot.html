@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BootstrapFewShot | Chapter 4 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Master BootstrapFewShot - the most common DSPy optimizer for automatic few-shot learning.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 4</h2>
+                <span class="sidebar-subtitle">Optimizers</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="why-optimize">
+                        <a href="why-optimize.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Why Optimize?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="metrics">
+                        <a href="metrics.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Metrics & Evaluation</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="bootstrap-fewshot">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced-optimizers">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-05/index.html" class="next-chapter-btn">
+                    Next: Chapter 05 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 4 · Section 4</span>
+                    <h1 class="chapter-title">BootstrapFewShot</h1>
+                    <p class="chapter-description">The workhorse optimizer—automatically find the best few-shot
+                        examples for your task.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~20 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="bootstrap-fewshot" data-section="bootstrap-fewshot">
+                        <div class="markdown-content" id="bootstrap-fewshot-content">
+
+                            <!-- What is BootstrapFewShot -->
+                            <div class="content-block">
+                                <h2>🚀 What is BootstrapFewShot?</h2>
+
+                                <p><code>BootstrapFewShot</code> is DSPy's most commonly used optimizer. It works by:
+                                </p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">1️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Running your module on training examples</h4>
+                                            <p>The optimizer tries your current module on the training set.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">2️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Collecting successful examples</h4>
+                                            <p>Examples where the metric returns True/high score become
+                                                "demonstrations".</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">3️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Adding demonstrations to the prompt</h4>
+                                            <p>These successful examples show the LM "here's how to do this correctly".
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key insight:</strong> "Bootstrap" means using the model's own successful
+                                        outputs as training signal—no external labeling needed!</p>
+                                </div>
+                            </div>
+
+                            <!-- Basic Usage -->
+                            <div class="content-block">
+                                <h2>📝 Basic Usage</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Configure LM
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Define signature
+class QA(dspy.Signature):
+    """Answer the question based on the context."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+# Create module
+qa_module = dspy.ChainOfThought(QA)
+
+# Create training data
+trainset = [
+    dspy.Example(
+        context="Paris is the capital of France.",
+        question="What is the capital of France?",
+        answer="Paris"
+    ).with_inputs("context", "question"),
+    
+    dspy.Example(
+        context="Python was created by Guido van Rossum in 1991.",
+        question="Who created Python?",
+        answer="Guido van Rossum"
+    ).with_inputs("context", "question"),
+    
+    # Add more examples...
+]
+
+# Define metric
+def exact_match(example, pred, trace=None):
+    return pred.answer.strip().lower() == example.answer.strip().lower()
+
+# Create optimizer
+optimizer = dspy.BootstrapFewShot(
+    metric=exact_match,
+    max_bootstrapped_demos=4,  # Number of demos to include
+    max_labeled_demos=4        # From labeled examples (if any)
+)
+
+# Compile (optimize)
+optimized_qa = optimizer.compile(qa_module, trainset=trainset)
+
+# Use the optimized module
+result = optimized_qa(
+    context="The Eiffel Tower is located in Paris, France.",
+    question="Where is the Eiffel Tower?"
+)
+print(result.answer)  # Paris, France</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Key Parameters -->
+                            <div class="content-block">
+                                <h2>⚙️ Key Parameters</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Default</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>metric</code></td>
+                                                <td>Required</td>
+                                                <td>Function to measure success</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_bootstrapped_demos</code></td>
+                                                <td>4</td>
+                                                <td>Demos from successful runs</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_labeled_demos</code></td>
+                                                <td>16</td>
+                                                <td>Demos from labeled training data</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_rounds</code></td>
+                                                <td>1</td>
+                                                <td>Optimization iterations</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_errors</code></td>
+                                                <td>5</td>
+                                                <td>Allowed errors before stopping</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># More aggressive optimization
+optimizer = dspy.BootstrapFewShot(
+    metric=my_metric,
+    max_bootstrapped_demos=8,
+    max_labeled_demos=8,
+    max_rounds=2  # Multiple rounds of bootstrapping
+)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- How It Works -->
+                            <div class="content-block">
+                                <h2>🔍 How BootstrapFewShot Works</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">Training Data
+      │
+      ▼
+┌─────────────────────────────────────────┐
+│  For each training example:             │
+│  1. Run the module                      │
+│  2. Evaluate with metric                │
+│  3. If successful → save as demo        │
+└─────────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────────┐
+│  Collect top demonstrations:            │
+│  - Filter by metric score               │
+│  - Select diverse examples              │
+│  - Include full trace (input → output)  │
+└─────────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────────┐
+│  Add demos to each module's prompt:     │
+│  "Here are examples of how to do this:" │
+│  [Demo 1: input → reasoning → output]   │
+│  [Demo 2: input → reasoning → output]   │
+│  ...                                    │
+└─────────────────────────────────────────┘
+      │
+      ▼
+   Optimized Module</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- With Random Search -->
+                            <div class="content-block">
+                                <h2>🎲 BootstrapFewShotWithRandomSearch</h2>
+
+                                <p>For better results, use <code>BootstrapFewShotWithRandomSearch</code> which tries
+                                    multiple demo combinations:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.teleprompt import BootstrapFewShotWithRandomSearch
+
+optimizer = BootstrapFewShotWithRandomSearch(
+    metric=exact_match,
+    max_bootstrapped_demos=4,
+    max_labeled_demos=4,
+    num_candidate_programs=8,  # Try 8 different demo combinations
+    num_threads=4              # Parallel evaluation
+)
+
+optimized_module = optimizer.compile(
+    my_module,
+    trainset=trainset,
+    valset=devset  # Use dev set to select best candidate
+)</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>num_candidate_programs</h4>
+                                            <p>How many different demo combinations to try. More = better but slower.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏆</span>
+                                        <div class="section-content">
+                                            <h4>Selection</h4>
+                                            <p>The candidate with best dev set performance is returned.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Complete Example -->
+                            <div class="content-block">
+                                <h2>🔧 Complete Working Example</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dspy.evaluate import Evaluate
+from dotenv import load_dotenv
+import random
+
+load_dotenv()
+
+# Configure
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signature for sentiment analysis
+class SentimentAnalysis(dspy.Signature):
+    """Classify the sentiment of the text."""
+    text: str = dspy.InputField()
+    sentiment: str = dspy.OutputField(desc="positive, negative, or neutral")
+
+# Create data
+all_examples = [
+    dspy.Example(text="I love this product!", sentiment="positive"),
+    dspy.Example(text="Terrible experience, waste of money.", sentiment="negative"),
+    dspy.Example(text="It's okay, nothing special.", sentiment="neutral"),
+    dspy.Example(text="Best purchase I've ever made!", sentiment="positive"),
+    dspy.Example(text="Absolutely horrible, never again.", sentiment="negative"),
+    dspy.Example(text="It works as expected.", sentiment="neutral"),
+    dspy.Example(text="Amazing quality and fast shipping!", sentiment="positive"),
+    dspy.Example(text="Broke after one day. Very disappointed.", sentiment="negative"),
+    dspy.Example(text="Average product for the price.", sentiment="neutral"),
+    dspy.Example(text="Exceeded all my expectations!", sentiment="positive"),
+]
+
+# Add input specification
+for ex in all_examples:
+    ex = ex.with_inputs("text")
+
+# Split data
+random.shuffle(all_examples)
+trainset = all_examples[:7]
+devset = all_examples[7:]
+
+# Metric
+def sentiment_match(example, pred, trace=None):
+    return pred.sentiment.strip().lower() == example.sentiment.strip().lower()
+
+# Create module
+classifier = dspy.Predict(SentimentAnalysis)
+
+# Evaluate BEFORE optimization
+print("Before Optimization:")
+evaluator = Evaluate(devset=devset, metric=sentiment_match)
+baseline_score = evaluator(classifier)
+print(f"Baseline accuracy: {baseline_score:.2%}")
+
+# Optimize
+optimizer = dspy.BootstrapFewShot(
+    metric=sentiment_match,
+    max_bootstrapped_demos=3
+)
+optimized_classifier = optimizer.compile(classifier, trainset=trainset)
+
+# Evaluate AFTER optimization  
+print("\nAfter Optimization:")
+optimized_score = evaluator(optimized_classifier)
+print(f"Optimized accuracy: {optimized_score:.2%}")
+print(f"Improvement: {optimized_score - baseline_score:.2%}")
+
+# Test on new data
+result = optimized_classifier(text="This is the worst thing I've ever bought.")
+print(f"\nTest: 'This is the worst thing I've ever bought.'")
+print(f"Predicted sentiment: {result.sentiment}")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Saving and Loading -->
+                            <div class="content-block">
+                                <h2>💾 Saving and Loading Optimized Programs</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Save the optimized module
+optimized_classifier.save("optimized_sentiment.json")
+
+# Later, load it back
+loaded_classifier = dspy.Predict(SentimentAnalysis)
+loaded_classifier.load("optimized_sentiment.json")
+
+# Use it
+result = loaded_classifier(text="Great product!")
+print(result.sentiment)</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Production tip:</strong> Always save your optimized modules! Re-running
+                                        optimization costs API calls and may produce slightly different results.</p>
+                                </div>
+                            </div>
+
+                            <!-- Best Practices -->
+                            <div class="content-block">
+                                <h2>✅ Best Practices</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>Use Enough Training Data</h4>
+                                            <p>10-50 examples is a good starting point. More data generally helps.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎯</span>
+                                        <div class="section-content">
+                                            <h4>Start with Good Metrics</h4>
+                                            <p>A bad metric will optimize for the wrong thing!</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔄</span>
+                                        <div class="section-content">
+                                            <h4>Iterate on Signatures First</h4>
+                                            <p>Get your signature right before optimizing. Optimization can't fix a
+                                                bad task definition.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📈</span>
+                                        <div class="section-content">
+                                            <h4>Compare to Baseline</h4>
+                                            <p>Always measure the unoptimized version first to see real improvement.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>BootstrapFewShot</strong> finds successful examples and uses
+                                                them as demonstrations.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Use RandomSearch variant</strong> for better demo selection.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Always save optimized programs</strong> for production use.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Measure before and after</strong> to verify improvement.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="advanced-optimizers.html" class="continue-btn">
+                                        <span>Continue to Advanced Optimizers</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
