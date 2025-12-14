@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Optimizers | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Explore KNNFewShot, COPRO, fine-tuning, and other advanced DSPy optimization strategies.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="compilation">
+                        <a href="compilation-concept.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Compilation Concept</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="mipro">
+                        <a href="mipro.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">MIPRO Optimizer</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="advanced">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 5</span>
+                    <h1 class="chapter-title">Advanced Optimizers</h1>
+                    <p class="chapter-description">KNNFewShot, COPRO, fine-tuning, and specialized optimization
+                        strategies.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="advanced" data-section="advanced">
+                        <div class="markdown-content" id="advanced-content">
+
+                            <!-- KNNFewShot -->
+                            <div class="content-block">
+                                <h2>🎯 KNNFewShot: Similarity-Based Example Selection</h2>
+
+                                <p>KNNFewShot dynamically selects the most relevant examples based on similarity to the
+                                    input query:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.teleprompt import KNNFewShot
+
+class TopicClassifier(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.classify = dspy.Predict("text -> topic")
+    
+    def forward(self, text):
+        return self.classify(text=text)
+
+# Create KNNFewShot optimizer
+optimizer = KNNFewShot(
+    k=5,                    # Number of examples to select
+    trainset=trainset,      # Example pool
+    vectorizer=None         # Uses default sentence embeddings
+)
+
+# Compile
+compiled = optimizer.compile(TopicClassifier(), trainset=trainset)</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>When to Use</h4>
+                                            <p>Large datasets, context-sensitive tasks, domain diversity</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚡</span>
+                                        <div class="section-content">
+                                            <h4>Advantage</h4>
+                                            <p>Selects different examples per query for better relevance</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- COPRO -->
+                            <div class="content-block">
+                                <h2>💰 COPRO: Cost-Aware Prompt Optimization</h2>
+
+                                <p>COPRO (Collaborative Prompt Optimization) balances performance with cost efficiency:
+                                </p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.teleprompt import COPRO
+
+# COPRO optimizes prompts while considering token costs
+optimizer = COPRO(
+    metric=accuracy_metric,
+    breadth=10,           # Number of prompt variants to try
+    depth=3,              # Refinement iterations
+    init_temperature=1.0  # Diversity in generation
+)
+
+# Compile with cost awareness
+compiled = optimizer.compile(
+    program,
+    trainset=trainset,
+    eval_kwargs={"num_threads": 4}
+)</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Use case:</strong> When you need to balance accuracy with API costs or
+                                        token limits.</p>
+                                </div>
+                            </div>
+
+                            <!-- BootstrapFewShotWithRandomSearch -->
+                            <div class="content-block">
+                                <h2>🔀 BootstrapFewShotWithRandomSearch</h2>
+
+                                <p>Extends BootstrapFewShot with random search over configurations:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.teleprompt import BootstrapFewShotWithRandomSearch
+
+optimizer = BootstrapFewShotWithRandomSearch(
+    metric=accuracy_metric,
+    max_bootstrapped_demos=8,
+    max_labeled_demos=4,
+    num_candidate_programs=16,  # Try this many configurations
+    num_threads=4                # Parallel evaluation
+)
+
+# Finds the best configuration through random search
+best_program = optimizer.compile(program, trainset=trainset)</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎲</span>
+                                        <div class="section-content">
+                                            <h4>Random Search</h4>
+                                            <p>Explores multiple demo configurations to find optimal</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚙️</span>
+                                        <div class="section-content">
+                                            <h4>Parallelizable</h4>
+                                            <p>Evaluates configurations in parallel for speed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fine-Tuning -->
+                            <div class="content-block">
+                                <h2>🔧 Fine-Tuning Optimizers</h2>
+
+                                <p>For production systems with high inference volume, fine-tuning small models can
+                                    reduce costs:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.teleprompt import BootstrapFinetune
+
+# Fine-tune a small model on bootstrapped examples
+optimizer = BootstrapFinetune(
+    metric=accuracy_metric,
+    target_model="gpt-3.5-turbo",  # Model to fine-tune
+    epochs=3
+)
+
+# This creates a fine-tuned model
+finetuned = optimizer.compile(
+    program,
+    trainset=trainset,
+    teacher_settings=dict(lm=dspy.settings.lm)  # Use powerful LM as teacher
+)</code></pre>
+                                </div>
+
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Requirements:</strong> Fine-tuning requires 1000+ examples and
+                                        significant compute time.</p>
+                                </div>
+
+                                <h3>When to Fine-Tune</h3>
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📈</span>
+                                        <div class="section-content">
+                                            <h4>High Inference Volume</h4>
+                                            <p>Thousands of requests per day makes fine-tuning cost-effective</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔒</span>
+                                        <div class="section-content">
+                                            <h4>Domain-Specific</h4>
+                                            <p>Specialized vocabulary or domain knowledge</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⏱️</span>
+                                        <div class="section-content">
+                                            <h4>Latency Requirements</h4>
+                                            <p>Smaller models = faster inference</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Optimizer Comparison -->
+                            <div class="content-block">
+                                <h2>📊 Optimizer Comparison</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Optimizer</th>
+                                                <th>Speed</th>
+                                                <th>Data Needed</th>
+                                                <th>Best For</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>BootstrapFewShot</strong></td>
+                                                <td>Fast</td>
+                                                <td>10-100</td>
+                                                <td>General improvement</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>KNNFewShot</strong></td>
+                                                <td>Medium</td>
+                                                <td>100+</td>
+                                                <td>Context-sensitive tasks</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>MIPRO</strong></td>
+                                                <td>Slow</td>
+                                                <td>20-200</td>
+                                                <td>Maximum performance</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>COPRO</strong></td>
+                                                <td>Medium</td>
+                                                <td>20-100</td>
+                                                <td>Cost-aware optimization</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>BootstrapFinetune</strong></td>
+                                                <td>Very Slow</td>
+                                                <td>1000+</td>
+                                                <td>Production deployment</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Saving and Loading -->
+                            <div class="content-block">
+                                <h2>💾 Saving and Loading Optimized Programs</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Save optimized program
+optimized_program.save("my_optimized_qa.json")
+
+# Load later
+loaded_program = MyQAProgram()
+loaded_program.load("my_optimized_qa.json")
+
+# Use immediately
+result = loaded_program(question="What is DSPy?")
+print(result.answer)</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Best practice:</strong> Version your optimized programs alongside your
+                                        code!</p>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>KNNFewShot</strong> selects examples dynamically based on query
+                                                similarity</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>COPRO</strong> balances performance with cost efficiency</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>RandomSearch</strong> explores configurations in parallel</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Fine-tuning</strong> reduces costs for high-volume production</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Save/load</strong> optimized programs for reuse</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="choosing-optimizers.html" class="continue-btn">
+                                        <span>Continue to Choosing Optimizers</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

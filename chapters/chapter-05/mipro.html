@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIPRO Optimizer | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Master MIPRO - Multi-step Instruction and Demonstration Optimization for maximum DSPy performance.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="compilation">
+                        <a href="compilation-concept.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Compilation Concept</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="mipro">
+                        <a href="mipro.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">MIPRO Optimizer</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 4</span>
+                    <h1 class="chapter-title">MIPRO Optimizer</h1>
+                    <p class="chapter-description">Multi-step Instruction and Demonstration Optimization for maximum
+                        performance.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~20 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="mipro" data-section="mipro">
+                        <div class="markdown-content" id="mipro-content">
+
+                            <!-- Introduction -->
+                            <div class="content-block">
+                                <h2>⚡ Introduction</h2>
+
+                                <p>MIPRO (Multi-step Instruction and demonstration PRompt Optimization) represents a
+                                    significant advancement in automated prompt optimization. Unlike simpler approaches
+                                    that only optimize examples, <strong>MIPRO simultaneously optimizes both
+                                        instructions (prompts) and demonstrations (examples)</strong> for each module in
+                                    a multi-stage pipeline.</p>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">📊</span>
+                                    <p><strong>Research results:</strong> MIPRO achieves 63% improvement on HotpotQA
+                                        (32.0 → 52.3 F1) compared to manual prompting!</p>
+                                </div>
+                            </div>
+
+                            <!-- Benchmark Results -->
+                            <div class="content-block">
+                                <h2>📈 Performance Benchmarks</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dataset</th>
+                                                <th>Task Type</th>
+                                                <th>Manual</th>
+                                                <th>MIPRO</th>
+                                                <th>Improvement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>HotpotQA</td>
+                                                <td>Multi-hop QA</td>
+                                                <td>32.0 F1</td>
+                                                <td>52.3 F1</td>
+                                                <td><strong>+63%</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GSM8K</td>
+                                                <td>Math Reasoning</td>
+                                                <td>28.5%</td>
+                                                <td>33.8%</td>
+                                                <td><strong>+19%</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>CodeAlpaca</td>
+                                                <td>Code Generation</td>
+                                                <td>63.1%</td>
+                                                <td>64.8%</td>
+                                                <td><strong>+3%</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>FEVER</td>
+                                                <td>Fact Verification</td>
+                                                <td>71.2%</td>
+                                                <td>78.9%</td>
+                                                <td><strong>+11%</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Dual-Component Architecture -->
+                            <div class="content-block">
+                                <h2>🏗️ Dual-Component Optimization</h2>
+
+                                <p>MIPRO's power comes from jointly optimizing two key elements:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>Instruction Generation</h4>
+                                            <p>Generates candidate instructions using meta-prompting conditioned on
+                                                program structure, module signatures, and dataset characteristics</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📋</span>
+                                        <div class="section-content">
+                                            <h4>Demonstration Selection</h4>
+                                            <p>Selects demonstrations using data-driven selection, utility scoring, and
+                                                greedy algorithms</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">┌──────────────────────────────────────────────────────────────────┐
+│                     MIPRO Optimization Loop                       │
+├──────────────────────────────────────────────────────────────────┤
+│  ┌────────────────┐      ┌────────────────┐                      │
+│  │  Meta-Prompt   │      │  Demonstration │                      │
+│  │  Generation    │      │  Selection     │                      │
+│  └───────┬────────┘      └───────┬────────┘                      │
+│          │                       │                               │
+│          ▼                       ▼                               │
+│  ┌────────────────────────────────────────┐                      │
+│  │        Candidate Configurations        │                      │
+│  │   (Instruction + Demonstration Pairs)  │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │      Simulated Annealing Search        │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │         Best Configuration             │                      │
+│  └────────────────────────────────────────┘                      │
+└──────────────────────────────────────────────────────────────────┘</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Basic Usage -->
+                            <div class="content-block">
+                                <h2>📦 Basic Usage</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dspy.teleprompt import MIPRO
+
+# Define your program
+class ReasoningQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought("question -> answer")
+    
+    def forward(self, question):
+        return self.generate(question=question)
+
+# Define metric
+def answer_accuracy(example, pred, trace=None):
+    return example.answer.lower() in pred.answer.lower()
+
+# Create MIPRO optimizer
+optimizer = MIPRO(
+    metric=answer_accuracy,
+    num_candidates=10,          # Instruction candidates per module
+    init_temperature=0.7,       # Diversity in generation
+    verbose=True
+)
+
+# Compile with MIPRO
+compiled = optimizer.compile(
+    ReasoningQA(),
+    trainset=trainset,
+    num_trials=3,               # Optimization iterations
+    max_bootstrapped_demos=8    # Max demos per module
+)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Auto Modes -->
+                            <div class="content-block">
+                                <h2>🎛️ Auto Configuration Modes</h2>
+
+                                <p>MIPRO provides convenient auto-configuration presets:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Light mode: Quick optimization for simple tasks
+# Equivalent to: num_candidates=5, init_temperature=0.8
+optimizer = MIPRO(metric=accuracy, auto="light")
+
+# Medium mode: Balanced optimization (recommended default)
+# Equivalent to: num_candidates=10, init_temperature=1.0
+optimizer = MIPRO(metric=accuracy, auto="medium")
+
+# Heavy mode: Extensive optimization for complex tasks
+# Equivalent to: num_candidates=20, init_temperature=1.2
+optimizer = MIPRO(metric=accuracy, auto="heavy")</code></pre>
+                                </div>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Default</th>
+                                                <th>Range</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>num_candidates</code></td>
+                                                <td>10</td>
+                                                <td>5-30</td>
+                                                <td>Instruction candidates per module</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>init_temperature</code></td>
+                                                <td>1.0</td>
+                                                <td>0.5-1.5</td>
+                                                <td>Meta-prompt sampling temperature</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>num_trials</code></td>
+                                                <td>3</td>
+                                                <td>1-10</td>
+                                                <td>Optimization iterations</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_bootstrapped_demos</code></td>
+                                                <td>8</td>
+                                                <td>0-16</td>
+                                                <td>Max demos per module</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Multi-Stage Pipelines -->
+                            <div class="content-block">
+                                <h2>🔗 Multi-Stage Pipeline Optimization</h2>
+
+                                <p>MIPRO excels at optimizing multi-stage pipelines:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class MultiHopQA(dspy.Module):
+    """Multi-hop QA pipeline."""
+    
+    def __init__(self):
+        super().__init__()
+        # Stage 1: Query generation
+        self.generate_queries = dspy.Predict("question -> search_queries")
+        
+        # Stage 2: Retrieval
+        self.retrieve = dspy.Retrieve(k=5)
+        
+        # Stage 3: Answer generation
+        self.generate_answer = dspy.ChainOfThought("question, context -> answer")
+    
+    def forward(self, question):
+        # Stage 1
+        queries = self.generate_queries(question=question)
+        
+        # Stage 2
+        passages = self.retrieve(query=queries.search_queries).passages
+        context = "\n".join(passages[:5])
+        
+        # Stage 3
+        answer = self.generate_answer(question=question, context=context)
+        
+        return dspy.Prediction(
+            answer=answer.answer,
+            reasoning=answer.rationale
+        )
+
+# MIPRO optimizes EACH module in the pipeline
+optimizer = MIPRO(
+    metric=qa_metric,
+    num_candidates=15,  # More candidates for multi-stage
+    auto="medium"
+)
+
+optimized = optimizer.compile(
+    MultiHopQA(),
+    trainset=trainset,
+    num_trials=5,
+    max_bootstrapped_demos=6  # Per module
+)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Zero-Shot vs Few-Shot -->
+                            <div class="content-block">
+                                <h2>🎯 Zero-Shot vs Few-Shot</h2>
+
+                                <p>MIPRO research reveals that <strong>optimized zero-shot can often beat manual
+                                        few-shot</strong>:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Zero-shot optimization (instructions only)
+mipro_zeroshot = MIPRO(metric=accuracy, num_candidates=20)
+zeroshot_compiled = mipro_zeroshot.compile(
+    program,
+    trainset=trainset,
+    max_bootstrapped_demos=0  # No demonstrations!
+)
+
+# Few-shot optimization (instructions + demos)
+mipro_fewshot = MIPRO(metric=accuracy, num_candidates=20)
+fewshot_compiled = mipro_fewshot.compile(
+    program,
+    trainset=trainset,
+    max_bootstrapped_demos=8
+)
+
+# Compare results
+print(f"Zero-shot: {evaluate(zeroshot_compiled, testset):.1%}")
+print(f"Few-shot:  {evaluate(fewshot_compiled, testset):.1%}")</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key insight:</strong> Zero-shot optimization saves context window space
+                                        for reasoning while still achieving strong performance!</p>
+                                </div>
+                            </div>
+
+                            <!-- Simulated Annealing -->
+                            <div class="content-block">
+                                <h2>🔥 Simulated Annealing Search</h2>
+
+                                <p>MIPRO uses simulated annealing to efficiently search the prompt configuration space:
+                                </p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🌡️</span>
+                                        <div class="section-content">
+                                            <h4>High Temperature Start</h4>
+                                            <p>Accept many changes initially to explore broadly</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">❄️</span>
+                                        <div class="section-content">
+                                            <h4>Gradual Cooling</h4>
+                                            <p>Become more selective as optimization progresses</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏔️</span>
+                                        <div class="section-content">
+                                            <h4>Escape Local Optima</h4>
+                                            <p>Occasionally accept "uphill" moves to find global optimum</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>MIPRO</strong> optimizes both instructions and demonstrations
+                                                jointly</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Significant improvements:</strong> 10-60%+ on various benchmarks
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Use auto modes</strong> for easy configuration
+                                                (light/medium/heavy)</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Excels at multi-stage</strong> pipelines with multiple modules
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Optimized zero-shot</strong> can beat manual few-shot!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="advanced-optimizers.html" class="continue-btn">
+                                        <span>Continue to Advanced Optimizers</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

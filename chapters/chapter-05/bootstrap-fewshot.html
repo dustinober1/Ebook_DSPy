@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BootstrapFewShot | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Master BootstrapFewShot - automatic few-shot example generation and weak supervision in DSPy.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="compilation">
+                        <a href="compilation-concept.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Compilation Concept</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="mipro">
+                        <a href="mipro.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">MIPRO Optimizer</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 3</span>
+                    <h1 class="chapter-title">BootstrapFewShot</h1>
+                    <p class="chapter-description">Automatic few-shot example generation—no manual annotation required.
+                    </p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="bootstrap" data-section="bootstrap">
+                        <div class="markdown-content" id="bootstrap-content">
+
+                            <!-- Introduction -->
+                            <div class="content-block">
+                                <h2>🎯 Introduction</h2>
+
+                                <p>BootstrapFewShot is one of DSPy's most powerful optimizers. It <strong>automatically
+                                        generates and selects high-quality few-shot examples</strong> to improve your
+                                    program's performance. Instead of manually crafting examples, BootstrapFewShot
+                                    discovers the optimal demonstrations for your specific task.</p>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key innovation:</strong> Weak supervision—train models without
+                                        hand-labeled intermediate steps!</p>
+                                </div>
+                            </div>
+
+                            <!-- Weak Supervision -->
+                            <div class="content-block">
+                                <h2>🔬 Weak Supervision and the annotate() Method</h2>
+
+                                <p>A key innovation from the Demonstrate-Search-Predict paper is <strong>weak
+                                        supervision</strong>—the ability to train models without hand-labeled
+                                    intermediate steps:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Traditional approach requires manually annotated reasoning
+traditional_training = [
+    dspy.Example(
+        question="What is 15 * 23?",
+        reasoning="Step 1: 15 * 20 = 300\nStep 2: 15 * 3 = 45\nStep 3: 300 + 45 = 345",
+        answer="345"
+    ),
+    # ... many more with detailed reasoning
+]
+
+# With weak supervision, you only need:
+weak_supervision_training = [
+    dspy.Example(question="What is 15 * 23?", answer="345"),
+    dspy.Example(question="What is 12 * 17?", answer="204"),
+    # ... just input-output pairs!
+]
+
+# BootstrapFewShot will automatically generate the reasoning!</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- How It Works -->
+                            <div class="content-block">
+                                <h2>⚙️ How BootstrapFewShot Works</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">1️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Initial Generation</h4>
+                                            <p>Uses the unoptimized program to generate candidate examples</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">2️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Quality Filtering</h4>
+                                            <p>Evaluates generated examples using your metric</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">3️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Example Selection</h4>
+                                            <p>Chooses the best examples based on performance</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">4️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Iterative Refinement</h4>
+                                            <p>Repeats the process to improve example quality</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Basic Usage -->
+                            <div class="content-block">
+                                <h2>📦 Basic Usage</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dspy.teleprompt import BootstrapFewShot
+
+# 1. Define your program
+class SimpleQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.Predict("question -> answer")
+    
+    def forward(self, question):
+        return self.generate(question=question)
+
+# 2. Define evaluation metric
+def exact_match(example, pred, trace=None):
+    return example.answer.lower() == pred.answer.lower()
+
+# 3. Prepare training data
+trainset = [
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    dspy.Example(question="What is the capital of France?", answer="Paris").with_inputs("question"),
+    dspy.Example(question="Who wrote Romeo and Juliet?", answer="William Shakespeare").with_inputs("question"),
+]
+
+# 4. Create optimizer and compile
+optimizer = BootstrapFewShot(metric=exact_match, max_bootstrapped_demos=4)
+compiled_qa = optimizer.compile(SimpleQA(), trainset=trainset)
+
+# 5. Use the compiled program
+result = compiled_qa(question="What is 3+3?")
+print(result.answer)  # Should be "6"</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Parameters -->
+                            <div class="content-block">
+                                <h2>🎛️ BootstrapFewShot Parameters</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Parameter</th>
+                                                <th>Type</th>
+                                                <th>Default</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>metric</code></td>
+                                                <td>Callable</td>
+                                                <td>Required</td>
+                                                <td>Function to evaluate example quality</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_bootstrapped_demos</code></td>
+                                                <td>int</td>
+                                                <td>8</td>
+                                                <td>Maximum generated examples</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_labeled_demos</code></td>
+                                                <td>int</td>
+                                                <td>4</td>
+                                                <td>Maximum human-labeled examples</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_rounds</code></td>
+                                                <td>int</td>
+                                                <td>2</td>
+                                                <td>Number of bootstrap iterations</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- With Chain of Thought -->
+                            <div class="content-block">
+                                <h2>🧠 Using with Chain of Thought</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class CoTQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate = dspy.ChainOfThought("question -> answer")
+    
+    def forward(self, question):
+        result = self.generate(question=question)
+        return dspy.Prediction(
+            answer=result.answer,
+            reasoning=result.rationale  # Automatically generated!
+        )
+
+# Bootstrap with Chain of Thought
+optimizer = BootstrapFewShot(
+    metric=exact_match,
+    max_bootstrapped_demos=8,
+    teacher_settings=dict(lm=dspy.settings.lm)
+)
+
+compiled_cot = optimizer.compile(CoTQA(), trainset=trainset)</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">✨</span>
+                                    <p><strong>The magic:</strong> The reasoning steps are automatically generated
+                                        during bootstrapping—you only provide input-output pairs!</p>
+                                </div>
+                            </div>
+
+                            <!-- Metrics -->
+                            <div class="content-block">
+                                <h2>📊 Defining Metrics</h2>
+
+                                <h3>Exact Match</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def exact_match_metric(example, pred, trace=None):
+    """Simple exact string match."""
+    return str(example.answer).lower() == str(pred.answer).lower()</code></pre>
+                                </div>
+
+                                <h3>Fuzzy Match</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def fuzzy_match(example, pred, trace=None):
+    """Fuzzy matching with some tolerance."""
+    from difflib import SequenceMatcher
+    similarity = SequenceMatcher(None, example.answer, pred.answer).ratio()
+    return similarity > 0.9</code></pre>
+                                </div>
+
+                                <h3>F1 Score for QA</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def qa_f1_metric(example, pred, trace=None):
+    """F1 score for QA tasks."""
+    from collections import Counter
+    
+    pred_tokens = Counter(str(pred.answer).lower().split())
+    true_tokens = Counter(str(example.answer).lower().split())
+    
+    common = pred_tokens & true_tokens
+    precision = len(common) / len(pred_tokens) if pred_tokens else 0
+    recall = len(common) / len(true_tokens) if true_tokens else 0
+    
+    if precision + recall == 0:
+        return 0
+    return 2 * precision * recall / (precision + recall)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Benefits -->
+                            <div class="content-block">
+                                <h2>✨ Benefits of Weak Supervision</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💰</span>
+                                        <div class="section-content">
+                                            <h4>Reduced Annotation Cost</h4>
+                                            <p>No need to write detailed reasoning chains—only final answers</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Consistent Quality</h4>
+                                            <p>Generated reasoning follows consistent patterns</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🚀</span>
+                                        <div class="section-content">
+                                            <h4>Rapid Prototyping</h4>
+                                            <p>Test new tasks with minimal data preparation</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎯</span>
+                                        <div class="section-content">
+                                            <h4>Better Coverage</h4>
+                                            <p>Generates diverse reasoning strategies automatically</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Common Pitfalls -->
+                            <div class="content-block">
+                                <h2>⚠️ Common Pitfalls</h2>
+
+                                <h3>Pitfall 1: Too Many Examples</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Problem: Overfitting
+optimizer = BootstrapFewShot(max_bootstrapped_demos=50)  # Too many!
+
+# Solution: Use reasonable limits
+optimizer = BootstrapFewShot(max_bootstrapped_demos=8)  # Better</code></pre>
+                                </div>
+
+                                <h3>Pitfall 2: Poor Metric</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Problem: Metric doesn't reflect actual performance
+def bad_metric(example, pred, trace=None):
+    return len(pred.answer) > 10  # Wrong!
+
+# Solution: Use meaningful metrics
+def good_metric(example, pred, trace=None):
+    return example.answer.lower() == pred.answer.lower()</code></pre>
+                                </div>
+
+                                <h3>Pitfall 3: Insufficient Diversity</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Problem: All examples are similar
+similar_examples = [
+    dspy.Example(question="What is 2+2?", answer="4"),
+    dspy.Example(question="What is 3+3?", answer="6"),
+    # ... all simple math
+]
+
+# Solution: Include diverse examples
+diverse_examples = [
+    dspy.Example(question="What is 2+2?", answer="4"),
+    dspy.Example(question="Capital of France?", answer="Paris"),
+    dspy.Example(question="Explain photosynthesis", answer="..."),
+]</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Evaluating Results -->
+                            <div class="content-block">
+                                <h2>📈 Evaluating Results</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Compare baseline vs compiled
+baseline = SimpleQA()
+compiled = optimizer.compile(SimpleQA(), trainset=trainset)
+
+# Evaluate both on test set
+def evaluate(program, testset):
+    correct = 0
+    for example in testset:
+        pred = program(question=example.question)
+        if pred.answer.lower() == example.answer.lower():
+            correct += 1
+    return correct / len(testset)
+
+baseline_score = evaluate(baseline, testset)
+compiled_score = evaluate(compiled, testset)
+
+print(f"Baseline accuracy: {baseline_score:.2%}")
+print(f"Compiled accuracy: {compiled_score:.2%}")
+print(f"Improvement: {compiled_score - baseline_score:.2%}")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>BootstrapFewShot</strong> automatically generates high-quality
+                                                few-shot examples</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Weak supervision</strong> means you only need input-output pairs
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Proper metric</strong> definition is crucial for success</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Data quality</strong> and diversity matter more than quantity</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Always validate</strong> compiled programs on held-out data</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="mipro.html" class="continue-btn">
+                                        <span>Continue to MIPRO Optimizer</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

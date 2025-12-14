@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Compilation Concept | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Understand what compilation means in DSPy - transforming high-level programs into optimized prompts and weights.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="compilation">
+                        <a href="compilation-concept.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Compilation Concept</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">BootstrapFewShot</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="mipro">
+                        <a href="mipro.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">MIPRO Optimizer</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced">
+                        <a href="advanced-optimizers.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 2</span>
+                    <h1 class="chapter-title">The Compilation Concept</h1>
+                    <p class="chapter-description">Transform high-level program specifications into optimized prompts
+                        and weights.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~10 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="compilation" data-section="compilation">
+                        <div class="markdown-content" id="compilation-content">
+
+                            <!-- What is Compilation -->
+                            <div class="content-block">
+                                <h2>🔧 What is DSPy Compilation?</h2>
+
+                                <p>DSPy compilation transforms your high-level program into optimized prompts and
+                                    weights. Unlike traditional compilation that converts source code to machine code,
+                                    <strong>DSPy compilation optimizes the language model interactions</strong> within
+                                    your program.</p>
+
+                                <p>The compilation process includes:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✏️</span>
+                                        <div class="section-content">
+                                            <h4>Automatic Prompt Engineering</h4>
+                                            <p>Crafting optimal prompts for your specific task</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📋</span>
+                                        <div class="section-content">
+                                            <h4>Example Selection</h4>
+                                            <p>Choosing the best demonstrations for few-shot learning</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚙️</span>
+                                        <div class="section-content">
+                                            <h4>Weight Tuning</h4>
+                                            <p>Optimizing module parameters for better performance</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔗</span>
+                                        <div class="section-content">
+                                            <h4>Pipeline Optimization</h4>
+                                            <p>Improving the overall program structure</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- The Compilation Pipeline -->
+                            <div class="content-block">
+                                <h2>🔄 The Compilation Pipeline</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dspy.teleprompt import BootstrapFewShot
+
+# Before compilation: High-level specification
+class QASystem(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate_answer = dspy.ChainOfThought("question -> answer")
+    
+    def forward(self, question):
+        return self.generate_answer(question=question)
+
+# Define metric
+def answer_exact_match(example, pred, trace=None):
+    return example.answer.lower() == pred.answer.lower()
+
+# After compilation: Optimized prompts and weights
+optimized_qa = BootstrapFewShot(metric=answer_exact_match).compile(
+    QASystem(),
+    trainset=train_data
+)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- How Compilation Works -->
+                            <div class="content-block">
+                                <h2>⚙️ How Compilation Works</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">1️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Program Specification</h4>
+                                            <p>You define the high-level structure using DSPy modules</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">2️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Training Data</h4>
+                                            <p>Provide examples of inputs and desired outputs</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">3️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Optimization Metric</h4>
+                                            <p>Define how to measure performance (accuracy, F1, etc.)</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">4️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Compilation</h4>
+                                            <p>DSPy automatically optimizes using the specified optimizer</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">5️⃣</span>
+                                        <div class="section-content">
+                                            <h4>Evaluation</h4>
+                                            <p>Test the compiled program on held-out data</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Types of Compilation -->
+                            <div class="content-block">
+                                <h2>📦 Types of Compilation</h2>
+
+                                <h3>Prompt Compilation</h3>
+                                <p>Optimizes the natural language instructions:</p>
+                                <ul>
+                                    <li>Rewrites instructions for clarity</li>
+                                    <li>Adds relevant context</li>
+                                    <li>Formats examples optimally</li>
+                                </ul>
+
+                                <h3>Example Compilation</h3>
+                                <p>Selects and orders training examples:</p>
+                                <ul>
+                                    <li>Chooses diverse examples</li>
+                                    <li>Orders by difficulty or relevance</li>
+                                    <li>Balances different types of cases</li>
+                                </ul>
+
+                                <h3>Weight Compilation</h3>
+                                <p>Optimizes module parameters:</p>
+                                <ul>
+                                    <li>Adjusts confidence thresholds</li>
+                                    <li>Tunes generation parameters</li>
+                                    <li>Optimizes module interactions</li>
+                                </ul>
+                            </div>
+
+                            <!-- Comparison Table -->
+                            <div class="content-block">
+                                <h2>📊 Compilation vs Traditional Programming</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Traditional Programming</th>
+                                                <th>DSPy Compilation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Source code → Machine code</td>
+                                                <td>High-level LM program → Optimized prompts</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Static optimization</td>
+                                                <td>Dynamic optimization based on data</td>
+                                            </tr>
+                                            <tr>
+                                                <td>One-time compilation</td>
+                                                <td>Iterative improvement possible</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hardware-specific</td>
+                                                <td>Task and data-specific</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Manual optimization required</td>
+                                                <td>Automatic optimization</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- When to Use Compilation -->
+                            <div class="content-block">
+                                <h2>🎯 When to Use Compilation</h2>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">✅</span>
+                                    <p><strong>Use compilation when:</strong></p>
+                                    <ul>
+                                        <li>You have training data available</li>
+                                        <li>Performance is critical</li>
+                                        <li>Task is complex or nuanced</li>
+                                        <li>You want consistent results</li>
+                                        <li>Manual prompt engineering is time-consuming</li>
+                                    </ul>
+                                </div>
+
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Skip compilation when:</strong></p>
+                                    <ul>
+                                        <li>Task is very simple</li>
+                                        <li>No training data available</li>
+                                        <li>One-off tasks</li>
+                                        <li>Rapid prototyping needed</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Best Practices -->
+                            <div class="content-block">
+                                <h2>💡 Compilation Best Practices</h2>
+
+                                <h3>Start Simple</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Start with this
+simple_classifier = dspy.Predict("text -> category")
+
+# Then compile for better performance
+optimized = BootstrapFewShot(metric=accuracy).compile(
+    simple_classifier, 
+    trainset=data
+)</code></pre>
+                                </div>
+
+                                <h3>Use Sufficient Training Data</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Minimum 10-20 examples for basic tasks
+# 50-100+ examples for complex tasks
+# Diversity in examples is crucial</code></pre>
+                                </div>
+
+                                <h3>Choose the Right Metric</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># For classification: accuracy, F1
+# For generation: ROUGE, BLEU
+# For QA: exact match, F1
+# Custom metrics for domain-specific tasks</code></pre>
+                                </div>
+
+                                <h3>Validate Properly</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># Split data properly
+train_data, val_data = train_test_split(all_data, test_size=0.2)
+
+# Compile on training data
+compiled_program = optimizer.compile(program, trainset=train_data)
+
+# Evaluate on validation data
+results = evaluate(compiled_program, val_data)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>DSPy compilation</strong> automatically optimizes LM interactions
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Transforms</strong> high-level programs into optimized prompts
+                                                and parameters</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Process is data-driven</strong> and reproducible</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Different types:</strong> prompts, examples, and weights</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Proper validation</strong> is essential for success</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="bootstrap-fewshot.html" class="continue-btn">
+                                        <span>Continue to BootstrapFewShot</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

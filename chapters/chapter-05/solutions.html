@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solutions | Chapter 5 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Complete solutions for Chapter 5 RAG exercises - retrievers, pipelines, and advanced patterns.">
+        content="Complete solutions for Chapter 5 DSPy optimizer exercises with detailed explanations.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -34,7 +34,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Chapter 5</h2>
-                <span class="sidebar-subtitle">Retrieval</span>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
@@ -44,39 +44,45 @@
                             <span class="section-title">Chapter Overview</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="what-is-rag">
-                        <a href="what-is-rag.html">
+                    <li class="section-item viewed" data-section="compilation">
+                        <a href="compilation-concept.html">
                             <span class="section-number">2</span>
-                            <span class="section-title">What is RAG?</span>
+                            <span class="section-title">Compilation Concept</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="retrievers">
-                        <a href="retrievers.html">
+                    <li class="section-item viewed" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
                             <span class="section-number">3</span>
-                            <span class="section-title">Retriever Modules</span>
+                            <span class="section-title">BootstrapFewShot</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="rag-pipelines">
-                        <a href="rag-pipelines.html">
+                    <li class="section-item viewed" data-section="mipro">
+                        <a href="mipro.html">
                             <span class="section-number">4</span>
-                            <span class="section-title">Building RAG Pipelines</span>
+                            <span class="section-title">MIPRO Optimizer</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="advanced-rag">
-                        <a href="advanced-rag.html">
+                    <li class="section-item viewed" data-section="advanced">
+                        <a href="advanced-optimizers.html">
                             <span class="section-number">5</span>
-                            <span class="section-title">Advanced RAG Patterns</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
                         </a>
                     </li>
                     <li class="section-item viewed" data-section="exercises">
                         <a href="exercises.html">
-                            <span class="section-number">6</span>
+                            <span class="section-number">7</span>
                             <span class="section-title">Exercises</span>
                         </a>
                     </li>
                     <li class="section-item active" data-section="solutions">
                         <a href="solutions.html">
-                            <span class="section-number">7</span>
+                            <span class="section-number">8</span>
                             <span class="section-title">Solutions</span>
                         </a>
                     </li>
@@ -102,10 +108,9 @@
 
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
-                    <span class="chapter-label">Chapter 5 · Section 7</span>
+                    <span class="chapter-label">Chapter 5 · Section 8</span>
                     <h1 class="chapter-title">Solutions</h1>
-                    <p class="chapter-description">Complete solutions with explanations for all Chapter 5 exercises.
-                    </p>
+                    <p class="chapter-description">Complete solutions with detailed explanations.</p>
                     <div class="chapter-meta">
                         <span class="meta-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -125,93 +130,99 @@
                     <section class="content-section is-visible" id="solutions" data-section="solutions">
                         <div class="markdown-content" id="solutions-content">
 
-                            <!-- Warning -->
-                            <div class="content-block">
-                                <div class="tip-box warning">
-                                    <span class="tip-icon">⚠️</span>
-                                    <p><strong>Spoiler Alert!</strong> Try to complete the exercises on your own before
-                                        viewing these solutions.</p>
-                                </div>
-                            </div>
-
                             <!-- Solution 1 -->
                             <div class="content-block solution-block">
                                 <div class="exercise-header">
                                     <span class="exercise-number">Solution 1</span>
                                     <span class="difficulty beginner">⭐ Beginner</span>
                                 </div>
-                                <h3>Build a Simple Retriever</h3>
+                                <h3>Basic BootstrapFewShot Optimization</h3>
 
                                 <div class="command-box">
-                                    <pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+                                    <pre><code class="language-python">import dspy
+from dspy.teleprompt import BootstrapFewShot
+import os
+from dotenv import load_dotenv
 
-class SimpleRetriever:
-    """A simple TF-IDF based retriever."""
-    
-    def __init__(self, documents: list):
-        self.documents = documents
-        self.vectorizer = TfidfVectorizer(
-            stop_words='english',
-            ngram_range=(1, 2)  # Include bigrams
-        )
-        self.doc_vectors = self.vectorizer.fit_transform(documents)
-    
-    def __call__(self, query: str, k: int = 3) -> list:
-        # Vectorize query
-        query_vector = self.vectorizer.transform([query])
-        
-        # Calculate similarities
-        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
-        
-        # Get top k indices
-        top_indices = np.argsort(similarities)[::-1][:k]
-        
-        # Return documents with scores
-        return [self.documents[i] for i in top_indices]
-    
-    def search_with_scores(self, query: str, k: int = 3):
-        """Return documents with similarity scores."""
-        query_vector = self.vectorizer.transform([query])
-        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
-        top_indices = np.argsort(similarities)[::-1][:k]
-        
-        return [
-            {"document": self.documents[i], "score": similarities[i]}
-            for i in top_indices
-        ]
+# Load environment variables
+load_dotenv()
 
-# Test
-docs = [
-    "Python is a high-level programming language.",
-    "DSPy is a framework for programming language models.",
-    "Machine learning uses statistical methods to learn from data.",
-    "Neural networks are inspired by biological neurons.",
-    "Deep learning is a subset of machine learning.",
-    "Natural language processing deals with text understanding.",
-    "Transformers revolutionized NLP with attention mechanisms.",
-    "GPT is a large language model developed by OpenAI.",
-    "BERT uses bidirectional training for language understanding.",
-    "Vector databases store embeddings for similarity search.",
+# Configure DSPy
+lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
+dspy.configure(lm=lm)
+
+class BasicQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.generate_answer = dspy.Predict("question -> answer")
+    
+    def forward(self, question):
+        return self.generate_answer(question=question)
+
+# Define exact match metric
+def exact_match(example, pred, trace=None):
+    """Check if prediction matches expected answer."""
+    return example.answer.lower().strip() == pred.answer.lower().strip()
+
+# Training data
+trainset = [
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    dspy.Example(question="Capital of France?", answer="Paris").with_inputs("question"),
+    dspy.Example(question="Who wrote Romeo and Juliet?", answer="Shakespeare").with_inputs("question"),
+    dspy.Example(question="What is H2O?", answer="Water").with_inputs("question"),
+    dspy.Example(question="How many continents?", answer="7").with_inputs("question"),
 ]
 
-retriever = SimpleRetriever(docs)
-
-# Test queries
-test_queries = [
-    "What is DSPy?",
-    "How does machine learning work?",
-    "What are transformers?",
+# Test data
+testset = [
+    dspy.Example(question="What is 3+3?", answer="6").with_inputs("question"),
+    dspy.Example(question="Capital of Spain?", answer="Madrid").with_inputs("question"),
 ]
 
-print("=== Simple Retriever Test ===\n")
-for query in test_queries:
-    results = retriever.search_with_scores(query, k=3)
-    print(f"Query: {query}")
-    for r in results:
-        print(f"  [{r['score']:.3f}] {r['document'][:50]}...")
-    print()</code></pre>
+def bootstrap_optimize(program, trainset, max_demos=4):
+    """Optimize the program using BootstrapFewShot."""
+    optimizer = BootstrapFewShot(
+        metric=exact_match,
+        max_bootstrapped_demos=max_demos,
+        max_labeled_demos=2
+    )
+    return optimizer.compile(program, trainset=trainset)
+
+def evaluate(program, testset):
+    """Evaluate program on test set."""
+    correct = 0
+    for example in testset:
+        try:
+            pred = program(question=example.question)
+            if exact_match(example, pred):
+                correct += 1
+        except Exception as e:
+            print(f"Error: {e}")
+    return correct / len(testset) if testset else 0
+
+# Run optimization
+baseline = BasicQA()
+optimized = bootstrap_optimize(BasicQA(), trainset, max_demos=4)
+
+# Evaluate
+baseline_score = evaluate(baseline, testset)
+optimized_score = evaluate(optimized, testset)
+
+print(f"Baseline accuracy: {baseline_score:.2%}")
+print(f"Optimized accuracy: {optimized_score:.2%}")
+print(f"Improvement: {optimized_score - baseline_score:+.2%}")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Concepts</h4>
+                                            <p>The metric function receives <code>example</code> (ground truth) and
+                                                <code>pred</code> (prediction). Normalize strings with
+                                                <code>.lower().strip()</code> for robust matching.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -219,91 +230,92 @@ for query in test_queries:
                             <div class="content-block solution-block">
                                 <div class="exercise-header">
                                     <span class="exercise-number">Solution 2</span>
-                                    <span class="difficulty beginner">⭐ Beginner</span>
+                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
                                 </div>
-                                <h3>Basic RAG Pipeline</h3>
+                                <h3>KNNFewShot for Context-Aware Selection</h3>
 
                                 <div class="command-box">
                                     <pre><code class="language-python">import dspy
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+from dspy.teleprompt import KNNFewShot
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-# Configure LM
-lm = dspy.LM("openai/gpt-4o-mini")
+lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 
-# Retriever (from Solution 1)
-class SimpleRetriever:
-    def __init__(self, documents):
-        self.documents = documents
-        self.vectorizer = TfidfVectorizer(stop_words='english')
-        self.doc_vectors = self.vectorizer.fit_transform(documents)
+class TopicClassifier(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.classify = dspy.Predict("text -> topic")
     
-    def __call__(self, query, k=3):
-        query_vector = self.vectorizer.transform([query])
-        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
-        top_indices = np.argsort(similarities)[::-1][:k]
-        return [self.documents[i] for i in top_indices]
+    def forward(self, text):
+        return self.classify(text=text)
 
-# RAG Signature
-class GenerateAnswer(dspy.Signature):
-    """Answer the question based on the provided context."""
-    context: str = dspy.InputField(desc="Retrieved passages")
-    question: str = dspy.InputField()
-    answer: str = dspy.OutputField(desc="Answer based on the context")
-
-# RAG Module
-class BasicRAG(dspy.Module):
-    def __init__(self, retriever, k=3):
-        self.retriever = retriever
-        self.k = k
-        self.generate = dspy.ChainOfThought(GenerateAnswer)
-    
-    def forward(self, question):
-        # Retrieve
-        docs = self.retriever(question, k=self.k)
-        context = "\n\n".join(docs)
-        
-        # Generate
-        result = self.generate(context=context, question=question)
-        
-        return dspy.Prediction(
-            question=question,
-            context=context,
-            answer=result.answer
-        )
-
-# Knowledge base
-knowledge_base = [
-    "DSPy is a framework for programming language models developed at Stanford.",
-    "Signatures in DSPy define the inputs and outputs of LM tasks.",
-    "Modules like Predict and ChainOfThought execute signatures in DSPy.",
-    "Optimizers like BootstrapFewShot improve DSPy programs automatically.",
-    "RAG retrieves relevant documents before generating answers.",
+# Training data with diverse topics
+trainset = [
+    dspy.Example(text="Stock price increased after earnings", topic="finance").with_inputs("text"),
+    dspy.Example(text="New study reveals vaccine effectiveness", topic="healthcare").with_inputs("text"),
+    dspy.Example(text="Court ruled in favor of plaintiff", topic="legal").with_inputs("text"),
+    dspy.Example(text="Quarterback threw touchdown pass", topic="sports").with_inputs("text"),
+    dspy.Example(text="New iPhone features improved camera", topic="technology").with_inputs("text"),
+    dspy.Example(text="Merger approved by shareholders", topic="finance").with_inputs("text"),
+    dspy.Example(text="Patient recovered after surgery", topic="healthcare").with_inputs("text"),
+    dspy.Example(text="Jury reached guilty verdict", topic="legal").with_inputs("text"),
 ]
 
-# Create and test
-retriever = SimpleRetriever(knowledge_base)
-rag = BasicRAG(retriever, k=3)
-
-# Test questions
-questions = [
-    "What is DSPy?",
-    "What do optimizers do in DSPy?",
-    "How does RAG work?",
+# Test data
+testset = [
+    dspy.Example(text="Bitcoin price surged today", topic="finance").with_inputs("text"),
+    dspy.Example(text="The team won the championship", topic="sports").with_inputs("text"),
 ]
 
-print("=== Basic RAG Pipeline ===\n")
-for q in questions:
-    result = rag(question=q)
-    print(f"Q: {q}")
-    print(f"A: {result.answer}")
-    print(f"Context used: {len(result.context)} chars")
-    print("-" * 50)</code></pre>
+def topic_match(example, pred, trace=None):
+    """Check if predicted topic matches expected."""
+    return example.topic.lower().strip() == pred.topic.lower().strip()
+
+def create_knn_optimizer(k=3):
+    """Create KNNFewShot optimizer."""
+    return KNNFewShot(
+        k=k,
+        trainset=trainset
+    )
+
+def evaluate_classifier(classifier, testset):
+    """Evaluate classifier accuracy."""
+    correct = 0
+    for example in testset:
+        try:
+            pred = classifier(text=example.text)
+            if topic_match(example, pred):
+                correct += 1
+                print(f"✓ '{example.text[:40]}...' -> {pred.topic}")
+            else:
+                print(f"✗ '{example.text[:40]}...' -> {pred.topic} (expected: {example.topic})")
+        except Exception as e:
+            print(f"Error: {e}")
+    return correct / len(testset) if testset else 0
+
+# Create and compile
+optimizer = create_knn_optimizer(k=3)
+compiled = optimizer.compile(TopicClassifier(), trainset=trainset)
+
+# Evaluate
+print("=== KNNFewShot Results ===")
+accuracy = evaluate_classifier(compiled, testset)
+print(f"\nAccuracy: {accuracy:.2%}")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Concepts</h4>
+                                            <p>KNNFewShot selects the k most similar examples for each query. For
+                                                finance questions, it selects finance examples—making the prompts more
+                                                relevant!</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -313,79 +325,114 @@ for q in questions:
                                     <span class="exercise-number">Solution 3</span>
                                     <span class="difficulty intermediate">⭐⭐ Intermediate</span>
                                 </div>
-                                <h3>RAG with Citations</h3>
+                                <h3>MIPRO for Complex Reasoning</h3>
 
                                 <div class="command-box">
                                     <pre><code class="language-python">import dspy
+from dspy.teleprompt import MIPRO
 import re
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-lm = dspy.LM("openai/gpt-4o-mini")
+lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 
-# Citation signature
-class GenerateWithCitations(dspy.Signature):
-    """Answer the question using the numbered sources. 
-    Cite sources using [1], [2], etc."""
-    context: str = dspy.InputField(desc="Numbered source passages")
-    question: str = dspy.InputField()
-    answer: str = dspy.OutputField(
-        desc="Answer with citation numbers like [1], [2]"
-    )
-
-class RAGWithCitations(dspy.Module):
-    def __init__(self, retriever, k=3):
-        self.retriever = retriever
-        self.k = k
-        self.generate = dspy.ChainOfThought(GenerateWithCitations)
+class MathSolver(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.solve = dspy.ChainOfThought("problem -> answer")
     
-    def forward(self, question):
-        # Retrieve
-        docs = self.retriever(question, k=self.k)
-        
-        # Number the passages
-        numbered_passages = {}
-        numbered_context = []
-        for i, doc in enumerate(docs, 1):
-            numbered_passages[str(i)] = doc
-            numbered_context.append(f"[{i}] {doc}")
-        
-        context = "\n\n".join(numbered_context)
-        
-        # Generate with citations
-        result = self.generate(context=context, question=question)
-        
-        # Extract cited sources
-        cited = re.findall(r'\[(\d+)\]', result.answer)
-        cited_unique = list(set(cited))
-        
-        # Get cited passages
-        cited_passages = {
-            num: numbered_passages.get(num, "Not found")
-            for num in cited_unique
-        }
-        
+    def forward(self, problem):
+        result = self.solve(problem=problem)
         return dspy.Prediction(
-            answer=result.answer,
-            sources_used=cited_unique,
-            passages=cited_passages,
-            all_passages=numbered_passages
+            steps=result.rationale,
+            answer=result.answer
         )
 
+# Training data
+trainset = [
+    dspy.Example(
+        problem="A rope is 12m long. Cut into 3 equal pieces. Length of each?",
+        answer="4 meters"
+    ).with_inputs("problem"),
+    dspy.Example(
+        problem="Train travels 60km in 1 hour. How far in 3 hours?",
+        answer="180 km"
+    ).with_inputs("problem"),
+    dspy.Example(
+        problem="Box has 8 rows of 5 apples each. Total apples?",
+        answer="40 apples"
+    ).with_inputs("problem"),
+]
+
+# Test data
+testset = [
+    dspy.Example(
+        problem="John saves $200 per month. How much in 6 months?",
+        answer="$1,200"
+    ).with_inputs("problem"),
+]
+
+def extract_number(text):
+    """Extract numerical value from text."""
+    numbers = re.findall(r'[\d,]+(?:\.\d+)?', str(text))
+    if numbers:
+        return float(numbers[-1].replace(',', ''))
+    return None
+
+def math_metric(example, pred, trace=None):
+    """Metric that compares numerical answers."""
+    pred_num = extract_number(pred.answer)
+    true_num = extract_number(example.answer)
+    
+    if pred_num is None or true_num is None:
+        # Fall back to string comparison
+        return example.answer.lower() in pred.answer.lower()
+    
+    # Allow small numerical tolerance
+    return abs(pred_num - true_num) < 0.01
+
+def mipro_optimize(program, trainset, num_candidates=10):
+    """Optimize using MIPRO."""
+    optimizer = MIPRO(
+        metric=math_metric,
+        num_candidates=num_candidates,
+        init_temperature=0.7,
+        verbose=True
+    )
+    return optimizer.compile(
+        program,
+        trainset=trainset,
+        num_trials=3,
+        max_bootstrapped_demos=4
+    )
+
+# Optimize
+print("=== MIPRO Optimization ===")
+optimized = mipro_optimize(MathSolver(), trainset)
+
 # Test
-retriever = SimpleRetriever(knowledge_base)
-rag_citations = RAGWithCitations(retriever, k=3)
+print("\n=== Testing ===")
+for example in testset:
+    result = optimized(problem=example.problem)
+    print(f"Problem: {example.problem}")
+    print(f"Reasoning: {result.steps}")
+    print(f"Answer: {result.answer}")
+    print(f"Expected: {example.answer}")
+    print(f"Correct: {math_metric(example, result)}")</code></pre>
+                                </div>
 
-result = rag_citations(question="What is DSPy and what are its optimizers?")
-
-print("=== RAG with Citations ===\n")
-print(f"Answer: {result.answer}")
-print(f"\nSources cited: {result.sources_used}")
-print("\nCited passages:")
-for num, passage in result.passages.items():
-    print(f"  [{num}] {passage[:60]}...")</code></pre>
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Concepts</h4>
+                                            <p>MIPRO optimizes both instructions and demonstrations. The
+                                                <code>extract_number</code> helper enables robust numerical comparison
+                                                even when formats differ.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -393,70 +440,130 @@ for num, passage in result.passages.items():
                             <div class="content-block solution-block">
                                 <div class="exercise-header">
                                     <span class="exercise-number">Solution 4</span>
-                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
+                                    <span class="difficulty advanced">⭐⭐⭐ Advanced</span>
                                 </div>
-                                <h3>Query Expansion RAG</h3>
+                                <h3>Optimizer Comparison Benchmark</h3>
 
                                 <div class="command-box">
                                     <pre><code class="language-python">import dspy
-from typing import List
+from dspy.teleprompt import BootstrapFewShot, KNNFewShot, MIPRO
+import time
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-lm = dspy.LM("openai/gpt-4o-mini")
+lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 
-# Query expansion signature
-class ExpandQuery(dspy.Signature):
-    """Generate related search queries to find more relevant information."""
-    original_query: str = dspy.InputField()
-    expanded_queries: List[str] = dspy.OutputField(
-        desc="3 related search queries"
-    )
-
-class QueryExpansionRAG(dspy.Module):
-    def __init__(self, retriever, k_per_query=2):
-        self.retriever = retriever
-        self.k_per_query = k_per_query
-        self.expand = dspy.Predict(ExpandQuery)
-        self.generate = dspy.ChainOfThought(GenerateAnswer)
+class SentimentAnalyzer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.analyze = dspy.Predict("text -> sentiment")
     
-    def forward(self, question):
-        # Step 1: Expand query
-        expansion = self.expand(original_query=question)
-        all_queries = [question] + expansion.expanded_queries[:3]
-        
-        # Step 2: Retrieve for each query
-        all_docs = []
-        for query in all_queries:
-            docs = self.retriever(query, k=self.k_per_query)
-            all_docs.extend(docs)
-        
-        # Step 3: Deduplicate
-        unique_docs = list(dict.fromkeys(all_docs))
-        
-        # Step 4: Generate
-        context = "\n\n".join(unique_docs)
-        result = self.generate(context=context, question=question)
-        
-        return dspy.Prediction(
-            original_query=question,
-            expanded_queries=all_queries,
-            retrieved_docs=len(unique_docs),
-            context=context,
-            answer=result.answer
-        )
+    def forward(self, text):
+        return self.analyze(text=text)
 
-# Test
-query_rag = QueryExpansionRAG(retriever, k_per_query=2)
-result = query_rag(question="How does DSPy improve prompts?")
+trainset = [
+    dspy.Example(text="I love this product!", sentiment="positive").with_inputs("text"),
+    dspy.Example(text="Terrible quality.", sentiment="negative").with_inputs("text"),
+    dspy.Example(text="Works as expected.", sentiment="neutral").with_inputs("text"),
+    dspy.Example(text="Outstanding service!", sentiment="positive").with_inputs("text"),
+    dspy.Example(text="Would not recommend.", sentiment="negative").with_inputs("text"),
+    dspy.Example(text="It's okay I guess.", sentiment="neutral").with_inputs("text"),
+]
 
-print("=== Query Expansion RAG ===\n")
-print(f"Original: {result.original_query}")
-print(f"Expanded to: {result.expanded_queries}")
-print(f"Retrieved {result.retrieved_docs} unique documents")
-print(f"\nAnswer: {result.answer}")</code></pre>
+testset = [
+    dspy.Example(text="Best purchase ever!", sentiment="positive").with_inputs("text"),
+    dspy.Example(text="Complete waste of money.", sentiment="negative").with_inputs("text"),
+    dspy.Example(text="Does the job.", sentiment="neutral").with_inputs("text"),
+]
+
+def sentiment_match(example, pred, trace=None):
+    return example.sentiment.lower() == pred.sentiment.lower()
+
+def evaluate(program, testset):
+    correct = sum(1 for ex in testset 
+                  if sentiment_match(ex, program(text=ex.text)))
+    return correct / len(testset)
+
+def benchmark_optimizers(program_class, trainset, testset):
+    """Compare multiple optimizers."""
+    results = {}
+    
+    # Baseline
+    print("Testing Baseline...")
+    baseline = program_class()
+    results["Baseline"] = {
+        "accuracy": evaluate(baseline, testset),
+        "time": 0
+    }
+    
+    # BootstrapFewShot
+    print("Testing BootstrapFewShot...")
+    start = time.time()
+    optimizer = BootstrapFewShot(metric=sentiment_match, max_bootstrapped_demos=4)
+    compiled = optimizer.compile(program_class(), trainset=trainset)
+    results["BootstrapFewShot"] = {
+        "accuracy": evaluate(compiled, testset),
+        "time": time.time() - start
+    }
+    
+    # KNNFewShot
+    print("Testing KNNFewShot...")
+    start = time.time()
+    optimizer = KNNFewShot(k=3, trainset=trainset)
+    compiled = optimizer.compile(program_class(), trainset=trainset)
+    results["KNNFewShot"] = {
+        "accuracy": evaluate(compiled, testset),
+        "time": time.time() - start
+    }
+    
+    # MIPRO
+    print("Testing MIPRO...")
+    start = time.time()
+    optimizer = MIPRO(metric=sentiment_match, auto="light")
+    compiled = optimizer.compile(program_class(), trainset=trainset, num_trials=2)
+    results["MIPRO"] = {
+        "accuracy": evaluate(compiled, testset),
+        "time": time.time() - start
+    }
+    
+    return results
+
+def print_comparison(results):
+    """Print comparison report."""
+    print("\n" + "=" * 50)
+    print("OPTIMIZER COMPARISON REPORT")
+    print("=" * 50)
+    
+    baseline_acc = results["Baseline"]["accuracy"]
+    
+    for name, data in results.items():
+        print(f"\n{name}:")
+        print(f"  Accuracy: {data['accuracy']:.1%}")
+        print(f"  Time: {data['time']:.1f}s")
+        if name != "Baseline":
+            improvement = data['accuracy'] - baseline_acc
+            print(f"  Improvement: {improvement:+.1%}")
+    
+    # Best performance
+    best = max(results.items(), key=lambda x: x[1]['accuracy'])
+    print(f"\n🏆 Best Performance: {best[0]}")
+
+# Run benchmark
+results = benchmark_optimizers(SentimentAnalyzer, trainset, testset)
+print_comparison(results)</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Concepts</h4>
+                                            <p>This benchmark tracks both accuracy and compilation time. Note how MIPRO
+                                                takes longer but often achieves the best results.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -466,183 +573,174 @@ print(f"\nAnswer: {result.answer}")</code></pre>
                                     <span class="exercise-number">Solution 5</span>
                                     <span class="difficulty advanced">⭐⭐⭐ Advanced</span>
                                 </div>
-                                <h3>Multi-Hop RAG System</h3>
+                                <h3>Progressive Optimization Pipeline</h3>
 
                                 <div class="command-box">
                                     <pre><code class="language-python">import dspy
+from dspy.teleprompt import BootstrapFewShot, KNNFewShot, MIPRO
+import time
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
-lm = dspy.LM("openai/gpt-4o-mini")
+lm = dspy.LM("openai/gpt-4o-mini", api_key=os.getenv("OPENAI_API_KEY"))
 dspy.configure(lm=lm)
 
-# Multi-hop knowledge base with interconnected facts
-multihop_kb = [
-    "DSPy is a framework developed at Stanford's NLP group.",
-    "Stanford's NLP group is led by Christopher Manning.",
-    "DSPy uses BootstrapFewShot as its main optimizer.",
-    "BootstrapFewShot finds successful examples for few-shot learning.",
-    "Few-shot learning uses a small number of examples.",
-    "Christopher Manning is a professor at Stanford University.",
-    "Stanford University is located in California.",
-    "MIPRO is an advanced optimizer that extends BootstrapFewShot.",
-    "MIPRO optimizes both instructions and demonstrations.",
-    "Demonstrations in DSPy are input-output examples.",
-    "DSPy signatures define the structure of LM tasks.",
-    "Signatures can be created using Python classes.",
-    "DSPy modules execute signatures with language models.",
-    "ChainOfThought is a module that adds reasoning steps.",
-    "Reasoning steps help with complex problems.",
-]
+def evaluate(program, valset, metric):
+    """Evaluate program on validation set."""
+    correct = sum(1 for ex in valset if metric(ex, program(**ex.inputs())))
+    return correct / len(valset)
 
-# Signatures
-class GenerateNextQuery(dspy.Signature):
-    """Based on what we know, generate a query to find missing information."""
-    question: str = dspy.InputField()
-    context: str = dspy.InputField(desc="What we know so far")
-    next_query: str = dspy.OutputField(desc="Query to find missing info")
+def progressive_optimize(program_class, trainset, valset, metric, target_accuracy=0.85):
+    """
+    Progressively optimize until target accuracy is reached.
+    """
+    stages = [
+        {
+            "name": "BootstrapFewShot",
+            "optimizer": BootstrapFewShot(metric=metric, max_bootstrapped_demos=4),
+            "config": {}
+        },
+        {
+            "name": "KNNFewShot",
+            "optimizer": KNNFewShot(k=3, trainset=trainset),
+            "config": {}
+        },
+        {
+            "name": "MIPRO",
+            "optimizer": MIPRO(metric=metric, auto="medium"),
+            "config": {"num_trials": 3}
+        }
+    ]
+    
+    results = []
+    best_program = None
+    best_accuracy = 0
+    
+    # Baseline
+    baseline = program_class()
+    baseline_acc = evaluate(baseline, valset, metric)
+    results.append({
+        "stage": "Baseline",
+        "accuracy": baseline_acc,
+        "time": 0
+    })
+    print(f"Baseline: {baseline_acc:.1%}")
+    
+    for stage in stages:
+        print(f"\nTrying {stage['name']}...")
+        start = time.time()
+        
+        try:
+            compiled = stage['optimizer'].compile(
+                program_class(),
+                trainset=trainset,
+                **stage['config']
+            )
+            
+            accuracy = evaluate(compiled, valset, metric)
+            elapsed = time.time() - start
+            
+            results.append({
+                "stage": stage['name'],
+                "accuracy": accuracy,
+                "time": elapsed
+            })
+            
+            print(f"  Accuracy: {accuracy:.1%} (took {elapsed:.1f}s)")
+            
+            if accuracy > best_accuracy:
+                best_accuracy = accuracy
+                best_program = compiled
+                print(f"  ✓ New best!")
+            
+            # Early stopping if target reached
+            if accuracy >= target_accuracy:
+                print(f"\n🎯 Target accuracy {target_accuracy:.1%} reached!")
+                break
+                
+        except Exception as e:
+            print(f"  Error: {e}")
+    
+    return best_program, results
 
-class CheckComplete(dspy.Signature):
-    """Check if we have enough information to answer."""
-    question: str = dspy.InputField()
-    context: str = dspy.InputField()
-    can_answer: bool = dspy.OutputField()
-    reasoning: str = dspy.OutputField()
+def analyze_optimization_roi(results):
+    """Analyze return on investment."""
+    print("\n" + "=" * 50)
+    print("ROI ANALYSIS")
+    print("=" * 50)
+    
+    baseline_acc = results[0]['accuracy']
+    
+    for i, result in enumerate(results[1:], 1):
+        gain = result['accuracy'] - baseline_acc
+        time_spent = result['time']
+        
+        if time_spent > 0:
+            roi = gain / (time_spent / 60)  # Gain per minute
+            print(f"\n{result['stage']}:")
+            print(f"  Accuracy gain: {gain:+.1%}")
+            print(f"  Time spent: {time_spent:.1f}s")
+            print(f"  ROI: {roi:.2%} per minute")
 
-class GenerateFinalAnswer(dspy.Signature):
-    """Generate a complete answer based on all gathered context."""
-    question: str = dspy.InputField()
-    context: str = dspy.InputField()
-    answer: str = dspy.OutputField()
-
-class MultiHopRAG(dspy.Module):
-    def __init__(self, retriever, max_hops=3, k=2):
-        self.retriever = retriever
-        self.max_hops = max_hops
-        self.k = k
-        self.generate_query = dspy.Predict(GenerateNextQuery)
-        self.check_complete = dspy.Predict(CheckComplete)
-        self.generate_answer = dspy.ChainOfThought(GenerateFinalAnswer)
+# Example usage
+class SimpleQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.answer = dspy.Predict("question -> answer")
     
     def forward(self, question):
-        context_parts = []
-        queries_used = [question]
-        
-        # Initial retrieval
-        docs = self.retriever(question, k=self.k)
-        context_parts.extend(docs)
-        
-        for hop in range(self.max_hops):
-            current_context = "\n".join(context_parts)
-            
-            # Check if we can answer
-            check = self.check_complete(
-                question=question,
-                context=current_context
-            )
-            
-            if check.can_answer:
-                break
-            
-            # Generate next query
-            next_q = self.generate_query(
-                question=question,
-                context=current_context
-            )
-            queries_used.append(next_q.next_query)
-            
-            # Retrieve more
-            new_docs = self.retriever(next_q.next_query, k=self.k)
-            
-            # Add only new docs
-            for doc in new_docs:
-                if doc not in context_parts:
-                    context_parts.append(doc)
-        
-        # Generate final answer
-        final_context = "\n\n".join(context_parts)
-        result = self.generate_answer(
-            question=question,
-            context=final_context
-        )
-        
-        return dspy.Prediction(
-            answer=result.answer,
-            hops=len(queries_used),
-            queries=queries_used,
-            context=final_context
-        )
+        return self.answer(question=question)
 
-# Create retriever and multi-hop RAG
-multihop_retriever = SimpleRetriever(multihop_kb)
-multihop_rag = MultiHopRAG(multihop_retriever, max_hops=3, k=2)
-
-# Test with multi-hop questions
-questions = [
-    "What optimizer does the Stanford NLP framework use?",
-    "Where is the university that developed DSPy located?",
-    "What does MIPRO extend and what does it optimize?",
+trainset = [
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    dspy.Example(question="Capital of France?", answer="Paris").with_inputs("question"),
+    # ... more examples
 ]
 
-print("=== Multi-Hop RAG System ===\n")
-for q in questions:
-    result = multihop_rag(question=q)
-    print(f"Q: {q}")
-    print(f"Hops: {result.hops}")
-    print(f"Queries: {result.queries}")
-    print(f"A: {result.answer}")
-    print("-" * 60)</code></pre>
+valset = [
+    dspy.Example(question="What is 5+5?", answer="10").with_inputs("question"),
+]
+
+def metric(ex, pred, trace=None):
+    return ex.answer.lower() in pred.answer.lower()
+
+# Run progressive optimization
+best, results = progressive_optimize(
+    SimpleQA, trainset, valset, metric, target_accuracy=0.80
+)
+
+# Analyze ROI
+analyze_optimization_roi(results)
+
+print("\n✅ Optimization complete!")</code></pre>
                                 </div>
-                            </div>
 
-                            <!-- Summary -->
-                            <div class="content-block summary-block">
-                                <h2>📝 Chapter Summary</h2>
-
-                                <p>In this chapter, you learned:</p>
-
-                                <div class="chapter-sections-list no-icons">
+                                <div class="chapter-sections-list">
                                     <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
                                         <div class="section-content">
-                                            <p><strong>RAG</strong> grounds LM outputs in retrieved knowledge</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Retrievers</strong> fetch relevant documents using embeddings
+                                            <h4>Key Concepts</h4>
+                                            <p>Progressive optimization stops early when target is reached—saving time.
+                                                ROI analysis helps identify which optimizer gives best "bang for buck."
                                             </p>
                                         </div>
                                     </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>RAG pipelines</strong> combine retrieve → augment → generate</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Advanced patterns:</strong> multi-hop, hybrid, reranking</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>RAG can be optimized</strong> like any DSPy module</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Continue to Chapter 6 -->
+                            <!-- Continue to Next Chapter -->
                             <div class="content-block">
-                                <div class="success-content">
-                                    <span class="success-icon-large">🎉</span>
-                                    <h2>Congratulations!</h2>
-                                    <p>You've completed Chapter 5: Retrieval! You now know how to build
-                                        knowledge-grounded AI applications.</p>
+                                <div class="tip-box">
+                                    <span class="tip-icon">🎉</span>
+                                    <p><strong>Congratulations!</strong> You've completed Chapter 5: Optimizers &
+                                        Compilation. You now understand how to automatically optimize DSPy programs for
+                                        maximum performance!</p>
                                 </div>
+
                                 <div class="continue-btn-container">
                                     <a href="../chapter-06/index.html" class="continue-btn next-chapter-main-btn">
-                                        <span>Start Chapter 6: Agents</span>
+                                        <span>Start Chapter 6: Real-World Applications</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">

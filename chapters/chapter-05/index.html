@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 5: Retrieval | DSPy: The Comprehensive Guide</title>
+    <title>Chapter 5: Optimizers & Compilation | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Master Retrieval-Augmented Generation (RAG) with DSPy - build powerful knowledge-grounded LM applications.">
+        content="Master DSPy's automatic optimization - BootstrapFewShot, MIPRO, KNNFewShot, fine-tuning, and advanced compilation strategies.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -34,7 +34,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Chapter 5</h2>
-                <span class="sidebar-subtitle">Retrieval</span>
+                <span class="sidebar-subtitle">Optimizers & Compilation</span>
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
@@ -44,39 +44,45 @@
                             <span class="section-title">Chapter Overview</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="what-is-rag">
-                        <a href="what-is-rag.html">
+                    <li class="section-item" data-section="compilation">
+                        <a href="compilation-concept.html">
                             <span class="section-number">2</span>
-                            <span class="section-title">What is RAG?</span>
+                            <span class="section-title">Compilation Concept</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="retrievers">
-                        <a href="retrievers.html">
+                    <li class="section-item" data-section="bootstrap">
+                        <a href="bootstrap-fewshot.html">
                             <span class="section-number">3</span>
-                            <span class="section-title">Retriever Modules</span>
+                            <span class="section-title">BootstrapFewShot</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="rag-pipelines">
-                        <a href="rag-pipelines.html">
+                    <li class="section-item" data-section="mipro">
+                        <a href="mipro.html">
                             <span class="section-number">4</span>
-                            <span class="section-title">Building RAG Pipelines</span>
+                            <span class="section-title">MIPRO Optimizer</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="advanced-rag">
-                        <a href="advanced-rag.html">
+                    <li class="section-item" data-section="advanced">
+                        <a href="advanced-optimizers.html">
                             <span class="section-number">5</span>
-                            <span class="section-title">Advanced RAG Patterns</span>
+                            <span class="section-title">Advanced Optimizers</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="choosing">
+                        <a href="choosing-optimizers.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Choosing Optimizers</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="exercises">
                         <a href="exercises.html">
-                            <span class="section-number">6</span>
+                            <span class="section-number">7</span>
                             <span class="section-title">Exercises</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="solutions">
                         <a href="solutions.html">
-                            <span class="section-number">7</span>
+                            <span class="section-number">8</span>
                             <span class="section-title">Solutions</span>
                         </a>
                     </li>
@@ -103,18 +109,18 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 5</span>
-                    <h1 class="chapter-title">Retrieval</h1>
-                    <p class="chapter-description">Ground your LM applications in real knowledge with
-                        Retrieval-Augmented Generation (RAG).</p>
+                    <h1 class="chapter-title">Optimizers & Compilation</h1>
+                    <p class="chapter-description">Automatic optimization transforms your DSPy programs into
+                        high-performance systems.</p>
                     <div class="chapter-meta">
                         <span class="meta-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
-                            7 Sections
+                            8 Sections
                         </span>
                         <span class="meta-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -123,10 +129,7 @@
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
-                            ~2-3 hours
-                        </span>
-                        <span class="meta-item">
-                            <span class="difficulty-badge intermediate">⭐⭐ Intermediate</span>
+                            ~90 min read
                         </span>
                     </div>
                 </div>
@@ -134,214 +137,270 @@
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
-                            <div class="content-intro is-visible fade-in-up">
-                                <h1 class="welcome-title">🔍 Knowledge-Grounded AI</h1>
-                                <p class="welcome-subtitle">Connect LMs to external knowledge sources for accurate,
-                                    up-to-date answers</p>
+                    <section class="content-section is-visible" id="chapter-intro" data-section="intro">
+                        <div class="markdown-content" id="chapter-intro-content">
+
+                            <!-- Overview -->
+                            <div class="content-block">
+                                <h2>🚀 Overview</h2>
+
+                                <p>Welcome to Chapter 5 where we explore one of DSPy's most powerful features:
+                                    <strong>automatic optimization and compilation</strong>. While earlier chapters
+                                    taught you how to build DSPy programs manually, this chapter shows you how DSPy can
+                                    automatically optimize your programs for dramatically better performance.</p>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key insight:</strong> DSPy compilation transforms high-level program
+                                        specifications into optimized prompts and weights—automatically!</p>
+                                </div>
+                            </div>
+
+                            <!-- Expected Performance Maximization -->
+                            <div class="content-block">
+                                <h2>📊 The Expected Performance Maximization Framework</h2>
+
+                                <p>At the core of DSPy's optimization philosophy is the <strong>Expected Performance
+                                        Maximization Framework</strong>:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">Goal: maximize E[metric(program(parameters), data)]
+
+Where:
+- θ = program parameters (instructions, demos, weights)
+- D = data distribution
+- f = evaluation metric
+- P_θ = parameterized program</code></pre>
+                                </div>
+
+                                <p>Instead of manually crafting prompts and hoping for good results, DSPy treats prompt
+                                    and model optimization as a principled optimization problem.</p>
                             </div>
 
                             <!-- What You'll Learn -->
                             <div class="content-block">
-                                <h2>What You'll Learn</h2>
-                                <p>By the end of this chapter, you will:</p>
-
-                                <div class="learning-objectives">
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Understand RAG and why it solves LM
-                                            limitations</span>
-                                    </div>
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Use DSPy's built-in retriever modules</span>
-                                    </div>
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Integrate with vector databases (ChromaDB,
-                                            Pinecone, etc.)</span>
-                                    </div>
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Build complete RAG pipelines with DSPy</span>
-                                    </div>
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Apply advanced patterns: multi-hop, iterative,
-                                            hybrid retrieval</span>
-                                    </div>
-                                    <div class="objective-item">
-                                        <span class="objective-check">✅</span>
-                                        <span class="objective-text">Optimize RAG systems for accuracy and
-                                            efficiency</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Why RAG Matters -->
-                            <div class="content-block">
-                                <h2>Why RAG Matters</h2>
-
-                                <div class="comparison-container">
-                                    <div class="comparison-side traditional">
-                                        <h4>❌ LMs Without Retrieval</h4>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># LM only knows training data
-result = lm("What happened yesterday?")
-# "I don't have access to 
-#  current events..."
-
-result = lm("What's in our docs?")
-# Can't access your data!</code></pre>
-                                        </div>
-                                        <div class="comparison-features">
-                                            <span class="feature">Limited to training cutoff</span>
-                                            <span class="feature">No private data access</span>
-                                            <span class="feature">Prone to hallucination</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="comparison-side dspy">
-                                        <h4>✅ LMs With Retrieval</h4>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Retrieve relevant context first
-docs = retriever("What happened?")
-result = lm(context=docs, 
-            question="What happened?")
-# Accurate, grounded answer!</code></pre>
-                                        </div>
-                                        <div class="comparison-benefits">
-                                            <span class="benefit">Access to current info</span>
-                                            <span class="benefit">Uses your data</span>
-                                            <span class="benefit">Grounded in facts</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Chapter Sections -->
-                            <div class="content-block">
-                                <h2>Chapter Overview</h2>
-                                <p>This chapter takes you from RAG fundamentals to production-ready systems:</p>
+                                <h2>📚 What You'll Learn</h2>
 
                                 <div class="chapter-sections-list">
                                     <div class="chapter-section-item">
-                                        <span class="section-icon">📖</span>
-                                        <div class="section-content">
-                                            <h4>What is RAG?</h4>
-                                            <p>Understand the Retrieve-Augment-Generate pattern and its benefits.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
                                         <span class="section-icon">🔧</span>
                                         <div class="section-content">
-                                            <h4>Retriever Modules</h4>
-                                            <p>Use DSPy's retriever integrations with various backends.</p>
+                                            <h4>Compilation Concept</h4>
+                                            <p>What compilation means in DSPy and how it transforms programs</p>
                                         </div>
                                     </div>
                                     <div class="chapter-section-item">
-                                        <span class="section-icon">🏗️</span>
+                                        <span class="section-icon">🎯</span>
                                         <div class="section-content">
-                                            <h4>Building RAG Pipelines</h4>
-                                            <p>Compose retrieval and generation into complete applications.</p>
+                                            <h4>BootstrapFewShot</h4>
+                                            <p>Automatic few-shot example generation and weak supervision</p>
                                         </div>
                                     </div>
                                     <div class="chapter-section-item">
                                         <span class="section-icon">⚡</span>
                                         <div class="section-content">
-                                            <h4>Advanced RAG Patterns</h4>
-                                            <p>Multi-hop, iterative, and hybrid retrieval strategies.</p>
+                                            <h4>MIPRO Optimizer</h4>
+                                            <p>Multi-step instruction and demonstration optimization</p>
                                         </div>
                                     </div>
                                     <div class="chapter-section-item">
-                                        <span class="section-icon">🏋️</span>
+                                        <span class="section-icon">🔬</span>
                                         <div class="section-content">
-                                            <h4>Exercises</h4>
-                                            <p>Build real RAG applications hands-on.</p>
+                                            <h4>Advanced Optimizers</h4>
+                                            <p>KNNFewShot, COPRO, fine-tuning, and more</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎛️</span>
+                                        <div class="section-content">
+                                            <h4>Choosing Optimizers</h4>
+                                            <p>Decision guide, trade-offs, and optimization synergy</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Key Concepts Preview -->
+                            <!-- Benchmark Results -->
                             <div class="content-block">
-                                <h2>Key Concepts Preview</h2>
+                                <h2>📈 Real Performance Improvements</h2>
 
-                                <div class="chapter-sections-list">
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔍</span>
-                                        <div class="section-content">
-                                            <h4>Retriever</h4>
-                                            <p>A module that fetches relevant documents given a query.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">📊</span>
-                                        <div class="section-content">
-                                            <h4>Embeddings</h4>
-                                            <p>Vector representations that capture semantic meaning.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🗄️</span>
-                                        <div class="section-content">
-                                            <h4>Vector Database</h4>
-                                            <p>Storage optimized for similarity search over embeddings.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔄</span>
-                                        <div class="section-content">
-                                            <h4>RAG Pipeline</h4>
-                                            <p>The complete flow: query → retrieve → augment → generate.</p>
-                                        </div>
-                                    </div>
+                                <p>MIPRO research demonstrates dramatic improvements across benchmarks:</p>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dataset</th>
+                                                <th>Manual Prompt</th>
+                                                <th>MIPRO Optimized</th>
+                                                <th>Improvement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>HotpotQA</td>
+                                                <td>32.0 F1</td>
+                                                <td>52.3 F1</td>
+                                                <td><strong>+63%</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GSM8K (Math)</td>
+                                                <td>28.5%</td>
+                                                <td>33.8%</td>
+                                                <td><strong>+19%</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td>FEVER</td>
+                                                <td>71.2%</td>
+                                                <td>78.9%</td>
+                                                <td><strong>+11%</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Quick Example -->
+                            <div class="content-block">
+                                <h2>⚡ Quick Example</h2>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dspy.teleprompt import BootstrapFewShot
+
+# Traditional approach: Manual prompting
+prompt = "Answer the question carefully."  # Hope it works...
+
+# DSPy approach: Expected performance maximization
+optimizer = dspy.BootstrapFewShot(
+    metric=answer_accuracy,     # Define what success means
+    max_bootstrapped_demos=4    # DSPy finds optimal examples
+)
+
+# Compile automatically optimizes the program
+optimized_program = optimizer.compile(
+    program,
+    trainset=training_examples
+)
+
+# Result: Maximized expected performance!</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Benefits Table -->
+                            <div class="content-block">
+                                <h2>✨ Benefits Over Manual Optimization</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Aspect</th>
+                                                <th>Point Optimization</th>
+                                                <th>Expected Performance Maximization</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Parameter selection</td>
+                                                <td>Manual/heuristic</td>
+                                                <td>Data-driven, metric-guided</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Generalization</td>
+                                                <td>Unknown</td>
+                                                <td>Optimized for distribution</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Reproducibility</td>
+                                                <td>Variable</td>
+                                                <td>Systematic and repeatable</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adaptability</td>
+                                                <td>Requires manual tuning</td>
+                                                <td>Automatic re-optimization</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
                             <!-- Prerequisites -->
                             <div class="content-block">
-                                <h2>Prerequisites</h2>
-                                <p>Before starting this chapter, ensure you have:</p>
+                                <h2>📋 Prerequisites</h2>
 
-                                <div class="prereq-checklist">
-                                    <div class="prereq-item">
-                                        <span class="prereq-check">✅</span>
-                                        <span class="prereq-text"><strong>Completed Chapters 1-4</strong>
-                                            (Fundamentals, Signatures, Modules, Optimizers)</span>
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Chapter 3: Modules</h4>
+                                            <p>Understanding of DSPy modules and signatures</p>
+                                        </div>
                                     </div>
-                                    <div class="prereq-item">
-                                        <span class="prereq-check">✅</span>
-                                        <span class="prereq-text"><strong>Understanding of modules</strong> and how to
-                                            compose them</span>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Chapter 4: Evaluation</h4>
+                                            <p>Knowledge of metrics and evaluation loops</p>
+                                        </div>
                                     </div>
-                                    <div class="prereq-item">
-                                        <span class="prereq-check">✅</span>
-                                        <span class="prereq-text"><strong>Working DSPy environment</strong> with API
-                                            keys</span>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Basic ML Concepts</h4>
+                                            <p>Understanding of training data, validation, and metrics</p>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="tip-box">
-                                    <span class="tip-icon">💡</span>
-                                    <p><strong>Optional:</strong> For full examples, install ChromaDB:
-                                        <code>pip install chromadb</code>
-                                    </p>
                                 </div>
                             </div>
 
-                            <!-- Let's Begin -->
-                            <div class="content-block cta-block">
-                                <div class="cta-content">
-                                    <span class="cta-icon">🚀</span>
-                                    <h2>Let's Retrieve!</h2>
-                                    <p>Ready to build knowledge-grounded AI applications? Let's start with
-                                        understanding RAG!</p>
+                            <!-- Learning Objectives -->
+                            <div class="content-block">
+                                <h2>🎯 Learning Objectives</h2>
+
+                                <p>By the end of this chapter, you will be able to:</p>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>1.</strong> Understand the compilation process in DSPy</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>2.</strong> Use different optimizers to improve program
+                                                performance</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>3.</strong> Select the right optimizer for your use case</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>4.</strong> Evaluate and compare optimization results</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>5.</strong> Implement custom optimization metrics</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>6.</strong> Build production-ready optimization pipelines</p>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <!-- Continue Button -->
+                            <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="what-is-rag.html" class="continue-btn">
-                                        <span>Continue to What is RAG?</span>
+                                    <a href="compilation-concept.html" class="continue-btn">
+                                        <span>Continue to Compilation Concept</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
