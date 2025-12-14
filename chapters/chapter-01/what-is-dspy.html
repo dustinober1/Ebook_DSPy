@@ -319,48 +319,55 @@ result = call_llm(classification_prompt)</code></pre>
                             <div class="content-block">
                                 <h2>What DSPy Provides</h2>
 
-                                <div class="feature-grid">
-                                    <div class="feature-card">
-                                        <div class="feature-icon">📝</div>
-                                        <h4>1. Signatures</h4>
-                                        <p>Task specifications that define <em>what</em> a task does, not <em>how</em>:
-                                        </p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python">class Summarize(dspy.Signature):
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>Signatures</h4>
+                                            <p>Task specifications that define <em>what</em> a task does, not
+                                                <em>how</em>:
+                                            </p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python">class Summarize(dspy.Signature):
     """Summarize the given text."""
     document: str = dspy.InputField()
     summary: str = dspy.OutputField(desc="concise summary in 2-3 sentences")</code></pre>
+                                            </div>
+                                            <p>Like a type signature in programming—specifies inputs and outputs.</p>
                                         </div>
-                                        <p>Like a type signature in programming—specifies inputs and outputs.</p>
                                     </div>
 
-                                    <div class="feature-card">
-                                        <div class="feature-icon">🧩</div>
-                                        <h4>2. Modules</h4>
-                                        <p>Reusable components that use signatures:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Create a summarization module
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧩</span>
+                                        <div class="section-content">
+                                            <h4>Modules</h4>
+                                            <p>Reusable components that use signatures:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Create a summarization module
 summarizer = dspy.Predict(Summarize)
 
 # Use it
 result = summarizer(document="Long text here...")
 print(result.summary)</code></pre>
+                                            </div>
+                                            <p>Modules can be combined, extended, and optimized.</p>
                                         </div>
-                                        <p>Modules can be combined, extended, and optimized.</p>
                                     </div>
 
-                                    <div class="feature-card">
-                                        <div class="feature-icon">⚡</div>
-                                        <h4>3. Optimizers</h4>
-                                        <p>Automatically improve your programs:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Optimize automatically
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚡</span>
+                                        <div class="section-content">
+                                            <h4>Optimizers</h4>
+                                            <p>Automatically improve your programs:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Optimize automatically
 from dspy.teleprompt import BootstrapFewShot
 
 optimizer = BootstrapFewShot(metric=your_metric)
 optimized_rag = optimizer.compile(RAGPipeline(), trainset=your_data)</code></pre>
+                                            </div>
+                                            <p>DSPy learns better prompts, examples, and module compositions!</p>
                                         </div>
-                                        <p>DSPy learns better prompts, examples, and module compositions!</p>
                                     </div>
                                 </div>
                             </div>
@@ -369,37 +376,46 @@ optimized_rag = optimizer.compile(RAGPipeline(), trainset=your_data)</code></pre
                             <div class="content-block">
                                 <h2>Core Concepts</h2>
 
-                                <div class="concepts-grid">
-                                    <div class="concept-item">
-                                        <h4>Signatures</h4>
-                                        <p>Think of signatures as function declarations for LM tasks:</p>
-                                        <div class="command-box">
-                                            <pre><code class="language-python"># Input -> Output specification
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📝</span>
+                                        <div class="section-content">
+                                            <h4>Signatures</h4>
+                                            <p>Think of signatures as function declarations for LM tasks:</p>
+                                            <div class="command-box">
+                                                <pre><code class="language-python"># Input -> Output specification
 class TranslateToFrench(dspy.Signature):
     english_text: str = dspy.InputField()
     french_text: str = dspy.OutputField()</code></pre>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="concept-item">
-                                        <h4>Modules</h4>
-                                        <p>Pre-built and custom components:</p>
-                                        <ul>
-                                            <li><code>dspy.Predict</code> - Basic prediction</li>
-                                            <li><code>dspy.ChainOfThought</code> - Step-by-step reasoning</li>
-                                            <li><code>dspy.ReAct</code> - Agent-style reasoning with tools</li>
-                                            <li><strong>Custom</strong> - Build your own!</li>
-                                        </ul>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧩</span>
+                                        <div class="section-content">
+                                            <h4>Modules</h4>
+                                            <p>Pre-built and custom components:</p>
+                                            <ul>
+                                                <li><code>dspy.Predict</code> - Basic prediction</li>
+                                                <li><code>dspy.ChainOfThought</code> - Step-by-step reasoning</li>
+                                                <li><code>dspy.ReAct</code> - Agent-style reasoning with tools</li>
+                                                <li><strong>Custom</strong> - Build your own!</li>
+                                            </ul>
+                                        </div>
                                     </div>
 
-                                    <div class="concept-item">
-                                        <h4>Teleprompters (Optimizers)</h4>
-                                        <p>Automatically improve your program:</p>
-                                        <ul>
-                                            <li><code>BootstrapFewShot</code> - Generate few-shot examples</li>
-                                            <li><code>MIPRO</code> - Optimize instructions and demonstrations</li>
-                                            <li><code>KNNFewShot</code> - Use similarity-based examples</li>
-                                        </ul>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚡</span>
+                                        <div class="section-content">
+                                            <h4>Teleprompters (Optimizers)</h4>
+                                            <p>Automatically improve your program:</p>
+                                            <ul>
+                                                <li><code>BootstrapFewShot</code> - Generate few-shot examples</li>
+                                                <li><code>MIPRO</code> - Optimize instructions and demonstrations</li>
+                                                <li><code>KNNFewShot</code> - Use similarity-based examples</li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
