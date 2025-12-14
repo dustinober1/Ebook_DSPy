@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup Instructions | DSPy: The Comprehensive Guide</title>
-    <meta name="description" content="Get your DSPy environment ready in 15-30 minutes with step-by-step setup instructions.">
+    <meta name="description"
+        content="Get your DSPy environment ready in 15-30 minutes with step-by-step setup instructions.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -85,17 +86,22 @@
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Introduction</span>
                     <h1 class="chapter-title">Setup Instructions</h1>
-                    <p class="chapter-description">Get your DSPy environment ready in 15-30 minutes with step-by-step setup instructions.</p>
+                    <p class="chapter-description">Get your DSPy environment ready in 15-30 minutes with step-by-step
+                        setup instructions.</p>
                     <div class="chapter-meta">
                         <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                             </svg>
                             Section 4 of 4
                         </span>
                         <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
@@ -397,24 +403,28 @@ pwd</code></pre>
                             <div class="content-block">
                                 <h2>Step 5: Configure API Access</h2>
 
-                                <div class="provider-selector">
-                                    <div class="provider-option selected" data-provider="openai">
+                                <div class="provider-selector" id="provider-selector">
+                                    <div class="provider-option selected" data-provider="openai"
+                                        onclick="selectProvider('openai')">
                                         <span class="provider-badge recommended">Recommended</span>
                                         <span class="provider-icon">💳</span>
                                         <span class="provider-name">OpenAI</span>
                                     </div>
-                                    <div class="provider-option" data-provider="anthropic">
+                                    <div class="provider-option" data-provider="anthropic"
+                                        onclick="selectProvider('anthropic')">
                                         <span class="provider-icon">🤖</span>
                                         <span class="provider-name">Claude</span>
                                     </div>
-                                    <div class="provider-option" data-provider="local">
+                                    <div class="provider-option" data-provider="local"
+                                        onclick="selectProvider('local')">
                                         <span class="provider-badge">Free</span>
                                         <span class="provider-icon">🏠</span>
                                         <span class="provider-name">Local</span>
                                     </div>
                                 </div>
 
-                                <div class="api-setup openai">
+                                <!-- OpenAI Instructions -->
+                                <div class="api-setup" id="setup-openai">
                                     <h4>Getting Your OpenAI API Key</h4>
                                     <ol class="setup-steps-list">
                                         <li><strong>Visit:</strong> <a href="https://platform.openai.com/"
@@ -425,6 +435,91 @@ pwd</code></pre>
                                         <li><strong>Create</strong> new secret key</li>
                                         <li><strong>Copy</strong> your key (starts with <code>sk-</code>)</li>
                                     </ol>
+
+                                    <div class="command-box">
+                                        <div class="command-header">
+                                            <span class="command-label">Add to your .env file:</span>
+                                        </div>
+                                        <pre><code class="language-bash">OPENAI_API_KEY=sk-your-actual-api-key-here</code></pre>
+                                    </div>
+                                </div>
+
+                                <!-- Claude/Anthropic Instructions -->
+                                <div class="api-setup" id="setup-anthropic" style="display: none;">
+                                    <h4>Getting Your Anthropic Claude API Key</h4>
+                                    <ol class="setup-steps-list">
+                                        <li><strong>Visit:</strong> <a href="https://console.anthropic.com/"
+                                                target="_blank">console.anthropic.com</a>
+                                        </li>
+                                        <li><strong>Sign up</strong> or <strong>log in</strong></li>
+                                        <li><strong>Navigate</strong> to Settings → API Keys</li>
+                                        <li><strong>Create</strong> new API key</li>
+                                        <li><strong>Copy</strong> your key (starts with <code>sk-ant-</code>)</li>
+                                    </ol>
+
+                                    <div class="command-box">
+                                        <div class="command-header">
+                                            <span class="command-label">Add to your .env file:</span>
+                                        </div>
+                                        <pre><code class="language-bash">ANTHROPIC_API_KEY=sk-ant-your-actual-api-key-here</code></pre>
+                                    </div>
+
+                                    <div class="tip-box">
+                                        <span class="tip-icon">💡</span>
+                                        <p><strong>Using Claude in DSPy:</strong></p>
+                                    </div>
+                                    <div class="command-box">
+                                        <pre><code class="language-python">lm = dspy.LM(
+    model="anthropic/claude-3-5-sonnet-20241022",
+    api_key=os.getenv("ANTHROPIC_API_KEY")
+)
+dspy.configure(lm=lm)</code></pre>
+                                    </div>
+                                </div>
+
+                                <!-- Local/Ollama Instructions -->
+                                <div class="api-setup" id="setup-local" style="display: none;">
+                                    <h4>Setting Up Local Models with Ollama (Free!)</h4>
+                                    <ol class="setup-steps-list">
+                                        <li><strong>Download Ollama:</strong> <a href="https://ollama.ai/"
+                                                target="_blank">ollama.ai</a>
+                                        </li>
+                                        <li><strong>Install</strong> Ollama for your operating system</li>
+                                        <li><strong>Open terminal</strong> and pull a model:</li>
+                                    </ol>
+
+                                    <div class="command-box">
+                                        <div class="command-header">
+                                            <span class="command-label">Pull a lightweight model (~500MB):</span>
+                                        </div>
+                                        <pre><code class="language-bash">ollama pull qwen2.5:0.5b</code></pre>
+                                    </div>
+
+                                    <div class="command-box">
+                                        <div class="command-header">
+                                            <span class="command-label">Start Ollama server:</span>
+                                        </div>
+                                        <pre><code class="language-bash">ollama serve</code></pre>
+                                    </div>
+
+                                    <div class="tip-box">
+                                        <span class="tip-icon">💡</span>
+                                        <p><strong>Using Ollama in DSPy:</strong></p>
+                                    </div>
+                                    <div class="command-box">
+                                        <pre><code class="language-python">lm = dspy.LM(
+    model="ollama_chat/qwen2.5:0.5b",
+    api_base="http://localhost:11434"
+)
+dspy.configure(lm=lm)</code></pre>
+                                    </div>
+
+                                    <div class="local-benefits">
+                                        <span class="benefit">✅ Completely free</span>
+                                        <span class="benefit">✅ No API keys needed</span>
+                                        <span class="benefit">✅ Runs offline</span>
+                                        <span class="benefit">✅ Data stays private</span>
+                                    </div>
                                 </div>
 
                                 <div class="command-box">
@@ -434,33 +529,10 @@ pwd</code></pre>
                                     <pre><code class="language-bash">touch .env</code></pre>
                                 </div>
 
-                                <div class="command-box">
-                                    <div class="command-header">
-                                        <span class="command-label">Add your key to .env:</span>
-                                    </div>
-                                    <pre><code class="language-bash">OPENAI_API_KEY=sk-your-actual-api-key-here</code></pre>
-                                </div>
-
                                 <div class="security-warning">
                                     <span class="warning-icon">🚨</span>
                                     <p><strong>Security Warning:</strong> Never commit API keys to Git or share them
                                         publicly!</p>
-                                </div>
-
-                                <div class="local-option">
-                                    <h4>Using Local Models (Free Option)</h4>
-                                    <ol class="setup-steps-list">
-                                        <li><strong>Install Ollama:</strong> <a href="https://ollama.ai/"
-                                                target="_blank">ollama.ai</a>
-                                        </li>
-                                        <li><strong>Pull model:</strong> <code>ollama pull qwen2.5:0.5b</code></li>
-                                        <li><strong>Use locally:</strong> No costs, no API keys!</li>
-                                    </ol>
-                                    <div class="local-benefits">
-                                        <span class="benefit">✅ Only ~0.5GB</span>
-                                        <span class="benefit">✅ Runs on most computers</span>
-                                        <span class="benefit">✅ Free and private</span>
-                                    </div>
                                 </div>
                             </div>
 
@@ -662,6 +734,37 @@ pip install -r requirements.txt</code></pre>
     <script src="../../assets/js/main.js?v=1"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
     <script>
+        // Provider selector tab functionality
+        function selectProvider(provider) {
+            // Update tab selection
+            const tabs = document.querySelectorAll('.provider-option');
+            tabs.forEach(tab => {
+                if (tab.dataset.provider === provider) {
+                    tab.classList.add('selected');
+                } else {
+                    tab.classList.remove('selected');
+                }
+            });
+
+            // Show/hide content sections
+            const sections = ['openai', 'anthropic', 'local'];
+            sections.forEach(section => {
+                const el = document.getElementById('setup-' + section);
+                if (el) {
+                    if (section === provider) {
+                        el.style.display = 'block';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                }
+            });
+
+            // Re-highlight code blocks
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 50);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             if (window.initChapter) {
                 window.initChapter({});
