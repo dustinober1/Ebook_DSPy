@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solutions | Chapter 3 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Complete solutions for Chapter 3 exercises - custom modules and pipeline implementations.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 3</h2>
+                <span class="sidebar-subtitle">Modules</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-are-modules">
+                        <a href="what-are-modules.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What Are Modules?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="built-in-modules">
+                        <a href="built-in-modules.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Built-in Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="custom-modules">
+                        <a href="custom-modules.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Creating Custom Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="module-composition">
+                        <a href="module-composition.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Module Composition</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-04/index.html" class="next-chapter-btn">
+                    Next: Chapter 04 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 3 · Section 7</span>
+                    <h1 class="chapter-title">Solutions</h1>
+                    <p class="chapter-description">Complete solutions with explanations for all Chapter 3 exercises.
+                    </p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            5 Solutions
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="solutions" data-section="solutions">
+                        <div class="markdown-content" id="solutions-content">
+
+                            <!-- Warning -->
+                            <div class="content-block">
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Spoiler Alert!</strong> Try to complete the exercises on your own before
+                                        viewing these solutions.</p>
+                                </div>
+                            </div>
+
+                            <!-- Solution 1 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 1</span>
+                                    <span class="difficulty beginner">⭐ Beginner</span>
+                                </div>
+                                <h3>Comparing Built-in Modules</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dotenv import load_dotenv
+
+load_dotenv()
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Define the signature
+class MathWordProblem(dspy.Signature):
+    """Solve the math word problem step by step."""
+    problem: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+# Create modules with the same signature
+simple_solver = dspy.Predict(MathWordProblem)
+reasoning_solver = dspy.ChainOfThought(MathWordProblem)
+
+# The test problem
+problem = """
+A store has 234 apples. If 67 are sold and 45 more are delivered, 
+how many apples are there now?
+"""
+
+# Compare results
+print("=" * 60)
+print("PREDICT (Simple)")
+print("=" * 60)
+result1 = simple_solver(problem=problem)
+print(f"Answer: {result1.answer}")
+
+print("\n" + "=" * 60)
+print("CHAIN OF THOUGHT (With Reasoning)")
+print("=" * 60)
+result2 = reasoning_solver(problem=problem)
+print(f"Reasoning: {result2.rationale}")
+print(f"Answer: {result2.answer}")
+
+# Correct answer: 234 - 67 + 45 = 212</code></pre>
+                                </div>
+
+                                <div class="expected-output">
+                                    <h4>Expected Output:</h4>
+                                    <pre>PREDICT (Simple)
+Answer: 212 apples
+
+CHAIN OF THOUGHT (With Reasoning)
+Reasoning: Let me solve this step by step:
+1. Starting apples: 234
+2. Sold: 234 - 67 = 167
+3. Delivered: 167 + 45 = 212
+Answer: 212 apples</pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Insight</h4>
+                                            <p>ChainOfThought automatically adds the <code>rationale</code> field,
+                                                showing its work. For math problems, both may get the right answer, but
+                                                CoT is more reliable for complex problems.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solution 2 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 2</span>
+                                    <span class="difficulty beginner">⭐ Beginner</span>
+                                </div>
+                                <h3>Your First Custom Module</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dotenv import load_dotenv
+
+load_dotenv()
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signatures for the two steps
+class ExtractKeyPoints(dspy.Signature):
+    """Extract the key points from the document."""
+    document: str = dspy.InputField()
+    key_points: list[str] = dspy.OutputField(
+        desc="List of 3-5 key points from the document"
+    )
+
+class SynthesizeSummary(dspy.Signature):
+    """Create a coherent summary from key points."""
+    key_points: str = dspy.InputField(desc="Key points to synthesize")
+    summary: str = dspy.OutputField(
+        desc="Coherent 2-3 sentence summary"
+    )
+
+# The custom module
+class TwoStepSummarizer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.extract = dspy.Predict(ExtractKeyPoints)
+        self.synthesize = dspy.Predict(SynthesizeSummary)
+    
+    def forward(self, document: str):
+        # Step 1: Extract key points
+        extraction = self.extract(document=document)
+        
+        # Step 2: Synthesize into summary
+        points_text = "\n".join([f"- {p}" for p in extraction.key_points])
+        synthesis = self.synthesize(key_points=points_text)
+        
+        return dspy.Prediction(
+            key_points=extraction.key_points,
+            final_summary=synthesis.summary
+        )
+
+# Test it
+summarizer = TwoStepSummarizer()
+
+document = """
+Machine learning is a subset of artificial intelligence that enables 
+systems to learn from data without being explicitly programmed. It uses 
+algorithms to identify patterns and make decisions. There are three main 
+types: supervised learning, unsupervised learning, and reinforcement 
+learning. ML is used in many applications including image recognition, 
+natural language processing, and recommendation systems. The field has 
+grown rapidly due to increased computing power and data availability.
+"""
+
+result = summarizer(document=document)
+
+print("Key Points:")
+for i, point in enumerate(result.key_points, 1):
+    print(f"  {i}. {point}")
+
+print(f"\nFinal Summary: {result.final_summary}")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Insight</h4>
+                                            <p>The two-step approach often produces better summaries than a single-step
+                                                approach because it forces structured analysis first.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solution 3 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 3</span>
+                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
+                                </div>
+                                <h3>Branching Pipeline</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from typing import Literal
+from dotenv import load_dotenv
+
+load_dotenv()
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signatures
+class ClassifyRequest(dspy.Signature):
+    """Classify the type of user request."""
+    request: str = dspy.InputField()
+    category: Literal["question", "creative", "technical", "casual"] = dspy.OutputField()
+
+class AnswerQuestion(dspy.Signature):
+    """Answer the question with clear reasoning."""
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+class CreativeResponse(dspy.Signature):
+    """Generate creative content as requested."""
+    request: str = dspy.InputField()
+    response: str = dspy.OutputField(desc="Creative, engaging response")
+
+class TechnicalExplanation(dspy.Signature):
+    """Provide a technical explanation."""
+    topic: str = dspy.InputField()
+    explanation: str = dspy.OutputField(desc="Clear technical explanation")
+
+class CasualReply(dspy.Signature):
+    """Reply in a casual, friendly manner."""
+    message: str = dspy.InputField()
+    reply: str = dspy.OutputField()
+
+# The branching module
+class SmartAssistant(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.classifier = dspy.Predict(ClassifyRequest)
+        
+        # Different handlers for different request types
+        self.question_handler = dspy.ChainOfThought(AnswerQuestion)
+        self.creative_handler = dspy.Predict(CreativeResponse)
+        self.technical_handler = dspy.ChainOfThought(TechnicalExplanation)
+        self.casual_handler = dspy.Predict(CasualReply)
+    
+    def forward(self, request: str):
+        # Step 1: Classify
+        classification = self.classifier(request=request)
+        category = classification.category
+        
+        # Step 2: Route to appropriate handler
+        if category == "question":
+            result = self.question_handler(question=request)
+            response = result.answer
+            reasoning = result.rationale
+        elif category == "creative":
+            result = self.creative_handler(request=request)
+            response = result.response
+            reasoning = None
+        elif category == "technical":
+            result = self.technical_handler(topic=request)
+            response = result.explanation
+            reasoning = result.rationale
+        else:  # casual
+            result = self.casual_handler(message=request)
+            response = result.reply
+            reasoning = None
+        
+        return dspy.Prediction(
+            category=category,
+            response=response,
+            reasoning=reasoning,
+            path_taken=category + "_handler"
+        )
+
+# Test with different inputs
+assistant = SmartAssistant()
+
+test_cases = [
+    "Write a short poem about clouds",
+    "Why is the sky blue?",
+    "Explain how a compiler works",
+    "Hey, what's up?"
+]
+
+for request in test_cases:
+    print("=" * 60)
+    print(f"Request: {request}")
+    result = assistant(request=request)
+    print(f"Category: {result.category}")
+    print(f"Path: {result.path_taken}")
+    print(f"Response: {result.response[:200]}...")
+    if result.reasoning:
+        print(f"Reasoning: {result.reasoning[:100]}...")
+    print()</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Insight</h4>
+                                            <p>Branching allows you to use the right module for each task type—CoT for
+                                                reasoning, simple Predict for casual chat. This optimizes both quality
+                                                and cost.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solution 4 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 4</span>
+                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
+                                </div>
+                                <h3>Multi-Step Analysis Pipeline</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from typing import Literal
+from dotenv import load_dotenv
+
+load_dotenv()
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signatures for each analysis type
+class SentimentAnalysis(dspy.Signature):
+    """Analyze the sentiment of the article."""
+    article: str = dspy.InputField()
+    sentiment: Literal["positive", "negative", "neutral", "mixed"] = dspy.OutputField()
+    sentiment_score: float = dspy.OutputField(desc="-1.0 to 1.0 scale")
+
+class EntityExtraction(dspy.Signature):
+    """Extract key entities from the article."""
+    article: str = dspy.InputField()
+    people: list[str] = dspy.OutputField()
+    organizations: list[str] = dspy.OutputField()
+    topics: list[str] = dspy.OutputField()
+
+class TopicClassification(dspy.Signature):
+    """Classify the main topic of the article."""
+    article: str = dspy.InputField()
+    primary_topic: str = dspy.OutputField()
+    secondary_topics: list[str] = dspy.OutputField()
+
+class BiasDetection(dspy.Signature):
+    """Detect potential bias in the article."""
+    article: str = dspy.InputField()
+    bias_level: Literal["none", "slight", "moderate", "strong"] = dspy.OutputField()
+    bias_direction: str = dspy.OutputField(desc="e.g., 'pro-company', 'anti-regulation'")
+    indicators: list[str] = dspy.OutputField(desc="Phrases indicating bias")
+
+class CompileReport(dspy.Signature):
+    """Compile analysis results into a summary report."""
+    sentiment: str = dspy.InputField()
+    entities: str = dspy.InputField()
+    topics: str = dspy.InputField()
+    bias: str = dspy.InputField()
+    executive_summary: str = dspy.OutputField(desc="2-3 sentence summary")
+
+# The analyzer module
+class NewsAnalyzer(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.sentiment_analyzer = dspy.Predict(SentimentAnalysis)
+        self.entity_extractor = dspy.Predict(EntityExtraction)
+        self.topic_classifier = dspy.Predict(TopicClassification)
+        self.bias_detector = dspy.ChainOfThought(BiasDetection)
+        self.report_compiler = dspy.Predict(CompileReport)
+    
+    def forward(self, article: str):
+        # Run parallel analyses
+        sentiment = self.sentiment_analyzer(article=article)
+        entities = self.entity_extractor(article=article)
+        topics = self.topic_classifier(article=article)
+        bias = self.bias_detector(article=article)
+        
+        # Compile into report
+        report = self.report_compiler(
+            sentiment=f"{sentiment.sentiment} (score: {sentiment.sentiment_score})",
+            entities=f"People: {entities.people}, Orgs: {entities.organizations}",
+            topics=f"Primary: {topics.primary_topic}, Secondary: {topics.secondary_topics}",
+            bias=f"Level: {bias.bias_level}, Direction: {bias.bias_direction}"
+        )
+        
+        return dspy.Prediction(
+            sentiment=sentiment.sentiment,
+            sentiment_score=sentiment.sentiment_score,
+            people=entities.people,
+            organizations=entities.organizations,
+            primary_topic=topics.primary_topic,
+            secondary_topics=topics.secondary_topics,
+            bias_level=bias.bias_level,
+            bias_direction=bias.bias_direction,
+            bias_indicators=bias.indicators,
+            executive_summary=report.executive_summary
+        )
+
+# Test
+analyzer = NewsAnalyzer()
+
+article = """
+Tech giant XYZ Corp announced record profits today, 
+exceeding analyst expectations by 15%. CEO Jane Smith 
+attributed the success to their new AI product line, 
+which has seen rapid adoption across enterprise customers. 
+Critics argue the company's market dominance raises 
+antitrust concerns, while investors remain bullish on 
+the stock's future performance.
+"""
+
+result = analyzer(article=article)
+
+print("=" * 60)
+print("NEWS ANALYSIS REPORT")
+print("=" * 60)
+print(f"\n📊 Sentiment: {result.sentiment} ({result.sentiment_score})")
+print(f"\n👥 People: {result.people}")
+print(f"🏢 Organizations: {result.organizations}")
+print(f"\n📰 Primary Topic: {result.primary_topic}")
+print(f"   Secondary: {result.secondary_topics}")
+print(f"\n⚖️ Bias Level: {result.bias_level}")
+print(f"   Direction: {result.bias_direction}")
+print(f"   Indicators: {result.bias_indicators}")
+print(f"\n📋 Executive Summary: {result.executive_summary}")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Insight</h4>
+                                            <p>Parallel analysis followed by synthesis creates comprehensive insights.
+                                                Each analyzer focuses on its specialty, and the compiler creates a
+                                                unified view.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Solution 5 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 5</span>
+                                    <span class="difficulty advanced">⭐⭐⭐ Advanced</span>
+                                </div>
+                                <h3>Complete Application: Study Assistant</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from typing import Literal
+from dotenv import load_dotenv
+
+load_dotenv()
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signatures
+class CreateSummary(dspy.Signature):
+    """Create a concise summary of the study material."""
+    material: str = dspy.InputField()
+    summary: str = dspy.OutputField(desc="3-5 sentence summary")
+
+class GenerateStudyQuestion(dspy.Signature):
+    """Generate a study question with its answer."""
+    material: str = dspy.InputField()
+    focus_area: str = dspy.InputField()
+    question: str = dspy.OutputField()
+    answer: str = dspy.OutputField()
+
+class ExplainConcept(dspy.Signature):
+    """Explain a specific concept in simple terms."""
+    material: str = dspy.InputField()
+    concept: str = dspy.InputField()
+    explanation: str = dspy.OutputField(desc="Clear explanation for a student")
+    example: str = dspy.OutputField(desc="Concrete example")
+
+class CreateFlashcard(dspy.Signature):
+    """Create a flashcard from the material."""
+    material: str = dspy.InputField()
+    topic_hint: str = dspy.InputField()
+    front: str = dspy.OutputField(desc="Question or term")
+    back: str = dspy.OutputField(desc="Answer or definition")
+
+class IdentifyTopics(dspy.Signature):
+    """Identify the main topics in the material."""
+    material: str = dspy.InputField()
+    topics: list[str] = dspy.OutputField()
+
+# The Study Assistant Module
+class StudyAssistant(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        # Sub-modules
+        self.summarizer = dspy.Predict(CreateSummary)
+        self.question_gen = dspy.ChainOfThought(GenerateStudyQuestion)
+        self.explainer = dspy.ChainOfThought(ExplainConcept)
+        self.flashcard_gen = dspy.Predict(CreateFlashcard)
+        self.topic_identifier = dspy.Predict(IdentifyTopics)
+        
+        self.material = ""
+    
+    def set_material(self, material: str):
+        """Set the study material."""
+        if not material or len(material.strip()) < 50:
+            raise ValueError("Material must be at least 50 characters")
+        self.material = material
+    
+    def summarize(self) -> str:
+        """Get a summary of the material."""
+        if not self.material:
+            raise ValueError("No material loaded. Call set_material() first.")
+        
+        result = self.summarizer(material=self.material)
+        return result.summary
+    
+    def generate_questions(self, n: int = 5) -> list[dict]:
+        """Generate N study questions with answers."""
+        if not self.material:
+            raise ValueError("No material loaded. Call set_material() first.")
+        
+        # First identify topics to generate diverse questions
+        topics = self.topic_identifier(material=self.material)
+        
+        questions = []
+        for i in range(n):
+            # Cycle through topics
+            focus = topics.topics[i % len(topics.topics)]
+            result = self.question_gen(
+                material=self.material,
+                focus_area=f"{focus} (question {i+1})"
+            )
+            questions.append({
+                "question": result.question,
+                "answer": result.answer,
+                "topic": focus
+            })
+        
+        return questions
+    
+    def explain_concept(self, concept: str) -> dict:
+        """Explain a specific concept from the material."""
+        if not self.material:
+            raise ValueError("No material loaded. Call set_material() first.")
+        
+        result = self.explainer(
+            material=self.material,
+            concept=concept
+        )
+        
+        return {
+            "concept": concept,
+            "explanation": result.explanation,
+            "example": result.example
+        }
+    
+    def create_flashcards(self, n: int = 5) -> list[dict]:
+        """Generate N flashcard pairs."""
+        if not self.material:
+            raise ValueError("No material loaded. Call set_material() first.")
+        
+        topics = self.topic_identifier(material=self.material)
+        
+        flashcards = []
+        for i in range(n):
+            topic = topics.topics[i % len(topics.topics)]
+            result = self.flashcard_gen(
+                material=self.material,
+                topic_hint=topic
+            )
+            flashcards.append({
+                "front": result.front,
+                "back": result.back
+            })
+        
+        return flashcards
+    
+    def full_study_guide(self) -> dict:
+        """Generate a complete study guide."""
+        if not self.material:
+            raise ValueError("No material loaded. Call set_material() first.")
+        
+        print("📝 Generating summary...")
+        summary = self.summarize()
+        
+        print("❓ Generating questions...")
+        questions = self.generate_questions(n=5)
+        
+        print("📇 Creating flashcards...")
+        flashcards = self.create_flashcards(n=5)
+        
+        print("✅ Study guide complete!")
+        
+        return {
+            "summary": summary,
+            "questions": questions,
+            "flashcards": flashcards
+        }
+
+# Usage Example
+assistant = StudyAssistant()
+
+material = """
+Photosynthesis is the process by which plants convert light energy into 
+chemical energy stored in glucose. It occurs primarily in the leaves, 
+within organelles called chloroplasts. The process has two main stages: 
+the light-dependent reactions and the Calvin cycle (light-independent 
+reactions).
+
+During light-dependent reactions, chlorophyll absorbs sunlight and uses 
+it to split water molecules, releasing oxygen as a byproduct and creating 
+ATP and NADPH. The Calvin cycle then uses this ATP and NADPH to convert 
+carbon dioxide into glucose through a series of enzyme-catalyzed reactions.
+
+The overall equation for photosynthesis is:
+6CO2 + 6H2O + light energy → C6H12O6 + 6O2
+
+Factors affecting photosynthesis include light intensity, carbon dioxide 
+concentration, and temperature. Plants have evolved various adaptations 
+to optimize photosynthesis in different environments.
+"""
+
+# Set the material
+assistant.set_material(material)
+
+# Generate full study guide
+guide = assistant.full_study_guide()
+
+print("\n" + "=" * 60)
+print("STUDY GUIDE: PHOTOSYNTHESIS")
+print("=" * 60)
+
+print("\n📋 SUMMARY:")
+print(guide["summary"])
+
+print("\n❓ STUDY QUESTIONS:")
+for i, q in enumerate(guide["questions"], 1):
+    print(f"\n{i}. {q['question']}")
+    print(f"   Answer: {q['answer']}")
+
+print("\n📇 FLASHCARDS:")
+for i, f in enumerate(guide["flashcards"], 1):
+    print(f"\nCard {i}:")
+    print(f"   Front: {f['front']}")
+    print(f"   Back: {f['back']}")
+
+# Try explaining a concept
+print("\n" + "=" * 60)
+explanation = assistant.explain_concept("Calvin cycle")
+print(f"\n📖 CONCEPT: {explanation['concept']}")
+print(f"Explanation: {explanation['explanation']}")
+print(f"Example: {explanation['example']}")</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💡</span>
+                                        <div class="section-content">
+                                            <h4>Key Insights</h4>
+                                            <p>This module demonstrates: (1) Stateful modules with
+                                                <code>set_material()</code>,
+                                                (2) Multiple public methods, (3) Error handling, (4) Composition of
+                                                multiple analyses, (5) Real-world application design.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Chapter Summary</h2>
+
+                                <p>In this chapter, you learned:</p>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Modules execute signatures</strong> — they're the implementation
+                                                to signatures' specification</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Built-in modules</strong> — Predict, ChainOfThought,
+                                                ProgramOfThought, ReAct for different needs</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Custom modules</strong> — inherit from dspy.Module with __init__
+                                                and forward</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Composition patterns</strong> — sequential, parallel, branching
+                                                pipelines</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>dspy.Prediction</strong> — structured return values from modules
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue to Chapter 4 -->
+                            <div class="content-block">
+                                <div class="success-content">
+                                    <span class="success-icon-large">🎉</span>
+                                    <h2>Congratulations!</h2>
+                                    <p>You've completed Chapter 3: Modules! You can now build powerful, composable LM
+                                        applications.</p>
+                                </div>
+                                <div class="continue-btn-container">
+                                    <a href="../chapter-04/index.html" class="continue-btn next-chapter-main-btn">
+                                        <span>Start Chapter 4: Optimizers</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
