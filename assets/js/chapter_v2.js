@@ -204,6 +204,7 @@ async function loadHtmlContent(url, targetId) {
         targetElement.innerHTML = `
             <div class="error-message">
                 <p><strong>Unable to load content.</strong></p>
+                <p class="error-details" style="font-family: monospace; font-size: 0.8em; color: #d32f2f; margin-top: 5px;">${error.message}</p>
                 <p>Please try refreshing the page.</p>
             </div>
         `;
