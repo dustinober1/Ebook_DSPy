@@ -173,6 +173,9 @@ async function convertMarkdownToHTML(sourcePath, targetPath, title) {
 function buildNavigation(currentTitle) {
   let html = `
     <div class="logo">
+      <div class="logo-icon">
+        <img src="/assets/logos/logo-512.png" alt="DSPy Logo" />
+      </div>
       <h1>DSPy</h1>
       <div class="subtitle">A Practical Guide</div>
     </div>
@@ -302,7 +305,11 @@ async function createIndex() {
   const indexContent = `
     <div class="page-wrapper">
       <div class="content" style="text-align: center; padding-top: 4rem;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem;">DSPy: A Practical Guide</h1>
+        <div class="cover-container">
+          <img src="/assets/covers/cover.jpg" alt="DSPy: A Practical Guide - Cover" class="cover-image" />
+        </div>
+
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; margin-top: 2rem;">DSPy: A Practical Guide</h1>
         <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem;">
           Programming Foundation Models
         </p>
