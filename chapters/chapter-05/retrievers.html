@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retriever Modules | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn to use DSPy's retriever modules to connect with vector databases and search engines.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Retrieval</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-is-rag">
+                        <a href="what-is-rag.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What is RAG?</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="retrievers">
+                        <a href="retrievers.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Retriever Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="rag-pipelines">
+                        <a href="rag-pipelines.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Building RAG Pipelines</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced-rag">
+                        <a href="advanced-rag.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced RAG Patterns</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 3</span>
+                    <h1 class="chapter-title">Retriever Modules</h1>
+                    <p class="chapter-description">Connect DSPy to vector databases, search engines, and custom
+                        retrieval backends.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="retrievers" data-section="retrievers">
+                        <div class="markdown-content" id="retrievers-content">
+
+                            <!-- dspy.Retrieve Overview -->
+                            <div class="content-block">
+                                <h2>🔧 DSPy Retriever Interface</h2>
+
+                                <p>DSPy provides a standard retriever interface that works with various backends:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Configure a retriever (we'll show specific backends below)
+retriever_model = dspy.ColBERTv2(url="http://...")
+
+# Use dspy.Retrieve module
+retrieve = dspy.Retrieve(k=5)  # Get top 5 documents
+
+# Call it with a query
+results = retrieve(query="What is machine learning?")
+
+# Results format
+for passage in results.passages:
+    print(passage)</code></pre>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Key point:</strong> <code>dspy.Retrieve</code> is a module that
+                                        interfaces with a configured retrieval model (RM).</p>
+                                </div>
+                            </div>
+
+                            <!-- Retriever Options -->
+                            <div class="content-block">
+                                <h2>📚 Available Retrievers</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Retriever</th>
+                                                <th>Type</th>
+                                                <th>Best For</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>dspy.ColBERTv2</code></td>
+                                                <td>Dense retrieval</td>
+                                                <td>High-quality semantic search</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>dspy.ChromadbRM</code></td>
+                                                <td>Vector DB</td>
+                                                <td>Local development, small-medium scale</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>dspy.PineconeRM</code></td>
+                                                <td>Vector DB</td>
+                                                <td>Production, large scale</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>dspy.WeaviateRM</code></td>
+                                                <td>Vector DB</td>
+                                                <td>Hybrid keyword + semantic</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Custom</td>
+                                                <td>Any</td>
+                                                <td>Your own backend</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- ChromaDB Example -->
+                            <div class="content-block">
+                                <h2>🗄️ ChromaDB Integration</h2>
+
+                                <p>ChromaDB is an open-source embedding database, great for local development:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-bash"># Install ChromaDB
+pip install chromadb</code></pre>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import chromadb
+import dspy
+from chromadb.utils import embedding_functions
+
+# Create ChromaDB client
+chroma_client = chromadb.Client()
+
+# Use OpenAI embeddings (or any other)
+openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+    api_key="your-api-key",
+    model_name="text-embedding-3-small"
+)
+
+# Create a collection
+collection = chroma_client.create_collection(
+    name="my_documents",
+    embedding_function=openai_ef
+)
+
+# Add documents
+documents = [
+    "DSPy is a framework for programming language models.",
+    "Python is a programming language.",
+    "Machine learning uses data to make predictions.",
+    "Neural networks are inspired by the brain.",
+    "Transformers revolutionized NLP.",
+]
+
+collection.add(
+    documents=documents,
+    ids=[f"doc_{i}" for i in range(len(documents))]
+)
+
+# Create custom retriever function
+def chromadb_retrieve(query: str, k: int = 3):
+    results = collection.query(
+        query_texts=[query],
+        n_results=k
+    )
+    return results["documents"][0]
+
+# Use in a DSPy module
+class ChromaRAG(dspy.Module):
+    def __init__(self, k=3):
+        self.k = k
+        self.generate = dspy.ChainOfThought("context, question -> answer")
+    
+    def forward(self, question):
+        # Retrieve
+        docs = chromadb_retrieve(question, self.k)
+        context = "\n".join(docs)
+        
+        # Generate
+        return self.generate(context=context, question=question)
+
+# Test it
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+rag = ChromaRAG()
+result = rag(question="What is DSPy?")
+print(result.answer)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Creating Custom Retriever -->
+                            <div class="content-block">
+                                <h2>🔨 Creating a Custom Retriever</h2>
+
+                                <p>You can create a retriever that works with any backend:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from typing import List, Optional
+
+class CustomRetriever(dspy.Retrieve):
+    """Custom retriever that wraps your search backend."""
+    
+    def __init__(self, search_client, k: int = 3):
+        super().__init__(k=k)
+        self.client = search_client
+    
+    def forward(self, query: str, k: Optional[int] = None) -> dspy.Prediction:
+        k = k if k is not None else self.k
+        
+        # Call your backend
+        results = self.client.search(query, num_results=k)
+        
+        # Return in DSPy format
+        return dspy.Prediction(
+            passages=[r["text"] for r in results]
+        )
+
+# Use with any search backend
+# retriever = CustomRetriever(my_elasticsearch_client, k=5)
+# results = retriever("What is DSPy?")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Simple In-Memory Retriever -->
+                            <div class="content-block">
+                                <h2>📋 Simple In-Memory Retriever</h2>
+
+                                <p>For learning and testing, here's a simple TF-IDF based retriever:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+class SimpleRetriever:
+    """A simple TF-IDF based retriever for testing."""
+    
+    def __init__(self, documents: list):
+        self.documents = documents
+        self.vectorizer = TfidfVectorizer()
+        self.doc_vectors = self.vectorizer.fit_transform(documents)
+    
+    def __call__(self, query: str, k: int = 3) -> list:
+        # Vectorize query
+        query_vector = self.vectorizer.transform([query])
+        
+        # Calculate similarities
+        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
+        
+        # Get top k indices
+        top_indices = np.argsort(similarities)[::-1][:k]
+        
+        # Return documents
+        return [self.documents[i] for i in top_indices]
+
+# Usage
+docs = [
+    "DSPy is a framework for programming language models.",
+    "Python is widely used in data science.",
+    "Neural networks can learn complex patterns.",
+    "GPT models are large language models.",
+    "Machine learning automates analytical model building.",
+]
+
+retriever = SimpleRetriever(docs)
+results = retriever("What is DSPy?", k=2)
+print(results)
+# ['DSPy is a framework for programming language models.', 
+#  'GPT models are large language models.']</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Configuring Retrieval Model -->
+                            <div class="content-block">
+                                <h2>⚙️ Configuring DSPy with Retrieval</h2>
+
+                                <p>You can configure both LM and RM in DSPy:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+# Configure language model
+lm = dspy.LM("openai/gpt-4o-mini")
+
+# Configure retrieval model (if using dspy.Retrieve)
+# rm = dspy.ColBERTv2(url="http://...")
+
+# Set up DSPy
+dspy.configure(lm=lm)
+
+# Now dspy.Retrieve will use the configured RM
+# retrieve = dspy.Retrieve(k=3)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Retrieval Parameters -->
+                            <div class="content-block">
+                                <h2>🎛️ Key Retrieval Parameters</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔢</span>
+                                        <div class="section-content">
+                                            <h4>k (number of results)</h4>
+                                            <p>How many documents to retrieve. Too few = missing info, too many =
+                                                noise.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>Similarity threshold</h4>
+                                            <p>Minimum similarity score to include a document. Filters out weak
+                                                matches.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📏</span>
+                                        <div class="section-content">
+                                            <h4>Chunk size</h4>
+                                            <p>How large each document chunk should be. Balance between context and
+                                                specificity.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔀</span>
+                                        <div class="section-content">
+                                            <h4>Chunk overlap</h4>
+                                            <p>Overlap between chunks to avoid cutting off important context.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Starting values:</strong> k=5, chunk_size=500 characters,
+                                        chunk_overlap=50 characters. Tune based on your data.</p>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>dspy.Retrieve</strong> is the standard retriever interface</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Multiple backends:</strong> ChromaDB, Pinecone, Weaviate, custom
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Easy to create custom retrievers</strong> for your backend</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Key parameter:</strong> k controls how many documents to
+                                                retrieve</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="rag-pipelines.html" class="continue-btn">
+                                        <span>Continue to Building RAG Pipelines</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

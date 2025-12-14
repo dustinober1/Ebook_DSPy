@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced RAG Patterns | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Master advanced RAG patterns - multi-hop retrieval, iterative RAG, and hybrid search strategies.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Retrieval</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-is-rag">
+                        <a href="what-is-rag.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What is RAG?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="retrievers">
+                        <a href="retrievers.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Retriever Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="rag-pipelines">
+                        <a href="rag-pipelines.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Building RAG Pipelines</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="advanced-rag">
+                        <a href="advanced-rag.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced RAG Patterns</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 5</span>
+                    <h1 class="chapter-title">Advanced RAG Patterns</h1>
+                    <p class="chapter-description">Multi-hop reasoning, iterative retrieval, and hybrid search for
+                        complex questions.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="advanced-rag" data-section="advanced-rag">
+                        <div class="markdown-content" id="advanced-rag-content">
+
+                            <!-- Multi-Hop RAG -->
+                            <div class="content-block">
+                                <h2>🔗 Multi-Hop RAG</h2>
+
+                                <p>Some questions require information from multiple documents that need to be connected:
+                                </p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">Question: "Who is the CEO of the company that acquired Twitter?"
+
+Step 1: Retrieve → "Twitter was acquired by X Corp"
+Step 2: Extract → "X Corp" 
+Step 3: Retrieve → "X Corp is owned by Elon Musk"
+Step 4: Answer → "Elon Musk"</code></pre>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+
+class GenerateSearchQuery(dspy.Signature):
+    """Generate a search query to find missing information."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    search_query: str = dspy.OutputField()
+
+class GenerateAnswer(dspy.Signature):
+    """Answer based on accumulated context."""
+    context: str = dspy.InputField()
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+class MultiHopRAG(dspy.Module):
+    def __init__(self, retriever, max_hops=3):
+        self.retriever = retriever
+        self.max_hops = max_hops
+        self.generate_query = dspy.ChainOfThought(GenerateSearchQuery)
+        self.generate_answer = dspy.ChainOfThought(GenerateAnswer)
+    
+    def forward(self, question):
+        context = ""
+        
+        for hop in range(self.max_hops):
+            # Generate search query based on what we know
+            if context:
+                query_result = self.generate_query(
+                    context=context, 
+                    question=question
+                )
+                search_query = query_result.search_query
+            else:
+                search_query = question
+            
+            # Retrieve new information
+            docs = self.retriever(search_query, k=2)
+            new_context = "\n".join(docs)
+            
+            # Accumulate context
+            context = f"{context}\n\n{new_context}".strip()
+        
+        # Generate final answer
+        result = self.generate_answer(context=context, question=question)
+        
+        return dspy.Prediction(
+            context=context,
+            answer=result.answer
+        )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Self-RAG -->
+                            <div class="content-block">
+                                <h2>🔄 Self-RAG (Iterative Retrieval)</h2>
+
+                                <p>Let the model decide when it needs more information:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class AssessAnswer(dspy.Signature):
+    """Assess if the answer is complete and well-supported."""
+    question: str = dspy.InputField()
+    context: str = dspy.InputField()
+    answer: str = dspy.InputField()
+    is_complete: bool = dspy.OutputField(desc="True if answer fully addresses the question")
+    missing_info: str = dspy.OutputField(desc="What information is missing, if any")
+
+class SelfRAG(dspy.Module):
+    def __init__(self, retriever, max_iterations=3):
+        self.retriever = retriever
+        self.max_iterations = max_iterations
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+        self.assess = dspy.ChainOfThought(AssessAnswer)
+    
+    def forward(self, question):
+        context = ""
+        
+        for i in range(self.max_iterations):
+            # Retrieve
+            if i == 0:
+                query = question
+            else:
+                query = f"{question} {assessment.missing_info}"
+            
+            docs = self.retriever(query, k=3)
+            context = f"{context}\n\n{chr(10).join(docs)}".strip()
+            
+            # Generate answer
+            result = self.generate(context=context, question=question)
+            
+            # Assess completeness
+            assessment = self.assess(
+                question=question,
+                context=context,
+                answer=result.answer
+            )
+            
+            if assessment.is_complete:
+                break
+        
+        return dspy.Prediction(
+            answer=result.answer,
+            iterations=i + 1,
+            context=context
+        )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Hybrid Search -->
+                            <div class="content-block">
+                                <h2>🔀 Hybrid Search</h2>
+
+                                <p>Combine keyword (sparse) and semantic (dense) search for better results:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class HybridRetriever:
+    """Combines keyword and semantic search."""
+    
+    def __init__(self, documents, embed_model):
+        self.documents = documents
+        
+        # Keyword search (TF-IDF)
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        self.tfidf = TfidfVectorizer()
+        self.tfidf_vectors = self.tfidf.fit_transform(documents)
+        
+        # Semantic search (embeddings)
+        self.embeddings = embed_model.encode(documents)
+        self.embed_model = embed_model
+    
+    def __call__(self, query: str, k: int = 5, alpha: float = 0.5):
+        """
+        Args:
+            alpha: Weight for semantic search (1-alpha for keyword)
+        """
+        from sklearn.metrics.pairwise import cosine_similarity
+        import numpy as np
+        
+        # Keyword scores
+        query_tfidf = self.tfidf.transform([query])
+        keyword_scores = cosine_similarity(query_tfidf, self.tfidf_vectors)[0]
+        
+        # Semantic scores
+        query_embedding = self.embed_model.encode([query])
+        semantic_scores = cosine_similarity(query_embedding, self.embeddings)[0]
+        
+        # Combine scores
+        combined_scores = alpha * semantic_scores + (1 - alpha) * keyword_scores
+        
+        # Get top k
+        top_indices = np.argsort(combined_scores)[::-1][:k]
+        return [self.documents[i] for i in top_indices]
+
+# Usage
+# hybrid = HybridRetriever(docs, embedding_model)
+# results = hybrid("DSPy optimization", k=5, alpha=0.7)</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔤</span>
+                                        <div class="section-content">
+                                            <h4>Keyword Search</h4>
+                                            <p>Good for specific terms, names, codes. Exact matching.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🧠</span>
+                                        <div class="section-content">
+                                            <h4>Semantic Search</h4>
+                                            <p>Good for concepts, synonyms, paraphrases. Meaning matching.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚖️</span>
+                                        <div class="section-content">
+                                            <h4>Hybrid</h4>
+                                            <p>Best of both! Use alpha to balance between them.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Reranking -->
+                            <div class="content-block">
+                                <h2>📊 Retrieval with Reranking</h2>
+
+                                <p>Retrieve many, then use a more accurate model to rerank:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class RelevanceScore(dspy.Signature):
+    """Score how relevant the passage is to the question."""
+    question: str = dspy.InputField()
+    passage: str = dspy.InputField()
+    relevance: float = dspy.OutputField(desc="0.0 to 1.0 relevance score")
+
+class RAGWithReranking(dspy.Module):
+    def __init__(self, retriever, k_retrieve=10, k_final=3):
+        self.retriever = retriever
+        self.k_retrieve = k_retrieve
+        self.k_final = k_final
+        self.reranker = dspy.Predict(RelevanceScore)
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+    
+    def forward(self, question):
+        # Step 1: Retrieve many candidates
+        candidates = self.retriever(question, k=self.k_retrieve)
+        
+        # Step 2: Rerank with LM
+        scored = []
+        for doc in candidates:
+            result = self.reranker(question=question, passage=doc)
+            scored.append((doc, float(result.relevance)))
+        
+        # Step 3: Take top k after reranking
+        scored.sort(key=lambda x: x[1], reverse=True)
+        top_docs = [doc for doc, score in scored[:self.k_final]]
+        
+        # Step 4: Generate answer
+        context = "\n\n".join(top_docs)
+        result = self.generate(context=context, question=question)
+        
+        return dspy.Prediction(
+            answer=result.answer,
+            top_docs=top_docs
+        )</code></pre>
+                                </div>
+
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Cost consideration:</strong> LM-based reranking requires one call per
+                                        candidate. Consider using a dedicated reranker model for cost efficiency.</p>
+                                </div>
+                            </div>
+
+                            <!-- Contextual Compression -->
+                            <div class="content-block">
+                                <h2>📦 Contextual Compression</h2>
+
+                                <p>Extract only the relevant parts of retrieved documents:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">class ExtractRelevant(dspy.Signature):
+    """Extract only the parts relevant to the question."""
+    question: str = dspy.InputField()
+    passage: str = dspy.InputField()
+    relevant_excerpt: str = dspy.OutputField(
+        desc="The specific sentences that help answer the question"
+    )
+
+class RAGWithCompression(dspy.Module):
+    def __init__(self, retriever, k=5):
+        self.retriever = retriever
+        self.k = k
+        self.compress = dspy.Predict(ExtractRelevant)
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+    
+    def forward(self, question):
+        # Retrieve
+        docs = self.retriever(question, k=self.k)
+        
+        # Compress each document
+        compressed = []
+        for doc in docs:
+            result = self.compress(question=question, passage=doc)
+            if result.relevant_excerpt.strip():
+                compressed.append(result.relevant_excerpt)
+        
+        # Generate with compressed context
+        context = "\n\n".join(compressed)
+        result = self.generate(context=context, question=question)
+        
+        return dspy.Prediction(
+            answer=result.answer,
+            compressed_context=context
+        )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Pattern Selection Guide -->
+                            <div class="content-block">
+                                <h2>🎯 When to Use Each Pattern</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Pattern</th>
+                                                <th>Best For</th>
+                                                <th>Trade-off</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Simple RAG</strong></td>
+                                                <td>Direct questions with clear answers</td>
+                                                <td>Fast, cheap</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Multi-Hop</strong></td>
+                                                <td>Questions requiring multiple facts</td>
+                                                <td>More accurate, slower</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Self-RAG</strong></td>
+                                                <td>Complex questions, unknown difficulty</td>
+                                                <td>Adaptive, variable cost</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Hybrid Search</strong></td>
+                                                <td>Mix of specific terms and concepts</td>
+                                                <td>Better recall</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Reranking</strong></td>
+                                                <td>When precision is critical</td>
+                                                <td>Higher quality, higher cost</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Compression</strong></td>
+                                                <td>Long documents, limited context</td>
+                                                <td>Focused context</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Multi-hop RAG</strong> connects information across documents</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Self-RAG</strong> iterates until the answer is complete</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Hybrid search</strong> combines keyword + semantic for better
+                                                retrieval</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Reranking</strong> improves precision at the cost of more LM
+                                                calls</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Choose patterns</strong> based on your accuracy and cost
+                                                requirements</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="exercises.html" class="continue-btn">
+                                        <span>Continue to Exercises</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

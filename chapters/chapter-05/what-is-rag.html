@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is RAG? | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Understand Retrieval-Augmented Generation (RAG) - the pattern that grounds LM outputs in real knowledge.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Retrieval</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="what-is-rag">
+                        <a href="what-is-rag.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What is RAG?</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="retrievers">
+                        <a href="retrievers.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Retriever Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="rag-pipelines">
+                        <a href="rag-pipelines.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Building RAG Pipelines</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="advanced-rag">
+                        <a href="advanced-rag.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced RAG Patterns</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 2</span>
+                    <h1 class="chapter-title">What is RAG?</h1>
+                    <p class="chapter-description">Retrieval-Augmented Generation connects LMs to external knowledge
+                        for accurate, grounded responses.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~10 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="what-is-rag" data-section="what-is-rag">
+                        <div class="markdown-content" id="what-is-rag-content">
+
+                            <!-- The Problem -->
+                            <div class="content-block">
+                                <h2>🤔 The Problem with LMs</h2>
+
+                                <p>Language models have fundamental limitations:</p>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📅</span>
+                                        <div class="section-content">
+                                            <h4>Knowledge Cutoff</h4>
+                                            <p>LMs only know what was in their training data. They can't answer about
+                                                recent events.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🔒</span>
+                                        <div class="section-content">
+                                            <h4>No Private Data Access</h4>
+                                            <p>Your company docs, database, or personal files aren't in the model.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">👻</span>
+                                        <div class="section-content">
+                                            <h4>Hallucination</h4>
+                                            <p>When LMs don't know something, they often make up plausible-sounding
+                                                answers.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">❓</span>
+                                        <div class="section-content">
+                                            <h4>No Citation</h4>
+                                            <p>LMs generate text but can't point to sources for verification.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- The RAG Solution -->
+                            <div class="content-block">
+                                <h2>✨ The RAG Solution</h2>
+
+                                <p><strong>RAG (Retrieval-Augmented Generation)</strong> solves these problems by
+                                    adding a retrieval step before generation:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-text">┌─────────────────────────────────────────────────────────────┐
+│                      RAG PIPELINE                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   User Query: "What was our Q4 revenue?"                    │
+│        │                                                    │
+│        ▼                                                    │
+│   ┌─────────────┐                                           │
+│   │  RETRIEVE   │  ← Search your knowledge base             │
+│   └─────────────┘                                           │
+│        │                                                    │
+│        ▼                                                    │
+│   Retrieved Docs: "Q4 2024 Report: Revenue $10.5M..."       │
+│        │                                                    │
+│        ▼                                                    │
+│   ┌─────────────┐                                           │
+│   │   AUGMENT   │  ← Add context to the prompt              │
+│   └─────────────┘                                           │
+│        │                                                    │
+│        ▼                                                    │
+│   ┌─────────────┐                                           │
+│   │  GENERATE   │  ← LM answers using the context           │
+│   └─────────────┘                                           │
+│        │                                                    │
+│        ▼                                                    │
+│   "Based on Q4 2024 Report, revenue was $10.5 million."     │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- How Retrieval Works -->
+                            <div class="content-block">
+                                <h2>🔍 How Retrieval Works</h2>
+
+                                <h3>Embedding-Based Retrieval</h3>
+
+                                <p>The most common approach uses embeddings (vector representations):</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python"># 1. Convert documents to embeddings
+docs = ["Doc about Python", "Doc about JavaScript", "Doc about DSPy"]
+embeddings = embed_model.encode(docs)
+
+# 2. Store in a vector database
+vector_db.add(embeddings, docs)
+
+# 3. At query time, embed the question
+query = "How does DSPy work?"
+query_embedding = embed_model.encode(query)
+
+# 4. Find similar documents
+similar_docs = vector_db.search(query_embedding, top_k=3)
+# Returns: ["Doc about DSPy", ...]</code></pre>
+                                </div>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📊</span>
+                                        <div class="section-content">
+                                            <h4>Embeddings</h4>
+                                            <p>Dense vectors (e.g., 768 or 1536 dimensions) that capture meaning.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🎯</span>
+                                        <div class="section-content">
+                                            <h4>Similarity Search</h4>
+                                            <p>Find documents whose embeddings are close to the query embedding.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏷️</span>
+                                        <div class="section-content">
+                                            <h4>Top-K Retrieval</h4>
+                                            <p>Return the K most similar documents (typically K=3-10).</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RAG Benefits -->
+                            <div class="content-block">
+                                <h2>✅ Benefits of RAG</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📰</span>
+                                        <div class="section-content">
+                                            <h4>Up-to-Date Information</h4>
+                                            <p>Your knowledge base can be updated any time—no model retraining needed.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">🏢</span>
+                                        <div class="section-content">
+                                            <h4>Private/Domain Data</h4>
+                                            <p>Answer questions about your specific documents, databases, or APIs.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✓</span>
+                                        <div class="section-content">
+                                            <h4>Reduced Hallucination</h4>
+                                            <p>LM generations are grounded in actual retrieved content.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">📚</span>
+                                        <div class="section-content">
+                                            <h4>Verifiable Sources</h4>
+                                            <p>You can show users exactly which documents the answer came from.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">💰</span>
+                                        <div class="section-content">
+                                            <h4>Cost Effective</h4>
+                                            <p>Cheaper than fine-tuning for domain-specific knowledge.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Simple RAG Example -->
+                            <div class="content-block">
+                                <h2>💻 Simple RAG Example</h2>
+
+                                <p>Here's what RAG looks like in DSPy:</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Configure LM
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Signature for RAG
+class RAG(dspy.Signature):
+    """Answer the question based on the provided context."""
+    context: str = dspy.InputField(desc="Retrieved documents")
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+# Simple RAG module
+class SimpleRAG(dspy.Module):
+    def __init__(self, retriever):
+        self.retriever = retriever
+        self.generate = dspy.ChainOfThought(RAG)
+    
+    def forward(self, question):
+        # 1. Retrieve relevant documents
+        docs = self.retriever(question)
+        context = "\n".join(docs)
+        
+        # 2. Generate answer using retrieved context
+        result = self.generate(context=context, question=question)
+        
+        return result
+
+# Usage (assuming you have a retriever)
+# rag = SimpleRAG(my_retriever)
+# answer = rag(question="What is DSPy?")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Components of RAG -->
+                            <div class="content-block">
+                                <h2>🧩 Components of a RAG System</h2>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Component</th>
+                                                <th>Purpose</th>
+                                                <th>Examples</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Document Loader</strong></td>
+                                                <td>Load documents from various sources</td>
+                                                <td>PDF, HTML, database, API</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Chunker</strong></td>
+                                                <td>Split documents into smaller pieces</td>
+                                                <td>Fixed size, semantic, sentence</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Embedding Model</strong></td>
+                                                <td>Convert text to vectors</td>
+                                                <td>OpenAI, Cohere, sentence-transformers</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Vector Store</strong></td>
+                                                <td>Store and search embeddings</td>
+                                                <td>ChromaDB, Pinecone, Weaviate</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Retriever</strong></td>
+                                                <td>Fetch relevant documents</td>
+                                                <td>dspy.Retrieve, custom</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Generator</strong></td>
+                                                <td>Generate answer from context</td>
+                                                <td>dspy.Predict, dspy.ChainOfThought</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- When to Use RAG -->
+                            <div class="content-block">
+                                <h2>⏰ When to Use RAG</h2>
+
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">✅</span>
+                                        <div class="section-content">
+                                            <h4>Great for RAG</h4>
+                                            <p>Question answering over documents, customer support bots, search +
+                                                summarize, fact-checking.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <span class="section-icon">⚠️</span>
+                                        <div class="section-content">
+                                            <h4>May Not Need RAG</h4>
+                                            <p>General conversation, creative writing, tasks where LM's training
+                                                knowledge suffices.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tip-box">
+                                    <span class="tip-icon">💡</span>
+                                    <p><strong>Rule of thumb:</strong> If the answer requires specific facts not in the
+                                        LM's training data, you need RAG.</p>
+                                </div>
+                            </div>
+
+                            <!-- Key Takeaways -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Key Takeaways</h2>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>RAG = Retrieve + Augment + Generate</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Solves LM limitations:</strong> knowledge cutoff, private data,
+                                                hallucination</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Uses embeddings</strong> for semantic similarity search</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Components:</strong> loader, chunker, embedder, vector store,
+                                                retriever, generator</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="retrievers.html" class="continue-btn">
+                                        <span>Continue to Retriever Modules</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

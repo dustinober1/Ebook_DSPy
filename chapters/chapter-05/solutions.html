@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solutions | Chapter 5 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Complete solutions for Chapter 5 RAG exercises - retrievers, pipelines, and advanced patterns.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 5</h2>
+                <span class="sidebar-subtitle">Retrieval</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="what-is-rag">
+                        <a href="what-is-rag.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">What is RAG?</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="retrievers">
+                        <a href="retrievers.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Retriever Modules</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="rag-pipelines">
+                        <a href="rag-pipelines.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Building RAG Pipelines</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="advanced-rag">
+                        <a href="advanced-rag.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Advanced RAG Patterns</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-06/index.html" class="next-chapter-btn">
+                    Next: Chapter 06 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 5 · Section 7</span>
+                    <h1 class="chapter-title">Solutions</h1>
+                    <p class="chapter-description">Complete solutions with explanations for all Chapter 5 exercises.
+                    </p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            5 Solutions
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="solutions" data-section="solutions">
+                        <div class="markdown-content" id="solutions-content">
+
+                            <!-- Warning -->
+                            <div class="content-block">
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Spoiler Alert!</strong> Try to complete the exercises on your own before
+                                        viewing these solutions.</p>
+                                </div>
+                            </div>
+
+                            <!-- Solution 1 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 1</span>
+                                    <span class="difficulty beginner">⭐ Beginner</span>
+                                </div>
+                                <h3>Build a Simple Retriever</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+class SimpleRetriever:
+    """A simple TF-IDF based retriever."""
+    
+    def __init__(self, documents: list):
+        self.documents = documents
+        self.vectorizer = TfidfVectorizer(
+            stop_words='english',
+            ngram_range=(1, 2)  # Include bigrams
+        )
+        self.doc_vectors = self.vectorizer.fit_transform(documents)
+    
+    def __call__(self, query: str, k: int = 3) -> list:
+        # Vectorize query
+        query_vector = self.vectorizer.transform([query])
+        
+        # Calculate similarities
+        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
+        
+        # Get top k indices
+        top_indices = np.argsort(similarities)[::-1][:k]
+        
+        # Return documents with scores
+        return [self.documents[i] for i in top_indices]
+    
+    def search_with_scores(self, query: str, k: int = 3):
+        """Return documents with similarity scores."""
+        query_vector = self.vectorizer.transform([query])
+        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
+        top_indices = np.argsort(similarities)[::-1][:k]
+        
+        return [
+            {"document": self.documents[i], "score": similarities[i]}
+            for i in top_indices
+        ]
+
+# Test
+docs = [
+    "Python is a high-level programming language.",
+    "DSPy is a framework for programming language models.",
+    "Machine learning uses statistical methods to learn from data.",
+    "Neural networks are inspired by biological neurons.",
+    "Deep learning is a subset of machine learning.",
+    "Natural language processing deals with text understanding.",
+    "Transformers revolutionized NLP with attention mechanisms.",
+    "GPT is a large language model developed by OpenAI.",
+    "BERT uses bidirectional training for language understanding.",
+    "Vector databases store embeddings for similarity search.",
+]
+
+retriever = SimpleRetriever(docs)
+
+# Test queries
+test_queries = [
+    "What is DSPy?",
+    "How does machine learning work?",
+    "What are transformers?",
+]
+
+print("=== Simple Retriever Test ===\n")
+for query in test_queries:
+    results = retriever.search_with_scores(query, k=3)
+    print(f"Query: {query}")
+    for r in results:
+        print(f"  [{r['score']:.3f}] {r['document'][:50]}...")
+    print()</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Solution 2 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 2</span>
+                                    <span class="difficulty beginner">⭐ Beginner</span>
+                                </div>
+                                <h3>Basic RAG Pipeline</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Configure LM
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Retriever (from Solution 1)
+class SimpleRetriever:
+    def __init__(self, documents):
+        self.documents = documents
+        self.vectorizer = TfidfVectorizer(stop_words='english')
+        self.doc_vectors = self.vectorizer.fit_transform(documents)
+    
+    def __call__(self, query, k=3):
+        query_vector = self.vectorizer.transform([query])
+        similarities = cosine_similarity(query_vector, self.doc_vectors)[0]
+        top_indices = np.argsort(similarities)[::-1][:k]
+        return [self.documents[i] for i in top_indices]
+
+# RAG Signature
+class GenerateAnswer(dspy.Signature):
+    """Answer the question based on the provided context."""
+    context: str = dspy.InputField(desc="Retrieved passages")
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField(desc="Answer based on the context")
+
+# RAG Module
+class BasicRAG(dspy.Module):
+    def __init__(self, retriever, k=3):
+        self.retriever = retriever
+        self.k = k
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+    
+    def forward(self, question):
+        # Retrieve
+        docs = self.retriever(question, k=self.k)
+        context = "\n\n".join(docs)
+        
+        # Generate
+        result = self.generate(context=context, question=question)
+        
+        return dspy.Prediction(
+            question=question,
+            context=context,
+            answer=result.answer
+        )
+
+# Knowledge base
+knowledge_base = [
+    "DSPy is a framework for programming language models developed at Stanford.",
+    "Signatures in DSPy define the inputs and outputs of LM tasks.",
+    "Modules like Predict and ChainOfThought execute signatures in DSPy.",
+    "Optimizers like BootstrapFewShot improve DSPy programs automatically.",
+    "RAG retrieves relevant documents before generating answers.",
+]
+
+# Create and test
+retriever = SimpleRetriever(knowledge_base)
+rag = BasicRAG(retriever, k=3)
+
+# Test questions
+questions = [
+    "What is DSPy?",
+    "What do optimizers do in DSPy?",
+    "How does RAG work?",
+]
+
+print("=== Basic RAG Pipeline ===\n")
+for q in questions:
+    result = rag(question=q)
+    print(f"Q: {q}")
+    print(f"A: {result.answer}")
+    print(f"Context used: {len(result.context)} chars")
+    print("-" * 50)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Solution 3 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 3</span>
+                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
+                                </div>
+                                <h3>RAG with Citations</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+import re
+from dotenv import load_dotenv
+
+load_dotenv()
+
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Citation signature
+class GenerateWithCitations(dspy.Signature):
+    """Answer the question using the numbered sources. 
+    Cite sources using [1], [2], etc."""
+    context: str = dspy.InputField(desc="Numbered source passages")
+    question: str = dspy.InputField()
+    answer: str = dspy.OutputField(
+        desc="Answer with citation numbers like [1], [2]"
+    )
+
+class RAGWithCitations(dspy.Module):
+    def __init__(self, retriever, k=3):
+        self.retriever = retriever
+        self.k = k
+        self.generate = dspy.ChainOfThought(GenerateWithCitations)
+    
+    def forward(self, question):
+        # Retrieve
+        docs = self.retriever(question, k=self.k)
+        
+        # Number the passages
+        numbered_passages = {}
+        numbered_context = []
+        for i, doc in enumerate(docs, 1):
+            numbered_passages[str(i)] = doc
+            numbered_context.append(f"[{i}] {doc}")
+        
+        context = "\n\n".join(numbered_context)
+        
+        # Generate with citations
+        result = self.generate(context=context, question=question)
+        
+        # Extract cited sources
+        cited = re.findall(r'\[(\d+)\]', result.answer)
+        cited_unique = list(set(cited))
+        
+        # Get cited passages
+        cited_passages = {
+            num: numbered_passages.get(num, "Not found")
+            for num in cited_unique
+        }
+        
+        return dspy.Prediction(
+            answer=result.answer,
+            sources_used=cited_unique,
+            passages=cited_passages,
+            all_passages=numbered_passages
+        )
+
+# Test
+retriever = SimpleRetriever(knowledge_base)
+rag_citations = RAGWithCitations(retriever, k=3)
+
+result = rag_citations(question="What is DSPy and what are its optimizers?")
+
+print("=== RAG with Citations ===\n")
+print(f"Answer: {result.answer}")
+print(f"\nSources cited: {result.sources_used}")
+print("\nCited passages:")
+for num, passage in result.passages.items():
+    print(f"  [{num}] {passage[:60]}...")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Solution 4 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 4</span>
+                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
+                                </div>
+                                <h3>Query Expansion RAG</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
+
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Query expansion signature
+class ExpandQuery(dspy.Signature):
+    """Generate related search queries to find more relevant information."""
+    original_query: str = dspy.InputField()
+    expanded_queries: List[str] = dspy.OutputField(
+        desc="3 related search queries"
+    )
+
+class QueryExpansionRAG(dspy.Module):
+    def __init__(self, retriever, k_per_query=2):
+        self.retriever = retriever
+        self.k_per_query = k_per_query
+        self.expand = dspy.Predict(ExpandQuery)
+        self.generate = dspy.ChainOfThought(GenerateAnswer)
+    
+    def forward(self, question):
+        # Step 1: Expand query
+        expansion = self.expand(original_query=question)
+        all_queries = [question] + expansion.expanded_queries[:3]
+        
+        # Step 2: Retrieve for each query
+        all_docs = []
+        for query in all_queries:
+            docs = self.retriever(query, k=self.k_per_query)
+            all_docs.extend(docs)
+        
+        # Step 3: Deduplicate
+        unique_docs = list(dict.fromkeys(all_docs))
+        
+        # Step 4: Generate
+        context = "\n\n".join(unique_docs)
+        result = self.generate(context=context, question=question)
+        
+        return dspy.Prediction(
+            original_query=question,
+            expanded_queries=all_queries,
+            retrieved_docs=len(unique_docs),
+            context=context,
+            answer=result.answer
+        )
+
+# Test
+query_rag = QueryExpansionRAG(retriever, k_per_query=2)
+result = query_rag(question="How does DSPy improve prompts?")
+
+print("=== Query Expansion RAG ===\n")
+print(f"Original: {result.original_query}")
+print(f"Expanded to: {result.expanded_queries}")
+print(f"Retrieved {result.retrieved_docs} unique documents")
+print(f"\nAnswer: {result.answer}")</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Solution 5 -->
+                            <div class="content-block solution-block">
+                                <div class="exercise-header">
+                                    <span class="exercise-number">Solution 5</span>
+                                    <span class="difficulty advanced">⭐⭐⭐ Advanced</span>
+                                </div>
+                                <h3>Multi-Hop RAG System</h3>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">import dspy
+from dotenv import load_dotenv
+
+load_dotenv()
+
+lm = dspy.LM("openai/gpt-4o-mini")
+dspy.configure(lm=lm)
+
+# Multi-hop knowledge base with interconnected facts
+multihop_kb = [
+    "DSPy is a framework developed at Stanford's NLP group.",
+    "Stanford's NLP group is led by Christopher Manning.",
+    "DSPy uses BootstrapFewShot as its main optimizer.",
+    "BootstrapFewShot finds successful examples for few-shot learning.",
+    "Few-shot learning uses a small number of examples.",
+    "Christopher Manning is a professor at Stanford University.",
+    "Stanford University is located in California.",
+    "MIPRO is an advanced optimizer that extends BootstrapFewShot.",
+    "MIPRO optimizes both instructions and demonstrations.",
+    "Demonstrations in DSPy are input-output examples.",
+    "DSPy signatures define the structure of LM tasks.",
+    "Signatures can be created using Python classes.",
+    "DSPy modules execute signatures with language models.",
+    "ChainOfThought is a module that adds reasoning steps.",
+    "Reasoning steps help with complex problems.",
+]
+
+# Signatures
+class GenerateNextQuery(dspy.Signature):
+    """Based on what we know, generate a query to find missing information."""
+    question: str = dspy.InputField()
+    context: str = dspy.InputField(desc="What we know so far")
+    next_query: str = dspy.OutputField(desc="Query to find missing info")
+
+class CheckComplete(dspy.Signature):
+    """Check if we have enough information to answer."""
+    question: str = dspy.InputField()
+    context: str = dspy.InputField()
+    can_answer: bool = dspy.OutputField()
+    reasoning: str = dspy.OutputField()
+
+class GenerateFinalAnswer(dspy.Signature):
+    """Generate a complete answer based on all gathered context."""
+    question: str = dspy.InputField()
+    context: str = dspy.InputField()
+    answer: str = dspy.OutputField()
+
+class MultiHopRAG(dspy.Module):
+    def __init__(self, retriever, max_hops=3, k=2):
+        self.retriever = retriever
+        self.max_hops = max_hops
+        self.k = k
+        self.generate_query = dspy.Predict(GenerateNextQuery)
+        self.check_complete = dspy.Predict(CheckComplete)
+        self.generate_answer = dspy.ChainOfThought(GenerateFinalAnswer)
+    
+    def forward(self, question):
+        context_parts = []
+        queries_used = [question]
+        
+        # Initial retrieval
+        docs = self.retriever(question, k=self.k)
+        context_parts.extend(docs)
+        
+        for hop in range(self.max_hops):
+            current_context = "\n".join(context_parts)
+            
+            # Check if we can answer
+            check = self.check_complete(
+                question=question,
+                context=current_context
+            )
+            
+            if check.can_answer:
+                break
+            
+            # Generate next query
+            next_q = self.generate_query(
+                question=question,
+                context=current_context
+            )
+            queries_used.append(next_q.next_query)
+            
+            # Retrieve more
+            new_docs = self.retriever(next_q.next_query, k=self.k)
+            
+            # Add only new docs
+            for doc in new_docs:
+                if doc not in context_parts:
+                    context_parts.append(doc)
+        
+        # Generate final answer
+        final_context = "\n\n".join(context_parts)
+        result = self.generate_answer(
+            question=question,
+            context=final_context
+        )
+        
+        return dspy.Prediction(
+            answer=result.answer,
+            hops=len(queries_used),
+            queries=queries_used,
+            context=final_context
+        )
+
+# Create retriever and multi-hop RAG
+multihop_retriever = SimpleRetriever(multihop_kb)
+multihop_rag = MultiHopRAG(multihop_retriever, max_hops=3, k=2)
+
+# Test with multi-hop questions
+questions = [
+    "What optimizer does the Stanford NLP framework use?",
+    "Where is the university that developed DSPy located?",
+    "What does MIPRO extend and what does it optimize?",
+]
+
+print("=== Multi-Hop RAG System ===\n")
+for q in questions:
+    result = multihop_rag(question=q)
+    print(f"Q: {q}")
+    print(f"Hops: {result.hops}")
+    print(f"Queries: {result.queries}")
+    print(f"A: {result.answer}")
+    print("-" * 60)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="content-block summary-block">
+                                <h2>📝 Chapter Summary</h2>
+
+                                <p>In this chapter, you learned:</p>
+
+                                <div class="chapter-sections-list no-icons">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>RAG</strong> grounds LM outputs in retrieved knowledge</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Retrievers</strong> fetch relevant documents using embeddings
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>RAG pipelines</strong> combine retrieve → augment → generate</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>Advanced patterns:</strong> multi-hop, hybrid, reranking</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <p><strong>RAG can be optimized</strong> like any DSPy module</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continue to Chapter 6 -->
+                            <div class="content-block">
+                                <div class="success-content">
+                                    <span class="success-icon-large">🎉</span>
+                                    <h2>Congratulations!</h2>
+                                    <p>You've completed Chapter 5: Retrieval! You now know how to build
+                                        knowledge-grounded AI applications.</p>
+                                </div>
+                                <div class="continue-btn-container">
+                                    <a href="../chapter-06/index.html" class="continue-btn next-chapter-main-btn">
+                                        <span>Start Chapter 6: Agents</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
