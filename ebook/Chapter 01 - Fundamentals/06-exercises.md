@@ -6,13 +6,13 @@ Practice what you've learned in this chapter with these hands-on exercises.
 
 ## Exercise Overview
 
-| Exercise | Difficulty | Topics Covered | Estimated Time |
-|----------|-----------|----------------|----------------|
-| Exercise 1 | ⭐ Beginner | Installation verification | 10-15 min |
-| Exercise 2 | ⭐ Beginner | Basic signatures | 15-20 min |
-| Exercise 3 | ⭐⭐ Intermediate | Language model configuration | 20-25 min |
-| Exercise 4 | ⭐⭐ Intermediate | Building a Q&A system | 30-40 min |
-| Exercise 5 | ⭐⭐⭐ Advanced | Multi-step pipeline | 45-60 min |
+| Exercise   | Difficulty      | Topics Covered               | Estimated Time |
+| ---------- | --------------- | ---------------------------- | -------------- |
+| Exercise 1 | ⭐ Beginner      | Installation verification    | 10-15 min      |
+| Exercise 2 | ⭐ Beginner      | Basic signatures             | 15-20 min      |
+| Exercise 3 | ⭐⭐ Intermediate | Language model configuration | 20-25 min      |
+| Exercise 4 | ⭐⭐ Intermediate | Building a Q&A system        | 30-40 min      |
+| Exercise 5 | ⭐⭐⭐ Advanced    | Multi-step pipeline          | 45-60 min      |
 
 ---
 
@@ -227,6 +227,11 @@ Create a program that:
 3. Tests the same question with all three models
 4. Compares the responses
 5. Measures and reports response time for each
+
+> **Note**: If you only have access to one LM provider (e.g., OpenAI), you can simulate "different" models by:
+> - Using different model sizes (e.g., `gpt-4o` vs `gpt-4o-mini`)
+> - Varying the temperature (e.g., `temperature=0.0` vs `temperature=1.0`)
+
 
 ### Starter Code
 

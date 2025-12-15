@@ -339,8 +339,12 @@ DSPy excels at:
 ```python
 # RAG-based QA
 retriever = dspy.Retrieve(k=3)
+# Uses "String Signature" shorthand: "input_fields -> output_fields"
 qa = dspy.ChainOfThought("context, question -> answer")
 ```
+
+> **Tip**: The string `"context, question -> answer"` is a shorthand for defining a Signature class. It's great for quick prototyping!
+
 
 ### Multi-Step Reasoning
 ```python
