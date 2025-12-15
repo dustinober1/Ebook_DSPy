@@ -26,7 +26,12 @@ By the end of this section, you will:
 Input(s) → [Predict Module] → Output(s)
 ```
 
+
 Predict takes your signature, constructs an appropriate prompt, sends it to the LLM, and parses the response back into structured outputs according to your signature definition.
+
+> **Note: Predict vs TypedPredictor**
+> `dspy.Predict` is the standard module for text-based tasks. If you need strictly typed outputs (e.g., guaranteed Pydantic models, validated JSON schemas), you should use `dspy.TypedPredictor` instead. We will cover `TypedPredictor` in detail in section [02a-typed-predictor](./02a-typed-predictor.md), but know that `Predict` handles the vast majority of general NLP tasks.
+
 
 ## Basic Usage
 

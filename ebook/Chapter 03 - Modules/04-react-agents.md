@@ -103,6 +103,9 @@ researcher = dspy.ReAct(
     tools=[search_tool]
 )
 
+# Note: Ensure your search API key (e.g., SERPER_API_KEY) is set in your environment variables.
+# You can stick it in a .env file and load it with `python-dotenv`.
+
 # Research a topic
 result = researcher(
     query="What are the main advantages of quantum computing?"
@@ -560,6 +563,8 @@ bounded_agent = dspy.ReAct(
     timeout=30    # Time limit per step
 )
 ```
+
+> **Tip**: When debugging agents, start with a low `max_steps` (e.g., 3-5) to prevent infinite loops and save on API costs. You can increase this once the agent's logic is stable.
 
 ### 2. Tool Not Used Correctly
 ```python
