@@ -55,29 +55,27 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--primary-color);
 ### 3. **Mobile User Experience (Medium Priority)**
 
 **Issues Found:**
-- ~~Sidebar toggle animation could be smoother~~ ✅ ALREADY IMPLEMENTED (uses cubic-bezier)
-- ~~Mobile navigation might be confusing~~ ✅ IMPROVED - Escape key closes sidebar
+- ~~Sidebar toggle animation could be smoother~~ ✅ ALREADY IMPLEMENTED
+- ~~Mobile navigation might be confusing~~ ✅ IMPROVED (Escape key closes sidebar, Swipe Gestures added)
 - Touch targets could be larger
-- No swipe gestures for navigation
+- ~~No swipe gestures for navigation~~ ✅ IMPLEMENTED (2025-12-15)
 
 **Implemented Solutions (2025-12-15):**
-```javascript
-// Keyboard support: Escape key to close sidebar
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-        toggleSidebar(false);
-        toggle.focus(); // Return focus to toggle button
-    }
-});
-```
+- **Swipe Gestures**: Swipe right to open sidebar, swipe left to close.
+- **Keyboard**: Escape key closes sidebar.
 
 ### 4. **Content Discovery & Navigation (Medium Priority)**
 
 **Issues Found:**
-- No search functionality
+- ~~No search functionality~~ ✅ IMPLEMENTED (2025-12-15) - Client-side search with JSON index
 - No table of contents on individual chapter pages
-- No breadcrumb navigation
-- ~~No "previous/next" chapter navigation on main pages~~ ✅ ALREADY IMPLEMENTED
+- ~~No breadcrumb navigation~~ ✅ IMPLEMENTED (2025-12-15) - Dynamic breadcrumbs
+- ~~No "previous/next" chapter navigation on main pages~~ ✅ IMPLEMENTED (2025-12-15) - Dynamic bottom buttons
+
+**Implemented Solutions (2025-12-15):**
+- **Search**: Added script `scripts/build_search_index.py` and client-side search UI in sidebar.
+- **Breadcrumbs**: Dynamically injected above chapter title.
+- **Bottom Nav**: Dynamically injected Previous/Next buttons at end of content.
 
 ### 5. **Error Handling & Resilience (Medium Priority)**
 
@@ -121,73 +119,38 @@ document.addEventListener('keydown', (e) => {
 1. **Lazy Loading**: Added `loading="lazy"` to all content images in chapter pages
 2. **Hero images**: Correctly NOT lazy loaded (above the fold)
 
+### ✅ UX & Navigation Improvements
+1. **Search**: Full-text search implemented using a generated JSON index.
+   - Run `python3 scripts/build_search_index.py` to update index.
+   - Search bar added to sidebar header.
+2. **Swipe Gestures**: Swipe right to open sidebar, left to close on mobile.
+3. **Breadcrumbs**: Automatically generated breadcrumbs (Home > Chapter > Section) added to all chapter pages.
+4. **Bottom Navigation**: "Previous" and "Next" buttons automatically added to the bottom of every section/page.
+
 ### ✅ Files Modified
-- `/assets/css/style.css` - Skip link styles, focus indicators
-- `/assets/css/chapter.css` - Chapter-specific focus indicators
-- `/assets/js/chapter_v2.js` - Enhanced keyboard/accessibility support
-- `/index.html` - Skip link, main-content ID
-- All 121 chapter HTML files - Skip links, main-content ID, lazy loading
+- `/assets/css/style.css` 
+- `/assets/css/chapter.css`
+- `/assets/js/chapter_v2.js` (Major logic updates)
+- `/index.html`
+- All 121 chapter HTML files
+- `/scripts/build_search_index.py` (New file)
+- `/assets/js/search_index.json` (New file)
 
 ## 🎯 Remaining Prioritized Action Plan
 
-### Phase 1 (Immediate - 1-2 weeks)
-1. ~~Add proper alt text and ARIA labels~~ ✅ DONE
-2. ~~Implement loading states for content~~ ✅ ALREADY EXISTS
-3. ~~Fix critical accessibility issues~~ ✅ DONE
-4. ~~Add basic error handling improvements~~ ✅ ALREADY GOOD
-
-### Phase 2 (Short-term - 2-4 weeks)
-1. Improve mobile navigation UX (swipe gestures)
-2. Add search functionality
-3. Implement breadcrumb navigation
-4. Add previous/next navigation to all pages
-
 ### Phase 3 (Medium-term - 1-2 months)
 1. Add dark mode support
-2. Implement additional performance optimizations
-3. Add offline capabilities
+2. Implement additional performance optimizations (code splitting?)
+3. Add offline capabilities (Service Worker)
 4. Enhanced typography and readability features
 
 ### Phase 4 (Long-term - 2-3 months)
 1. Advanced accessibility features
 2. Progressive Web App capabilities
-3. Advanced search and filtering
-4. Analytics and user behavior insights
+3. Analytics and user behavior insights
 
 ## 🧪 Testing Recommendations
 
-- Conduct accessibility audit with tools like Lighthouse, WAVE, or axe
-- Test on various devices and screen sizes
-- User testing with developers and technical readers
-- Performance testing with WebPageTest or similar tools
-
-## 📊 Success Metrics
-
-- Improved Lighthouse accessibility score (>90)
-- Better user engagement (time on page, chapter completion rates)
-- Reduced bounce rate on mobile devices
-- Positive user feedback on navigation and readability
-
-## 📈 Current Status Summary
-
-**Completed Analysis:**
-- ✅ Main landing page structure and design
-- ✅ CSS styling and visual design elements
-- ✅ JavaScript functionality and interactivity
-- ✅ Chapter page layout and content presentation
-- ✅ Responsive design and mobile experience
-- ✅ Navigation and user flow evaluation
-- ✅ Accessibility features review
-- ✅ Content readability and typography analysis
-- ✅ Loading states and performance considerations
-- ✅ Specific UI/UX issues identification
-- ✅ Prioritized recommendations compilation
-
-**Implemented (2025-12-15):**
-- ✅ Skip links for keyboard navigation
-- ✅ Focus indicators for all interactive elements
-- ✅ Enhanced keyboard support (Enter, Space, Escape)
-- ✅ ARIA attributes for dynamic content
-- ✅ Lazy loading for content images
-
-This ebook has excellent potential. With these improvements, it will provide a world-class reading experience that matches the quality of the DSPy content itself.
+- **Search**: Verify search results link correctly to chapters (handling `../../` vs `./`).
+- **Mobile**: Test swipe gestures on actual mobile device or simulator.
+- **Nav**: Verify Prev/Next buttons appear correctly on first, middle, and last sections.

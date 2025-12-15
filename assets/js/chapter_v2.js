@@ -468,18 +468,309 @@ function trackViewedSections() {
 }
 
 /**
- * Initialize chapter page
+ * Swipe Gestures for Mobile Sidebar
  */
+function initSwipeGestures() {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+    if (!sidebar || !toggle) return;
+
+    let touchStartX = 0;
+    // const touchStartY = 0; // Unused
+    const SWIPE_THRESHOLD = 75;
+    const EDGE_THRESHOLD = 50;
+    const SCROLL_THRESHOLD = 50;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        // touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+
+        // We need startY for scroll check
+        // Ideally capture startY in touchstart too
+    }, { passive: true });
+}
+// Retrying Swipe Gestures with correct variable scope
+function initSwipeGesturesCorrected() {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+    if (!sidebar || !toggle) return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const SWIPE_THRESHOLD = 75;
+    const EDGE_THRESHOLD = 50;
+    const SCROLL_THRESHOLD = 50;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        if (Math.abs(diffY) > SCROLL_THRESHOLD) return;
+
+        // Swipe Right (Open)
+        if (diffX > SWIPE_THRESHOLD && touchStartX < EDGE_THRESHOLD) {
+            if (!sidebar.classList.contains('open')) {
+                sidebar.classList.add('open');
+                toggle.classList.add('active');
+                toggle.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        // Swipe Left (Close)
+        if (diffX < -SWIPE_THRESHOLD) {
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                toggle.classList.remove('active');
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.focus();
+            }
+        }
+    }, { passive: true });
+}
+
+/**
+ * Dynamic Breadcrumb Generation
+ */
+function initBreadcrumbs() {
+    const heroContent = document.querySelector('.chapter-hero-content');
+    if (!heroContent) return;
+
+    const chapterTitleElement = document.querySelector('.chapter-title');
+    const sectionTitleElement = document.querySelector('.section-item.active .section-title');
+
+    const chapterTitle = document.querySelector('.sidebar-header h2')?.textContent.trim() ||
+        chapterTitleElement?.textContent.trim() || 'Chapter';
+
+    const currentSectionTitle = sectionTitleElement?.textContent.trim() || 'Introduction';
+
+    const breadcrumbNav = document.createElement('nav');
+    breadcrumbNav.className = 'breadcrumbs is-visible fade-in-up';
+    breadcrumbNav.setAttribute('aria-label', 'Breadcrumb');
+    breadcrumbNav.style.marginBottom = '1rem';
+    breadcrumbNav.style.fontSize = '0.9rem';
+    breadcrumbNav.style.color = 'var(--secondary-color)';
+
+    breadcrumbNav.innerHTML = `
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+            <li><a href="../../index.html" style="color: var(--secondary-color); text-decoration: none;">Home</a></li>
+            <li aria-hidden="true" style="opacity: 0.5;">/</li>
+            <li><a href="index.html" style="color: var(--secondary-color); text-decoration: none;">${chapterTitle}</a></li>
+            ${currentSectionTitle && currentSectionTitle !== 'Preface' && currentSectionTitle !== 'Chapter Overview' ? `
+                <li aria-hidden="true" style="opacity: 0.5;">/</li>
+                <li style="color: var(--primary-color); font-weight: 500;" aria-current="page">${currentSectionTitle}</li>
+            ` : ''}
+        </ol>
+    `;
+
+    heroContent.insertBefore(breadcrumbNav, heroContent.firstChild);
+}
+
+/**
+ * Dynamic Content Navigation
+ */
+function initContentNavigation() {
+    const mainContent = document.querySelector('.chapter-content');
+    if (!mainContent) return;
+    if (document.querySelector('.chapter-nav')) return;
+
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    const sidebarLinks = Array.from(document.querySelectorAll('.section-list a'));
+    const currentIndex = sidebarLinks.findIndex(link => {
+        const href = link.getAttribute('href');
+        return href === currentPath || (currentPath === 'index.html' && href.startsWith('index.html'));
+    });
+
+    if (currentIndex === -1) return;
+
+    const navContainer = document.createElement('div');
+    navContainer.className = 'chapter-nav is-visible fade-in-up';
+
+    let prevHtml = '';
+    if (currentIndex > 0) {
+        const prevLink = sidebarLinks[currentIndex - 1];
+        const prevTitle = prevLink.querySelector('.section-title').textContent.trim();
+        const prevHref = prevLink.getAttribute('href');
+        prevHtml = `<a href="${prevHref}" class="nav-link prev"><span class="nav-direction">← Previous</span><span class="nav-title">${prevTitle}</span></a>`;
+    }
+
+    let nextHtml = '';
+    if (currentIndex < sidebarLinks.length - 1) {
+        const nextLink = sidebarLinks[currentIndex + 1];
+        const nextTitle = nextLink.querySelector('.section-title').textContent.trim();
+        const nextHref = nextLink.getAttribute('href');
+        nextHtml = `<a href="${nextHref}" class="nav-link next"><span class="nav-direction">Next →</span><span class="nav-title">${nextTitle}</span></a>`;
+    } else {
+        const nextChapterBtn = document.querySelector('.next-chapter-btn');
+        if (nextChapterBtn) {
+            const nextHref = nextChapterBtn.getAttribute('href');
+            const nextText = nextChapterBtn.textContent.replace('Next: ', '').replace(' →', '').trim();
+            nextHtml = `<a href="${nextHref}" class="nav-link next chapter-step"><span class="nav-direction">Next Chapter →</span><span class="nav-title">${nextText}</span></a>`;
+        }
+    }
+
+    if (prevHtml || nextHtml) {
+        navContainer.innerHTML = `${prevHtml}${nextHtml}`;
+        const contentWrapper = document.querySelector('.content-wrapper');
+        if (contentWrapper) contentWrapper.appendChild(navContainer);
+    }
+}
+
+/**
+ * Search Functionality
+ */
+function initSearch() {
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    if (!sidebarHeader) return;
+
+    // Avoid duplicate search bars
+    if (document.querySelector('.sidebar-search')) return;
+
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'sidebar-search';
+    // Using inline styles for now as we haven't updated CSS
+    searchContainer.style.marginTop = '10px';
+    searchContainer.style.position = 'relative';
+
+    searchContainer.innerHTML = `
+        <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7; margin-right: 6px;">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" style="background: transparent; border: none; font-size: 0.9rem; color: white; width: 100%; outline: none;">
+            <button id="clear-search" aria-label="Clear search" style="display: none; background: none; border: none; cursor: pointer; color: white; padding: 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div id="search-results" class="search-results" style="display: none; position: absolute; top: 105%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 400px; overflow-y: auto; z-index: 1000; color: var(--text-color);"></div>
+    `;
+
+    sidebarHeader.appendChild(searchContainer);
+
+    // Placeholder styling
+    // Since we can't easily do ::placeholder in inline styles, we rely on browser default or inherited
+
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+    const clearBtn = document.getElementById('clear-search');
+    let searchIndex = null;
+    let isFetching = false;
+
+    searchInput.addEventListener('focus', async () => {
+        if (!searchIndex && !isFetching) {
+            isFetching = true;
+            try {
+                const pathParts = window.location.pathname.split('/');
+                let prefix = '';
+                if (pathParts.includes('chapters')) {
+                    prefix = '../../';
+                }
+                const response = await fetch(`${prefix}assets/js/search_index.json`);
+                searchIndex = await response.json();
+            } catch (err) {
+                console.error('Failed to load search index:', err);
+                // Creating search index failed?
+            } finally {
+                isFetching = false;
+            }
+        }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length > 0) {
+            clearBtn.style.display = 'block';
+            resultsContainer.style.display = 'block';
+            if (!searchIndex) {
+                resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; color: #666;">Loading index...</div>';
+                return;
+            }
+            const results = searchIndex.filter(page => {
+                return page.title.toLowerCase().includes(query) || page.content.toLowerCase().includes(query);
+            }).slice(0, 50);
+            displayResults(results, query);
+        } else {
+            clearBtn.style.display = 'none';
+            resultsContainer.style.display = 'none';
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        resultsContainer.style.display = 'none';
+        clearBtn.style.display = 'none';
+        searchInput.focus();
+    });
+
+    function displayResults(results, query) {
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; color: #666;">No results found</div>';
+            return;
+        }
+        const pathParts = window.location.pathname.split('/');
+        let prefix = '';
+        if (pathParts.includes('chapters')) {
+            prefix = '../../';
+        }
+
+        const html = results.map(result => {
+            const contentLower = result.content.toLowerCase();
+            const queryIdx = contentLower.indexOf(query);
+            let snippet = '';
+            if (queryIdx > -1) {
+                const start = Math.max(0, queryIdx - 40);
+                const end = Math.min(result.content.length, queryIdx + 60);
+                snippet = '...' + result.content.substring(start, end) + '...';
+            } else {
+                snippet = result.content.substring(0, 100) + '...';
+            }
+            snippet = snippet.replace(new RegExp(query, 'gi'), match => `<mark style="background: rgba(255, 235, 59, 0.5); border-radius: 2px;">${match}</mark>`);
+
+            return `
+                <a href="${prefix}${result.url}" style="display: block; padding: 10px; border-bottom: 1px solid #eee; text-decoration: none; color: inherit; transition: background 0.2s;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: var(--primary-color); margin-bottom: 4px;">${result.title}</div>
+                    <div style="font-size: 0.8rem; color: #666; line-height: 1.4;">${snippet}</div>
+                </a>
+            `;
+        }).join('');
+        resultsContainer.innerHTML = html;
+
+        // Add hover effects via JS since inline
+        resultsContainer.querySelectorAll('a').forEach(a => {
+            a.addEventListener('mouseenter', () => a.style.background = '#f8fafc');
+            a.addEventListener('mouseleave', () => a.style.background = 'transparent');
+        });
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!searchContainer.contains(e.target)) {
+            resultsContainer.style.display = 'none';
+        }
+    });
+}
+
 function initChapter(config) {
-    // Configure marked
     configureMarked();
 
-    // Load all sections
     if (config && config.sections) {
         config.sections.forEach((section, index) => {
-            // Stagger loading for smoother appearance
             setTimeout(() => {
-                // Support both HTML and markdown content types
                 if (section.type === 'html') {
                     loadHtmlContent(section.file, section.contentId);
                 } else {
@@ -489,28 +780,28 @@ function initChapter(config) {
         });
     }
 
-    // Initialize UI components
     initSidebarToggle();
     initSmoothScroll();
     initScrollToTop();
     initSectionAnimations();
     trackViewedSections();
 
-    // Scroll event listeners
+    // Init new features
+    initSwipeGesturesCorrected();
+    initBreadcrumbs();
+    initContentNavigation();
+    initSearch(); // Initialize search
+
     let scrollTimeout;
     window.addEventListener('scroll', () => {
         updateReadingProgress();
-
-        // Debounce active section updates
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(updateActiveSection, 50);
     });
 
-    // Initial calls
     updateReadingProgress();
     updateActiveSection();
 }
 
-// Make functions globally available
 window.initChapter = initChapter;
 window.copyCode = copyCode;
