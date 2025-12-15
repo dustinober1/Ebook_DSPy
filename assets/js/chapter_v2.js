@@ -294,9 +294,31 @@ function initSidebarToggle() {
 
     if (!toggle || !sidebar) return;
 
-    toggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        toggle.classList.toggle('active');
+    // Set initial aria-expanded state
+    toggle.setAttribute('aria-expanded', 'false');
+
+    const toggleSidebar = (open) => {
+        const isOpen = open !== undefined ? open : !sidebar.classList.contains('open');
+
+        if (isOpen) {
+            sidebar.classList.add('open');
+            toggle.classList.add('active');
+            toggle.setAttribute('aria-expanded', 'true');
+        } else {
+            sidebar.classList.remove('open');
+            toggle.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    };
+
+    toggle.addEventListener('click', () => toggleSidebar());
+
+    // Keyboard support for sidebar toggle
+    toggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleSidebar();
+        }
     });
 
     // Close sidebar when clicking outside
@@ -304,8 +326,15 @@ function initSidebarToggle() {
         if (sidebar.classList.contains('open') &&
             !sidebar.contains(e.target) &&
             !toggle.contains(e.target)) {
-            sidebar.classList.remove('open');
-            toggle.classList.remove('active');
+            toggleSidebar(false);
+        }
+    });
+
+    // Close sidebar when pressing Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+            toggleSidebar(false);
+            toggle.focus(); // Return focus to toggle button
         }
     });
 
@@ -313,8 +342,7 @@ function initSidebarToggle() {
     sidebar.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             if (window.innerWidth <= 1024) {
-                sidebar.classList.remove('open');
-                toggle.classList.remove('active');
+                toggleSidebar(false);
             }
         });
     });
