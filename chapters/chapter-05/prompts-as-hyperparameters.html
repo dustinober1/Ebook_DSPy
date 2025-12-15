@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 5: Optimizers | DSPy: The Comprehensive Guide</title>
+    <title>Prompts as Hyperparameters | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Explore DSPy's advanced optimizers: BootstrapFewShot, MiPRO, KnnFewShot, and more for efficient model compilation.">
+        content="Treating prompts as trainable hyperparameters to automatically optimize language model performance, enabling effective learning with minimal data.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -170,7 +170,7 @@
                             <span class="section-title">Instruction-Demonstration Interactions</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="prompts-as-hyperparameters">
+                    <li class="section-item active" data-section="prompts-as-hyperparameters">
                         <a href="prompts-as-hyperparameters.html">
                             <span class="section-number">23</span>
                             <span class="section-title">Prompts as Hyperparameters</span>
@@ -235,88 +235,81 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 5</span>
-                    <h1 class="chapter-title">Optimizers</h1>
-                    <p class="chapter-description">Learn how DSPy optimizers systematically improve your prompts and
-                        modules.</p>
+                    <h1 class="chapter-title">Prompts as Hyperparameters</h1>
+                    <p class="chapter-description">Systematic prompt optimization: Treating instruction templates,
+                        few-shot examples, and formatting as tunable hyperparameters.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="prompts-as-hyperparameters"
+                        data-section="prompts-as-hyperparameters">
+                        <div class="markdown-content">
 
-                            <!-- Overview -->
+                            <!-- Introduction -->
                             <div class="content-block">
-                                <h2>🚀 Chapter Overview</h2>
-                                <p>Optimizers are the heart of DSPy. They take your declarative modules and
-                                    systematically improve them by tuning prompts and updating weights. In this chapter,
-                                    we'll explore the full range of DSPy optimizers, from basic few-shot selectors to
-                                    advanced evolutionary algorithms and fine-tuning strategies.</p>
-                                <p>You'll learn how to treat prompt engineering as a programmatic optimization problem,
-                                    allowing you to achieve higher performance with less manual effort.</p>
+                                <h2>Introduction</h2>
+                                <p>Instead of manually crafting "perfect" prompts, DSPy allows us to treat prompt
+                                    components—instructions, examples, reasoning patterns—as hyperparameters. These can
+                                    be optimized using automated search strategies, much like learning rates in neural
+                                    networks.</p>
                             </div>
 
-                            <!-- What You'll Learn -->
+                            <!-- Conceptual Foundation -->
                             <div class="content-block">
-                                <h2>📚 What You'll Learn</h2>
-                                <div class="chapter-sections-list">
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔧</span>
-                                        <div class="section-content">
-                                            <h4>Core Optimizers</h4>
-                                            <p>Master BootstrapFewShot, COPRO, and MiPRO for automatic prompt
-                                                improvement.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🧠</span>
-                                        <div class="section-content">
-                                            <h4>Model Tuning</h4>
-                                            <p>Learn how to fine-tune small language models to perform like larger ones.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔬</span>
-                                        <div class="section-content">
-                                            <h4>Advanced Techniques</h4>
-                                            <p>Explore cutting-edge methods like Bayesian Optimization, Monte Carlo
-                                                methods, and Genetic Algorithms.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">📐</span>
-                                        <div class="section-content">
-                                            <h4>Theoretical Foundations</h4>
-                                            <p>Understand the theory behind multi-stage optimization and complex
-                                                pipeline architectures.</p>
-                                        </div>
-                                    </div>
+                                <h2>The Hyperparameter Framework</h2>
+                                <p>We define a search space for various prompt aspects:</p>
+                                <ul>
+                                    <li><strong>Instruction Templates:</strong> "Summarize this text" vs. "Provide a
+                                        concise summary of the key points."</li>
+                                    <li><strong>Formatting:</strong> "Q: ... A: ..." vs. "Input: ... Output: ..."</li>
+                                    <li><strong>Reasoning Guidance:</strong> "Think step-by-step" vs. "Analyze the pros
+                                        and cons first."</li>
+                                </ul>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class PromptHyperparameters:
+    instruction_template: str
+    example_selection: str
+    formatting_pattern: str</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Detailed breakdown -->
+                            <!-- Extreme Few-Shot -->
                             <div class="content-block">
-                                <h2>📋 Chapter Structure</h2>
-                                <p>This chapter is organized into several key areas:</p>
+                                <h2>Extreme Few-Shot Learning</h2>
+                                <p>One of the most powerful applications of this method is training high-performing
+                                    systems with very little data (e.g., just 10 examples). By rigorously optimizing the
+                                    prompt structure on a small validation set, we can extract maximum performance from
+                                    the LLM's pre-trained knowledge.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">optimizer = ExtremeFewShotOptimizer(base_model="gpt-4o")
+program = optimizer.optimize_with_10_examples(
+    task_signature=my_signature,
+    examples=tiny_dataset
+)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Real World IR Application -->
+                            <div class="content-block">
+                                <h2>Case Study: Optimized Information Retrieval</h2>
+                                <p>In an Information Retrieval (IR) task with only 10 labeled queries, auto-optimizing
+                                    the prompt (instruction + few-shot selection) can yield a system that rivals those
+                                    trained on much larger datasets.</p>
                                 <ul>
-                                    <li><strong>Getting Started:</strong> Compilation Concept, BootstrapFewShot</li>
-                                    <li><strong>Instruction Optimization:</strong> COPRO, MiPRO, Automatic Prompt
-                                        Optimization</li>
-                                    <li><strong>Example Selection:</strong> KnnFewShot, Demonstration Optimization</li>
-                                    <li><strong>Model Optimization:</strong> Fine-tuning, Joint Optimization</li>
-                                    <li><strong>Advanced Methods:</strong> Monte Carlo, Bayesian, Genetic Algorithms
-                                        (GEPA), Reflective Prompt Evolution</li>
-                                    <li><strong>Architectures & Frameworks:</strong> CoPA, Multistage Theory,
-                                        Instruction Tuning Frameworks</li>
+                                    <li><strong>Meta-Learning:</strong> Use the model to generate its own variations of
+                                        instructions.</li>
+                                    <li><strong>Cross-Validation:</strong> Crucial when data is scarce to ensure the
+                                        chosen prompt generalizes.</li>
                                 </ul>
                             </div>
 
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="compilation-concept.html" class="continue-btn">
-                                        <span>Start with Compilation Concept</span>
+                                    <a href="minimal-data-pipelines.html" class="continue-btn">
+                                        <span>Next: Minimal Data Pipelines</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -325,6 +318,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>

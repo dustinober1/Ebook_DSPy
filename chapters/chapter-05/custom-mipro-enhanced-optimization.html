@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 5: Optimizers | DSPy: The Comprehensive Guide</title>
+    <title>Custom MiPRO Enhanced Optimization | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Explore DSPy's advanced optimizers: BootstrapFewShot, MiPRO, KnnFewShot, and more for efficient model compilation.">
+        content="Dive into CustomMIPROv2, an enhanced multi-stage prompt optimization strategy for DSPy that separates constraint extraction from instruction generation for production-grade results.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -200,7 +200,7 @@
                             <span class="section-title">InPars+ Synthetic Data IR</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="custom-mipro-enhanced-optimization">
+                    <li class="section-item active" data-section="custom-mipro-enhanced-optimization">
                         <a href="custom-mipro-enhanced-optimization.html">
                             <span class="section-number">28</span>
                             <span class="section-title">Custom MiPRO Enhanced Optimization</span>
@@ -235,88 +235,78 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 5</span>
-                    <h1 class="chapter-title">Optimizers</h1>
-                    <p class="chapter-description">Learn how DSPy optimizers systematically improve your prompts and
-                        modules.</p>
+                    <h1 class="chapter-title">CustomMIPROv2: Enhanced Optimization</h1>
+                    <p class="chapter-description">A production-ready extension of MIPROv2 that introduces two-stage
+                        optimization, explicit constraints, and efficient mini-batch evaluation.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="custom-mipro-enhanced-optimization"
+                        data-section="custom-mipro-enhanced-optimization">
+                        <div class="markdown-content">
 
-                            <!-- Overview -->
+                            <!-- Introduction -->
                             <div class="content-block">
-                                <h2>🚀 Chapter Overview</h2>
-                                <p>Optimizers are the heart of DSPy. They take your declarative modules and
-                                    systematically improve them by tuning prompts and updating weights. In this chapter,
-                                    we'll explore the full range of DSPy optimizers, from basic few-shot selectors to
-                                    advanced evolutionary algorithms and fine-tuning strategies.</p>
-                                <p>You'll learn how to treat prompt engineering as a programmatic optimization problem,
-                                    allowing you to achieve higher performance with less manual effort.</p>
+                                <h2>Introduction</h2>
+                                <p><strong>CustomMIPROv2</strong> enhances the standard MIPROv2 optimizer by adding
+                                    explicit controls for real-world constraints ("Must prevent X", "Must ensure Y"). It
+                                    separates the process into two stages: extracting constraints from data, and then
+                                    generating instructions that obey those constraints.</p>
                             </div>
 
-                            <!-- What You'll Learn -->
+                            <!-- Architecture -->
                             <div class="content-block">
-                                <h2>📚 What You'll Learn</h2>
-                                <div class="chapter-sections-list">
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔧</span>
-                                        <div class="section-content">
-                                            <h4>Core Optimizers</h4>
-                                            <p>Master BootstrapFewShot, COPRO, and MiPRO for automatic prompt
-                                                improvement.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🧠</span>
-                                        <div class="section-content">
-                                            <h4>Model Tuning</h4>
-                                            <p>Learn how to fine-tune small language models to perform like larger ones.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔬</span>
-                                        <div class="section-content">
-                                            <h4>Advanced Techniques</h4>
-                                            <p>Explore cutting-edge methods like Bayesian Optimization, Monte Carlo
-                                                methods, and Genetic Algorithms.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">📐</span>
-                                        <div class="section-content">
-                                            <h4>Theoretical Foundations</h4>
-                                            <p>Understand the theory behind multi-stage optimization and complex
-                                                pipeline architectures.</p>
-                                        </div>
-                                    </div>
+                                <h2>Architecture</h2>
+                                <h3>1. Constraint Extraction (Stage 1)</h3>
+                                <p>The optimizer first looks at your examples to figure out the "rules of the road"—what
+                                    are the critical constraints and edge cases?</p>
+
+                                <h3>2. Instruction Generation (Stage 2)</h3>
+                                <p>It then generates instructions that explicitly address these constraints, rather than
+                                    hope the model infers them implicitly.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">optimizer = CustomMIPROv2(
+    tips=[
+        "Be concise",
+        "Never use markdown in the output"
+    ],
+    constraints=[
+        OptimizationConstraint(name="safety", priority="HIGH")
+    ]
+)</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Detailed breakdown -->
+                            <!-- Use Cases -->
                             <div class="content-block">
-                                <h2>📋 Chapter Structure</h2>
-                                <p>This chapter is organized into several key areas:</p>
+                                <h2>Use Cases</h2>
                                 <ul>
-                                    <li><strong>Getting Started:</strong> Compilation Concept, BootstrapFewShot</li>
-                                    <li><strong>Instruction Optimization:</strong> COPRO, MiPRO, Automatic Prompt
-                                        Optimization</li>
-                                    <li><strong>Example Selection:</strong> KnnFewShot, Demonstration Optimization</li>
-                                    <li><strong>Model Optimization:</strong> Fine-tuning, Joint Optimization</li>
-                                    <li><strong>Advanced Methods:</strong> Monte Carlo, Bayesian, Genetic Algorithms
-                                        (GEPA), Reflective Prompt Evolution</li>
-                                    <li><strong>Architectures & Frameworks:</strong> CoPA, Multistage Theory,
-                                        Instruction Tuning Frameworks</li>
+                                    <li><strong>Routing Agents:</strong> Ensuring reliable selection of tools/agents in
+                                        complex workflows.</li>
+                                    <li><strong>Code Generation:</strong> Enforcing syntax correctness and specific
+                                        library usage.</li>
+                                    <li><strong>Safety Critical Systems:</strong> Where constraints must be explicitly
+                                        followed (e.g., "Do not give medical advice").</li>
                                 </ul>
                             </div>
 
+                            <!-- Implementation -->
+                            <div class="content-block">
+                                <h2>Implementation Guide</h2>
+                                <p>Using CustomMIPROv2 is similar to standard optimizers but allows you to pass in
+                                    `tips` and `constraints` during the compile step.</p>
+                                <div class="command-box">
+                                    <pre>optimized_program = optimizer.compile(..., tips=my_tips, constraints=my_constraints)</pre>
+                                </div>
+                            </div>
+
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="compilation-concept.html" class="continue-btn">
-                                        <span>Start with Compilation Concept</span>
+                                    <a href="automatic-prompt-optimization-research.html" class="continue-btn">
+                                        <span>Next: Automatic Prompt Optimization Research</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -325,6 +315,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>

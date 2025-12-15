@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 5: Optimizers | DSPy: The Comprehensive Guide</title>
+    <title>Multistage Architectures | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Explore DSPy's advanced optimizers: BootstrapFewShot, MiPRO, KnnFewShot, and more for efficient model compilation.">
+        content="Design patterns and best practices for building robust multi-stage language model architectures in DSPy, including sequential, branching, and iterative pipelines.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -152,7 +152,7 @@
                             <span class="section-title">Demonstration Optimization</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="multistage-architectures">
+                    <li class="section-item active" data-section="multistage-architectures">
                         <a href="multistage-architectures.html">
                             <span class="section-number">20</span>
                             <span class="section-title">Multistage Architectures</span>
@@ -170,45 +170,39 @@
                             <span class="section-title">Instruction-Demonstration Interactions</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="prompts-as-hyperparameters">
-                        <a href="prompts-as-hyperparameters.html">
-                            <span class="section-number">23</span>
-                            <span class="section-title">Prompts as Hyperparameters</span>
-                        </a>
-                    </li>
                     <li class="section-item" data-section="minimal-data-pipelines">
                         <a href="minimal-data-pipelines.html">
-                            <span class="section-number">24</span>
+                            <span class="section-number">23</span>
                             <span class="section-title">Minimal Data Pipelines</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="gepa-genetic-pareto-optimization">
                         <a href="gepa-genetic-pareto-optimization.html">
-                            <span class="section-number">25</span>
+                            <span class="section-number">24</span>
                             <span class="section-title">GEPA (Genetic Pareto Optimization)</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="state-space-prompt-optimization">
                         <a href="state-space-prompt-optimization.html">
-                            <span class="section-number">26</span>
+                            <span class="section-number">25</span>
                             <span class="section-title">State-Space Prompt Optimization</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="inpars-plus-synthetic-data-ir">
                         <a href="inpars-plus-synthetic-data-ir.html">
-                            <span class="section-number">27</span>
+                            <span class="section-number">26</span>
                             <span class="section-title">InPars+ Synthetic Data IR</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="custom-mipro-enhanced-optimization">
                         <a href="custom-mipro-enhanced-optimization.html">
-                            <span class="section-number">28</span>
+                            <span class="section-number">27</span>
                             <span class="section-title">Custom MiPRO Enhanced Optimization</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="automatic-prompt-optimization-research">
                         <a href="automatic-prompt-optimization-research.html">
-                            <span class="section-number">29</span>
+                            <span class="section-number">28</span>
                             <span class="section-title">Automatic Prompt Optimization Research</span>
                         </a>
                     </li>
@@ -235,88 +229,86 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 5</span>
-                    <h1 class="chapter-title">Optimizers</h1>
-                    <p class="chapter-description">Learn how DSPy optimizers systematically improve your prompts and
-                        modules.</p>
+                    <h1 class="chapter-title">Multistage Architectures</h1>
+                    <p class="chapter-description">Explore architectural patterns for multi-stage DSPy programs,
+                        including sequential pipelines, branching logic, and hierarchical structures.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="multistage-architectures"
+                        data-section="multistage-architectures">
+                        <div class="markdown-content">
 
-                            <!-- Overview -->
+                            <!-- Introduction -->
                             <div class="content-block">
-                                <h2>🚀 Chapter Overview</h2>
-                                <p>Optimizers are the heart of DSPy. They take your declarative modules and
-                                    systematically improve them by tuning prompts and updating weights. In this chapter,
-                                    we'll explore the full range of DSPy optimizers, from basic few-shot selectors to
-                                    advanced evolutionary algorithms and fine-tuning strategies.</p>
-                                <p>You'll learn how to treat prompt engineering as a programmatic optimization problem,
-                                    allowing you to achieve higher performance with less manual effort.</p>
+                                <h2>Introduction</h2>
+                                <p>Multi-stage architectures allow us to break down complex tasks into manageable steps.
+                                    This improves modularity, debuggability, and performance.</p>
                             </div>
 
-                            <!-- What You'll Learn -->
+                            <!-- Architectures -->
                             <div class="content-block">
-                                <h2>📚 What You'll Learn</h2>
-                                <div class="chapter-sections-list">
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔧</span>
-                                        <div class="section-content">
-                                            <h4>Core Optimizers</h4>
-                                            <p>Master BootstrapFewShot, COPRO, and MiPRO for automatic prompt
-                                                improvement.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🧠</span>
-                                        <div class="section-content">
-                                            <h4>Model Tuning</h4>
-                                            <p>Learn how to fine-tune small language models to perform like larger ones.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">🔬</span>
-                                        <div class="section-content">
-                                            <h4>Advanced Techniques</h4>
-                                            <p>Explore cutting-edge methods like Bayesian Optimization, Monte Carlo
-                                                methods, and Genetic Algorithms.</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">📐</span>
-                                        <div class="section-content">
-                                            <h4>Theoretical Foundations</h4>
-                                            <p>Understand the theory behind multi-stage optimization and complex
-                                                pipeline architectures.</p>
-                                        </div>
-                                    </div>
+                                <h2>Architectural Patterns</h2>
+
+                                <h3>1. Sequential Pipeline</h3>
+                                <p>The most common pattern, where data flows linearly through a series of stages.</p>
+                                <div class="command-box">
+                                    <pre>Input → Stage 1 → Stage 2 → Stage 3 → Output</pre>
                                 </div>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class SequentialPipeline(dspy.Module):
+    def forward(self, x):
+        for stage in self.stages:
+            x = stage(x)
+        return x</code></pre>
+                                </div>
+
+                                <h3>2. Branching Architecture</h3>
+                                <p>Uses a router to direct the flow of execution based on the input or intermediate
+                                    results.</p>
+                                <div class="command-box">
+                                    <pre>           ┌─→ Stage A
+Input → Router ─┤
+           └─→ Stage B</pre>
+                                </div>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class BranchingPipeline(dspy.Module):
+    def forward(self, x):
+        branch = self.router(x)
+        if branch == 'A':
+            return self.stage_a(x)
+        else:
+            return self.stage_b(x)</code></pre>
+                                </div>
+
+                                <h3>3. Iterative Architecture</h3>
+                                <p>Repeats a process until a stopping condition is met (e.g., quality threshold or max
+                                    iterations).</p>
+
+                                <h3>4. Hierarchical Architecture</h3>
+                                <p>Composes pipelines within pipelines to handle very complex tasks.</p>
                             </div>
 
-                            <!-- Detailed breakdown -->
+                            <!-- Design Principles -->
                             <div class="content-block">
-                                <h2>📋 Chapter Structure</h2>
-                                <p>This chapter is organized into several key areas:</p>
+                                <h2>Design Principles</h2>
                                 <ul>
-                                    <li><strong>Getting Started:</strong> Compilation Concept, BootstrapFewShot</li>
-                                    <li><strong>Instruction Optimization:</strong> COPRO, MiPRO, Automatic Prompt
-                                        Optimization</li>
-                                    <li><strong>Example Selection:</strong> KnnFewShot, Demonstration Optimization</li>
-                                    <li><strong>Model Optimization:</strong> Fine-tuning, Joint Optimization</li>
-                                    <li><strong>Advanced Methods:</strong> Monte Carlo, Bayesian, Genetic Algorithms
-                                        (GEPA), Reflective Prompt Evolution</li>
-                                    <li><strong>Architectures & Frameworks:</strong> CoPA, Multistage Theory,
-                                        Instruction Tuning Frameworks</li>
+                                    <li><strong>Clear Interfaces:</strong> Define standard input/output schemas for
+                                        stages.</li>
+                                    <li><strong>Error Handling:</strong> Implement robust error detection and recovery
+                                        strategies.</li>
+                                    <li><strong>Observability:</strong> Log intermediate outputs for debugging and
+                                        optimization.</li>
                                 </ul>
                             </div>
 
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="compilation-concept.html" class="continue-btn">
-                                        <span>Start with Compilation Concept</span>
+                                    <a href="complex-pipeline-optimization.html" class="continue-btn">
+                                        <span>Next: Complex Pipeline Optimization</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -325,6 +317,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>
