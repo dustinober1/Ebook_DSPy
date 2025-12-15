@@ -106,6 +106,12 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--primary-color);
 
 ## 📱 Completed Implementation Summary (2025-12-15)
 
+### ✅ Technical Improvements
+1. **Dark Mode**: Fully implemented with system preference detection and manual toggle.
+   - CSS variables defined for light/dark themes.
+   - Persistence via `localStorage`.
+   - Toggle button added to Sidebar (Chapters) and Header (Home).
+
 ### ✅ Accessibility Improvements
 1. **Skip Links**: Added to `index.html` and all 121 chapter HTML files
 2. **Focus Indicators**: Custom `:focus-visible` styles added to `style.css` and `chapter.css`
@@ -128,9 +134,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--primary-color);
 4. **Bottom Navigation**: "Previous" and "Next" buttons automatically added to the bottom of every section/page.
 
 ### ✅ Files Modified
-- `/assets/css/style.css` 
-- `/assets/css/chapter.css`
-- `/assets/js/chapter_v2.js` (Major logic updates)
+- `/assets/css/style.css` (Added Dark Mode vars)
+- `/assets/css/chapter.css` (Added Dark Mode vars)
+- `/assets/js/chapter_v2.js` (Major logic updates + Theme)
+- `/assets/js/main.js` (Added Theme Toggle)
 - `/index.html`
 - All 121 chapter HTML files
 - `/scripts/build_search_index.py` (New file)
@@ -138,19 +145,16 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--primary-color);
 
 ## 🎯 Remaining Prioritized Action Plan
 
-### Phase 3 (Medium-term - 1-2 months)
-1. Add dark mode support
-2. Implement additional performance optimizations (code splitting?)
-3. Add offline capabilities (Service Worker)
-4. Enhanced typography and readability features
-
-### Phase 4 (Long-term - 2-3 months)
-1. Advanced accessibility features
-2. Progressive Web App capabilities
+### Phase 4 (Long-term)
+1. Offline capabilities (Service Worker)
+2. Progressive Web App (PWA) manifest
 3. Analytics and user behavior insights
+4. Advanced typography (variable fonts, reading time)
 
 ## 🧪 Testing Recommendations
 
+- **Dark Mode**: Toggle theme on Home and Chapter pages. Refresh to ensure persistence.
 - **Search**: Verify search results link correctly to chapters (handling `../../` vs `./`).
 - **Mobile**: Test swipe gestures on actual mobile device or simulator.
 - **Nav**: Verify Prev/Next buttons appear correctly on first, middle, and last sections.
+

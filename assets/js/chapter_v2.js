@@ -635,36 +635,31 @@ function initSearch() {
     const sidebarHeader = document.querySelector('.sidebar-header');
     if (!sidebarHeader) return;
 
-    // Avoid duplicate search bars
     if (document.querySelector('.sidebar-search')) return;
 
     const searchContainer = document.createElement('div');
     searchContainer.className = 'sidebar-search';
-    // Using inline styles for now as we haven't updated CSS
     searchContainer.style.marginTop = '10px';
     searchContainer.style.position = 'relative';
 
     searchContainer.innerHTML = `
         <div class="search-input-wrapper" style="position: relative; display: flex; align-items: center; background: rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 8px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7; margin-right: 6px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7; margin-right: 6px;">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" id="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" style="background: transparent; border: none; font-size: 0.9rem; color: white; width: 100%; outline: none;">
-            <button id="clear-search" aria-label="Clear search" style="display: none; background: none; border: none; cursor: pointer; color: white; padding: 0;">
+            <input type="text" id="search-input" placeholder="Search..." aria-label="Search" autocomplete="off" style="background: transparent; border: none; font-size: 0.9rem; color: inherit; width: 100%; outline: none;">
+            <button id="clear-search" aria-label="Clear search" style="display: none; background: none; border: none; cursor: pointer; color: inherit; padding: 0;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
         </div>
-        <div id="search-results" class="search-results" style="display: none; position: absolute; top: 105%; left: 0; right: 0; background: white; border: 1px solid var(--border-color); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 400px; overflow-y: auto; z-index: 1000; color: var(--text-color);"></div>
+        <div id="search-results" class="search-results" style="display: none; position: absolute; top: 105%; left: 0; right: 0; background: var(--card-bg, white); border: 1px solid var(--border-color); border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 400px; overflow-y: auto; z-index: 1000; color: var(--text-color);"></div>
     `;
 
     sidebarHeader.appendChild(searchContainer);
-
-    // Placeholder styling
-    // Since we can't easily do ::placeholder in inline styles, we rely on browser default or inherited
 
     const searchInput = document.getElementById('search-input');
     const resultsContainer = document.getElementById('search-results');
@@ -685,7 +680,6 @@ function initSearch() {
                 searchIndex = await response.json();
             } catch (err) {
                 console.error('Failed to load search index:', err);
-                // Creating search index failed?
             } finally {
                 isFetching = false;
             }
@@ -698,7 +692,7 @@ function initSearch() {
             clearBtn.style.display = 'block';
             resultsContainer.style.display = 'block';
             if (!searchIndex) {
-                resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; color: #666;">Loading index...</div>';
+                resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; opacity: 0.7;">Loading index...</div>';
                 return;
             }
             const results = searchIndex.filter(page => {
@@ -720,7 +714,7 @@ function initSearch() {
 
     function displayResults(results, query) {
         if (results.length === 0) {
-            resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; color: #666;">No results found</div>';
+            resultsContainer.innerHTML = '<div style="padding: 12px; font-size: 0.85rem; opacity: 0.7;">No results found</div>';
             return;
         }
         const pathParts = window.location.pathname.split('/');
@@ -740,20 +734,19 @@ function initSearch() {
             } else {
                 snippet = result.content.substring(0, 100) + '...';
             }
-            snippet = snippet.replace(new RegExp(query, 'gi'), match => `<mark style="background: rgba(255, 235, 59, 0.5); border-radius: 2px;">${match}</mark>`);
+            snippet = snippet.replace(new RegExp(query, 'gi'), match => `<mark style="background: rgba(255, 235, 59, 0.5); border-radius: 2px; color: black;">${match}</mark>`);
 
             return `
-                <a href="${prefix}${result.url}" style="display: block; padding: 10px; border-bottom: 1px solid #eee; text-decoration: none; color: inherit; transition: background 0.2s;">
+                <a href="${prefix}${result.url}" style="display: block; padding: 10px; border-bottom: 1px solid var(--border-color); text-decoration: none; color: inherit; transition: background 0.2s;">
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--primary-color); margin-bottom: 4px;">${result.title}</div>
-                    <div style="font-size: 0.8rem; color: #666; line-height: 1.4;">${snippet}</div>
+                    <div style="font-size: 0.8rem; opacity: 0.8; line-height: 1.4;">${snippet}</div>
                 </a>
             `;
         }).join('');
         resultsContainer.innerHTML = html;
 
-        // Add hover effects via JS since inline
         resultsContainer.querySelectorAll('a').forEach(a => {
-            a.addEventListener('mouseenter', () => a.style.background = '#f8fafc');
+            a.addEventListener('mouseenter', () => a.style.background = 'var(--sidebar-active)');
             a.addEventListener('mouseleave', () => a.style.background = 'transparent');
         });
     }
@@ -763,6 +756,81 @@ function initSearch() {
             resultsContainer.style.display = 'none';
         }
     });
+}
+
+/**
+ * Theme Toggle Functionality
+ */
+function initTheme() {
+    // Check local storage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemDark ? 'dark' : 'light');
+
+    // Apply initial
+    document.documentElement.setAttribute('data-theme', initialTheme);
+
+    // Create Toggle Button in Sidebar Header
+    const sidebarHeader = document.querySelector('.sidebar-header');
+    // Only add if not already present
+    if (sidebarHeader && !document.getElementById('theme-toggle')) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.id = 'theme-toggle';
+        toggleBtn.className = 'theme-toggle-btn';
+        toggleBtn.setAttribute('aria-label', 'Toggle Dark Mode');
+        toggleBtn.style.background = 'transparent';
+        toggleBtn.style.border = 'none';
+        toggleBtn.style.cursor = 'pointer';
+        toggleBtn.style.color = 'inherit';
+        toggleBtn.style.padding = '8px';
+        toggleBtn.style.marginLeft = 'auto';
+        toggleBtn.style.borderRadius = '50%';
+        toggleBtn.style.display = 'flex';
+        toggleBtn.style.alignItems = 'center';
+        toggleBtn.style.justifyContent = 'center';
+
+        // Icon SVG
+        toggleBtn.innerHTML = `
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: ${initialTheme === 'dark' ? 'none' : 'block'}">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: ${initialTheme === 'dark' ? 'block' : 'none'}">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        `;
+
+        sidebarHeader.appendChild(toggleBtn);
+
+        toggleBtn.addEventListener('mouseenter', () => toggleBtn.style.background = 'var(--sidebar-active)');
+        toggleBtn.addEventListener('mouseleave', () => toggleBtn.style.background = 'transparent');
+
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            const sun = toggleBtn.querySelector('.sun-icon');
+            const moon = toggleBtn.querySelector('.moon-icon');
+
+            if (newTheme === 'dark') {
+                sun.style.display = 'none';
+                moon.style.display = 'block';
+            } else {
+                sun.style.display = 'block';
+                moon.style.display = 'none';
+            }
+        });
+    }
 }
 
 function initChapter(config) {
@@ -790,7 +858,8 @@ function initChapter(config) {
     initSwipeGesturesCorrected();
     initBreadcrumbs();
     initContentNavigation();
-    initSearch(); // Initialize search
+    initSearch();
+    initTheme();
 
     let scrollTimeout;
     window.addEventListener('scroll', () => {
