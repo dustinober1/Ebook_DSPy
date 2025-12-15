@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structured Prompting | Chapter 4 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn how to use structured prompting for robust, reproducible evaluations in DSPy.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 4</h2>
+                <span class="sidebar-subtitle">Evaluation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="why-eval">
+                        <a href="why-evaluation-matters.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Why Evaluation Matters</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="datasets">
+                        <a href="creating-datasets.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Creating Datasets</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="metrics">
+                        <a href="defining-metrics.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Defining Metrics</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="loops">
+                        <a href="evaluation-loops.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Evaluation Loops</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="best-practices">
+                        <a href="best-practices.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Best Practices</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="structured-prompting">
+                        <a href="structured-prompting.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Structured Prompting</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="llm-as-judge">
+                        <a href="llm-as-a-judge.html">
+                            <span class="section-number">9</span>
+                            <span class="section-title">LLM-as-a-Judge</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="human-aligned">
+                        <a href="human-aligned-evaluation.html">
+                            <span class="section-number">10</span>
+                            <span class="section-title">Human-Aligned Eval</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">11</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-05/index.html" class="next-chapter-btn">
+                    Next: Chapter 05 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 4</span>
+                    <h1 class="chapter-title">Structured Prompting</h1>
+                    <p class="chapter-description">A systematic methodology for creating robust evaluation prompts.</p>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="structured-prompting"
+                        data-section="structured-prompting">
+                        <div class="markdown-content" id="structured-prompting-content">
+                            <!-- Overview -->
+                            <div class="content-block">
+                                <h2>Overview</h2>
+                                <p><strong>Structured Prompting</strong> is a systematic methodology for creating
+                                    evaluation prompts that ensures consistency, reliability, and robustness in language
+                                    model assessment. Introduced in late 2024, this approach addresses the variability
+                                    and inconsistency issues that plague ad-hoc prompt engineering in evaluation
+                                    scenarios.</p>
+                                <p>The key innovation is the formalization of prompt creation into a structured process
+                                    that:</p>
+                                <ul>
+                                    <li>Standardizes prompt components</li>
+                                    <li>Ensures comprehensive coverage of evaluation aspects</li>
+                                    <li>Reduces ambiguity in task instructions</li>
+                                    <li>Enables reproducible evaluation across different models and settings</li>
+                                </ul>
+                            </div>
+
+                            <!-- Why it Matters -->
+                            <div class="content-block">
+                                <h2>Why Structured Prompting Matters</h2>
+                                <h3>Problems with Ad-Hoc Prompting</h3>
+                                <p>Traditional ad-hoc prompting suffers from several issues:</p>
+                                <ol>
+                                    <li><strong>Inconsistency</strong>: Different evaluators create wildly different
+                                        prompts</li>
+                                    <li><strong>Ambiguity</strong>: Unclear instructions lead to model confusion</li>
+                                    <li><strong>Coverage Gaps</strong>: Important aspects of the task may be omitted
+                                    </li>
+                                    <li><strong>Reproducibility</strong>: Difficult to replicate results across setups
+                                    </li>
+                                    <li><strong>Bias</strong>: Unconscious biases in prompt formulation</li>
+                                </ol>
+
+                                <h3>Benefits of Structured Prompting</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-python"># Ad-hoc approach (problematic)
+ad_hoc_prompt = "Tell me about the medical risks in this trial."
+
+# Structured approach (robust)
+structured_prompt = """
+Task: Risk Assessment Evaluation
+
+Context: You are evaluating a medical research paper for potential risks.
+Please analyze the following randomized controlled trial (RCT).
+
+Instructions:
+1. Identify all potential risks mentioned
+2. Categorize risks by severity (mild/moderate/severe)
+3. Note the frequency of each risk
+4. Assess if risks are adequately addressed
+5. Provide a confidence score for your assessment
+
+Format your response as:
+- Risk Category: [Name] - Frequency - Severity
+- Overall Assessment: [Summary]
+- Confidence Score: [0-1]
+
+Trial Text: {trial_text}
+"""</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Framework -->
+                            <div class="content-block">
+                                <h2>The Structured Prompting Framework</h2>
+                                <h3>Core Components</h3>
+                                <p>A structured prompt consists of five essential components:</p>
+                                <ol>
+                                    <li><strong>Task Definition</strong>: Clear specification of what to evaluate</li>
+                                    <li><strong>Context Setting</strong>: Background information and role definition
+                                    </li>
+                                    <li><strong>Explicit Instructions</strong>: Step-by-step guidance</li>
+                                    <li><strong>Output Format</strong>: Precise formatting requirements</li>
+                                    <li><strong>Examples</strong>: Demonstration of expected responses</li>
+                                </ol>
+
+                                <h3>Implementation in DSPy</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-python">import dspy
+from typing import Dict, List, Optional
+
+class StructuredPromptEvaluator(dspy.Module):
+    """Base class for structured prompting evaluators."""
+
+    def __init__(self, task_spec: Dict):
+        super().__init__()
+        self.task_spec = task_spec
+        self.prompt_template = self._build_structured_prompt()
+
+    def _build_structured_prompt(self) -> str:
+        """Build a structured prompt from task specification."""
+        components = []
+
+        # Task Definition
+        components.append(f"Task: {self.task_spec['task_name']}")
+        components.append(f"Objective: {self.task_spec['objective']}")
+
+        # Context Setting
+        if 'context' in self.task_spec:
+            components.append(f"Context: {self.task_spec['context']}")
+
+        # Instructions
+        components.append("\nInstructions:")
+        for i, instruction in enumerate(self.task_spec['instructions'], 1):
+            components.append(f"{i}. {instruction}")
+
+        # Output Format
+        components.append("\nOutput Format:")
+        components.append(self.task_spec['output_format'])
+
+        # Examples (if provided)
+        if 'examples' in self.task_spec:
+            components.append("\nExamples:")
+            for example in self.task_spec['examples']:
+                components.append(f"Input: {example['input']}")
+                components.append(f"Output: {example['output']}\n")
+
+        # Input placeholder
+        components.append("\nInput: {input}")
+
+        return "\n".join(components)
+
+    def forward(self, **kwargs):
+        """Execute the structured prompt."""
+        prompt = self.prompt_template.format(**kwargs)
+        return dspy.Predict(prompt)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Techniques -->
+                            <div class="content-block">
+                                <h2>Advanced Structured Prompting Techniques</h2>
+                                <h3>1. Template-Based Prompt Generation</h3>
+                                <p>A template system allows you to generate structured prompts dynamically based on task
+                                    configurations.</p>
+                                <div class="code-block">
+                                    <pre><code class="language-python">class PromptTemplate:
+    """Template system for generating structured prompts."""
+    # ... (See Markdown source for full implementation) ...
+    def generate_prompt(self, task_config: Dict) -> str:
+        # Implementation details...
+        pass</code></pre>
+                                </div>
+                                <p><em>See full source code in the markdown file for complete implementation
+                                        details.</em></p>
+                            </div>
+
+                            <!-- Integration -->
+                            <div class="content-block">
+                                <h2>Integration with DSPy Evaluation</h2>
+                                <h3>Structured Evaluation Metrics</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-python">class StructuredMetric(dspy.Metric):
+    """Custom metric for evaluating structured prompt outputs."""
+
+    def __init__(self, structure_validator, content_evaluator):
+        self.structure_validator = structure_validator
+        self.content_evaluator = content_evaluator
+
+    def __call__(self, example, pred, trace=None):
+        """Evaluate both structure and content quality."""
+        # Check if output follows required structure
+        structure_score = self.structure_validator(pred.output)
+
+        # Evaluate content quality
+        content_score = self.content_evaluator(
+            example=example,
+            prediction=pred.output
+        )
+
+        # Combine scores
+        total_score = 0.6 * structure_score + 0.4 * content_score
+        return total_score</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="llm-as-a-judge.html" class="continue-btn">
+                                        <span>Continue to LLM-as-a-Judge</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
