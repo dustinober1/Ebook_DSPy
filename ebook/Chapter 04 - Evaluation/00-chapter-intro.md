@@ -38,6 +38,15 @@ Follow proven patterns for reliable, reproducible evaluations.
 ### [Exercises](06-exercises.md)
 Practice with 5 hands-on evaluation exercises.
 
+### [Structured Prompting](07-structured-prompting.md)
+Learn to create robust, consistent prompts for evaluation tasks.
+
+### [LLM-as-a-Judge](08-llm-as-a-judge.md)
+Implement advanced evaluation using LLMs to assess complex outputs.
+
+### [Human-Aligned Evaluation](09-human-aligned-evaluation.md)
+Build evaluation systems that correlate with human judgment and real-world priorities.
+
 ---
 
 ## Prerequisites
@@ -217,6 +226,11 @@ Chapter 4: Evaluation
     ├── 5 practical exercises
     ├── Metric design challenges
     └── Complete solutions
+
+├── Advanced Topics
+    ├── Structured Prompting
+    ├── LLM-as-a-Judge
+    └── Human-Aligned Evaluation
 ```
 
 ---
