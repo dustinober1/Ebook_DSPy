@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instruction Tuning Frameworks | DSPy: The Comprehensive Guide</title>
+    <title>InPars+ Synthetic Data IR | Chapter 5 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Learn the principles and frameworks for instruction tuning in DSPy, including supervised tuning, RLHF, and automatic instruction optimization.">
+        content="Advanced synthetic query generation for information retrieval using CPO and DSPy dynamic prompts.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -31,7 +31,7 @@
     </header>
 
     <div class="chapter-layout">
-                        <aside class="sidebar" id="sidebar">
+                <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Chapter 5</h2>
                 <span class="sidebar-subtitle">Optimizers</span>
@@ -140,7 +140,7 @@
                             <span class="section-title">Multistage Optimization Theory</span>
                         </a>
                     </li>
-                    <li class="section-item active" data-section="instruction-tuning-frameworks">
+                    <li class="section-item" data-section="instruction-tuning-frameworks">
                         <a href="instruction-tuning-frameworks.html">
                             <span class="section-number">18</span>
                             <span class="section-title">Instruction Tuning Frameworks</span>
@@ -194,7 +194,7 @@
                             <span class="section-title">State-Space Optimization</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="inpars-plus-synthetic-data-ir">
+                    <li class="section-item active" data-section="inpars-plus-synthetic-data-ir">
                         <a href="inpars-plus-synthetic-data-ir.html">
                             <span class="section-number">27</span>
                             <span class="section-title">InPars+ Synthetic Data</span>
@@ -233,11 +233,8 @@
             </div>
         </aside>
 
-        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <button class="sidebar-toggle" id="sidebar-toggle"
+            aria-label="Toggle Sidebar"><span></span><span></span><span></span></button>
 
         <main class="chapter-content">
             <div class="reading-progress" id="reading-progress">
@@ -247,112 +244,54 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 5</span>
-                    <h1 class="chapter-title">Instruction Tuning Frameworks</h1>
-                    <p class="chapter-description">Master instruction tuning principles and methodologies, from template
-                        design to automatic optimization in DSPy.</p>
+                    <h1 class="chapter-title">InPars+: Synthetic Data for IR</h1>
+                    <p class="chapter-description">Generate high-quality synthetic queries for information retrieval
+                        systems.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="instruction-tuning-frameworks"
-                        data-section="instruction-tuning-frameworks">
+                    <section class="content-section is-visible" id="inpars"
+                        data-section="inpars-plus-synthetic-data-ir">
                         <div class="markdown-content">
 
-                            <!-- Introduction -->
                             <div class="content-block">
-                                <h2>Introduction</h2>
-                                <p>Instruction tuning improves language model performance by training models to follow
-                                    natural language instructions. In DSPy, this extends to automatically discovering
-                                    and refining the instructions that guide each module in a multi-stage program.</p>
-                            </div>
-
-                            <!-- Theoretical Foundations -->
-                            <div class="content-block">
-                                <h2>Foundations</h2>
-                                <p>Instruction tuning emphasizes learning from task descriptions (what to do) rather
-                                    than
-                                    just input-output pairs. This enables:</p>
+                                <h2>Key Innovations</h2>
                                 <ul>
-                                    <li><strong>Generalization:</strong> Handling new tasks described in natural
-                                        language.</li>
-                                    <li><strong>Zero-shot Capability:</strong> Performing tasks without needing
-                                        examples.</li>
-                                    <li><strong>Better Instruction Following:</strong> Adhering to complex constraints.
+                                    <li><strong>CPO Fine-tuning:</strong> Improves generator quality with Contrastive
+                                        Preference Optimization</li>
+                                    <li><strong>DSPy Dynamic Optimization:</strong> Real-time prompt adaptation based on
+                                        retrieval performance</li>
+                                    <li><strong>60% Reduced Filtering:</strong> Higher initial query quality</li>
+                                    <li><strong>Neural IR Integration:</strong> Works seamlessly with neural re-rankers
                                     </li>
                                 </ul>
                             </div>
 
-                            <!-- Methodologies -->
                             <div class="content-block">
-                                <h2>Methodologies</h2>
-
-                                <h3>1. Supervised Instruction Fine-tuning</h3>
-                                <p>Training on datasets formatted as instructions. The model learns to predict the
-                                    output given an instruction and input.</p>
-
-                                <h3>2. RLHF (Reinforcement Learning from Human Feedback)</h3>
-                                <p>Using human preferences to fine-tune the model, rewarding responses that better
-                                    follow
-                                    instructions or align with human intent.</p>
-
-                                <h3>3. Dynamic Template Generation</h3>
-                                <p>Using an LLM to generate and refine instruction templates based on task descriptions.
-                                </p>
+                                <h2>CPO Query Generator</h2>
                                 <div class="command-box">
-                                    <pre><code class="language-python">class InstructionTemplateGenerator:
-    def generate_template(self, task):
-        prompt = f"Generate an effective instruction template for: {task}"
-        return self.llm.generate(prompt)</code></pre>
+                                    <pre><code class="language-python">class CPOQueryGenerator(dspy.Module):
+    def __init__(self, model_name="mistralai/Mistral-7B"):
+        super().__init__()
+        self.query_generator = dspy.Predict(
+            """Generate diverse, relevant search queries based on the document.
+            Document: {document}
+            Generate {num_queries} unique queries that would retrieve this document."""
+        )
+
+    def generate_queries(self, document, num_queries=5):
+        result = self.query_generator(document=document, num_queries=num_queries)
+        queries = self._parse_queries(result.queries)
+        return self._ensure_diversity(queries)</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Automatic Optimization -->
-                            <div class="content-block">
-                                <h2>Automatic Instruction Optimization</h2>
-                                <p>We can automate the search for optimal instructions using various algorithms.</p>
-
-                                <h3>Evolutionary Optimization</h3>
-                                <p>Evolving a population of instructions by mutating and combining them, selecting the
-                                    best performers based on a validation set.</p>
-                                <div class="command-box">
-                                    <pre><code class="language-python">class EvolutionaryInstructionOptimizer:
-    def optimize(self, task, examples):
-        population = self._initialize_population(task)
-        for generation in range(generations):
-            fitness = [self._evaluate(inst) for inst in population]
-            population = self._evolve(population, fitness)
-        return best_instruction</code></pre>
-                                </div>
-
-                                <h3>DSPy Integration</h3>
-                                <p>DSPy provides tools to tune instructions for specific modules within a pipeline.</p>
-                                <div class="command-box">
-                                    <pre><code class="language-python">class DSPyInstructionTuner:
-    def tune_module_instruction(self, module_class, signature, trainset):
-        candidates = self._generate_candidates(module_class, signature)
-        best_instruction, score = self._evaluate_candidates(candidates, trainset)
-        return best_instruction</code></pre>
-                                </div>
-                            </div>
-
-                            <!-- Best Practices -->
-                            <div class="content-block">
-                                <h2>Best Practices</h2>
-                                <ul>
-                                    <li><strong>Clarity:</strong> Be explicit about what needs to be done.</li>
-                                    <li><strong>Format Specification:</strong> Clearly define the expected output format
-                                        (e.g., JSON, List).</li>
-                                    <li><strong>Iterative Refinement:</strong> Start simple and add constraints/details
-                                        based on errors.</li>
-                                </ul>
-                            </div>
-
-                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="demonstration-optimization.html" class="continue-btn">
-                                        <span>Next: Demonstration Optimization</span>
+                                    <a href="custom-mipro-enhanced-optimization.html" class="continue-btn">
+                                        <span>Next: CustomMIPROv2</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -372,22 +311,10 @@
     <footer>
         <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
     </footer>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="../../assets/js/main.js?v=2"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.initChapter) {
-                window.initChapter({});
-            }
-            setTimeout(() => {
-                if (window.Prism) window.Prism.highlightAll();
-            }, 100);
-        });
-    </script>
 </body>
 
 </html>
