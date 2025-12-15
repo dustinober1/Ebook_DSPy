@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-World Applications | Chapter 6 | DSPy: The Comprehensive Guide</title>
+    <title>Framework Comparisons (DSPy vs. LangChain) | Chapter 6 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Apply DSPy to build production-ready systems including RAG pipelines, agents, and complex classifiers.">
+        content="A detailed comparison of DSPy and LangChain. Learn when to use each framework, their core philosophical differences, and how to combine them in a hybrid architecture.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -140,16 +140,10 @@
                             <span class="section-title">GraphRAG with TiDB</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="framework-comparisons-dspy-ecosystem">
+                    <li class="section-item active" data-section="framework-comparisons-dspy-ecosystem">
                         <a href="framework-comparisons-dspy-ecosystem.html">
                             <span class="section-number">18</span>
                             <span class="section-title">Framework Comparisons</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="multi-agent-rag-systems">
-                        <a href="multi-agent-rag-systems.html">
-                            <span class="section-number">19</span>
-                            <span class="section-title">Multi-Agent RAG Systems</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="exercises">
@@ -187,93 +181,89 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 6</span>
-                    <h1 class="chapter-title">Real-World Applications</h1>
-                    <p class="chapter-description">Moving from theory to practice: Building RAG systems, Agents, and
-                        Production Pipelines.</p>
-                    <div class="chapter-meta">
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            ~2 hours read
-                        </span>
-                    </div>
+                    <h1 class="chapter-title">Framework Comparisons</h1>
+                    <p class="chapter-description">A deep dive into the differences between DSPy and LangChain.
+                        Understand when to use "Programming over Prompting" versus "Workflow Orchestration".</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
-                            <div class="content-block">
-                                <h2>Introduction</h2>
-                                <p>In the previous chapters, we mastered the core building blocks of DSPy: Signatures,
-                                    Modules, Metrics, and Optimizers. Now, we apply these tools to solve complex,
-                                    real-world problems.</p>
-                                <p>This chapter focuses on the most common and high-value applications of Large Language
-                                    Models, starting with Retrieval-Augmented Generation (RAG) and moving into
-                                    autonomous agents, precise classification tasks, and specialized research workflows.
-                                </p>
-                            </div>
+                    <section class="content-section is-visible" id="framework-comparisons"
+                        data-section="framework-comparisons-dspy-ecosystem">
+                        <div class="markdown-content">
 
+                            <!-- High-level Comparison -->
                             <div class="content-block">
-                                <h2>Learning Objectives</h2>
-                                <ul class="learning-objectives">
-                                    <li><strong>Build Robust RAG Systems:</strong> Create pipelines that can search,
-                                        filter, and synthesize information from large document bases.</li>
-                                    <li><strong>Master Multi-Hop Reasoning:</strong> Design systems that can answer
-                                        complex questions requiring information from multiple disparate sources.</li>
-                                    <li><strong>Develop Intelligent Agents:</strong> Create agents that can use tools
-                                        and plan dynamic sequences of actions.</li>
-                                    <li><strong>Implement Complex Classification:</strong> Handle difficult
-                                        categorization tasks with high precision using DSPy optimizers.</li>
-                                    <li><strong>Explore Advanced Architectures:</strong> Learn about Multi-Agent RAG,
-                                        GraphRAG, and Perspective-Driven Research.</li>
+                                <h2>DSPy vs. LangChain</h2>
+                                <p>The choice between DSPy and LangChain often comes down to philosophy:</p>
+                                <ul>
+                                    <li><strong>LangChain</strong> focuses on <em>orchestration</em>. It connects LLMs
+                                        to thousands of tools, APIs, and data sources. It is great for building agents
+                                        that need to browse the web or query databases out-of-the-box.</li>
+                                    <li><strong>DSPy</strong> focuses on <em>optimization</em>. It treats prompts as
+                                        compiled bytecode. It is great for building high-quality pipelines where
+                                        accuracy and reliability are paramount.</li>
                                 </ul>
                             </div>
 
+                            <!-- When to use which -->
                             <div class="content-block">
-                                <h2>Chapter Roadmap</h2>
-                                <div class="roadmap-container">
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">01</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="rag-systems.html">RAG Systems</a></h3>
-                                            <p>The foundation of modern LLM apps: combining search with generation.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">02</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-hop-search.html">Multi-Hop Search</a></h3>
-                                            <p>Solving complex queries that require multiple steps of gathering info.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">03</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="intelligent-agents.html">Intelligent Agents</a></h3>
-                                            <p>Building autonomous systems that can use tools and make decisions.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">04</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-agent-rag-systems.html">Advanced Systems</a></h3>
-                                            <p>Exploring Multi-Agent architectures, GraphRAG, and more.</p>
-                                        </div>
-                                    </div>
+                                <h2>When to Choose What</h2>
+                                <div class="comparison-table-container">
+                                    <table class="comparison-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Scenario</th>
+                                                <th>Recommended Framework</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Rapid Prototyping</strong></td>
+                                                <td>LangChain (due to rich tooling)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Complex Reasoning</strong></td>
+                                                <td>DSPy (automatic optimization)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Production Optimization</strong></td>
+                                                <td>DSPy (metric-driven improvement)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Data Integrations</strong></td>
+                                                <td>LangChain (lots of loaders)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
+                            <!-- Hybrid Architecture -->
+                            <div class="content-block">
+                                <h2>Hybrid Architecture</h2>
+                                <p>You don't have to choose! A powerful pattern is to use <strong>LangChain for data
+                                        loading</strong> and <strong>DSPy for core logic</strong>.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python"># 1. Use LangChain to load data
+loader = PyPDFLoader("data.pdf")
+docs = loader.load()
+
+# 2. Use DSPy to process it intelligently
+class Summarizer(dspy.Module):
+    # ... optimized logic ...
+
+optimizer = dspy.BootstrapFewShot(...)
+program = optimizer.compile(Summarizer(), trainset=docs)</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="rag-systems.html" class="continue-btn">
-                                        <span>Start Chapter: RAG Systems</span>
+                                    <a href="multi-agent-rag-systems.html" class="continue-btn">
+                                        <span>Next: Multi-Agent RAG Systems</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -282,6 +272,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>
@@ -293,8 +284,21 @@
         <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="../../assets/js/main.js?v=2"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>

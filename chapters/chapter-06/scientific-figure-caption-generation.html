@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-World Applications | Chapter 6 | DSPy: The Comprehensive Guide</title>
+    <title>Scientific Figure Caption Generation | Chapter 6 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Apply DSPy to build production-ready systems including RAG pipelines, agents, and complex classifiers.">
+        content="Learn to generate accurate, stylistically consistent captions for scientific figures using a two-stage DSPy pipeline with context-aware generation and author style refinement.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -122,34 +122,10 @@
                             <span class="section-title">LingVarBench & Healthcare</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="scientific-figure-caption-generation">
+                    <li class="section-item active" data-section="scientific-figure-caption-generation">
                         <a href="scientific-figure-caption-generation.html">
                             <span class="section-number">15</span>
                             <span class="section-title">Scientific Figure Captions</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="retrieval-augmented-guardrails">
-                        <a href="retrieval-augmented-guardrails.html">
-                            <span class="section-number">16</span>
-                            <span class="section-title">Retrieval Augmented Guardrails</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="graphrag-wikipedia-tidb-tutorial">
-                        <a href="graphrag-wikipedia-tidb-tutorial.html">
-                            <span class="section-number">17</span>
-                            <span class="section-title">GraphRAG with TiDB</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="framework-comparisons-dspy-ecosystem">
-                        <a href="framework-comparisons-dspy-ecosystem.html">
-                            <span class="section-number">18</span>
-                            <span class="section-title">Framework Comparisons</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="multi-agent-rag-systems">
-                        <a href="multi-agent-rag-systems.html">
-                            <span class="section-number">19</span>
-                            <span class="section-title">Multi-Agent RAG Systems</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="exercises">
@@ -187,93 +163,70 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 6</span>
-                    <h1 class="chapter-title">Real-World Applications</h1>
-                    <p class="chapter-description">Moving from theory to practice: Building RAG systems, Agents, and
-                        Production Pipelines.</p>
-                    <div class="chapter-meta">
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            ~2 hours read
-                        </span>
-                    </div>
+                    <h1 class="chapter-title">Scientific Figure Captioning</h1>
+                    <p class="chapter-description">A two-stage pipeline for generating scientifically accurate and
+                        stylistically consistent figure captions using context-aware optimization.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="scientific-caption-generation"
+                        data-section="scientific-figure-caption-generation">
+                        <div class="markdown-content">
+
+                            <!-- Overview -->
                             <div class="content-block">
-                                <h2>Introduction</h2>
-                                <p>In the previous chapters, we mastered the core building blocks of DSPy: Signatures,
-                                    Modules, Metrics, and Optimizers. Now, we apply these tools to solve complex,
-                                    real-world problems.</p>
-                                <p>This chapter focuses on the most common and high-value applications of Large Language
-                                    Models, starting with Retrieval-Augmented Generation (RAG) and moving into
-                                    autonomous agents, precise classification tasks, and specialized research workflows.
+                                <h2>The Challenge</h2>
+                                <p>Writing captions for scientific figures is hard. The caption must be technically
+                                    precise and match the specific writing style of the paper (or journal). Generic
+                                    image captioning models fail here because they lack context and domain knowledge.
                                 </p>
                             </div>
 
+                            <!-- Architecture -->
                             <div class="content-block">
-                                <h2>Learning Objectives</h2>
-                                <ul class="learning-objectives">
-                                    <li><strong>Build Robust RAG Systems:</strong> Create pipelines that can search,
-                                        filter, and synthesize information from large document bases.</li>
-                                    <li><strong>Master Multi-Hop Reasoning:</strong> Design systems that can answer
-                                        complex questions requiring information from multiple disparate sources.</li>
-                                    <li><strong>Develop Intelligent Agents:</strong> Create agents that can use tools
-                                        and plan dynamic sequences of actions.</li>
-                                    <li><strong>Implement Complex Classification:</strong> Handle difficult
-                                        categorization tasks with high precision using DSPy optimizers.</li>
-                                    <li><strong>Explore Advanced Architectures:</strong> Learn about Multi-Agent RAG,
-                                        GraphRAG, and Perspective-Driven Research.</li>
-                                </ul>
-                            </div>
+                                <h2>Two-Stage Pipeline</h2>
+                                <p>We solve this with a dual-stage approach:</p>
+                                <ol type="1">
+                                    <li><strong>Context-Aware Generation:</strong> A module retrieves relevant text from
+                                        the paper (e.g., surrounding the figure reference) to understand what the figure
+                                        shows.</li>
+                                    <li><strong>Stylistic Refinement:</strong> A second module rewrites basic captions
+                                        to match the target author's style using few-shot examples from their previous
+                                        work.</li>
+                                </ol>
 
-                            <div class="content-block">
-                                <h2>Chapter Roadmap</h2>
-                                <div class="roadmap-container">
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">01</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="rag-systems.html">RAG Systems</a></h3>
-                                            <p>The foundation of modern LLM apps: combining search with generation.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">02</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-hop-search.html">Multi-Hop Search</a></h3>
-                                            <p>Solving complex queries that require multiple steps of gathering info.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">03</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="intelligent-agents.html">Intelligent Agents</a></h3>
-                                            <p>Building autonomous systems that can use tools and make decisions.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">04</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-agent-rag-systems.html">Advanced Systems</a></h3>
-                                            <p>Exploring Multi-Agent architectures, GraphRAG, and more.</p>
-                                        </div>
-                                    </div>
+                                <h3>Stage 1: Category-Specific Optimization</h3>
+                                <p>We use <strong>MIPROv2</strong> to optimize prompts specifically for different figure
+                                    types (e.g., bar charts, scatter plots, diagrams).</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def optimize_for_category(training_data, category):
+    # Filter data for just this figure type (e.g. "bar_graph")
+    category_data = [x for x in data if x.category == category]
+    
+    # Compile a specialized module
+    optimizer = dspy.MIPROv2(metric=caption_quality_metric)
+    return optimizer.compile(CategoryCaptionModule(), trainset=category_data)</code></pre>
                                 </div>
                             </div>
 
+                            <!-- Results -->
+                            <div class="content-block">
+                                <h2>Results</h2>
+                                <p>This specialized pipeline achieved significant metric improvements:</p>
+                                <ul>
+                                    <li><strong>ROUGE-1 Recall:</strong> +8.3%</li>
+                                    <li><strong>Style Consistency:</strong> ~45% improvement in BLEU scores against
+                                        author profile examples.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="rag-systems.html" class="continue-btn">
-                                        <span>Start Chapter: RAG Systems</span>
+                                    <a href="retrieval-augmented-guardrails.html" class="continue-btn">
+                                        <span>Next: Retrieval Augmented Guardrails</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -282,6 +235,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>
@@ -293,8 +247,21 @@
         <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="../../assets/js/main.js?v=2"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>

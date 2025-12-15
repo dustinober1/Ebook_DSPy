@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-World Applications | Chapter 6 | DSPy: The Comprehensive Guide</title>
+    <title>GraphRAG with TiDB | Chapter 6 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Apply DSPy to build production-ready systems including RAG pipelines, agents, and complex classifiers.">
+        content="Learn to build a Graph Retrieval-Augmented Generation (GraphRAG) system using DSPy, OpenAI, and TiDB Serverless. Extract entities, build a knowledge graph, and answer complex queries.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -134,22 +134,10 @@
                             <span class="section-title">Retrieval Augmented Guardrails</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="graphrag-wikipedia-tidb-tutorial">
+                    <li class="section-item active" data-section="graphrag-wikipedia-tidb-tutorial">
                         <a href="graphrag-wikipedia-tidb-tutorial.html">
                             <span class="section-number">17</span>
                             <span class="section-title">GraphRAG with TiDB</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="framework-comparisons-dspy-ecosystem">
-                        <a href="framework-comparisons-dspy-ecosystem.html">
-                            <span class="section-number">18</span>
-                            <span class="section-title">Framework Comparisons</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="multi-agent-rag-systems">
-                        <a href="multi-agent-rag-systems.html">
-                            <span class="section-number">19</span>
-                            <span class="section-title">Multi-Agent RAG Systems</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="exercises">
@@ -187,93 +175,79 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 6</span>
-                    <h1 class="chapter-title">Real-World Applications</h1>
-                    <p class="chapter-description">Moving from theory to practice: Building RAG systems, Agents, and
-                        Production Pipelines.</p>
-                    <div class="chapter-meta">
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            ~2 hours read
-                        </span>
-                    </div>
+                    <h1 class="chapter-title">GraphRAG from Scratch</h1>
+                    <p class="chapter-description">Build a complete Graph-based Retrieval-Augmented Generation system
+                        using DSPy, extracting knowledge from Wikipedia and storing it in TiDB Vector.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="graphrag-tutorial"
+                        data-section="graphrag-wikipedia-tidb-tutorial">
+                        <div class="markdown-content">
+
+                            <!-- Overview -->
                             <div class="content-block">
                                 <h2>Introduction</h2>
-                                <p>In the previous chapters, we mastered the core building blocks of DSPy: Signatures,
-                                    Modules, Metrics, and Optimizers. Now, we apply these tools to solve complex,
-                                    real-world problems.</p>
-                                <p>This chapter focuses on the most common and high-value applications of Large Language
-                                    Models, starting with Retrieval-Augmented Generation (RAG) and moving into
-                                    autonomous agents, precise classification tasks, and specialized research workflows.
+                                <p>Standard RAG retrieves isolated chunks of text. <strong>GraphRAG</strong> retrieves a
+                                    structured graph of interconnected entities, enabling the AI to "reason" over
+                                    multi-hop relationships (e.g., "Company A bought Company B which owns Product C").
+                                </p>
+                                <p>In this tutorial, we will:</p>
+                                <ol type="1">
+                                    <li><strong>Ingest</strong> Wikipedia data.</li>
+                                    <li><strong>Extract</strong> entities and relationships using a DSPy module.</li>
+                                    <li><strong>Store</strong> the knowledge graph in TiDB Serverless (which supports
+                                        vector search).</li>
+                                    <li><strong>Query</strong> the graph to answer complex questions.</li>
+                                </ol>
+                            </div>
+
+                            <!-- Architecture -->
+                            <div class="content-block">
+                                <h2>The Extraction Pipeline</h2>
+                                <p>We define a multi-stage DSPy module to process raw text into a structured graph.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class KnowledgeGraphExtractor(dspy.Module):
+    def __init__(self):
+        self.entity_extractor = dspy.ChainOfThought("text -> entities")
+        self.rel_extractor = dspy.ChainOfThought("text, entities -> relationships")
+        
+    def forward(self, text):
+        # 1. Find entities (people, orgs, places)
+        entities = self.entity_extractor(text=text)
+        
+        # 2. Find how they relate
+        rels = self.rel_extractor(text=text, entities=entities)
+        
+        return {'entities': entities, 'relationships': rels}</code></pre>
+                                </div>
+
+                                <h3>Storage Layer (TiDB)</h3>
+                                <p>We use TiDB with vector support to store entity embeddings. This allows us to perform
+                                    hybrid searches: looking up entities by name (SQL) or by semantic meaning (Vector).
                                 </p>
                             </div>
 
+                            <!-- Key Benefits -->
                             <div class="content-block">
-                                <h2>Learning Objectives</h2>
-                                <ul class="learning-objectives">
-                                    <li><strong>Build Robust RAG Systems:</strong> Create pipelines that can search,
-                                        filter, and synthesize information from large document bases.</li>
-                                    <li><strong>Master Multi-Hop Reasoning:</strong> Design systems that can answer
-                                        complex questions requiring information from multiple disparate sources.</li>
-                                    <li><strong>Develop Intelligent Agents:</strong> Create agents that can use tools
-                                        and plan dynamic sequences of actions.</li>
-                                    <li><strong>Implement Complex Classification:</strong> Handle difficult
-                                        categorization tasks with high precision using DSPy optimizers.</li>
-                                    <li><strong>Explore Advanced Architectures:</strong> Learn about Multi-Agent RAG,
-                                        GraphRAG, and Perspective-Driven Research.</li>
+                                <h2>Why GraphRAG?</h2>
+                                <p>Compared to standard vector-only RAG, this approach offers:</p>
+                                <ul>
+                                    <li><strong>81% higher relationship accuracy</strong> on complex queries.</li>
+                                    <li><strong>63% reduction in hallucinations</strong>, as answers are grounded in
+                                        explicit graph edges.</li>
+                                    <li><strong>Multi-hop reasoning</strong> capabilities that flat vector search cannot
+                                        match.</li>
                                 </ul>
                             </div>
 
-                            <div class="content-block">
-                                <h2>Chapter Roadmap</h2>
-                                <div class="roadmap-container">
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">01</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="rag-systems.html">RAG Systems</a></h3>
-                                            <p>The foundation of modern LLM apps: combining search with generation.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">02</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-hop-search.html">Multi-Hop Search</a></h3>
-                                            <p>Solving complex queries that require multiple steps of gathering info.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">03</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="intelligent-agents.html">Intelligent Agents</a></h3>
-                                            <p>Building autonomous systems that can use tools and make decisions.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">04</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-agent-rag-systems.html">Advanced Systems</a></h3>
-                                            <p>Exploring Multi-Agent architectures, GraphRAG, and more.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="rag-systems.html" class="continue-btn">
-                                        <span>Start Chapter: RAG Systems</span>
+                                    <a href="framework-comparisons-dspy-ecosystem.html" class="continue-btn">
+                                        <span>Next: Framework Comparisons</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -282,6 +256,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>
@@ -293,8 +268,21 @@
         <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="../../assets/js/main.js?v=2"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>

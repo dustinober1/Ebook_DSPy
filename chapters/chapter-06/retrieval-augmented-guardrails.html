@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-World Applications | Chapter 6 | DSPy: The Comprehensive Guide</title>
+    <title>Retrieval Augmented Guardrails | Chapter 6 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Apply DSPy to build production-ready systems including RAG pipelines, agents, and complex classifiers.">
+        content="Implement Retrieval-Augmented Guardrails to evaluate AI outputs against historical reference data. Learn to detect clinical errors and ensure safety in high-stakes domains with DSPy.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -38,7 +38,7 @@
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
-                    <li class="section-item active" data-section="intro">
+                    <li class="section-item" data-section="intro">
                         <a href="index.html">
                             <span class="section-number">1</span>
                             <span class="section-title">Chapter Overview</span>
@@ -128,28 +128,10 @@
                             <span class="section-title">Scientific Figure Captions</span>
                         </a>
                     </li>
-                    <li class="section-item" data-section="retrieval-augmented-guardrails">
+                    <li class="section-item active" data-section="retrieval-augmented-guardrails">
                         <a href="retrieval-augmented-guardrails.html">
                             <span class="section-number">16</span>
                             <span class="section-title">Retrieval Augmented Guardrails</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="graphrag-wikipedia-tidb-tutorial">
-                        <a href="graphrag-wikipedia-tidb-tutorial.html">
-                            <span class="section-number">17</span>
-                            <span class="section-title">GraphRAG with TiDB</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="framework-comparisons-dspy-ecosystem">
-                        <a href="framework-comparisons-dspy-ecosystem.html">
-                            <span class="section-number">18</span>
-                            <span class="section-title">Framework Comparisons</span>
-                        </a>
-                    </li>
-                    <li class="section-item" data-section="multi-agent-rag-systems">
-                        <a href="multi-agent-rag-systems.html">
-                            <span class="section-number">19</span>
-                            <span class="section-title">Multi-Agent RAG Systems</span>
                         </a>
                     </li>
                     <li class="section-item" data-section="exercises">
@@ -187,93 +169,76 @@
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
                     <span class="chapter-label">Chapter 6</span>
-                    <h1 class="chapter-title">Real-World Applications</h1>
-                    <p class="chapter-description">Moving from theory to practice: Building RAG systems, Agents, and
-                        Production Pipelines.</p>
-                    <div class="chapter-meta">
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            ~2 hours read
-                        </span>
-                    </div>
+                    <h1 class="chapter-title">Retrieval Augmented Guardrails</h1>
+                    <p class="chapter-description">Enhancing AI safety in high-stakes domains by evaluating outputs
+                        against retrieved historical contexts and similar cases.</p>
                 </div>
             </section>
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="intro" data-section="intro">
-                        <div class="markdown-content" id="intro-content">
+                    <section class="content-section is-visible" id="retrieval-augmented-guardrails"
+                        data-section="retrieval-augmented-guardrails">
+                        <div class="markdown-content">
+
+                            <!-- Overview -->
                             <div class="content-block">
-                                <h2>Introduction</h2>
-                                <p>In the previous chapters, we mastered the core building blocks of DSPy: Signatures,
-                                    Modules, Metrics, and Optimizers. Now, we apply these tools to solve complex,
-                                    real-world problems.</p>
-                                <p>This chapter focuses on the most common and high-value applications of Large Language
-                                    Models, starting with Retrieval-Augmented Generation (RAG) and moving into
-                                    autonomous agents, precise classification tasks, and specialized research workflows.
-                                </p>
+                                <h2>Why Retrieval for Guardrails?</h2>
+                                <p>Standard AI guardrails often check outputs against static rules ("Do not mention X").
+                                    In complex fields like healthcare, this isn't enough. An answer might be safe in one
+                                    context but dangerous in another.</p>
+                                <p>Retrieval-Augmented Guardrails improve safety by retrieving <strong>similar past
+                                        cases</strong> (e.g., previous patient messages and clinician responses) to use
+                                    as a "ground truth" reference for evaluating the current output.</p>
                             </div>
 
+                            <!-- Architecture -->
                             <div class="content-block">
-                                <h2>Learning Objectives</h2>
-                                <ul class="learning-objectives">
-                                    <li><strong>Build Robust RAG Systems:</strong> Create pipelines that can search,
-                                        filter, and synthesize information from large document bases.</li>
-                                    <li><strong>Master Multi-Hop Reasoning:</strong> Design systems that can answer
-                                        complex questions requiring information from multiple disparate sources.</li>
-                                    <li><strong>Develop Intelligent Agents:</strong> Create agents that can use tools
-                                        and plan dynamic sequences of actions.</li>
-                                    <li><strong>Implement Complex Classification:</strong> Handle difficult
-                                        categorization tasks with high precision using DSPy optimizers.</li>
-                                    <li><strong>Explore Advanced Architectures:</strong> Learn about Multi-Agent RAG,
-                                        GraphRAG, and Perspective-Driven Research.</li>
-                                </ul>
-                            </div>
+                                <h2>The Evaluation Pipeline</h2>
+                                <p>This system acts as a sophisticated judge:</p>
+                                <ol type="1">
+                                    <li><strong>Retrieve:</strong> Find historically similar interactions.</li>
+                                    <li><strong>Compare:</strong> Use an <code>ErrorClassifier</code> module to check if
+                                        the new AI response deviates from the clinical standards established in those
+                                        historical examples.</li>
+                                    <li><strong>Assess Severity:</strong> If an error is found, determine if it's a
+                                        minor tone issue or a critical safety risk.</li>
+                                </ol>
 
-                            <div class="content-block">
-                                <h2>Chapter Roadmap</h2>
-                                <div class="roadmap-container">
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">01</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="rag-systems.html">RAG Systems</a></h3>
-                                            <p>The foundation of modern LLM apps: combining search with generation.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">02</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-hop-search.html">Multi-Hop Search</a></h3>
-                                            <p>Solving complex queries that require multiple steps of gathering info.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">03</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="intelligent-agents.html">Intelligent Agents</a></h3>
-                                            <p>Building autonomous systems that can use tools and make decisions.</p>
-                                        </div>
-                                    </div>
-                                    <div class="roadmap-item">
-                                        <div class="roadmap-number">04</div>
-                                        <div class="roadmap-content">
-                                            <h3><a href="multi-agent-rag-systems.html">Advanced Systems</a></h3>
-                                            <p>Exploring Multi-Agent architectures, GraphRAG, and more.</p>
-                                        </div>
-                                    </div>
+                                <h3>Implementation</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">class RetrievalAugmentedEvaluator(dspy.Module):
+    def forward(self, patient_message, ai_response):
+        # 1. Get context
+        similar_cases = self.retriever(query=patient_message, k=3)
+        
+        # 2. Check for errors against that context
+        classification = self.error_classifier(
+            message=patient_message,
+            response=ai_response,
+            context=similar_cases
+        )
+        
+        return classification</code></pre>
                                 </div>
                             </div>
 
+                            <!-- Results -->
+                            <div class="content-block">
+                                <h2>Performance Gains</h2>
+                                <p>Adding retrieval to the guardrail system resulted in:</p>
+                                <ul>
+                                    <li><strong>50% higher concordance</strong> with human reviewers compared to
+                                        non-retrieval baselines.</li>
+                                    <li><strong>42% better identification</strong> of safety concerns.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Next Steps -->
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="rag-systems.html" class="continue-btn">
-                                        <span>Start Chapter: RAG Systems</span>
+                                    <a href="graphrag-wikipedia-tidb-tutorial.html" class="continue-btn">
+                                        <span>Next: GraphRAG with TiDB</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -282,6 +247,7 @@
                                     </a>
                                 </div>
                             </div>
+
                         </div>
                     </section>
                 </article>
@@ -293,8 +259,21 @@
         <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="../../assets/js/main.js?v=2"></script>
     <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>
