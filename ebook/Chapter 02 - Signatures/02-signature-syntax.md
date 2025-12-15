@@ -214,11 +214,14 @@ For complex signatures, you can add inline documentation:
 
 ### Type Hints (Informal)
 
-While DSPy doesn't enforce types, you can include them as documentation:
+While DSPy doesn't enforce types in string signatures, you can include them as documentation:
 
 ```python
 "customer_feedback:string[int], sentiment:label -> category:label, priority:number[1-5]"
 ```
+
+> **Want strict type enforcement?** String signatures are great for prototyping. for production apps requiring strict validation (like `Literal` or `float` ranges), check out [Typed Signatures](./03-typed-signatures.md).
+
 
 ## Signature Validation
 

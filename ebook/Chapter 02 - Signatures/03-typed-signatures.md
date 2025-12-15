@@ -22,8 +22,13 @@ Typed signatures extend basic DSPy signatures with:
 - **Field descriptions** - Adding documentation for each field
 - **Constraints** - Defining valid value ranges or formats
 - **Validation rules** - Ensuring data quality and consistency
+ 
+ Typed signatures transform simple string signatures into rich, self-documenting specifications that provide better type safety, validation, and developer experience.
+ 
+ > **How DSPy Uses Types**: DSPy uses your type definitions in two ways:
+ > 1. **Prompting**: It translates types into natural language instructions for the LM (e.g., `int` becomes "an integer").
+ > 2. **Validation**: When using modules like `TypedPredictor`, it enforces these types at runtime, retrying if the LM fails to match the schema.
 
-Typed signatures transform simple string signatures into rich, self-documenting specifications that provide better type safety, validation, and developer experience.
 
 ## Creating Typed Signatures
 
