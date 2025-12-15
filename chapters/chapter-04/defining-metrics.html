@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Defining Metrics | Chapter 4 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn how to define, implement, and choose the right metrics for evaluating DSPy modules using the trace parameter.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 4</h2>
+                <span class="sidebar-subtitle">Evaluation</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="why-eval">
+                        <a href="why-evaluation-matters.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">Why Evaluation Matters</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="datasets">
+                        <a href="creating-datasets.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Creating Datasets</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="metrics">
+                        <a href="defining-metrics.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Defining Metrics</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="loops">
+                        <a href="evaluation-loops.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Evaluation Loops</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="best-practices">
+                        <a href="best-practices.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Best Practices</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-05/index.html" class="next-chapter-btn">
+                    Next: Chapter 05 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 4 · Section 4</span>
+                    <h1 class="chapter-title">Defining Metrics</h1>
+                    <p class="chapter-description">Master the art of measuring LLM performance with custom and built-in
+                        metrics.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~35 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="metrics" data-section="metrics">
+                        <div class="markdown-content" id="metrics-content">
+                            <div class="content-block">
+                                <h2>Metric Function Anatomy</h2>
+                                <p>A DSPy metric is simply a Python function that evaluates prediction quality by
+                                    comparing it to the ground truth.</p>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">def metric(example, pred, trace=None):
+    """
+    Evaluate prediction quality.
+
+    Args:
+        example: The original Example with inputs AND expected outputs
+        pred: The Prediction (module output) to evaluate
+        trace: Optional trace info (used during optimization)
+
+    Returns:
+        bool or float: Score indicating quality (True/False or 0.0-1.0)
+    """
+    # Compare prediction to expected output
+    return pred.answer == example.answer</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>The Three Parameters</h2>
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>1. <code>example</code> (Ground Truth)</h4>
+                                            <p>Contains both the inputs sent to the model and the expected output
+                                                labels.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>2. <code>pred</code> (Prediction)</h4>
+                                            <p>The actual output generated by your DSPy module.</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>3. <code>trace</code> (Context)</h4>
+                                            <p>Indicates if the metric is running during optimization (filtering) or
+                                                evaluation (scoring).</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>Built-in Metrics</h2>
+                                <p>DSPy provides several ready-to-use metrics for common tasks.</p>
+
+                                <h3>Semantic F1</h3>
+                                <p>Measures semantic overlap between answers using a language model.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">from dspy.evaluate import SemanticF1
+
+# Initialize
+metric = SemanticF1(decompositional=True)
+
+# Use
+score = metric(example, pred)</code></pre>
+                                </div>
+
+                                <h3>Answer Correctness</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def answer_correctness(example, pred, trace=None):
+    """Check if predicted answer contains the correct answer."""
+    correct = example.answer.lower()
+    predicted = pred.answer.lower()
+    return correct in predicted or predicted in correct</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>Creating Custom Metrics</h2>
+
+                                <h3>Simple Boolean Metrics</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def sentiment_accuracy(example, pred, trace=None):
+    """Check if sentiment prediction matches ground truth."""
+    return example.sentiment == pred.sentiment</code></pre>
+                                </div>
+
+                                <h3>Composite Metrics</h3>
+                                <p>Combine multiple quality factors into a single score.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def comprehensive_qa_metric(example, pred, trace=None):
+    # 1. Correctness
+    correct = example.answer.lower() in pred.answer.lower()
+    
+    # 2. Completeness (length heuristic)
+    complete = len(pred.answer) > 20
+    
+    # 3. No uncertainty
+    certain = "I don't know" not in pred.answer
+
+    # Scoring logic
+    if not correct: return 0.0
+    if not complete: return 0.5
+    if not certain: return 0.7
+    return 1.0</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>The Trace Parameter Deep Dive</h2>
+                                <p>The <code>trace</code> parameter is what enables DSPy's powerful optimization.</p>
+
+                                <div class="module-comparison">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Mode</th>
+                                                <th>trace value</th>
+                                                <th>Goal</th>
+                                                <th>Return Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Optimization</strong></td>
+                                                <td><code>not None</code> (Object)</td>
+                                                <td>Select best demos</td>
+                                                <td><code>bool</code> (True/False)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Evaluation</strong></td>
+                                                <td><code>None</code></td>
+                                                <td>Measure performance</td>
+                                                <td><code>float</code> (Score)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="command-box">
+                                    <pre><code class="language-python">def smart_metric(example, pred, trace=None):
+    score = calculate_score(example, pred)
+    
+    if trace is not None:
+        # Optimization: Be strict! Only accept perfect examples
+        return score >= 0.9
+        
+    # Evaluation: Return the actual score
+    return score</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>Specialized Metrics for Long-form Content</h2>
+                                <p>Evaluating long responses (like articles) requires more sophisticated metrics.</p>
+
+                                <ul>
+                                    <li><strong>Topic Coverage:</strong> Uses ROUGE scores to check if key concepts are
+                                        covered.</li>
+                                    <li><strong>FactScore:</strong> Breaks text into atomic claims and verifies each
+                                        against a knowledge source.</li>
+                                    <li><strong>Verifiability:</strong> Checks if claims are supported by citations.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="evaluation-loops.html" class="continue-btn">
+                                        <span>Next: Evaluation Loops</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solutions | Chapter 4 | DSPy: The Comprehensive Guide</title>
-    <meta name="description"
-        content="Complete solutions for Chapter 4 exercises - metrics, datasets, and optimization implementations.">
+    <meta name="description" content="Complete solutions and explanations for Chapter 4 evaluation exercises.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -34,7 +33,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2>Chapter 4</h2>
-                <span class="sidebar-subtitle">Optimizers</span>
+                <span class="sidebar-subtitle">Evaluation</span>
             </div>
             <nav class="sidebar-nav">
                 <ul class="section-list" id="section-list">
@@ -44,39 +43,45 @@
                             <span class="section-title">Chapter Overview</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="why-optimize">
-                        <a href="why-optimize.html">
+                    <li class="section-item viewed" data-section="why-eval">
+                        <a href="why-evaluation-matters.html">
                             <span class="section-number">2</span>
-                            <span class="section-title">Why Optimize?</span>
+                            <span class="section-title">Why Evaluation Matters</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="datasets">
+                        <a href="creating-datasets.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Creating Datasets</span>
                         </a>
                     </li>
                     <li class="section-item viewed" data-section="metrics">
-                        <a href="metrics.html">
-                            <span class="section-number">3</span>
-                            <span class="section-title">Metrics & Evaluation</span>
-                        </a>
-                    </li>
-                    <li class="section-item viewed" data-section="bootstrap-fewshot">
-                        <a href="bootstrap-fewshot.html">
+                        <a href="defining-metrics.html">
                             <span class="section-number">4</span>
-                            <span class="section-title">BootstrapFewShot</span>
+                            <span class="section-title">Defining Metrics</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="advanced-optimizers">
-                        <a href="advanced-optimizers.html">
+                    <li class="section-item viewed" data-section="loops">
+                        <a href="evaluation-loops.html">
                             <span class="section-number">5</span>
-                            <span class="section-title">Advanced Optimizers</span>
+                            <span class="section-title">Evaluation Loops</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="best-practices">
+                        <a href="best-practices.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Best Practices</span>
                         </a>
                     </li>
                     <li class="section-item viewed" data-section="exercises">
                         <a href="exercises.html">
-                            <span class="section-number">6</span>
+                            <span class="section-number">7</span>
                             <span class="section-title">Exercises</span>
                         </a>
                     </li>
                     <li class="section-item active" data-section="solutions">
                         <a href="solutions.html">
-                            <span class="section-number">7</span>
+                            <span class="section-number">8</span>
                             <span class="section-title">Solutions</span>
                         </a>
                     </li>
@@ -102,21 +107,9 @@
 
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
-                    <span class="chapter-label">Chapter 4 · Section 7</span>
+                    <span class="chapter-label">Chapter 4 · Section 8</span>
                     <h1 class="chapter-title">Solutions</h1>
-                    <p class="chapter-description">Complete solutions with explanations for all Chapter 4 exercises.
-                    </p>
-                    <div class="chapter-meta">
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            5 Solutions
-                        </span>
-                    </div>
+                    <p class="chapter-description">Detailed implementations for the evaluation exercises.</p>
                 </div>
             </section>
 
@@ -124,655 +117,212 @@
                 <article class="content-article" id="content-article">
                     <section class="content-section is-visible" id="solutions" data-section="solutions">
                         <div class="markdown-content" id="solutions-content">
-
-                            <!-- Warning -->
                             <div class="content-block">
-                                <div class="tip-box warning">
-                                    <span class="tip-icon">⚠️</span>
-                                    <p><strong>Spoiler Alert!</strong> Try to complete the exercises on your own before
-                                        viewing these solutions.</p>
-                                </div>
-                            </div>
-
-                            <!-- Solution 1 -->
-                            <div class="content-block solution-block">
-                                <div class="exercise-header">
-                                    <span class="exercise-number">Solution 1</span>
-                                    <span class="difficulty beginner">⭐ Beginner</span>
-                                </div>
-                                <h3>Write Your First Metric</h3>
-
-                                <div class="command-box">
-                                    <pre><code class="language-python">def exact_match(example, pred, trace=None):
-    """Case-insensitive exact match."""
-    expected = example.answer.strip().lower()
-    predicted = pred.answer.strip().lower()
-    return expected == predicted
-
-
-def contains_answer(example, pred, trace=None):
-    """Check if expected answer appears in prediction."""
-    expected = example.answer.strip().lower()
-    predicted = pred.answer.strip().lower()
-    return expected in predicted
-
-
-def word_f1(example, pred, trace=None):
-    """F1 score based on word overlap."""
-    expected_words = set(example.answer.lower().split())
-    predicted_words = set(pred.answer.lower().split())
-    
-    if not expected_words or not predicted_words:
-        return 0.0
-    
-    intersection = expected_words & predicted_words
-    
-    precision = len(intersection) / len(predicted_words)
-    recall = len(intersection) / len(expected_words)
-    
-    if precision + recall == 0:
-        return 0.0
-    
-    return 2 * (precision * recall) / (precision + recall)
-
-
-# Test the metrics
-class MockExample:
-    def __init__(self, answer):
-        self.answer = answer
-
-class MockPred:
-    def __init__(self, answer):
-        self.answer = answer
-
-test_cases = [
-    ("Paris", "Paris"),
-    ("Paris", "The answer is Paris"),
-    ("William Shakespeare", "Shakespeare"),
-]
-
-print("Testing Metrics")
-print("=" * 50)
-
-for expected, predicted in test_cases:
-    example = MockExample(expected)
-    pred = MockPred(predicted)
-    
-    print(f"\nExpected: '{expected}' | Predicted: '{predicted}'")
-    print(f"  exact_match: {exact_match(example, pred)}")
-    print(f"  contains_answer: {contains_answer(example, pred)}")
-    print(f"  word_f1: {word_f1(example, pred):.2f}")</code></pre>
-                                </div>
-
-                                <div class="chapter-sections-list">
-                                    <div class="chapter-section-item">
-                                        <span class="section-icon">💡</span>
-                                        <div class="section-content">
-                                            <h4>Key Insight</h4>
-                                            <p>Different metrics capture different aspects of correctness. Choose based
-                                                on your task requirements.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Solution 2 -->
-                            <div class="content-block solution-block">
-                                <div class="exercise-header">
-                                    <span class="exercise-number">Solution 2</span>
-                                    <span class="difficulty beginner">⭐ Beginner</span>
-                                </div>
-                                <h3>Create a Training Dataset</h3>
+                                <h2>Exercise 1: Creating a Quality Dataset</h2>
+                                <p>This solution demonstrates how to create a balanced, diverse dataset with edge cases
+                                    and proper splitting.</p>
 
                                 <div class="command-box">
                                     <pre><code class="language-python">import dspy
 import random
 
-# Technology examples
-tech_examples = [
-    dspy.Example(
-        text="Apple announced a new smartphone featuring an advanced AI chip.",
-        topic="technology"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The latest software update includes improved security features.",
-        topic="technology"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="Cloud computing services are becoming increasingly popular.",
-        topic="technology"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="Researchers developed a new machine learning algorithm.",
-        topic="technology"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The company unveiled its next-generation electric vehicle.",
-        topic="technology"
-    ).with_inputs("text"),
-]
+def create_sentiment_dataset():
+    examples = []
+    
+    # 1. POSITIVE EXAMPLES (10+)
+    positive_texts = [
+        "This product is amazing! Best purchase ever!",
+        "Absolutely love the quality.",
+        "Great customer service, very helpful.",
+        "Fast shipping and item as described.",
+        "Exceeded my expectations entirely.",
+        "I would recommend this to everyone.",
+        "Fantastic value for the money.",
+        "Works perfectly out of the box.",
+        "Simple to use and effective.",
+        "Five stars, no complaints!"
+    ]
+    for text in positive_texts:
+        examples.append(dspy.Example(text=text, sentiment="positive", confidence=0.9).with_inputs("text"))
 
-# Sports examples
-sports_examples = [
-    dspy.Example(
-        text="The team won the championship after a thrilling final match.",
-        topic="sports"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The star player signed a new contract worth millions.",
-        topic="sports"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The Olympics will feature several new events this year.",
-        topic="sports"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The coach announced changes to the starting lineup.",
-        topic="sports"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The marathon runner broke the world record yesterday.",
-        topic="sports"
-    ).with_inputs("text"),
-]
+    # 2. NEGATIVE EXAMPLES (10+)
+    negative_texts = [
+        "Terrible quality, broke immediately.",
+        "Waste of money, do not buy.",
+        "Customer service was rude and unhelpful.",
+        "Shipping took forever and arrived damaged.",
+        "Completely different from the description.",
+        "Not worth the price tag.",
+        "Stopped working after one day.",
+        "Frustrating to set up.",
+        "Poor design choices everywhere.",
+        "I want a refund."
+    ]
+    for text in negative_texts:
+        examples.append(dspy.Example(text=text, sentiment="negative", confidence=0.9).with_inputs("text"))
 
-# Politics examples
-politics_examples = [
-    dspy.Example(
-        text="The president announced new economic policies today.",
-        topic="politics"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="Congress passed a new bill on healthcare reform.",
-        topic="politics"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The election results showed a close race between candidates.",
-        topic="politics"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="International leaders met to discuss climate agreements.",
-        topic="politics"
-    ).with_inputs("text"),
-    dspy.Example(
-        text="The senator proposed new legislation on immigration.",
-        topic="politics"
-    ).with_inputs("text"),
-]
+    # 3. NEUTRAL EXAMPLES (5+)
+    neutral_texts = [
+        "It's okay, nothing special.",
+        "Average product for the price.",
+        "Does the job, but has flaws.",
+        "Delivered on time.",
+        "It is what it is."
+    ]
+    for text in neutral_texts:
+        examples.append(dspy.Example(text=text, sentiment="neutral", confidence=0.5).with_inputs("text"))
 
-# Combine all examples
-all_examples = tech_examples + sports_examples + politics_examples
+    # 4. EDGE CASESS (5+)
+    edge_cases = [
+        ("Great, another broken item.", "negative", 0.8), # Sarcasm
+        ("Food was good, service was bad.", "neutral", 0.6), # Mixed
+        ("Is this worth it?", "neutral", 0.3), # Question
+        ("meh", "neutral", 0.4), # Short
+        ("LOVE IT!!! 😍", "positive", 0.95), # Emoji/formatting
+    ]
+    for text, sent, conf in edge_cases:
+        examples.append(dspy.Example(text=text, sentiment=sent, confidence=conf).with_inputs("text"))
 
-# Shuffle
-random.shuffle(all_examples)
+    # 5. SHUFFLE
+    random.seed(42)
+    random.shuffle(examples)
 
-# Split into train (10) and dev (5)
-trainset = all_examples[:10]
-devset = all_examples[10:]
+    # 6. SPLIT (60/20/20)
+    n = len(examples)
+    train_end = int(n * 0.6)
+    dev_end = int(n * 0.8)
 
-print(f"Training set: {len(trainset)} examples")
-print(f"Dev set: {len(devset)} examples")
+    trainset = examples[:train_end]
+    devset = examples[train_end:dev_end]
+    testset = examples[dev_end:]
 
-# Verify distribution
-for split_name, split in [("Train", trainset), ("Dev", devset)]:
-    topics = [ex.topic for ex in split]
-    print(f"\n{split_name} distribution:")
-    for topic in ["technology", "sports", "politics"]:
-        count = topics.count(topic)
-        print(f"  {topic}: {count}")</code></pre>
+    return trainset, devset, testset</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Solution 3 -->
-                            <div class="content-block solution-block">
-                                <div class="exercise-header">
-                                    <span class="exercise-number">Solution 3</span>
-                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
-                                </div>
-                                <h3>Basic BootstrapFewShot Optimization</h3>
+                            <div class="content-block">
+                                <h2>Exercise 2: Designing a Custom Metric</h2>
+                                <p>This metric implements weighted sub-scores and handles the trace parameter for
+                                    optimization.</p>
 
                                 <div class="command-box">
-                                    <pre><code class="language-python">import dspy
-from dspy.evaluate import Evaluate
-from dotenv import load_dotenv
-import random
+                                    <pre><code class="language-python">def qa_quality_metric(example, pred, trace=None):
+    # 1. Correctness (40%)
+    # Simple inclusion check (could use semantic comparison in production)
+    expected = example.answer.lower()
+    actual = pred.answer.lower()
+    correctness = 1.0 if expected in actual else 0.0
 
-load_dotenv()
+    # 2. Completeness (30%)
+    # Check if key concepts from answer are present
+    key_terms = expected.split()
+    found_terms = sum(1 for term in key_terms if term in actual)
+    completeness = found_terms / len(key_terms) if key_terms else 1.0
 
-# Configure
-lm = dspy.LM("openai/gpt-4o-mini")
-dspy.configure(lm=lm)
+    # 3. Conciseness (20%)
+    # Ideal length between 10 and 100 words
+    word_count = len(actual.split())
+    if 10 <= word_count <= 100:
+        conciseness = 1.0
+    elif word_count < 5 or word_count > 200:
+        conciseness = 0.0
+    else:
+        conciseness = 0.5
 
-# Signature
-class SentimentAnalysis(dspy.Signature):
-    """Classify the sentiment of the text as positive, negative, or neutral."""
-    text: str = dspy.InputField()
-    sentiment: str = dspy.OutputField(desc="positive, negative, or neutral")
+    # 4. Format (10%)
+    # Check for basic punctuation
+    format_score = 1.0 if actual.strip().endswith(('.', '!', '?')) else 0.0
 
-# Training data
-examples = [
-    dspy.Example(text="I love this product! Best purchase ever!", sentiment="positive"),
-    dspy.Example(text="Terrible quality. Complete waste of money.", sentiment="negative"),
-    dspy.Example(text="It's okay, nothing special.", sentiment="neutral"),
-    dspy.Example(text="Amazing experience, highly recommend!", sentiment="positive"),
-    dspy.Example(text="Worst customer service I've ever had.", sentiment="negative"),
-    dspy.Example(text="Works as expected, no issues.", sentiment="neutral"),
-    dspy.Example(text="Exceeded all my expectations!", sentiment="positive"),
-    dspy.Example(text="Broke after one week. Very disappointed.", sentiment="negative"),
-    dspy.Example(text="Average product for the price.", sentiment="neutral"),
-    dspy.Example(text="Absolutely fantastic quality!", sentiment="positive"),
-    dspy.Example(text="Would not recommend to anyone.", sentiment="negative"),
-    dspy.Example(text="It does the job, nothing more.", sentiment="neutral"),
-]
+    # Weighted Sum
+    final_score = (
+        0.4 * correctness + 
+        0.3 * completeness + 
+        0.2 * conciseness + 
+        0.1 * format_score
+    )
 
-# Add inputs marker
-for ex in examples:
-    ex._input_keys = {"text"}
-
-# Split
-random.shuffle(examples)
-trainset = examples[:9]
-devset = examples[9:]
-
-# Metric
-def sentiment_metric(example, pred, trace=None):
-    return pred.sentiment.strip().lower() == example.sentiment.strip().lower()
-
-# Create module
-classifier = dspy.Predict(SentimentAnalysis)
-
-# Evaluate baseline
-print("Evaluating Baseline...")
-evaluator = Evaluate(devset=devset, metric=sentiment_metric, display_progress=True)
-baseline_score = evaluator(classifier)
-print(f"Baseline accuracy: {baseline_score:.2%}")
-
-# Optimize
-print("\nOptimizing...")
-optimizer = dspy.BootstrapFewShot(
-    metric=sentiment_metric,
-    max_bootstrapped_demos=3,
-    max_labeled_demos=3
-)
-optimized_classifier = optimizer.compile(classifier, trainset=trainset)
-
-# Evaluate optimized
-print("Evaluating Optimized...")
-optimized_score = evaluator(optimized_classifier)
-print(f"Optimized accuracy: {optimized_score:.2%}")
-
-# Report
-print("\n" + "=" * 50)
-print("RESULTS")
-print("=" * 50)
-print(f"Baseline:    {baseline_score:.2%}")
-print(f"Optimized:   {optimized_score:.2%}")
-print(f"Improvement: {(optimized_score - baseline_score):.2%}")
-
-# Save
-optimized_classifier.save("optimized_sentiment_classifier.json")
-print("\n✓ Saved optimized module to 'optimized_sentiment_classifier.json'")</code></pre>
+    # Trace Handling
+    if trace is not None:
+        # Optimization Goal: High quality (>0.7)
+        return final_score >= 0.7
+        
+    return final_score</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Solution 4 -->
-                            <div class="content-block solution-block">
-                                <div class="exercise-header">
-                                    <span class="exercise-number">Solution 4</span>
-                                    <span class="difficulty intermediate">⭐⭐ Intermediate</span>
-                                </div>
-                                <h3>LM-as-Judge Metric</h3>
+                            <div class="content-block">
+                                <h2>Exercise 3: Systematic Evaluation</h2>
+                                <p>A comprehensive evaluation function that provides actionable insights.</p>
 
                                 <div class="command-box">
-                                    <pre><code class="language-python">import dspy
-from dotenv import load_dotenv
-
-load_dotenv()
-
-lm = dspy.LM("openai/gpt-4o-mini")
-dspy.configure(lm=lm)
-
-# Judge signature
-class SummaryEvaluator(dspy.Signature):
-    """Evaluate the quality of a summary."""
-    original_text: str = dspy.InputField()
-    summary: str = dspy.InputField()
-    accuracy: float = dspy.OutputField(
-        desc="How accurately the summary reflects the original (0.0-1.0)"
-    )
-    completeness: float = dspy.OutputField(
-        desc="How completely the summary covers key points (0.0-1.0)"
-    )
-    conciseness: float = dspy.OutputField(
-        desc="How concise the summary is without losing meaning (0.0-1.0)"
-    )
-
-# Create judge
-judge = dspy.ChainOfThought(SummaryEvaluator)
-
-def summary_quality_metric(example, pred, trace=None):
-    """LM-as-judge metric for summary quality."""
-    try:
-        evaluation = judge(
-            original_text=example.text,
-            summary=pred.summary
-        )
-        
-        # Convert to floats and clamp to 0-1
-        accuracy = max(0.0, min(1.0, float(evaluation.accuracy)))
-        completeness = max(0.0, min(1.0, float(evaluation.completeness)))
-        conciseness = max(0.0, min(1.0, float(evaluation.conciseness)))
-        
-        # Return average score
-        return (accuracy + completeness + conciseness) / 3
-        
-    except Exception as e:
-        print(f"Evaluation error: {e}")
-        return 0.0
-
-# Test the metric
-class MockExample:
-    def __init__(self, text):
-        self.text = text
-
-class MockPred:
-    def __init__(self, summary):
-        self.summary = summary
-
-# Test cases
-test_cases = [
-    {
-        "text": """
-        Machine learning is a subset of artificial intelligence that enables 
-        computers to learn from data without being explicitly programmed. 
-        It uses algorithms to identify patterns and make predictions. 
-        Common applications include image recognition, natural language 
-        processing, and recommendation systems.
-        """,
-        "summary": "Machine learning allows computers to learn from data and make predictions using algorithms."
-    },
-    {
-        "text": """
-        The Eiffel Tower is a wrought-iron lattice tower in Paris, France. 
-        It was constructed from 1887 to 1889 and stands 330 meters tall. 
-        Named after engineer Gustave Eiffel, it has become a global cultural 
-        icon of France and one of the most recognizable structures in the world.
-        """,
-        "summary": "Tower in Paris."
-    },
-    {
-        "text": """
-        Climate change is causing rising sea levels, more extreme weather events, 
-        and shifts in ecosystems worldwide. Scientists agree that human activities, 
-        particularly the burning of fossil fuels, are the primary cause.
-        """,
-        "summary": "Climate change, driven by human fossil fuel use, causes rising seas, extreme weather, and ecosystem changes globally."
+                                    <pre><code class="language-python">def comprehensive_evaluation(module, devset, metric):
+    results = {
+        'total_score': 0.0,
+        'count': 0,
+        'scores': [],
+        'errors': [],
+        'best_examples': [],
+        'worst_examples': []
     }
-]
-
-print("Testing LM-as-Judge Metric")
-print("=" * 60)
-
-for i, case in enumerate(test_cases, 1):
-    example = MockExample(case["text"])
-    pred = MockPred(case["summary"])
     
-    score = summary_quality_metric(example, pred)
+    detailed_results = []
+
+    for idx, example in enumerate(devset):
+        try:
+            # Predict
+            pred = module(**example.inputs())
+            
+            # Score
+            score = metric(example, pred)
+            
+            # Store
+            results['total_score'] += score
+            results['count'] += 1
+            results['scores'].append(score)
+            
+            detailed_results.append({
+                'example': example, 
+                'pred': pred, 
+                'score': score
+            })
+
+            # Error Analysis Categories
+            if score < 0.5:
+                error_type = "low_quality"
+                if len(pred.answer) == 0:
+                    error_type = "empty_response"
+                results['errors'].append({
+                    'index': idx,
+                    'type': error_type,
+                    'input': example.question,
+                    'expected': example.answer,
+                    'actual': pred.answer
+                })
+
+        except Exception as e:
+            results['errors'].append({
+                'index': idx,
+                'type': 'exception',
+                'message': str(e)
+            })
+
+    # Averages
+    if results['count'] > 0:
+        results['average_score'] = results['total_score'] / results['count']
     
-    print(f"\nTest {i}:")
-    print(f"Summary: {case['summary'][:60]}...")
-    print(f"Quality Score: {score:.2f}")</code></pre>
+    # Sort for best/worst
+    sorted_res = sorted(detailed_results, key=lambda x: x['score'], reverse=True)
+    results['best_examples'] = sorted_res[:3]
+    results['worst_examples'] = sorted_res[-3:]
+
+    return results</code></pre>
                                 </div>
                             </div>
 
-                            <!-- Solution 5 -->
-                            <div class="content-block solution-block">
-                                <div class="exercise-header">
-                                    <span class="exercise-number">Solution 5</span>
-                                    <span class="difficulty advanced">⭐⭐⭐ Advanced</span>
-                                </div>
-                                <h3>Complete Optimization Pipeline</h3>
-
-                                <div class="command-box">
-                                    <pre><code class="language-python">import dspy
-from dspy.evaluate import Evaluate
-from dspy.teleprompt import BootstrapFewShotWithRandomSearch
-from dotenv import load_dotenv
-import random
-
-load_dotenv()
-
-# Configure
-lm = dspy.LM("openai/gpt-4o-mini")
-dspy.configure(lm=lm)
-
-print("=" * 60)
-print("COMPLETE OPTIMIZATION PIPELINE")
-print("=" * 60)
-
-# ============================================
-# Step 1: Data Preparation
-# ============================================
-print("\n📊 Step 1: Preparing Data...")
-
-raw_data = [
-    {"context": "Paris is the capital of France.", "question": "What is the capital of France?", "answer": "Paris"},
-    {"context": "Python was created by Guido van Rossum in 1991.", "question": "Who created Python?", "answer": "Guido van Rossum"},
-    {"context": "The Earth orbits the Sun.", "question": "What does Earth orbit?", "answer": "The Sun"},
-    {"context": "Water boils at 100 degrees Celsius.", "question": "At what temperature does water boil?", "answer": "100 degrees Celsius"},
-    {"context": "The Great Wall of China is over 13,000 miles long.", "question": "How long is the Great Wall?", "answer": "Over 13,000 miles"},
-    {"context": "Shakespeare wrote Romeo and Juliet.", "question": "Who wrote Romeo and Juliet?", "answer": "Shakespeare"},
-    {"context": "The Amazon is the largest rainforest.", "question": "What is the largest rainforest?", "answer": "The Amazon"},
-    {"context": "Einstein developed the theory of relativity.", "question": "Who developed relativity?", "answer": "Einstein"},
-    {"context": "Mount Everest is the tallest mountain.", "question": "What is the tallest mountain?", "answer": "Mount Everest"},
-    {"context": "The Pacific is the largest ocean.", "question": "What is the largest ocean?", "answer": "The Pacific"},
-    {"context": "DNA stands for deoxyribonucleic acid.", "question": "What does DNA stand for?", "answer": "Deoxyribonucleic acid"},
-    {"context": "The Nile is the longest river.", "question": "What is the longest river?", "answer": "The Nile"},
-    {"context": "Mars is called the Red Planet.", "question": "What is Mars called?", "answer": "The Red Planet"},
-    {"context": "The heart pumps blood.", "question": "What does the heart do?", "answer": "Pumps blood"},
-    {"context": "Tokyo is the capital of Japan.", "question": "What is the capital of Japan?", "answer": "Tokyo"},
-    {"context": "Beethoven composed nine symphonies.", "question": "How many symphonies did Beethoven compose?", "answer": "Nine"},
-    {"context": "Light travels at 299,792 km/s.", "question": "How fast does light travel?", "answer": "299,792 km/s"},
-    {"context": "Oxygen makes up 21% of the atmosphere.", "question": "What percentage of atmosphere is oxygen?", "answer": "21%"},
-    {"context": "The Mona Lisa was painted by da Vinci.", "question": "Who painted the Mona Lisa?", "answer": "Da Vinci"},
-    {"context": "Diamonds are made of carbon.", "question": "What are diamonds made of?", "answer": "Carbon"},
-]
-
-# Convert to DSPy examples
-examples = [
-    dspy.Example(
-        context=d["context"],
-        question=d["question"],
-        answer=d["answer"]
-    ).with_inputs("context", "question")
-    for d in raw_data
-]
-
-# Split
-random.shuffle(examples)
-trainset = examples[:14]
-devset = examples[14:17]
-testset = examples[17:]
-
-print(f"  Train: {len(trainset)} | Dev: {len(devset)} | Test: {len(testset)}")
-
-# ============================================
-# Step 2: Module Creation
-# ============================================
-print("\n🧩 Step 2: Creating Module...")
-
-class QA(dspy.Signature):
-    """Answer the question based on the context."""
-    context: str = dspy.InputField()
-    question: str = dspy.InputField()
-    answer: str = dspy.OutputField()
-
-qa_module = dspy.ChainOfThought(QA)
-print("  ✓ ChainOfThought QA module created")
-
-# ============================================
-# Step 3: Metrics
-# ============================================
-print("\n📏 Step 3: Defining Metrics...")
-
-def exact_match(example, pred, trace=None):
-    return pred.answer.strip().lower() == example.answer.strip().lower()
-
-def word_overlap(example, pred, trace=None):
-    expected = set(example.answer.lower().split())
-    predicted = set(pred.answer.lower().split())
-    if not expected or not predicted:
-        return 0.0
-    intersection = expected & predicted
-    return len(intersection) / len(expected)
-
-print("  ✓ exact_match and word_overlap metrics defined")
-
-# ============================================
-# Step 4: Baseline Evaluation
-# ============================================
-print("\n📊 Step 4: Evaluating Baseline...")
-
-evaluator_em = Evaluate(devset=devset, metric=exact_match, display_progress=False)
-evaluator_wo = Evaluate(devset=devset, metric=word_overlap, display_progress=False)
-
-baseline_em = evaluator_em(qa_module)
-baseline_wo = evaluator_wo(qa_module)
-
-print(f"  Baseline Exact Match: {baseline_em:.2%}")
-print(f"  Baseline Word Overlap: {baseline_wo:.2%}")
-
-# ============================================
-# Step 5: BootstrapFewShot
-# ============================================
-print("\n🚀 Step 5: BootstrapFewShot Optimization...")
-
-optimizer1 = dspy.BootstrapFewShot(
-    metric=exact_match,
-    max_bootstrapped_demos=3
-)
-bootstrap_module = optimizer1.compile(qa_module, trainset=trainset)
-
-bs_em = evaluator_em(bootstrap_module)
-bs_wo = evaluator_wo(bootstrap_module)
-
-print(f"  BootstrapFewShot Exact Match: {bs_em:.2%}")
-print(f"  BootstrapFewShot Word Overlap: {bs_wo:.2%}")
-
-# ============================================
-# Step 6: BootstrapFewShotWithRandomSearch
-# ============================================
-print("\n🎲 Step 6: RandomSearch Optimization...")
-
-optimizer2 = BootstrapFewShotWithRandomSearch(
-    metric=exact_match,
-    max_bootstrapped_demos=3,
-    num_candidate_programs=5,
-    num_threads=2
-)
-random_search_module = optimizer2.compile(
-    qa_module,
-    trainset=trainset,
-    valset=devset
-)
-
-rs_em = evaluator_em(random_search_module)
-rs_wo = evaluator_wo(random_search_module)
-
-print(f"  RandomSearch Exact Match: {rs_em:.2%}")
-print(f"  RandomSearch Word Overlap: {rs_wo:.2%}")
-
-# ============================================
-# Step 7: Final Test Evaluation
-# ============================================
-print("\n✅ Step 7: Final Test Set Evaluation...")
-
-test_evaluator_em = Evaluate(devset=testset, metric=exact_match, display_progress=False)
-test_evaluator_wo = Evaluate(devset=testset, metric=word_overlap, display_progress=False)
-
-best_module = random_search_module if rs_em >= bs_em else bootstrap_module
-best_name = "RandomSearch" if rs_em >= bs_em else "BootstrapFewShot"
-
-final_em = test_evaluator_em(best_module)
-final_wo = test_evaluator_wo(best_module)
-
-# ============================================
-# Results Summary
-# ============================================
-print("\n" + "=" * 60)
-print("RESULTS SUMMARY")
-print("=" * 60)
-
-print("\n| Approach              | Exact Match | Word Overlap |")
-print("|----------------------|-------------|--------------|")
-print(f"| Baseline             | {baseline_em:>10.2%} | {baseline_wo:>11.2%} |")
-print(f"| BootstrapFewShot     | {bs_em:>10.2%} | {bs_wo:>11.2%} |")
-print(f"| RandomSearch         | {rs_em:>10.2%} | {rs_wo:>11.2%} |")
-print(f"| Final Test ({best_name[:8]}) | {final_em:>10.2%} | {final_wo:>11.2%} |")
-
-# Save best module
-best_module.save("best_qa_module.json")
-print(f"\n💾 Saved best module ({best_name}) to 'best_qa_module.json'")
-
-# Sample predictions
-print("\n📋 Sample Predictions from Best Model:")
-for ex in testset[:2]:
-    result = best_module(context=ex.context, question=ex.question)
-    print(f"\n  Q: {ex.question}")
-    print(f"  Expected: {ex.answer}")
-    print(f"  Predicted: {result.answer}")</code></pre>
-                                </div>
-                            </div>
-
-                            <!-- Summary -->
-                            <div class="content-block summary-block">
-                                <h2>📝 Chapter Summary</h2>
-
-                                <p>In this chapter, you learned:</p>
-
-                                <div class="chapter-sections-list no-icons">
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Metrics define success</strong> — optimizers maximize your
-                                                metric</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Training data</strong> — dspy.Example with .with_inputs()</p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>BootstrapFewShot</strong> — finds successful examples as demos
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Advanced optimizers</strong> — MIPRO, COPRO, BootstrapFinetune
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="chapter-section-item">
-                                        <div class="section-content">
-                                            <p><strong>Always save</strong> optimized modules for production</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Continue to Chapter 5 -->
                             <div class="content-block">
-                                <div class="success-content">
-                                    <span class="success-icon-large">🎉</span>
-                                    <h2>Congratulations!</h2>
-                                    <p>You've completed Chapter 4: Optimizers! You now know how to automatically
-                                        improve your DSPy programs.</p>
-                                </div>
                                 <div class="continue-btn-container">
-                                    <a href="../chapter-05/index.html" class="continue-btn next-chapter-main-btn">
-                                        <span>Start Chapter 5: Retrieval</span>
+                                    <a href="../chapter-05/index.html" class="continue-btn">
+                                        <span>Next: Chapter 5 - Optimizers</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">

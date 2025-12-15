@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercises | Chapter 4 | DSPy: The Comprehensive Guide</title>
+    <title>Best Practices | Chapter 4 | DSPy: The Comprehensive Guide</title>
     <meta name="description"
-        content="Practice your evaluation skills with hands-on exercises: creating datasets, designing metrics, and running systematic evaluations.">
+        content="Expert guidelines for reliable DSPy evaluation: dataset curation, metric design, avoiding data leakage, and reproducibility.">
     <link rel="stylesheet" href="../../assets/css/style.css?v=2">
     <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
     <link rel="stylesheet" href="../../assets/css/content.css?v=2">
@@ -68,13 +68,13 @@
                             <span class="section-title">Evaluation Loops</span>
                         </a>
                     </li>
-                    <li class="section-item viewed" data-section="best-practices">
+                    <li class="section-item active" data-section="best-practices">
                         <a href="best-practices.html">
                             <span class="section-number">6</span>
                             <span class="section-title">Best Practices</span>
                         </a>
                     </li>
-                    <li class="section-item active" data-section="exercises">
+                    <li class="section-item" data-section="exercises">
                         <a href="exercises.html">
                             <span class="section-number">7</span>
                             <span class="section-title">Exercises</span>
@@ -108,10 +108,10 @@
 
             <section class="chapter-hero">
                 <div class="chapter-hero-content is-visible fade-in-up">
-                    <span class="chapter-label">Chapter 4 · Section 7</span>
-                    <h1 class="chapter-title">Exercises</h1>
-                    <p class="chapter-description">Put your evaluation skills to the test with these hands-on coding
-                        challenges.</p>
+                    <span class="chapter-label">Chapter 4 · Section 6</span>
+                    <h1 class="chapter-title">Best Practices</h1>
+                    <p class="chapter-description">Proven strategies for reliable, reproducible, and effective
+                        evaluation.</p>
                     <div class="chapter-meta">
                         <span class="meta-item">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -120,17 +120,7 @@
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
-                            ~2-3 hours
-                        </span>
-                        <span class="meta-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path
-                                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
-                                </path>
-                            </svg>
-                            Hands-on
+                            ~25 min read
                         </span>
                     </div>
                 </div>
@@ -138,125 +128,115 @@
 
             <div class="content-wrapper">
                 <article class="content-article" id="content-article">
-                    <section class="content-section is-visible" id="exercises" data-section="exercises">
-                        <div class="markdown-content" id="exercises-content">
+                    <section class="content-section is-visible" id="best-practices" data-section="best-practices">
+                        <div class="markdown-content" id="best-practices-content">
                             <div class="content-block">
-                                <h2>Exercise 1: Creating a Quality Dataset</h2>
-                                <p><strong>Difficulty:</strong> ⭐⭐ Intermediate</p>
+                                <h2>Dataset Curation</h2>
 
-                                <h3>Objective</h3>
-                                <p>Create a well-structured evaluation dataset for a sentiment analysis task.</p>
-
-                                <h3>Requirements</h3>
-                                <ul>
-                                    <li>Create a dataset of at least 30 examples with fields: <code>text</code>,
-                                        <code>sentiment</code> (pos/neg/neu), and <code>confidence</code>.</li>
-                                    <li>Ensure valid distribution: 10+ positive, 10+ negative, 5+ neutral.</li>
-                                    <li>Include at least 5 edge cases (sarcasm, mixed sentiment, short text).</li>
-                                    <li>Properly split data into train (60%), dev (20%), and test (20%).</li>
-                                </ul>
-
-                                <h3>Starter Code</h3>
+                                <h3>1. Ensure Representative Data</h3>
+                                <p>Your evaluation set should mirror real-world distribution. A dataset of only "easy"
+                                    questions will give you a false sense of security.</p>
                                 <div class="command-box">
-                                    <pre><code class="language-python">import dspy
-import random
+                                    <pre><code class="language-python"># BAD: Homogeneous data
+data = [dspy.Example(q="2+2?", a="4"), dspy.Example(q="3+3?", a="6")]
 
-def create_sentiment_dataset():
-    """Returns: Tuple of (trainset, devset, testset)"""
-    examples = []
+# GOOD: Diverse data with edge cases
+data = [
+    dspy.Example(q="2+2?", a="4"),                  # Simple
+    dspy.Example(q="What is the meaning of lif", a="Likely typo..."), # Edge case
+    dspy.Example(q="", a="Please provide input")    # Empty input
+]</code></pre>
+                                </div>
 
-    # TODO: Add examples (positive, negative, neutral, edge cases)
-    # Hint: Use dspy.Example(...).with_inputs("text")
-    
-    # TODO: Shuffle with fixed seed
-    
-    # TODO: Split data
-    
-    return trainset, devset, testset</code></pre>
+                                <h3>2. Balance Your Dataset</h3>
+                                <p>Ensure key categories are equally represented to prevent bias towards majority
+                                    classes.</p>
+                            </div>
+
+                            <div class="content-block">
+                                <h2>Metric Design</h2>
+
+                                <h3>1. Measure What Matters</h3>
+                                <p>Don't use proxy metrics just because they are easy. Length does not equal quality.
+                                </p>
+
+                                <h3>2. Make Metrics Robust</h3>
+                                <p>Handle formatting variations (case sensitivity, punctuation) gracefully.</p>
+                                <div class="command-box">
+                                    <pre><code class="language-python">def robust_metric(example, pred, trace=None):
+    # Normalize before comparing
+    clean_gold = example.answer.lower().strip()
+    clean_pred = pred.answer.lower().strip()
+    return clean_gold == clean_pred</code></pre>
                                 </div>
                             </div>
 
-                            <hr class="section-divider">
-
                             <div class="content-block">
-                                <h2>Exercise 2: Designing a Custom Metric</h2>
-                                <p><strong>Difficulty:</strong> ⭐⭐ Intermediate</p>
-
-                                <h3>Objective</h3>
-                                <p>Design a comprehensive metric for evaluating a question-answering system.</p>
-
-                                <h3>Requirements</h3>
-                                <p>Create a metric that combines:</p>
-                                <ul>
-                                    <li><strong>Correctness (40%):</strong> Does the answer contain the expected info?
-                                    </li>
-                                    <li><strong>Completeness (30%):</strong> are all key points addressed?</li>
-                                    <li><strong>Conciseness (20%):</strong> Is the answer brief (10-100 words)?</li>
-                                    <li><strong>Format (10%):</strong> No repeated words or odd punctuation?</li>
-                                </ul>
-                                <p>The metric handles the <code>trace</code> parameter correctly (stricter during
-                                    optimization).</p>
-
-                                <h3>Starter Code</h3>
-                                <div class="command-box">
-                                    <pre><code class="language-python">def qa_quality_metric(example, pred, trace=None):
-    # TODO: Implement sub-scores
-    correctness = ...
-    completeness = ...
-    conciseness = ...
-    format_score = ...
-    
-    final_score = (0.4 * correctness + 
-                   0.3 * completeness + 
-                   0.2 * conciseness + 
-                   0.1 * format_score)
-
-    if trace is not None:
-        return final_score >= 0.7  # Stricter for optimization
-        
-    return final_score</code></pre>
+                                <h2>Avoiding Data Leakage</h2>
+                                <div class="tip-box warning">
+                                    <span class="tip-icon">⚠️</span>
+                                    <p><strong>Critical:</strong> Data leakage—where test data overlaps with training
+                                        data—invalidates your entire evaluation.</p>
                                 </div>
+
+                                <h3>Prevention Strategies</h3>
+                                <ul>
+                                    <li><strong>Split by Date:</strong> Train on past data, test on future data.</li>
+                                    <li><strong>Deduplicate:</strong> Remove identical or near-identical examples before
+                                        splitting.</li>
+                                    <li><strong>Verify Disjoint Sets:</strong> Programmatically check that
+                                        <code>len(set(train) & set(test)) == 0</code>.</li>
+                                </ul>
                             </div>
 
-                            <hr class="section-divider">
+                            <div class="content-block">
+                                <h2>Reproducibility</h2>
+
+                                <h3>1. Fix Random Seeds</h3>
+                                <div class="command-box">
+                                    <pre><code class="language-python">import random
+random.seed(42)</code></pre>
+                                </div>
+
+                                <h3>2. Version Control Data</h3>
+                                <p>Treat your datasets like code. Track versions to understand performance changes over
+                                    time.</p>
+                            </div>
 
                             <div class="content-block">
-                                <h2>Exercise 3: Systematic Evaluation</h2>
-                                <p><strong>Difficulty:</strong> ⭐⭐⭐ Intermediate-Advanced</p>
-
-                                <h3>Objective</h3>
-                                <p>Build a function that runs evaluation and provides a detailed report, including error
-                                    analysis.</p>
-
-                                <h3>Requirements</h3>
-                                <ul>
-                                    <li>Function takes a module, dataset, and metric.</li>
-                                    <li>Runs evaluation and captures detailed results.</li>
-                                    <li>Categorizes errors (e.g., empty response, wrong answer).</li>
-                                    <li>Identifies the best and worst performing examples.</li>
-                                    <li>Returns a dictionary with aggregate score and analysis.</li>
-                                </ul>
-
-                                <h3>Starter Code</h3>
-                                <div class="command-box">
-                                    <pre><code class="language-python">def comprehensive_evaluation(module, devset, metric):
-    results = {
-        'score': 0,
-        'errors': [],
-        'best_examples': [],
-        'worst_examples': []
-    }
-    
-    # TODO: Iterate, predict, score, and analyze
-    
-    return results</code></pre>
+                                <h2>Checklist for Every Evaluation</h2>
+                                <div class="chapter-sections-list">
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>✅ Data Representation</h4>
+                                            <p>Does the data cover edge cases and real-world variety?</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>✅ Metric Validity</h4>
+                                            <p>Does the metric actually measure success for the user?</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>✅ No Leakage</h4>
+                                            <p>Are training and testing sets completely disjoint?</p>
+                                        </div>
+                                    </div>
+                                    <div class="chapter-section-item">
+                                        <div class="section-content">
+                                            <h4>✅ Baselines</h4>
+                                            <p>Did you compare against a simple baseline?</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="content-block">
                                 <div class="continue-btn-container">
-                                    <a href="solutions.html" class="continue-btn">
-                                        <span>View Solutions</span>
+                                    <a href="exercises.html" class="continue-btn">
+                                        <span>Next: Exercises</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round">

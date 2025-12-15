@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting Guide | Chapter 9 | DSPy: The Comprehensive Guide</title>
+    <meta name="description" content="Common issues, diagnostic steps, and solutions for debugging DSPy applications.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 9</h2>
+                <span class="sidebar-subtitle">Appendices</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="api-reference">
+                        <a href="api-reference.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">API Reference</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="troubleshooting">
+                        <a href="troubleshooting.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Troubleshooting</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="resources">
+                        <a href="resources.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Additional Resources</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="glossary">
+                        <a href="glossary.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Glossary</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="community">
+                        <a href="community.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Community</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../../index.html" class="next-chapter-btn">
+                    Back to Home
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 9</span>
+                    <h1 class="chapter-title">Troubleshooting Guide</h1>
+                    <p class="chapter-description">Diagnostic steps and solutions for common DSPy issues.</p>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="troubleshooting-guide"
+                        data-section="troubleshooting-guide">
+                        <div class="markdown-content" id="troubleshooting-guide-content">
+                            <!-- Installation -->
+                            <div class="content-block">
+                                <h2>Installation & Setup</h2>
+                                <h3>Issue: <code>ModuleNotFoundError: No module named 'dspy'</code></h3>
+                                <p><strong>Solution:</strong> Install the package using <code>pip install dspy-ai</code>
+                                    (not just 'dspy'). Ensure you are in the correct virtual environment.</p>
+
+                                <h3>Issue: Authentication/API Errors</h3>
+                                <p>Ensure your API keys are correctly set. For OpenAI:</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-language">Python</span>
+                                        <button class="copy-btn" aria-label="Copy code">Copy</button>
+                                    </div>
+                                    <pre><code class="language-python">dspy.configure(api_key="...", model="gpt-4")</code></pre>
+                                </div>
+                                <p>Or use environment variables like <code>OPENAI_API_KEY</code>.</p>
+                            </div>
+
+                            <!-- Common Runtime Errors -->
+                            <div class="content-block">
+                                <h2>Runtime Errors</h2>
+                                <h3>Timeout Errors</h3>
+                                <p>Network issues or slow model responses. Try increasing the timeout:</p>
+                                <pre><code class="language-python">dspy.OpenAI(..., request_timeout=60)</code></pre>
+
+                                <h3>Rate Limit Errors</h3>
+                                <p>Implement retry logic or backoff. Use the <code>dspy.settings</code> to configure
+                                    global retry behavior if available, or wrap calls with retry decorators.</p>
+                            </div>
+
+                            <!-- Evaluation Issues -->
+                            <div class="content-block">
+                                <h2>Evaluation & Optimization</h2>
+                                <h3>Optimization Fails / No Improvement</h3>
+                                <ul>
+                                    <li>Check your metric function logic. It must accurately reflect quality.</li>
+                                    <li>Ensure you have enough high-quality examples in your training set.</li>
+                                    <li>Try a different optimizer (e.g., switch from <code>BootstrapFewShot</code> to
+                                        <code>MIPRO</code>).</li>
+                                </ul>
+                            </div>
+
+                            <!-- Debugging -->
+                            <div class="content-block">
+                                <h2>Debugging Tips</h2>
+                                <p>Enable verbose logging to see exactly what is being sent to the LM:</p>
+                                <pre><code class="language-python">dspy.settings.configure(trace=True)</code></pre>
+                                <p>Inspect the last call:</p>
+                                <pre><code class="language-python">lm.inspect_history(n=1)</code></pre>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="resources.html" class="continue-btn">
+                                        <span>Continue to Additional Resources</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

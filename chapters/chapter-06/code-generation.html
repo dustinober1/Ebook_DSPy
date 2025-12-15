@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Generation | Chapter 6 | DSPy: The Comprehensive Guide</title>
+    <meta name="description"
+        content="Learn to build automated coding assistants with DSPy that can write, refactor, test, and explain code based on natural language requirements.">
+    <link rel="stylesheet" href="../../assets/css/style.css?v=2">
+    <link rel="stylesheet" href="../../assets/css/chapter.css?v=8">
+    <link rel="stylesheet" href="../../assets/css/content.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+
+<body class="chapter-page">
+    <header>
+        <div class="logo">
+            <a href="../../index.html">
+                <img src="../../src/assets/logos/logo.png" alt="DSPy Ebook Logo">
+                <span>DSPy Ebook</span>
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../index.html#chapters">Chapters</a></li>
+                <li><a href="https://github.com/dustinober1/Ebook_DSPy" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chapter-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Chapter 6</h2>
+                <span class="sidebar-subtitle">Real-World Apps</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="section-list" id="section-list">
+                    <li class="section-item viewed" data-section="intro">
+                        <a href="index.html">
+                            <span class="section-number">1</span>
+                            <span class="section-title">Chapter Overview</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="rag-systems">
+                        <a href="rag-systems.html">
+                            <span class="section-number">2</span>
+                            <span class="section-title">RAG Systems</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="multi-hop-search">
+                        <a href="multi-hop-search.html">
+                            <span class="section-number">3</span>
+                            <span class="section-title">Multi-hop Search</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="classification-tasks">
+                        <a href="classification-tasks.html">
+                            <span class="section-number">4</span>
+                            <span class="section-title">Classification Tasks</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="entity-extraction">
+                        <a href="entity-extraction.html">
+                            <span class="section-number">5</span>
+                            <span class="section-title">Entity Extraction</span>
+                        </a>
+                    </li>
+                    <li class="section-item viewed" data-section="intelligent-agents">
+                        <a href="intelligent-agents.html">
+                            <span class="section-number">6</span>
+                            <span class="section-title">Intelligent Agents</span>
+                        </a>
+                    </li>
+                    <li class="section-item active" data-section="code-generation">
+                        <a href="code-generation.html">
+                            <span class="section-number">7</span>
+                            <span class="section-title">Code Generation</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="exercises">
+                        <a href="exercises.html">
+                            <span class="section-number">8</span>
+                            <span class="section-title">Exercises</span>
+                        </a>
+                    </li>
+                    <li class="section-item" data-section="solutions">
+                        <a href="solutions.html">
+                            <span class="section-number">9</span>
+                            <span class="section-title">Solutions</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../chapter-07/index.html" class="next-chapter-btn">
+                    Next: Chapter 07 →
+                </a>
+            </div>
+        </aside>
+
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <main class="chapter-content">
+            <div class="reading-progress" id="reading-progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <section class="chapter-hero">
+                <div class="chapter-hero-content is-visible fade-in-up">
+                    <span class="chapter-label">Chapter 6 · Section 7</span>
+                    <h1 class="chapter-title">Code Generation</h1>
+                    <p class="chapter-description">Build automated programming assistants to write, test, debug, and
+                        optimize code.</p>
+                    <div class="chapter-meta">
+                        <span class="meta-item">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ~15 min read
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-wrapper">
+                <article class="content-article" id="content-article">
+                    <section class="content-section is-visible" id="introduction" data-section="introduction">
+                        <div class="markdown-content" id="introduction-content">
+                            <!-- Introduction -->
+                            <div class="content-block">
+                                <h2>Introduction</h2>
+                                <p>Code generation is a transformative application of language models. DSPy allows you
+                                    to build sophisticated coding assistants that can not only generate boilerplate but
+                                    also implement complex algorithms, integrate APIs, write tests, and debug errors.
+                                </p>
+                            </div>
+
+                            <!-- Understanding Code Generation -->
+                            <div class="content-block">
+                                <h2>Understanding Code Generation</h2>
+
+                                <h3>Common Usecases</h3>
+                                <ul class="feature-list">
+                                    <li><strong>Boilerplate Generation:</strong> Quickly scrambling standard project
+                                        structures.</li>
+                                    <li><strong>Algorithm Implementation:</strong> Translating requirements into logic.
+                                    </li>
+                                    <li><strong>Test Generation:</strong> Creating unit tests for better coverage.</li>
+                                    <li><strong>Refactoring & Optimization:</strong> Improving code quality and
+                                        performance.</li>
+                                </ul>
+
+                                <h3>DSPy Code Generator</h3>
+                                <p>A basic module for generating code from requirements:</p>
+
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-language">Python</span>
+                                        <button class="copy-btn" aria-label="Copy code">Copy</button>
+                                    </div>
+                                    <pre><code class="language-python">import dspy
+
+class CodeGenerator(dspy.Module):
+    def __init__(self, language="python"):
+        super().__init__()
+        self.language = language
+        self.generate_code = dspy.Predict(
+            f"requirement, language[{language}] -> code, explanation"
+        )
+        self.validate_syntax = dspy.Predict(
+            f"code, language[{language}] -> syntax_valid, syntax_errors"
+        )
+
+    def forward(self, requirement):
+        # Generate code
+        generation = self.generate_code(
+            requirement=requirement,
+            language=self.language
+        )
+
+        # Validate syntax (basic check)
+        validation = self.validate_syntax(
+            code=generation.code,
+            language=self.language
+        )
+
+        return dspy.Prediction(
+            code=generation.code,
+            explanation=generation.explanation,
+            syntax_valid=validation.syntax_valid
+        )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Specialized Applications -->
+                            <div class="content-block">
+                                <h2>Specialized Applications</h2>
+
+                                <h3>Unit Test Generator</h3>
+                                <p>Generating robust test suites automatically:</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-language">Python</span>
+                                        <button class="copy-btn" aria-label="Copy code">Copy</button>
+                                    </div>
+                                    <pre><code class="language-python">class UnitTestGenerator(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.analyze_function = dspy.Predict(
+            "function_code -> signature, edge_cases"
+        )
+        self.generate_tests = dspy.ChainOfThought(
+            "function_info, edge_cases -> test_cases, assertions"
+        )
+
+    def forward(self, function_code):
+        analysis = self.analyze_function(function_code=function_code)
+        
+        tests = self.generate_tests(
+            function_info=analysis.signature,
+            edge_cases=analysis.edge_cases
+        )
+
+        return dspy.Prediction(
+            test_code=tests.test_cases,
+            assertions=tests.assertions
+        )</code></pre>
+                                </div>
+
+                                <h3>Code Refactoring Assistant</h3>
+                                <p>Improving code quality and maintainability:</p>
+                                <div class="code-block">
+                                    <div class="code-header">
+                                        <span class="code-language">Python</span>
+                                        <button class="copy-btn" aria-label="Copy code">Copy</button>
+                                    </div>
+                                    <pre><code class="language-python">class CodeRefactoringAssistant(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.analyze_quality = dspy.Predict(
+            "code -> issues, suggestions"
+        )
+        self.refactor = dspy.ChainOfThought(
+            "original_code, issues, suggestions -> refactored_code"
+        )
+
+    def forward(self, code):
+        analysis = self.analyze_quality(code=code)
+        
+        refactored = self.refactor(
+            original_code=code,
+            issues=analysis.issues,
+            suggestions=analysis.suggestions
+        )
+
+        return dspy.Prediction(
+            refactored_code=refactored.refactored_code,
+            improvements=analysis.suggestions
+        )</code></pre>
+                                </div>
+                            </div>
+
+                            <!-- Best Practices -->
+                            <div class="content-block">
+                                <h2>Best Practices</h2>
+                                <ul class="feature-list">
+                                    <li><strong>Context Awareness:</strong> Provide existing code context to generators
+                                        for better integration.</li>
+                                    <li><strong>Validation:</strong> Always validate generated code syntax and
+                                        functionality where possible.</li>
+                                    <li><strong>Security:</strong> Scan generated code for potential vulnerabilities.
+                                    </li>
+                                    <li><strong>Optimization:</strong> Use DSPy optimizers to fine-tune the prompts for
+                                        specific coding standards or languages.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Continue -->
+                            <div class="content-block">
+                                <div class="continue-btn-container">
+                                    <a href="exercises.html" class="continue-btn">
+                                        <span>Continue to Chapter 6 Exercises</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 DSPy Ebook. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../assets/js/main.js?v=1"></script>
+    <script src="../../assets/js/chapter_v2.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initChapter) {
+                window.initChapter({});
+            }
+            setTimeout(() => {
+                if (window.Prism) window.Prism.highlightAll();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
