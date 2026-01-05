@@ -265,8 +265,10 @@ class FactualAccuracyJudge(LLMJudge):
 
 ### 1. Using GEPA for Prompt Optimization
 
+> **Note**: **GEPA** stands for *Generative Evolutionary Prompt Adjustment*. It is an advanced optimizer technique covered in detail in [Chapter 5: Optimizers](../05-optimizers/00-chapter-intro.md).
+
 ```python
-from gepa import GEPAOptimizer  # Note: GEPA (Generative Evolutionary Prompt Adjustment) is covered in Chapter 5
+from gepa import GEPAOptimizer
 
 class OptimizedJudge:
     """Train LLM judge using GEPA for prompt optimization."""

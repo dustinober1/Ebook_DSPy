@@ -60,6 +60,8 @@ transformation_signature = "________________________________________"
 # Task 4: Explain your design choices
 # Why did you structure each signature this way?
 # What trade-offs did you consider?
+# Note: There is no single "correct" answer. Focus on justifying your trade-offs
+# (e.g., specificity vs. generality, single vs. multiple outputs).
 
 explanation = """
 ________________________________________

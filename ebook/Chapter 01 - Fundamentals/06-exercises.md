@@ -231,6 +231,7 @@ Create a program that:
 > **Note**: If you only have access to one LM provider (e.g., OpenAI), you can simulate "different" models by:
 > - Using different model sizes (e.g., `gpt-4o` vs `gpt-4o-mini`)
 > - Varying the temperature (e.g., `temperature=0.0` vs `temperature=1.0`)
+> - **Tip**: This simulation approach helps you understand how model choice affects output variability and quality, even without multiple providers.
 
 
 ### Starter Code
