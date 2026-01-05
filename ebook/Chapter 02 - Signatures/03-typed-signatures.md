@@ -25,9 +25,9 @@ Typed signatures extend basic DSPy signatures with:
  
  Typed signatures transform simple string signatures into rich, self-documenting specifications that provide better type safety, validation, and developer experience.
  
- > **How DSPy Uses Types**: DSPy uses your type definitions in two ways:
- > 1. **Prompting**: It translates types into natural language instructions for the LM (e.g., `int` becomes "an integer").
- > 2. **Validation**: When using modules like `TypedPredictor`, it enforces these types at runtime, retrying if the LM fails to match the schema.
+ > **Type Enforcement Note**:
+ > * **Prompting**: DSPy always uses your type annotations to generate better prompts (e.g., explaining to the LM that it should output a `list` or an `int`).
+ > * **Validation**: Strict validation (raising errors or retrying on bad types) typically requires using `dspy.TypedPredictor` or similar advanced modules. Standard `dspy.Predict` uses types primarily for guidance.
 
 
 ## Creating Typed Signatures

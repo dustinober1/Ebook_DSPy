@@ -105,6 +105,8 @@ researcher = dspy.ReAct(
 
 # Note: Ensure your search API key (e.g., SERPER_API_KEY) is set in your environment variables.
 # You can stick it in a .env file and load it with `python-dotenv`.
+# SECURITY TIP: Never hardcode API keys in your scripts. Always use environment variables
+# or a secure secrets manager.
 
 # Research a topic
 result = researcher(

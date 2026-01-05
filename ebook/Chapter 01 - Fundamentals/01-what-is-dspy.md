@@ -344,6 +344,10 @@ qa = dspy.ChainOfThought("context, question -> answer")
 ```
 
 > **Tip**: The string `"context, question -> answer"` is a shorthand for defining a Signature class. It's great for quick prototyping!
+>
+> **String Signature vs. Class Signature**:
+> - **String Signature** (`"input -> output"`): Best for quick experiments and simple tasks.
+> - **Class Signature** (`class MySig(dspy.Signature): ...`): Necessary for adding field descriptions, type hints, and stricter validation.
 
 
 ### Multi-Step Reasoning
