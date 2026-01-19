@@ -96,24 +96,26 @@
 
 ---
 
-### Task 1.3: Python Standard Layout
+### Task 1.3: Python Standard Layout ✅ COMPLETE
 
 **Why:** Creating a proper Python project structure enables code reuse, testing, and maintainability.
 
-- [ ] **1.3.1** Review existing `src/` directory:
+- [x] **1.3.1** Review existing `src/` directory:
   - Currently contains: `SUMMARY.md` and `assets/` subdirectory
   - Determine what should stay vs. be reorganized
+  - **Result:** Identified `SUMMARY.md` to move to planning and `assets/` to distribute to `content/`.
 
-- [ ] **1.3.2** Restructure `src/` for Python utilities:
-  - Move `src/SUMMARY.md` → `planning/SUMMARY.md` (or delete if redundant)
-  - Move `src/assets/` → `content/images/` or appropriate location
+- [x] **1.3.2** Restructure `src/` for Python utilities:
+  - Move `src/SUMMARY.md` → `planning/SUMMARY.md`
+  - Move `src/assets/` → `content/images/` and `content/data/`
   - Create proper Python package structure:
     ```bash
     mkdir -p src/dspy_utils
     touch src/dspy_utils/__init__.py
     ```
+  - **Completed:** Moved summary and assets. `src/` is now dedicated to python code.
 
-- [ ] **1.3.3** Create `src/dspy_utils/` with placeholder modules:
+- [x] **1.3.3** Create `src/dspy_utils/` with placeholder modules:
   - Create `src/dspy_utils/__init__.py`:
     ```python
     """Shared utilities for DSPy ebook examples."""
@@ -135,13 +137,13 @@
         pass
     ```
 
-- [ ] **1.3.4** Create the `tests/` directory:
+- [x] **1.3.4** Create the `tests/` directory:
   ```bash
   mkdir -p tests
   touch tests/__init__.py
   ```
 
-- [ ] **1.3.5** Create a placeholder test file:
+- [x] **1.3.5** Create a placeholder test file:
   - Create `tests/test_placeholder.py`:
     ```python
     """Placeholder test file for the DSPy ebook."""
@@ -151,11 +153,12 @@
         assert True
     ```
 
-- [ ] **1.3.6** Verify the test setup works:
+- [x] **1.3.6** Verify the test setup works:
   ```bash
   pip install pytest
   pytest tests/ -v
   ```
+  - **Result:** Tests passed successfully (1 passed in 0.01s). Created venv for isolation.
 
 ---
 
