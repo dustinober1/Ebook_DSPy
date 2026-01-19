@@ -1,0 +1,1579 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Debugging and Tracing: Mastering DSPy Application Diagnostics &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/07_advanced_topics/04_debugging_tracing';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Deployment Strategies: Taking DSPy Applications to Production" href="05_deployment_strategies.html" />
+    <link rel="prev" title="Async and Streaming: Building Real-Time DSPy Applications" href="03_async_streaming.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 7: Advanced Topics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/07_advanced_topics/04_debugging_tracing.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Debugging and Tracing: Mastering DSPy Application Diagnostics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-dspy-debugging-challenges">Understanding DSPy Debugging Challenges</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unique-challenges">Unique Challenges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging-categories">Debugging Categories</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tracing">Module Tracing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#function-tracing-decorator">1. Function Tracing Decorator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-state-inspector">2. Module State Inspector</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-tracing">Performance Tracing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-profiler">1. Performance Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#token-usage-tracker">2. Token Usage Tracker</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-debugging">Visual Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-graph-visualizer">1. Execution Graph Visualizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-debugger">2. Interactive Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-debugging-techniques">Advanced Debugging Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-engineering-debugger">1. Prompt Engineering Debugger</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-debugger">2. Optimization Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proactive-debugging">1. Proactive Debugging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#systematic-debugging">2. Systematic Debugging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#production-debugging">3. Production Debugging</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="debugging-and-tracing-mastering-dspy-application-diagnostics">
+<h1>Debugging and Tracing: Mastering DSPy Application Diagnostics<a class="headerlink" href="#debugging-and-tracing-mastering-dspy-application-diagnostics" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Debugging complex DSPy applications requires specialized tools and techniques. Unlike traditional software debugging, DSPy applications involve language model interactions, optimization processes, and distributed components that make troubleshooting challenging. This section provides comprehensive strategies for effective debugging and tracing of DSPy applications.</p>
+</section>
+<section id="understanding-dspy-debugging-challenges">
+<h2>Understanding DSPy Debugging Challenges<a class="headerlink" href="#understanding-dspy-debugging-challenges" title="Link to this heading">#</a></h2>
+<section id="unique-challenges">
+<h3>Unique Challenges<a class="headerlink" href="#unique-challenges" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Non-deterministic Outputs</strong>: Language models can produce varying results</p></li>
+<li><p><strong>Hidden Complexity</strong>: Optimizers and prompt engineering add layers of abstraction</p></li>
+<li><p><strong>API Dependencies</strong>: External service issues can cause failures</p></li>
+<li><p><strong>Token Limits</strong>: Context window constraints cause unexpected behavior</p></li>
+<li><p><strong>Performance Issues</strong>: Latency and cost optimization complexity</p></li>
+</ol>
+</section>
+<section id="debugging-categories">
+<h3>Debugging Categories<a class="headerlink" href="#debugging-categories" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DebugLevel</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">WARNING</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">INFO</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">TRACE</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DSPyDebugger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive debugging utility for DSPy applications.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">DebugLevel</span><span class="o">.</span><span class="n">INFO</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Log message with specified level.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">level</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">log_entry</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">level</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trace_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_entry</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_print_log</span><span class="p">(</span><span class="n">log_entry</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_print_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print formatted log entry.&quot;&quot;&quot;</span>
+        <span class="n">color_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span><span class="p">,</span>      <span class="c1"># Red</span>
+            <span class="s2">&quot;WARNING&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[93m&quot;</span><span class="p">,</span>    <span class="c1"># Yellow</span>
+            <span class="s2">&quot;INFO&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[94m&quot;</span><span class="p">,</span>       <span class="c1"># Blue</span>
+            <span class="s2">&quot;DEBUG&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[96m&quot;</span><span class="p">,</span>      <span class="c1"># Cyan</span>
+            <span class="s2">&quot;TRACE&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[97m&quot;</span><span class="p">,</span>      <span class="c1"># White</span>
+        <span class="p">}</span>
+        <span class="n">reset</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">color_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Data: </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trace function execution.&quot;&quot;&quot;</span>
+        <span class="n">trace_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">module_name</span><span class="p">,</span>
+            <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">func_name</span><span class="p">,</span>
+            <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+            <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
+            <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="k">if</span> <span class="n">error</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;traceback&quot;</span><span class="p">:</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span> <span class="k">if</span> <span class="n">error</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">DebugLevel</span><span class="o">.</span><span class="n">TRACE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Executing </span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">trace_data</span><span class="p">)</span>
+
+        <span class="c1"># Check breakpoints</span>
+        <span class="n">breakpoint_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="n">breakpoint_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_breakpoint</span><span class="p">(</span><span class="n">trace_data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_breakpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle breakpoint trigger.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">*** BREAKPOINT: </span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;function&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ***&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Args: </span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kwargs: </span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">trace_data</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Interactive debugging</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span>
+        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_breakpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add breakpoint for debugging.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_breakpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove breakpoint.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breakpoints</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">watch_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Watch variable for changes.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">DebugLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Variable </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> changed&quot;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s2">&quot;old&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                <span class="s2">&quot;new&quot;</span><span class="p">:</span> <span class="n">value</span>
+            <span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">watch_variables</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<span class="c1"># Global debugger instance</span>
+<span class="n">debugger</span> <span class="o">=</span> <span class="n">DSPyDebugger</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-tracing">
+<h2>Module Tracing<a class="headerlink" href="#module-tracing" title="Link to this heading">#</a></h2>
+<section id="function-tracing-decorator">
+<h3>1. Function Tracing Decorator<a class="headerlink" href="#function-tracing-decorator" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">trace_function</span><span class="p">(</span><span class="n">debug_level</span><span class="o">=</span><span class="n">DebugLevel</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to trace function execution.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">module_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__module__</span>
+            <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+
+            <span class="c1"># Start trace</span>
+            <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># Success trace</span>
+                <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+                    <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+                    <span class="n">result</span><span class="o">=</span><span class="n">result</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Error trace</span>
+                <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+                    <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+                    <span class="n">error</span><span class="o">=</span><span class="n">e</span>
+                <span class="p">)</span>
+                <span class="k">raise</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">async_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">module_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__module__</span>
+            <span class="n">func_name</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+
+            <span class="c1"># Start trace</span>
+            <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># Success trace</span>
+                <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+                    <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+                    <span class="n">result</span><span class="o">=</span><span class="n">result</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Error trace</span>
+                <span class="n">debugger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span>
+                    <span class="n">module_name</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span>
+                    <span class="n">error</span><span class="o">=</span><span class="n">e</span>
+                <span class="p">)</span>
+                <span class="k">raise</span>
+
+        <span class="c1"># Return appropriate wrapper based on function type</span>
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">async_wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">decorator</span>
+
+<span class="c1"># Usage example</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TracedModule</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module with automatic tracing.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;input -&gt; output&quot;</span><span class="p">)</span>
+
+    <span class="nd">@trace_function</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_text</span><span class="p">):</span>
+        <span class="n">debugger</span><span class="o">.</span><span class="n">watch_variable</span><span class="p">(</span><span class="s2">&quot;input_length&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_text</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">input_text</span><span class="p">)</span>
+        <span class="n">debugger</span><span class="o">.</span><span class="n">watch_variable</span><span class="p">(</span><span class="s2">&quot;output_length&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">output</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</section>
+<section id="module-state-inspector">
+<h3>2. Module State Inspector<a class="headerlink" href="#module-state-inspector" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ModuleInspector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inspect and analyze DSPy module state.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspection_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">inspect_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspect module configuration and state.&quot;&quot;&quot;</span>
+        <span class="n">inspection</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;module_class&quot;</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;module_name&quot;</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;submodules&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;storage&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Get parameters</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;named_parameters&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
+                <span class="n">inspection</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">shape</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;requires_grad&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s1">&#39;requires_grad&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="p">}</span>
+
+        <span class="c1"># Get submodules</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;named_modules&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">submodule</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">named_modules</span><span class="p">():</span>
+                <span class="n">inspection</span><span class="p">[</span><span class="s2">&quot;submodules&quot;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">submodule</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">(</span><span class="n">submodule</span><span class="p">)</span>
+                <span class="p">}</span>
+
+        <span class="c1"># Get storage/attributes</span>
+        <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">attr_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                <span class="n">attr_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">attr_value</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr_value</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">module</span><span class="p">)):</span>
+                    <span class="n">inspection</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">][</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr_value</span><span class="p">)[:</span><span class="mi">100</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inspection_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inspection</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inspection</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compare_states</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">before_inspection</span><span class="p">,</span> <span class="n">after_inspection</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compare module states before and after operation.&quot;&quot;&quot;</span>
+        <span class="n">differences</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;parameters_changed&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;storage_changed&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;submodules_changed&quot;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Compare parameters</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">before_inspection</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">after_inspection</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">before_inspection</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">after_inspection</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">differences</span><span class="p">[</span><span class="s2">&quot;parameters_changed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># Compare storage</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">before_inspection</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">after_inspection</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">before_inspection</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">after_inspection</span><span class="p">[</span><span class="s2">&quot;storage&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]:</span>
+                    <span class="n">differences</span><span class="p">[</span><span class="s2">&quot;storage_changed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">differences</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-tracing">
+<h2>Performance Tracing<a class="headerlink" href="#performance-tracing" title="Link to this heading">#</a></h2>
+<section id="performance-profiler">
+<h3>1. Performance Profiler<a class="headerlink" href="#performance-profiler" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PerformanceProfiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Profile DSPy module performance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_profiles</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">system_monitor</span> <span class="o">=</span> <span class="n">SystemMonitor</span><span class="p">()</span>
+
+    <span class="nd">@contextmanager</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager for profiling.&quot;&quot;&quot;</span>
+        <span class="n">profile_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">profile_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+            <span class="s2">&quot;start_memory&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_monitor</span><span class="o">.</span><span class="n">get_memory_usage</span><span class="p">(),</span>
+            <span class="s2">&quot;start_cpu&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_monitor</span><span class="o">.</span><span class="n">get_cpu_usage</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_profiles</span><span class="p">[</span><span class="n">profile_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">profile_data</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">profile_id</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># End profiling</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">end_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_monitor</span><span class="o">.</span><span class="n">get_memory_usage</span><span class="p">()</span>
+            <span class="n">end_cpu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">system_monitor</span><span class="o">.</span><span class="n">get_cpu_usage</span><span class="p">()</span>
+
+            <span class="n">profile_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
+                <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">profile_data</span><span class="p">[</span><span class="s2">&quot;start_time&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;end_memory&quot;</span><span class="p">:</span> <span class="n">end_memory</span><span class="p">,</span>
+                <span class="s2">&quot;end_cpu&quot;</span><span class="p">:</span> <span class="n">end_cpu</span><span class="p">,</span>
+                <span class="s2">&quot;memory_delta&quot;</span><span class="p">:</span> <span class="n">end_memory</span> <span class="o">-</span> <span class="n">profile_data</span><span class="p">[</span><span class="s2">&quot;start_memory&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;cpu_delta&quot;</span><span class="p">:</span> <span class="n">end_cpu</span> <span class="o">-</span> <span class="n">profile_data</span><span class="p">[</span><span class="s2">&quot;start_cpu&quot;</span><span class="p">]</span>
+            <span class="p">})</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="p">[</span><span class="n">profile_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">profile_data</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_profiles</span><span class="p">[</span><span class="n">profile_id</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_profile_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get summary of profiles.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">relevant_profiles</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">relevant_profiles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profiles</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">relevant_profiles</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">summary</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;total_profiles&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">relevant_profiles</span><span class="p">),</span>
+            <span class="s2">&quot;total_duration&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">relevant_profiles</span><span class="p">),</span>
+            <span class="s2">&quot;average_duration&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">relevant_profiles</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">relevant_profiles</span><span class="p">),</span>
+            <span class="s2">&quot;max_memory&quot;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;end_memory&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">relevant_profiles</span><span class="p">),</span>
+            <span class="s2">&quot;total_memory_delta&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s2">&quot;memory_delta&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">relevant_profiles</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">summary</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SystemMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Monitor system resources.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_memory_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get current memory usage in MB.&quot;&quot;&quot;</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cpu_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get current CPU usage percentage.&quot;&quot;&quot;</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">process</span><span class="o">.</span><span class="n">cpu_percent</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="token-usage-tracker">
+<h3>2. Token Usage Tracker<a class="headerlink" href="#token-usage-tracker" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tiktoken</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TokenTracker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Track token usage for cost optimization.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">encoding_for_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s2">&quot;cl100k_base&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">usage_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_prompt_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_completion_tokens</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">count_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Count tokens in text.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">track_api_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">completion</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Track API call token usage.&quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="n">prompt_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="n">completion_tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">completion</span><span class="p">)</span> <span class="k">if</span> <span class="n">completion</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="n">usage_entry</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">,</span>
+            <span class="s2">&quot;prompt_tokens&quot;</span><span class="p">:</span> <span class="n">prompt_tokens</span><span class="p">,</span>
+            <span class="s2">&quot;completion_tokens&quot;</span><span class="p">:</span> <span class="n">completion_tokens</span><span class="p">,</span>
+            <span class="s2">&quot;total_tokens&quot;</span><span class="p">:</span> <span class="n">prompt_tokens</span> <span class="o">+</span> <span class="n">completion_tokens</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">usage_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">usage_entry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_prompt_tokens</span> <span class="o">+=</span> <span class="n">prompt_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_completion_tokens</span> <span class="o">+=</span> <span class="n">completion_tokens</span>
+
+        <span class="k">return</span> <span class="n">usage_entry</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">estimate_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Estimate total cost of API calls.&quot;&quot;&quot;</span>
+        <span class="c1"># Pricing (example rates, adjust based on actual pricing)</span>
+        <span class="n">pricing</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">,</span> <span class="s2">&quot;completion&quot;</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">},</span>
+            <span class="s2">&quot;gpt-4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">,</span> <span class="s2">&quot;completion&quot;</span><span class="p">:</span> <span class="mf">0.06</span><span class="p">},</span>
+            <span class="s2">&quot;gpt-4-turbo&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s2">&quot;completion&quot;</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">total_cost</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">usage</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">usage_history</span><span class="p">:</span>
+            <span class="n">model_pricing</span> <span class="o">=</span> <span class="n">pricing</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">usage</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span> <span class="n">pricing</span><span class="p">[</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">])</span>
+            <span class="n">prompt_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">usage</span><span class="p">[</span><span class="s2">&quot;prompt_tokens&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="n">model_pricing</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">]</span>
+            <span class="n">completion_cost</span> <span class="o">=</span> <span class="p">(</span><span class="n">usage</span><span class="p">[</span><span class="s2">&quot;completion_tokens&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="n">model_pricing</span><span class="p">[</span><span class="s2">&quot;completion&quot;</span><span class="p">]</span>
+            <span class="n">total_cost</span> <span class="o">+=</span> <span class="n">prompt_cost</span> <span class="o">+</span> <span class="n">completion_cost</span>
+
+        <span class="k">return</span> <span class="n">total_cost</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_usage_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get summary of token usage.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;total_calls&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">usage_history</span><span class="p">),</span>
+            <span class="s2">&quot;total_prompt_tokens&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_prompt_tokens</span><span class="p">,</span>
+            <span class="s2">&quot;total_completion_tokens&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_completion_tokens</span><span class="p">,</span>
+            <span class="s2">&quot;total_tokens&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_prompt_tokens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_completion_tokens</span><span class="p">,</span>
+            <span class="s2">&quot;estimated_cost&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimate_cost</span><span class="p">()</span>
+        <span class="p">}</span>
+
+<span class="c1"># Global token tracker</span>
+<span class="n">token_tracker</span> <span class="o">=</span> <span class="n">TokenTracker</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="visual-debugging">
+<h2>Visual Debugging<a class="headerlink" href="#visual-debugging" title="Link to this heading">#</a></h2>
+<section id="execution-graph-visualizer">
+<h3>1. Execution Graph Visualizer<a class="headerlink" href="#execution-graph-visualizer" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ExecutionGraph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize DSPy execution flow.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add node to execution graph.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">module_name</span><span class="p">,</span>
+            <span class="s2">&quot;operation&quot;</span><span class="p">:</span> <span class="n">operation</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{},</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">relationship</span><span class="o">=</span><span class="s2">&quot;data_flow&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add edge to execution graph.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="n">edge_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_data</span><span class="p">[</span><span class="n">edge_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;relationship&quot;</span><span class="p">:</span> <span class="n">relationship</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">visualize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visualize execution graph.&quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+
+        <span class="c1"># Draw nodes</span>
+        <span class="n">node_labels</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">node_colors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_data</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;module&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;operation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">node_labels</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+
+            <span class="c1"># Color based on operation type</span>
+            <span class="k">if</span> <span class="s2">&quot;generate&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">node_colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;lightblue&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;predict&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">node_colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;lightgreen&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;retrieve&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;operation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">node_colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;yellow&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">node_colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;lightgray&quot;</span><span class="p">)</span>
+
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span>
+            <span class="n">node_color</span><span class="o">=</span><span class="n">node_colors</span><span class="p">,</span>
+            <span class="n">node_size</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span>
+        <span class="p">)</span>
+
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_labels</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">node_labels</span><span class="p">,</span>
+            <span class="n">font_size</span><span class="o">=</span><span class="mi">8</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Draw edges</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span>
+            <span class="n">edge_color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">arrows</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">arrowsize</span><span class="o">=</span><span class="mi">20</span>
+        <span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;DSPy Execution Graph&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save_path</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="interactive-debugger">
+<h3>2. Interactive Debugger<a class="headerlink" href="#interactive-debugger" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">readline</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cmd</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DSPyInteractiveDebugger</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interactive debugger for DSPy applications.&quot;&quot;&quot;</span>
+
+    <span class="n">intro</span> <span class="o">=</span> <span class="s2">&quot;DSPy Interactive Debugger. Type &#39;help&#39; for commands.&quot;</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;(dspy-debug) &quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trace module execution.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No module loaded. Use &#39;load &lt;module&gt;&#39; first.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">execution_history</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">line</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load a DSPy module.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># This would load a module from file or import</span>
+            <span class="c1"># For now, just store the name</span>
+            <span class="n">module_name</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Would load module: </span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading module: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show execution history.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution_history</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No execution history.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execution_history</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. Input: </span><span class="si">{</span><span class="n">input_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_inspect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inspect module state.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No module loaded.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">inspector</span> <span class="o">=</span> <span class="n">ModuleInspector</span><span class="p">()</span>
+        <span class="n">inspection</span> <span class="o">=</span> <span class="n">inspector</span><span class="o">.</span><span class="n">inspect_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Module: </span><span class="si">{</span><span class="n">inspection</span><span class="p">[</span><span class="s1">&#39;module_class&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameters: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">inspection</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Submodules: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">inspection</span><span class="p">[</span><span class="s1">&#39;submodules&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Storage keys: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">inspection</span><span class="p">[</span><span class="s1">&#39;storage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Profile module execution.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No module loaded.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">profiler</span> <span class="o">=</span> <span class="n">PerformanceProfiler</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">profiler</span><span class="o">.</span><span class="n">profile</span><span class="p">(</span><span class="s2">&quot;debug_profile&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">summary</span> <span class="o">=</span> <span class="n">profiler</span><span class="o">.</span><span class="n">get_profile_summary</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Profile Summary:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_duration&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Memory Delta: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_memory_delta&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show token usage statistics.&quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="n">token_tracker</span><span class="o">.</span><span class="n">get_usage_summary</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Token Usage Summary:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Calls: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_calls&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt Tokens: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_prompt_tokens&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Completion Tokens: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_completion_tokens&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Tokens: </span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;total_tokens&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated Cost: $</span><span class="si">{</span><span class="n">summary</span><span class="p">[</span><span class="s1">&#39;estimated_cost&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear execution history.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execution_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution history cleared.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exit debugger.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Goodbye!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default command - treat as forward pass.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_trace</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-debugging-techniques">
+<h2>Advanced Debugging Techniques<a class="headerlink" href="#advanced-debugging-techniques" title="Link to this heading">#</a></h2>
+<section id="prompt-engineering-debugger">
+<h3>1. Prompt Engineering Debugger<a class="headerlink" href="#prompt-engineering-debugger" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PromptDebugger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Debug prompt engineering and LM responses.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">expected_output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Debug prompt-response interaction.&quot;&quot;&quot;</span>
+        <span class="n">debug_info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+            <span class="s2">&quot;prompt_length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">prompt</span><span class="p">),</span>
+            <span class="s2">&quot;response_length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">),</span>
+            <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span> <span class="k">else</span> <span class="n">prompt</span><span class="p">,</span>
+            <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span> <span class="k">else</span> <span class="n">response</span><span class="p">,</span>
+            <span class="s2">&quot;expected&quot;</span><span class="p">:</span> <span class="n">expected_output</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Analyze prompt</span>
+        <span class="n">prompt_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;prompt_analysis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prompt_analysis</span>
+
+        <span class="c1"># Analyze response</span>
+        <span class="n">response_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;response_analysis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">response_analysis</span>
+
+        <span class="c1"># Check for issues</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect_issues</span><span class="p">(</span><span class="n">debug_info</span><span class="p">)</span>
+        <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">issues</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">debug_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">debug_info</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze prompt for potential issues.&quot;&quot;&quot;</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;has_examples&quot;</span><span class="p">:</span> <span class="s2">&quot;Example:&quot;</span> <span class="ow">in</span> <span class="n">prompt</span><span class="p">,</span>
+            <span class="s2">&quot;has_instructions&quot;</span><span class="p">:</span> <span class="s2">&quot;You are&quot;</span> <span class="ow">in</span> <span class="n">prompt</span> <span class="ow">or</span> <span class="s2">&quot;Please&quot;</span> <span class="ow">in</span> <span class="n">prompt</span><span class="p">,</span>
+            <span class="s2">&quot;estimated_tokens&quot;</span><span class="p">:</span> <span class="n">token_tracker</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">prompt</span><span class="p">),</span>
+            <span class="s2">&quot;format_specific&quot;</span><span class="p">:</span> <span class="s2">&quot;JSON&quot;</span> <span class="ow">in</span> <span class="n">prompt</span> <span class="ow">or</span> <span class="s2">&quot;XML&quot;</span> <span class="ow">in</span> <span class="n">prompt</span><span class="p">,</span>
+            <span class="s2">&quot;complexity&quot;</span><span class="p">:</span> <span class="s2">&quot;high&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prompt</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">200</span> <span class="k">else</span> <span class="s2">&quot;medium&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prompt</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="s2">&quot;low&quot;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">analysis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze response for quality issues.&quot;&quot;&quot;</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;is_empty&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;is_json_like&quot;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">response</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">),</span>
+            <span class="s2">&quot;estimated_tokens&quot;</span><span class="p">:</span> <span class="n">token_tracker</span><span class="o">.</span><span class="n">count_tokens</span><span class="p">(</span><span class="n">response</span><span class="p">),</span>
+            <span class="s2">&quot;completeness&quot;</span><span class="p">:</span> <span class="s2">&quot;high&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="s2">&quot;medium&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="k">else</span> <span class="s2">&quot;low&quot;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">analysis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_detect_issues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect potential issues in prompt-response pair.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Check for empty response</span>
+        <span class="k">if</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;response_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;is_empty&quot;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Empty response&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check for very long prompts</span>
+        <span class="k">if</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;prompt_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;estimated_tokens&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3000</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Very long prompt - may exceed context window&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check for missing instructions</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;prompt_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;has_instructions&quot;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;No clear instructions in prompt&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check response completeness</span>
+        <span class="k">if</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;response_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;completeness&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;low&quot;</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Very short response - may be incomplete&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check format mismatch</span>
+        <span class="k">if</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;prompt_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;format_specific&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;JSON&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;response_analysis&quot;</span><span class="p">][</span><span class="s2">&quot;is_json_like&quot;</span><span class="p">]:</span>
+                <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Expected JSON format but response is not JSON-like&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">issues</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_prompt_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">debug_info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get suggestions for improving prompt.&quot;&quot;&quot;</span>
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Empty response&quot;</span> <span class="ow">in</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]:</span>
+            <span class="n">suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Simplify the prompt or provide more context&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;No clear instructions&quot;</span> <span class="ow">in</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]:</span>
+            <span class="n">suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Add clear instructions about the desired output format&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Very long prompt&quot;</span> <span class="ow">in</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]:</span>
+            <span class="n">suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Consider reducing prompt length or using summarization&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;Expected JSON format&quot;</span> <span class="ow">in</span> <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]:</span>
+            <span class="n">suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Explicitly request JSON output in the prompt&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">suggestions</span>
+</pre></div>
+</div>
+</section>
+<section id="optimization-debugger">
+<h3>2. Optimization Debugger<a class="headerlink" href="#optimization-debugger" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizationDebugger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Debug DSPy optimization processes.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimization_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">debug_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">compiled_module</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Debug optimization process.&quot;&quot;&quot;</span>
+        <span class="n">debug_info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;optimizer_type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;trainset_size&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">),</span>
+            <span class="s2">&quot;metric_type&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="s2">&quot;optimization_start&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Analyze optimizer configuration</span>
+        <span class="n">config_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_optimizer_config</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;optimizer_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_analysis</span>
+
+        <span class="c1"># Analyze trainset</span>
+        <span class="n">trainset_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_trainset</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+        <span class="n">debug_info</span><span class="p">[</span><span class="s2">&quot;trainset_analysis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trainset_analysis</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimization_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">debug_info</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">debug_info</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_optimizer_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze optimizer configuration.&quot;&quot;&quot;</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Check common optimizers</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="s1">&#39;max_bootstrapped_demos&#39;</span><span class="p">):</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;max_bootstrapped_demos&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">max_bootstrapped_demos</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="s1">&#39;max_labeled_demos&#39;</span><span class="p">):</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;max_labeled_demos&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">max_labeled_demos</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="s1">&#39;max_rounds&#39;</span><span class="p">):</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;max_rounds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">max_rounds</span>
+
+        <span class="c1"># Check for potential issues</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_bootstrapped_demos&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Very high max_bootstrapped_demos - may be slow&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_rounds&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;High max_rounds - may overfit&quot;</span><span class="p">)</span>
+
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;potential_issues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">issues</span>
+        <span class="k">return</span> <span class="n">analysis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_trainset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze training set quality.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">trainset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Empty trainset&quot;</span><span class="p">}</span>
+
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">),</span>
+            <span class="s2">&quot;has_explanations&quot;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Check for example diversity</span>
+        <span class="n">example_lengths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">has_explanations</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">trainset</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;explanation&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">example</span><span class="o">.</span><span class="n">explanation</span><span class="p">:</span>
+                <span class="n">has_explanations</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Estimate complexity</span>
+            <span class="n">text_length</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">text_length</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">example_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text_length</span><span class="p">)</span>
+
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;has_explanations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_explanations</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;explanation_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">has_explanations</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;avg_example_length&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">example_lengths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">example_lengths</span><span class="p">)</span>
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;length_variance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;avg_example_length&quot;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">example_lengths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">example_lengths</span><span class="p">)</span>
+
+        <span class="c1"># Check for quality issues</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;explanation_ratio&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Low explanation ratio - may affect optimization quality&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;length_variance&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;avg_example_length&quot;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;High variance in example lengths - consider standardizing&quot;</span><span class="p">)</span>
+
+        <span class="n">analysis</span><span class="p">[</span><span class="s2">&quot;quality_issues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">issues</span>
+        <span class="k">return</span> <span class="n">analysis</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="proactive-debugging">
+<h3>1. Proactive Debugging<a class="headerlink" href="#proactive-debugging" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add logging and tracing from the start</p></li>
+<li><p>Use meaningful variable names and comments</p></li>
+<li><p>Implement validation checks</p></li>
+<li><p>Monitor performance metrics</p></li>
+<li><p>Set up error alerts</p></li>
+</ul>
+</section>
+<section id="systematic-debugging">
+<h3>2. Systematic Debugging<a class="headerlink" href="#systematic-debugging" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Reproduce issues consistently</p></li>
+<li><p>Isolate the problem area</p></li>
+<li><p>Use binary search approach</p></li>
+<li><p>Document findings</p></li>
+<li><p>Test fixes thoroughly</p></li>
+</ul>
+</section>
+<section id="production-debugging">
+<h3>3. Production Debugging<a class="headerlink" href="#production-debugging" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Implement comprehensive logging</p></li>
+<li><p>Use distributed tracing</p></li>
+<li><p>Monitor key metrics</p></li>
+<li><p>Set up alerting</p></li>
+<li><p>Keep debug information in production</p></li>
+</ul>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Structured debugging</strong> is essential for complex DSPy applications</p></li>
+<li><p><strong>Tracing execution</strong> helps understand flow and identify bottlenecks</p></li>
+<li><p><strong>Performance monitoring</strong> optimizes resource usage</p></li>
+<li><p><strong>Interactive debugging</strong> speeds up problem resolution</p></li>
+<li><p><strong>Visual tools</strong> make complex systems easier to understand</p></li>
+<li><p><strong>Proactive monitoring</strong> prevents issues in production</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore <strong>Deployment Strategies</strong> to help you take your DSPy applications from development to production, covering various deployment scenarios and best practices.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/07_advanced_topics"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_async_streaming.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Async and Streaming: Building Real-Time DSPy Applications</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_deployment_strategies.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Deployment Strategies: Taking DSPy Applications to Production</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-dspy-debugging-challenges">Understanding DSPy Debugging Challenges</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unique-challenges">Unique Challenges</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging-categories">Debugging Categories</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tracing">Module Tracing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#function-tracing-decorator">1. Function Tracing Decorator</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-state-inspector">2. Module State Inspector</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-tracing">Performance Tracing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-profiler">1. Performance Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#token-usage-tracker">2. Token Usage Tracker</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-debugging">Visual Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-graph-visualizer">1. Execution Graph Visualizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interactive-debugger">2. Interactive Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-debugging-techniques">Advanced Debugging Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-engineering-debugger">1. Prompt Engineering Debugger</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-debugger">2. Optimization Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proactive-debugging">1. Proactive Debugging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#systematic-debugging">2. Systematic Debugging</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#production-debugging">3. Production Debugging</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1796 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Defining Metrics &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/04_evaluation/03_defining_metrics';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Evaluation Loops" href="04_evaluation_loops.html" />
+    <link rel="prev" title="Creating Datasets" href="02_creating_datasets.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 4: Evaluation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/04_evaluation/03_defining_metrics.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Defining Metrics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-function-anatomy">Metric Function Anatomy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-three-parameters">The Three Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-the-ground-truth">1. <code class="docutils literal notranslate"><span class="pre">example</span></code> - The Ground Truth</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pred-the-model-s-prediction">2. <code class="docutils literal notranslate"><span class="pre">pred</span></code> - The Model’s Prediction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-optimization-context">3. <code class="docutils literal notranslate"><span class="pre">trace</span></code> - Optimization Context</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-metrics">Built-in Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semanticf1">SemanticF1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-match">Exact Match</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-correctness">Answer Correctness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-custom-metrics">Creating Custom Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-boolean-metrics">Simple Boolean Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-metrics">Numeric Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-metrics">Domain-Specific Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#composite-metrics">Composite Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-combination">Weighted Combination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checklist-based-metrics">Checklist-Based Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aspect-metrics">Multi-Aspect Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-trace-parameter-deep-dive">The Trace Parameter Deep Dive</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-trace-matters">Why Trace Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-aware-metric-pattern">Trace-Aware Metric Pattern</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-trace-for-debugging">Using Trace for Debugging</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-metric-patterns">Common Metric Patterns</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-1-exact-match-with-normalization">Pattern 1: Exact Match with Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-2-contains-expected">Pattern 2: Contains Expected</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-3-any-of-multiple-correct-answers">Pattern 3: Any of Multiple Correct Answers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-4-threshold-based">Pattern 4: Threshold-Based</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-5-multi-field-match">Pattern 5: Multi-Field Match</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-design-best-practices">Metric Design Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capture-what-actually-matters">1. Capture What Actually Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#be-robust-to-formatting">2. Be Robust to Formatting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-edge-cases">3. Handle Edge Cases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-metrics-interpretable">4. Make Metrics Interpretable</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-metrics-for-long-form-content-generation">Specialized Metrics for Long-form Content Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topic-coverage-evaluation">Topic Coverage Evaluation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factual-accuracy-factscore">Factual Accuracy (FactScore)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verifiability-assessment">Verifiability Assessment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#citation-quality-metrics">Citation Quality Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#composite-long-form-quality-metric">Composite Long-form Quality Metric</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="defining-metrics">
+<h1>Defining Metrics<a class="headerlink" href="#defining-metrics" title="Link to this heading">#</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Chapter 1-3</strong>: DSPy Fundamentals, Signatures, and Modules</p></li>
+<li><p><strong>Previous Sections</strong>: Why Evaluation Matters, Creating Datasets</p></li>
+<li><p><strong>Required Knowledge</strong>: Basic Python functions</p></li>
+<li><p><strong>Difficulty Level</strong>: Intermediate-Advanced</p></li>
+<li><p><strong>Estimated Reading Time</strong>: 35 minutes</p></li>
+</ul>
+</section>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ul class="simple">
+<li><p>Understand the anatomy of DSPy metric functions</p></li>
+<li><p>Use built-in metrics for common tasks</p></li>
+<li><p>Create custom metrics for specific needs</p></li>
+<li><p>Design composite metrics that capture multiple quality dimensions</p></li>
+<li><p>Use the trace parameter for optimization-aware metrics</p></li>
+</ul>
+</section>
+<section id="metric-function-anatomy">
+<h2>Metric Function Anatomy<a class="headerlink" href="#metric-function-anatomy" title="Link to this heading">#</a></h2>
+<p>A DSPy metric is a Python function that evaluates prediction quality:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate prediction quality.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        example: The original Example with inputs AND expected outputs</span>
+<span class="sd">        pred: The Prediction (module output) to evaluate</span>
+<span class="sd">        trace: Optional trace info (used during optimization)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool or float: Score indicating quality (True/False or 0.0-1.0)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Compare prediction to expected output</span>
+    <span class="k">return</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span> <span class="o">==</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span>
+</pre></div>
+</div>
+<section id="the-three-parameters">
+<h3>The Three Parameters<a class="headerlink" href="#the-three-parameters" title="Link to this heading">#</a></h3>
+<section id="example-the-ground-truth">
+<h4>1. <code class="docutils literal notranslate"><span class="pre">example</span></code> - The Ground Truth<a class="headerlink" href="#example-the-ground-truth" title="Link to this heading">#</a></h4>
+<p>Contains both inputs and expected outputs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">example</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+    <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is 2+2?&quot;</span><span class="p">,</span>  <span class="c1"># Input</span>
+    <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;4&quot;</span>                 <span class="c1"># Expected output (ground truth)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">)</span>
+
+<span class="c1"># In metric:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">ground_truth</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span>  <span class="c1"># Access expected output</span>
+    <span class="n">input_question</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">question</span>  <span class="c1"># Can also access input</span>
+</pre></div>
+</div>
+</section>
+<section id="pred-the-model-s-prediction">
+<h4>2. <code class="docutils literal notranslate"><span class="pre">pred</span></code> - The Model’s Prediction<a class="headerlink" href="#pred-the-model-s-prediction" title="Link to this heading">#</a></h4>
+<p>The output from your DSPy module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Module produces prediction</span>
+<span class="n">module</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is 2+2?&quot;</span><span class="p">)</span>
+
+<span class="c1"># In metric:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">model_output</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span>  <span class="c1"># Access predicted output</span>
+</pre></div>
+</div>
+</section>
+<section id="trace-optimization-context">
+<h4>3. <code class="docutils literal notranslate"><span class="pre">trace</span></code> - Optimization Context<a class="headerlink" href="#trace-optimization-context" title="Link to this heading">#</a></h4>
+<p>Indicates whether metric is being used for optimization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Calculate score</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">calculate_similarity</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># During optimization: return boolean for filtering</span>
+        <span class="k">return</span> <span class="n">score</span> <span class="o">&gt;=</span> <span class="mf">0.9</span>  <span class="c1"># Only accept very good examples</span>
+
+    <span class="c1"># During evaluation: return actual score</span>
+    <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="built-in-metrics">
+<h2>Built-in Metrics<a class="headerlink" href="#built-in-metrics" title="Link to this heading">#</a></h2>
+<p>DSPy provides several ready-to-use metrics:</p>
+<section id="semanticf1">
+<h3>SemanticF1<a class="headerlink" href="#semanticf1" title="Link to this heading">#</a></h3>
+<p>Measures semantic overlap between answers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspy.evaluate</span><span class="w"> </span><span class="kn">import</span> <span class="n">SemanticF1</span>
+
+<span class="c1"># Initialize metric</span>
+<span class="n">metric</span> <span class="o">=</span> <span class="n">SemanticF1</span><span class="p">(</span><span class="n">decompositional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Use in evaluation</span>
+<span class="n">example</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+    <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is photosynthesis?&quot;</span><span class="p">,</span>
+    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;The process by which plants convert sunlight to energy&quot;</span>
+<span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># Returns F1 score based on semantic similarity</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Semantic F1: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="exact-match">
+<h3>Exact Match<a class="headerlink" href="#exact-match" title="Link to this heading">#</a></h3>
+<p>Simple string equality:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">exact_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exact string match metric.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="answer-correctness">
+<h3>Answer Correctness<a class="headerlink" href="#answer-correctness" title="Link to this heading">#</a></h3>
+<p>For QA tasks with known correct answers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">answer_correctness</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if predicted answer contains the correct answer.&quot;&quot;&quot;</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">correct</span> <span class="ow">in</span> <span class="n">predicted</span> <span class="ow">or</span> <span class="n">predicted</span> <span class="ow">in</span> <span class="n">correct</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="creating-custom-metrics">
+<h2>Creating Custom Metrics<a class="headerlink" href="#creating-custom-metrics" title="Link to this heading">#</a></h2>
+<section id="simple-boolean-metrics">
+<h3>Simple Boolean Metrics<a class="headerlink" href="#simple-boolean-metrics" title="Link to this heading">#</a></h3>
+<p>Return True/False for pass/fail:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sentiment_accuracy</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if sentiment prediction matches ground truth.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">example</span><span class="o">.</span><span class="n">sentiment</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">sentiment</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">label_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if classification label matches.&quot;&quot;&quot;</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">predicted</span>
+</pre></div>
+</div>
+</section>
+<section id="numeric-metrics">
+<h3>Numeric Metrics<a class="headerlink" href="#numeric-metrics" title="Link to this heading">#</a></h3>
+<p>Return scores between 0 and 1:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">partial_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score based on word overlap.&quot;&quot;&quot;</span>
+    <span class="n">expected_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">predicted_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expected_words</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">overlap</span> <span class="o">=</span> <span class="n">expected_words</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">predicted_words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_words</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">length_ratio</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score based on answer length appropriateness.&quot;&quot;&quot;</span>
+    <span class="n">expected_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+    <span class="n">predicted_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">expected_len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">ratio</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">predicted_len</span><span class="p">,</span> <span class="n">expected_len</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">predicted_len</span><span class="p">,</span> <span class="n">expected_len</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ratio</span>
+</pre></div>
+</div>
+</section>
+<section id="domain-specific-metrics">
+<h3>Domain-Specific Metrics<a class="headerlink" href="#domain-specific-metrics" title="Link to this heading">#</a></h3>
+<p>Metrics tailored to your application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Medical diagnosis accuracy</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">diagnosis_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate medical diagnosis predictions.&quot;&quot;&quot;</span>
+    <span class="c1"># Primary diagnosis must match</span>
+    <span class="n">primary_correct</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">primary_diagnosis</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">primary_diagnosis</span>
+
+    <span class="c1"># Check if any differential diagnosis is correct</span>
+    <span class="n">differential_overlap</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">d</span> <span class="ow">in</span> <span class="n">example</span><span class="o">.</span><span class="n">differential_diagnoses</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">differential_diagnoses</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Urgency assessment</span>
+    <span class="n">urgency_correct</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">urgency_level</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">urgency_level</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="n">primary_correct</span> <span class="o">+</span>
+        <span class="mf">0.3</span> <span class="o">*</span> <span class="n">differential_overlap</span> <span class="o">+</span>
+        <span class="mf">0.2</span> <span class="o">*</span> <span class="n">urgency_correct</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">score</span>
+
+<span class="c1"># Code generation correctness</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">code_correctness</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate generated code.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Try to execute the generated code</span>
+        <span class="n">exec</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+        <span class="c1"># Check if output matches expected</span>
+        <span class="c1"># (In practice, you&#39;d capture and compare output)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="c1"># Entity extraction F1</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">entity_f1</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate F1 score for entity extraction.&quot;&quot;&quot;</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">predicted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expected</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">predicted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">true_positives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected</span> <span class="o">&amp;</span> <span class="n">predicted</span><span class="p">)</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">true_positives</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span> <span class="k">if</span> <span class="n">predicted</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">recall</span> <span class="o">=</span> <span class="n">true_positives</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span> <span class="k">if</span> <span class="n">expected</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="composite-metrics">
+<h2>Composite Metrics<a class="headerlink" href="#composite-metrics" title="Link to this heading">#</a></h2>
+<p>Combine multiple quality dimensions:</p>
+<section id="weighted-combination">
+<h3>Weighted Combination<a class="headerlink" href="#weighted-combination" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">comprehensive_qa_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Comprehensive QA evaluation combining multiple factors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 1. Answer correctness (most important)</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">correctness_score</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">correct</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="c1"># 2. Answer completeness</span>
+    <span class="n">expected_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+    <span class="n">predicted_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+    <span class="n">completeness</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">predicted_len</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">expected_len</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># 3. Relevance (answer mentions key terms from question)</span>
+    <span class="n">question_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">answer_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">relevance</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">question_words</span> <span class="o">&amp;</span> <span class="n">answer_words</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">question_words</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># 4. Confidence (if available)</span>
+    <span class="n">confidence_score</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="n">final_score</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.5</span> <span class="o">*</span> <span class="n">correctness_score</span> <span class="o">+</span>
+        <span class="mf">0.2</span> <span class="o">*</span> <span class="n">completeness</span> <span class="o">+</span>
+        <span class="mf">0.2</span> <span class="o">*</span> <span class="n">relevance</span> <span class="o">+</span>
+        <span class="mf">0.1</span> <span class="o">*</span> <span class="n">confidence_score</span>
+    <span class="p">)</span>
+
+    <span class="c1"># For optimization, require high threshold</span>
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">final_score</span> <span class="o">&gt;=</span> <span class="mf">0.8</span>
+
+    <span class="k">return</span> <span class="n">final_score</span>
+</pre></div>
+</div>
+</section>
+<section id="checklist-based-metrics">
+<h3>Checklist-Based Metrics<a class="headerlink" href="#checklist-based-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quality_checklist</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate against a quality checklist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;has_answer&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;not_too_short&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;not_too_long&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">500</span><span class="p">,</span>
+        <span class="s2">&quot;contains_expected&quot;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">expected_keyword</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+        <span class="s2">&quot;no_apology&quot;</span><span class="p">:</span> <span class="s2">&quot;sorry&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+        <span class="s2">&quot;no_uncertainty&quot;</span><span class="p">:</span> <span class="s2">&quot;i don&#39;t know&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Count passed checks</span>
+    <span class="n">passed</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># For optimization, all checks must pass</span>
+        <span class="k">return</span> <span class="n">passed</span> <span class="o">==</span> <span class="n">total</span>
+
+    <span class="c1"># For evaluation, return ratio of passed checks</span>
+    <span class="k">return</span> <span class="n">passed</span> <span class="o">/</span> <span class="n">total</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-aspect-metrics">
+<h3>Multi-Aspect Metrics<a class="headerlink" href="#multi-aspect-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_aspect_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return detailed scores for multiple aspects.</span>
+<span class="sd">    During evaluation, returns overall score.</span>
+<span class="sd">    Can also be used for detailed analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">calculate_accuracy</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">),</span>
+        <span class="s2">&quot;fluency&quot;</span><span class="p">:</span> <span class="n">calculate_fluency</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">),</span>
+        <span class="s2">&quot;relevance&quot;</span><span class="p">:</span> <span class="n">calculate_relevance</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">),</span>
+        <span class="s2">&quot;safety&quot;</span><span class="p">:</span> <span class="n">calculate_safety</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Overall score (weighted average)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;fluency&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;relevance&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;safety&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+    <span class="n">overall</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">overall</span> <span class="o">&gt;=</span> <span class="mf">0.7</span>
+
+    <span class="k">return</span> <span class="n">overall</span>
+
+
+<span class="c1"># Helper functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_accuracy</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_fluency</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="c1"># Simple fluency check (could use language model)</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.5</span>
+    <span class="k">return</span> <span class="mf">1.0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_relevance</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">):</span>
+    <span class="n">q_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">a_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_words</span> <span class="o">&amp;</span> <span class="n">a_words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">overlap</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_words</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_safety</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">unsafe_terms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;harmful&quot;</span><span class="p">,</span> <span class="s2">&quot;dangerous&quot;</span><span class="p">,</span> <span class="s2">&quot;illegal&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">term</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">unsafe_terms</span><span class="p">)</span> <span class="k">else</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="the-trace-parameter-deep-dive">
+<h2>The Trace Parameter Deep Dive<a class="headerlink" href="#the-trace-parameter-deep-dive" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">trace</span></code> parameter enables different behavior during optimization vs. evaluation:</p>
+<section id="why-trace-matters">
+<h3>Why Trace Matters<a class="headerlink" href="#why-trace-matters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># During optimization (trace is not None)</span>
+<span class="c1"># - DSPy is looking for good examples to bootstrap</span>
+<span class="c1"># - Metric should return boolean (True = good example)</span>
+<span class="c1"># - Be stricter to get high-quality demonstrations</span>
+
+<span class="c1"># During evaluation (trace is None)</span>
+<span class="c1"># - You want to measure actual performance</span>
+<span class="c1"># - Metric should return actual score (float or bool)</span>
+<span class="c1"># - Be accurate, not strict</span>
+</pre></div>
+</div>
+</section>
+<section id="trace-aware-metric-pattern">
+<h3>Trace-Aware Metric Pattern<a class="headerlink" href="#trace-aware-metric-pattern" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">smart_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metric that behaves differently during optimization vs evaluation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate detailed score</span>
+    <span class="n">exact</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">partial</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">length_ok</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">2.0</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># OPTIMIZATION MODE</span>
+        <span class="c1"># Be strict - only accept perfect examples</span>
+        <span class="c1"># These will be used as demonstrations</span>
+        <span class="k">return</span> <span class="n">exact</span> <span class="ow">and</span> <span class="n">length_ok</span>
+
+    <span class="c1"># EVALUATION MODE</span>
+    <span class="c1"># Return nuanced score</span>
+    <span class="k">if</span> <span class="n">exact</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">elif</span> <span class="n">partial</span> <span class="ow">and</span> <span class="n">length_ok</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.7</span>
+    <span class="k">elif</span> <span class="n">partial</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.5</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="using-trace-for-debugging">
+<h3>Using Trace for Debugging<a class="headerlink" href="#using-trace-for-debugging" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">debugging_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metric that logs information when tracing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Log during optimization for debugging</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected: </span><span class="si">{</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got: </span><span class="si">{</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-metric-patterns">
+<h2>Common Metric Patterns<a class="headerlink" href="#common-metric-patterns" title="Link to this heading">#</a></h2>
+<section id="pattern-1-exact-match-with-normalization">
+<h3>Pattern 1: Exact Match with Normalization<a class="headerlink" href="#pattern-1-exact-match-with-normalization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">normalized_exact_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exact match after normalization.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">==</span> <span class="n">normalize</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pattern-2-contains-expected">
+<h3>Pattern 2: Contains Expected<a class="headerlink" href="#pattern-2-contains-expected" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">contains_expected</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if prediction contains the expected answer.&quot;&quot;&quot;</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">predicted</span>
+</pre></div>
+</div>
+</section>
+<section id="pattern-3-any-of-multiple-correct-answers">
+<h3>Pattern 3: Any of Multiple Correct Answers<a class="headerlink" href="#pattern-3-any-of-multiple-correct-answers" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">any_correct</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept any of multiple correct answers.&quot;&quot;&quot;</span>
+    <span class="c1"># example.answers is a list of acceptable answers</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="n">ans</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">in</span> <span class="n">predicted</span>
+        <span class="k">for</span> <span class="n">ans</span> <span class="ow">in</span> <span class="n">example</span><span class="o">.</span><span class="n">answers</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pattern-4-threshold-based">
+<h3>Pattern 4: Threshold-Based<a class="headerlink" href="#pattern-4-threshold-based" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">threshold_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply threshold to continuous score.&quot;&quot;&quot;</span>
+    <span class="c1"># Calculate similarity score</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">calculate_similarity</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">score</span> <span class="o">&gt;=</span> <span class="n">threshold</span>
+
+    <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</section>
+<section id="pattern-5-multi-field-match">
+<h3>Pattern 5: Multi-Field Match<a class="headerlink" href="#pattern-5-multi-field-match" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_field_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate multiple output fields.&quot;&quot;&quot;</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check each output field</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;sentiment&#39;</span><span class="p">):</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">sentiment</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">sentiment</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">):</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">):</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">confidence</span> <span class="o">-</span> <span class="n">pred</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="metric-design-best-practices">
+<h2>Metric Design Best Practices<a class="headerlink" href="#metric-design-best-practices" title="Link to this heading">#</a></h2>
+<section id="capture-what-actually-matters">
+<h3>1. Capture What Actually Matters<a class="headerlink" href="#capture-what-actually-matters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># BAD: Metric that doesn&#39;t capture real quality</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bad_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>  <span class="c1"># Length doesn&#39;t mean quality!</span>
+
+<span class="c1"># GOOD: Metric that captures task-specific quality</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">good_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">key_fact</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span> <span class="ow">and</span>
+        <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="ow">and</span>  <span class="c1"># Complete sentence</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;=</span> <span class="mi">5</span>   <span class="c1"># Substantive answer</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="be-robust-to-formatting">
+<h3>2. Be Robust to Formatting<a class="headerlink" href="#be-robust-to-formatting" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">robust_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle formatting variations.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">clean</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">==</span> <span class="n">clean</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="handle-edge-cases">
+<h3>3. Handle Edge Cases<a class="headerlink" href="#handle-edge-cases" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">safe_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle missing or empty values.&quot;&quot;&quot;</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expected</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">predicted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="n">expected</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">predicted</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="make-metrics-interpretable">
+<h3>4. Make Metrics Interpretable<a class="headerlink" href="#make-metrics-interpretable" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">interpretable_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return score with clear meaning.&quot;&quot;&quot;</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;correct&quot;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+        <span class="s2">&quot;complete&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;relevant&quot;</span><span class="p">:</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                       <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Log which checks failed (useful for debugging)</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">failed</span> <span class="ow">and</span> <span class="n">trace</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Only log during evaluation</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed checks: </span><span class="si">{</span><span class="n">failed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">checks</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">checks</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="specialized-metrics-for-long-form-content-generation">
+<h2>Specialized Metrics for Long-form Content Generation<a class="headerlink" href="#specialized-metrics-for-long-form-content-generation" title="Link to this heading">#</a></h2>
+<p>When evaluating long-form articles like Wikipedia entries, we need specialized metrics that go beyond simple answer correctness. These metrics assess comprehensiveness, factual accuracy, and verifiability.</p>
+<section id="topic-coverage-evaluation">
+<h3>Topic Coverage Evaluation<a class="headerlink" href="#topic-coverage-evaluation" title="Link to this heading">#</a></h3>
+<p>Measures how comprehensively the generated content covers the topic:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">topic_coverage_rouge</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate topic coverage using ROUGE metrics against reference articles.</span>
+
+<span class="sd">    ROUGE (Recall-Oriented Understudy for Gisting Evaluation) measures</span>
+<span class="sd">    overlap between generated and reference content.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rouge_score</span><span class="w"> </span><span class="kn">import</span> <span class="n">rouge_scorer</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Install rouge_score: pip install rouge-score&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">scorer</span> <span class="o">=</span> <span class="n">rouge_scorer</span><span class="o">.</span><span class="n">RougeScorer</span><span class="p">([</span><span class="s1">&#39;rouge1&#39;</span><span class="p">,</span> <span class="s1">&#39;rouge2&#39;</span><span class="p">,</span> <span class="s1">&#39;rougeL&#39;</span><span class="p">],</span> <span class="n">use_stemmer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Score against reference content</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">reference_content</span><span class="p">,</span>
+        <span class="n">pred</span><span class="o">.</span><span class="n">article_content</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Use ROUGE-L as primary metric (measures longest common subsequence)</span>
+    <span class="n">rouge_l_score</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="s1">&#39;rougeL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fmeasure</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># During optimization, require good coverage</span>
+        <span class="k">return</span> <span class="n">rouge_l_score</span> <span class="o">&gt;=</span> <span class="mf">0.4</span>
+
+    <span class="k">return</span> <span class="n">rouge_l_score</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">comprehensive_topic_coverage</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    More comprehensive topic coverage evaluation.</span>
+
+<span class="sd">    Checks coverage of multiple aspects:</span>
+<span class="sd">    1. Key entities mentioned</span>
+<span class="sd">    2. Important concepts covered</span>
+<span class="sd">    3. Topic depth across sections</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract key entities from reference</span>
+    <span class="n">reference_entities</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key_entities&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">generated_text</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">article_content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Check entity coverage</span>
+    <span class="n">entities_covered</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="mi">1</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">reference_entities</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">generated_text</span>
+    <span class="p">)</span>
+    <span class="n">entity_coverage</span> <span class="o">=</span> <span class="n">entities_covered</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_entities</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference_entities</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># Check section coverage (if outline provided)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;outline&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pred</span><span class="o">.</span><span class="n">outline</span><span class="p">:</span>
+        <span class="n">expected_sections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;required_sections&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">generated_sections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">outline</span><span class="p">)</span>
+
+        <span class="n">section_coverage</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_sections</span> <span class="o">&amp;</span> <span class="n">generated_sections</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_sections</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">section_coverage</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># Default if no outline</span>
+
+    <span class="c1"># Check concept coverage</span>
+    <span class="n">reference_concepts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key_concepts&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+    <span class="n">concepts_covered</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="mi">1</span> <span class="k">for</span> <span class="n">concept</span> <span class="ow">in</span> <span class="n">reference_concepts</span>
+        <span class="k">if</span> <span class="n">concept</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">generated_text</span>
+    <span class="p">)</span>
+    <span class="n">concept_coverage</span> <span class="o">=</span> <span class="n">concepts_covered</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_concepts</span><span class="p">)</span> <span class="k">if</span> <span class="n">reference_concepts</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="n">overall_coverage</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.4</span> <span class="o">*</span> <span class="n">entity_coverage</span> <span class="o">+</span>
+        <span class="mf">0.4</span> <span class="o">*</span> <span class="n">concept_coverage</span> <span class="o">+</span>
+        <span class="mf">0.2</span> <span class="o">*</span> <span class="n">section_coverage</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">overall_coverage</span> <span class="o">&gt;=</span> <span class="mf">0.6</span>
+
+    <span class="k">return</span> <span class="n">overall_coverage</span>
+</pre></div>
+</div>
+</section>
+<section id="factual-accuracy-factscore">
+<h3>Factual Accuracy (FactScore)<a class="headerlink" href="#factual-accuracy-factscore" title="Link to this heading">#</a></h3>
+<p>FactScore is a metric specifically designed to evaluate factual accuracy in long-form generation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FactScoreMetric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FactScore: Evaluates factual accuracy by breaking down content into</span>
+<span class="sd">    atomic claims and verifying each against a knowledge source.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">claim_extractor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;text -&gt; atomic_claims&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fact_checker</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;claim, context -&gt; is_factual, confidence, correction&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate FactScore for generated content.</span>
+
+<span class="sd">        Returns the average of factual claim scores.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Extract atomic claims from generated content</span>
+        <span class="n">claims_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">claim_extractor</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">pred</span><span class="o">.</span><span class="n">article_content</span>
+        <span class="p">)</span>
+        <span class="n">claims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_claims</span><span class="p">(</span><span class="n">claims_result</span><span class="o">.</span><span class="n">atomic_claims</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">claims</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Verify each claim</span>
+        <span class="n">claim_scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">claim</span> <span class="ow">in</span> <span class="n">claims</span><span class="p">:</span>
+            <span class="n">verification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fact_checker</span><span class="p">(</span>
+                <span class="n">claim</span><span class="o">=</span><span class="n">claim</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reference_documents&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Convert confidence to score</span>
+            <span class="k">if</span> <span class="n">verification</span><span class="o">.</span><span class="n">is_factual</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">verification</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="n">claim_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+        <span class="c1"># Calculate FactScore (average of verified claims)</span>
+        <span class="n">fact_score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">claim_scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">claim_scores</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># During optimization, require high factual accuracy</span>
+            <span class="k">return</span> <span class="n">fact_score</span> <span class="o">&gt;=</span> <span class="mf">0.7</span>
+
+        <span class="k">return</span> <span class="n">fact_score</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_claims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">claims_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse atomic claims from extracted text.&quot;&quot;&quot;</span>
+        <span class="n">claims</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">claims_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;•&#39;</span><span class="p">)):</span>
+                <span class="n">claim</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;- •&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">claim</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+                    <span class="n">claim</span> <span class="o">=</span> <span class="n">claim</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">claims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">claim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">claims</span>
+
+<span class="c1"># Usage</span>
+<span class="n">fact_scorer</span> <span class="o">=</span> <span class="n">FactScoreMetric</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">factscore_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for FactScore metric.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">fact_scorer</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="verifiability-assessment">
+<h3>Verifiability Assessment<a class="headerlink" href="#verifiability-assessment" title="Link to this heading">#</a></h3>
+<p>Measures how well claims in the generated content can be verified with citations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">verifiability_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measures the fraction of sentences that can be verified</span>
+<span class="sd">    using retrieved evidence or citations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">_split_into_sentences</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">article_content</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sentences</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">verifiable_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span>
+        <span class="c1"># Check if sentence has citation</span>
+        <span class="n">has_citation</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\[\d+\]|\[.*?\]&#39;</span><span class="p">,</span> <span class="n">sentence</span><span class="p">))</span>
+
+        <span class="c1"># Check if sentence is factual claim</span>
+        <span class="n">is_factual</span> <span class="o">=</span> <span class="n">_is_factual_claim</span><span class="p">(</span><span class="n">sentence</span><span class="p">)</span>
+
+        <span class="c1"># Check if supporting evidence exists</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">:</span>
+            <span class="n">has_evidence</span> <span class="o">=</span> <span class="n">_check_evidence_support</span><span class="p">(</span>
+                <span class="n">sentence</span><span class="p">,</span>
+                <span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">,</span>
+                <span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reference_documents&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_evidence</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Sentence is verifiable if it has citation OR supporting evidence</span>
+        <span class="k">if</span> <span class="n">is_factual</span> <span class="ow">and</span> <span class="p">(</span><span class="n">has_citation</span> <span class="ow">or</span> <span class="n">has_evidence</span><span class="p">):</span>
+            <span class="n">verifiable_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">verifiability</span> <span class="o">=</span> <span class="n">verifiable_count</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># During optimization, require high verifiability</span>
+        <span class="k">return</span> <span class="n">verifiability</span> <span class="o">&gt;=</span> <span class="mf">0.6</span>
+
+    <span class="k">return</span> <span class="n">verifiability</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_split_into_sentences</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split text into sentences.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="c1"># Simple sentence splitting</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[.!?]+&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sentences</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_factual_claim</span><span class="p">(</span><span class="n">sentence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if a sentence makes a factual claim.&quot;&quot;&quot;</span>
+    <span class="n">factual_indicators</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;according to&#39;</span><span class="p">,</span> <span class="s1">&#39;research shows&#39;</span><span class="p">,</span> <span class="s1">&#39;studies indicate&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;data suggests&#39;</span><span class="p">,</span> <span class="s1">&#39;reported&#39;</span><span class="p">,</span> <span class="s1">&#39;found that&#39;</span><span class="p">,</span> <span class="s1">&#39;demonstrates&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;proved&#39;</span><span class="p">,</span> <span class="s1">&#39;discovered&#39;</span><span class="p">,</span> <span class="s1">&#39;measured&#39;</span><span class="p">,</span> <span class="s1">&#39;calculated&#39;</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Check for numbers (statistics)</span>
+    <span class="n">has_numbers</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">sentence</span><span class="p">))</span>
+
+    <span class="c1"># Check for factual indicators</span>
+    <span class="n">has_indicators</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">ind</span> <span class="ow">in</span> <span class="n">sentence</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">factual_indicators</span><span class="p">)</span>
+
+    <span class="c1"># Check for specific entities (often indicates facts)</span>
+    <span class="n">has_entities</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[A-Z][a-z]+ [A-Z][a-z]+&#39;</span><span class="p">,</span> <span class="n">sentence</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">has_numbers</span> <span class="ow">or</span> <span class="n">has_indicators</span> <span class="ow">or</span> <span class="n">has_entities</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_evidence_support</span><span class="p">(</span><span class="n">sentence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                           <span class="n">citations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                           <span class="n">reference_docs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if sentence has supporting evidence in references.&quot;&quot;&quot;</span>
+    <span class="c1"># Simple check - in practice would use semantic similarity</span>
+    <span class="n">sentence_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sentence</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">citations</span><span class="p">:</span>
+        <span class="c1"># Extract cited content (simplified)</span>
+        <span class="n">cited_content</span> <span class="o">=</span> <span class="n">_extract_citation_content</span><span class="p">(</span><span class="n">citation</span><span class="p">,</span> <span class="n">reference_docs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cited_content</span><span class="p">:</span>
+            <span class="n">cited_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cited_content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence_words</span> <span class="o">&amp;</span> <span class="n">cited_words</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentence_words</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">overlap</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>  <span class="c1"># 30% overlap threshold</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_citation_content</span><span class="p">(</span><span class="n">citation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reference_docs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract content for a specific citation.&quot;&quot;&quot;</span>
+    <span class="c1"># Simplified - would need proper citation parsing</span>
+    <span class="k">if</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">reference_docs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">reference_docs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">citation</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="citation-quality-metrics">
+<h3>Citation Quality Metrics<a class="headerlink" href="#citation-quality-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">citation_quality_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluates the quality and appropriateness of citations in the article.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="n">total_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">for</span> <span class="n">citation</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">:</span>
+        <span class="c1"># Check citation format</span>
+        <span class="n">format_score</span> <span class="o">=</span> <span class="n">_check_citation_format</span><span class="p">(</span><span class="n">citation</span><span class="p">)</span>
+
+        <span class="c1"># Check citation relevance</span>
+        <span class="n">relevance_score</span> <span class="o">=</span> <span class="n">_check_citation_relevance</span><span class="p">(</span>
+            <span class="n">citation</span><span class="p">,</span>
+            <span class="n">pred</span><span class="o">.</span><span class="n">article_content</span><span class="p">,</span>
+            <span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reference_documents&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Check source credibility (if available)</span>
+        <span class="n">credibility_score</span> <span class="o">=</span> <span class="n">_check_source_credibility</span><span class="p">(</span><span class="n">citation</span><span class="p">)</span>
+
+        <span class="c1"># Combine scores</span>
+        <span class="n">citation_score</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">0.3</span> <span class="o">*</span> <span class="n">format_score</span> <span class="o">+</span>
+            <span class="mf">0.5</span> <span class="o">*</span> <span class="n">relevance_score</span> <span class="o">+</span>
+            <span class="mf">0.2</span> <span class="o">*</span> <span class="n">credibility_score</span>
+        <span class="p">)</span>
+
+        <span class="n">total_score</span> <span class="o">+=</span> <span class="n">citation_score</span>
+
+    <span class="n">average_score</span> <span class="o">=</span> <span class="n">total_score</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">average_score</span> <span class="o">&gt;=</span> <span class="mf">0.7</span>
+
+    <span class="k">return</span> <span class="n">average_score</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_citation_format</span><span class="p">(</span><span class="n">citation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if citation follows expected format.&quot;&quot;&quot;</span>
+    <span class="c1"># Check for common citation formats</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">r</span><span class="s1">&#39;\[\d+\]&#39;</span><span class="p">,</span>  <span class="c1"># Numeric [1]</span>
+        <span class="sa">r</span><span class="s1">&#39;\([A-Z][a-z]+, \d</span><span class="si">{4}</span><span class="s1">\)&#39;</span><span class="p">,</span>  <span class="c1"># APA (Smith, 2023)</span>
+        <span class="sa">r</span><span class="s1">&#39;\([A-Z][a-z]+ et al\., \d</span><span class="si">{4}</span><span class="s1">\)&#39;</span><span class="p">,</span>  <span class="c1"># APA et al.</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">citation</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+
+    <span class="k">return</span> <span class="mf">0.5</span>  <span class="c1"># Partial score for unrecognized format</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_citation_relevance</span><span class="p">(</span><span class="n">citation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">references</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check how relevant the citation is to the content.&quot;&quot;&quot;</span>
+    <span class="c1"># Simplified - would use semantic similarity in practice</span>
+    <span class="n">citation_text</span> <span class="o">=</span> <span class="n">_extract_citation_text</span><span class="p">(</span><span class="n">citation</span><span class="p">,</span> <span class="n">references</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">citation_text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Find where citation is used in content</span>
+    <span class="n">citation_context</span> <span class="o">=</span> <span class="n">_find_citation_context</span><span class="p">(</span><span class="n">citation</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">citation_context</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Calculate word overlap</span>
+    <span class="n">context_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">citation_context</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">citation_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">citation_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">context_words</span> <span class="o">&amp;</span> <span class="n">citation_words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">overlap</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># Normalize by expected overlap</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_source_credibility</span><span class="p">(</span><span class="n">citation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check the credibility of the cited source.&quot;&quot;&quot;</span>
+    <span class="c1"># List of credible sources (simplified)</span>
+    <span class="n">credible_domains</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;nature.com&#39;</span><span class="p">,</span> <span class="s1">&#39;science.org&#39;</span><span class="p">,</span> <span class="s1">&#39;cell.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;arxiv.org&#39;</span><span class="p">,</span> <span class="s1">&#39;scholar.google.com&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;gov&#39;</span><span class="p">,</span> <span class="s1">&#39;edu&#39;</span><span class="p">,</span> <span class="s1">&#39;ieee.org&#39;</span><span class="p">,</span> <span class="s1">&#39;acm.org&#39;</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Extract domain if URL is present</span>
+    <span class="k">if</span> <span class="s1">&#39;http&#39;</span> <span class="ow">in</span> <span class="n">citation</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">domain</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">citation</span><span class="p">)</span><span class="o">.</span><span class="n">netloc</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">cred</span> <span class="ow">in</span> <span class="n">domain</span> <span class="k">for</span> <span class="n">cred</span> <span class="ow">in</span> <span class="n">credible_domains</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mf">1.0</span>
+            <span class="k">return</span> <span class="mf">0.5</span>  <span class="c1"># Partial for other domains</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.5</span>
+
+    <span class="c1"># For non-URL citations, assume academic source</span>
+    <span class="k">return</span> <span class="mf">0.8</span>
+</pre></div>
+</div>
+</section>
+<section id="composite-long-form-quality-metric">
+<h3>Composite Long-form Quality Metric<a class="headerlink" href="#composite-long-form-quality-metric" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">longform_composite_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Composite metric for evaluating long-form article quality.</span>
+
+<span class="sd">    Combines multiple aspects:</span>
+<span class="sd">    - Topic coverage (ROUGE)</span>
+<span class="sd">    - Factual accuracy (FactScore)</span>
+<span class="sd">    - Verifiability</span>
+<span class="sd">    - Citation quality</span>
+<span class="sd">    - Coherence and flow</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Individual component scores</span>
+    <span class="n">coverage_score</span> <span class="o">=</span> <span class="n">topic_coverage_rouge</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+    <span class="n">factual_score</span> <span class="o">=</span> <span class="n">factscore_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+    <span class="n">verifiability_score</span> <span class="o">=</span> <span class="n">verifiability_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+    <span class="n">citation_score</span> <span class="o">=</span> <span class="n">citation_quality_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+
+    <span class="c1"># Coherence score (simplified)</span>
+    <span class="n">coherence_score</span> <span class="o">=</span> <span class="n">_evaluate_coherence</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">article_content</span><span class="p">)</span>
+
+    <span class="c1"># Weighted combination for final score</span>
+    <span class="n">final_score</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.25</span> <span class="o">*</span> <span class="n">coverage_score</span> <span class="o">+</span>
+        <span class="mf">0.30</span> <span class="o">*</span> <span class="n">factual_score</span> <span class="o">+</span>
+        <span class="mf">0.20</span> <span class="o">*</span> <span class="n">verifiability_score</span> <span class="o">+</span>
+        <span class="mf">0.15</span> <span class="o">*</span> <span class="n">citation_score</span> <span class="o">+</span>
+        <span class="mf">0.10</span> <span class="o">*</span> <span class="n">coherence_score</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">trace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># During optimization, require good overall quality</span>
+        <span class="k">return</span> <span class="n">final_score</span> <span class="o">&gt;=</span> <span class="mf">0.6</span>
+
+    <span class="k">return</span> <span class="n">final_score</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_coherence</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate text coherence and flow.&quot;&quot;&quot;</span>
+    <span class="n">sentences</span> <span class="o">=</span> <span class="n">_split_into_sentences</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+
+    <span class="n">coherence_scores</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check transitions between consecutive sentences</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">next_sent</span> <span class="o">=</span> <span class="n">sentences</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Check for transition words</span>
+        <span class="n">transitions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;however&#39;</span><span class="p">,</span> <span class="s1">&#39;therefore&#39;</span><span class="p">,</span> <span class="s1">&#39;furthermore&#39;</span><span class="p">,</span> <span class="s1">&#39;consequently&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;moreover&#39;</span><span class="p">,</span> <span class="s1">&#39;in addition&#39;</span><span class="p">,</span> <span class="s1">&#39;in contrast&#39;</span><span class="p">,</span> <span class="s1">&#39;similarly&#39;</span><span class="p">]</span>
+
+        <span class="n">has_transition</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">trans</span> <span class="ow">in</span> <span class="n">next_sent</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">trans</span> <span class="ow">in</span> <span class="n">transitions</span><span class="p">)</span>
+
+        <span class="c1"># Check for pronoun reference to previous sentence</span>
+        <span class="n">current_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">current</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">next_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">next_sent</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="c1"># Common coherence indicators</span>
+        <span class="n">pronouns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;they&#39;</span><span class="p">,</span> <span class="s1">&#39;this&#39;</span><span class="p">,</span> <span class="s1">&#39;that&#39;</span><span class="p">,</span> <span class="s1">&#39;these&#39;</span><span class="p">,</span> <span class="s1">&#39;those&#39;</span><span class="p">}</span>
+        <span class="n">pronoun_reference</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pronouns</span> <span class="o">&amp;</span> <span class="n">next_words</span><span class="p">)</span>
+
+        <span class="c1"># Topic continuity</span>
+        <span class="n">topic_overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_words</span> <span class="o">&amp;</span> <span class="n">next_words</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_words</span> <span class="o">|</span> <span class="n">next_words</span><span class="p">)</span>
+
+        <span class="c1"># Score for this transition</span>
+        <span class="n">transition_score</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">0.4</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">has_transition</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span>
+            <span class="mf">0.3</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">pronoun_reference</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span>
+            <span class="mf">0.3</span> <span class="o">*</span> <span class="n">topic_overlap</span>
+        <span class="p">)</span>
+
+        <span class="n">coherence_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transition_score</span><span class="p">)</span>
+
+    <span class="c1"># Average coherence across all transitions</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">coherence_scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">coherence_scores</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Effective metrics are the key to meaningful evaluation:</p>
+<ol class="arabic simple">
+<li><p><strong>Understand the anatomy</strong>: example, pred, trace parameters</p></li>
+<li><p><strong>Use built-in metrics</strong> when appropriate (SemanticF1, etc.)</p></li>
+<li><p><strong>Create custom metrics</strong> for domain-specific needs</p></li>
+<li><p><strong>Combine multiple aspects</strong> with composite metrics</p></li>
+<li><p><strong>Use trace appropriately</strong> for optimization vs. evaluation</p></li>
+<li><p><strong>Employ specialized metrics</strong> for long-form content (ROUGE, FactScore, Verifiability)</p></li>
+</ol>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Metrics define success</strong> - They determine what optimization improves</p></li>
+<li><p><strong>The trace parameter</strong> enables optimization-aware behavior</p></li>
+<li><p><strong>Custom metrics</strong> capture domain-specific quality</p></li>
+<li><p><strong>Composite metrics</strong> address multiple dimensions</p></li>
+<li><p><strong>Robustness matters</strong> - Handle edge cases gracefully</p></li>
+<li><p><strong>Long-form content requires specialized evaluation</strong> beyond simple accuracy</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#./04-evaluation-loops.md"><span class="xref myst">Next Section: Evaluation Loops</span></a> - Run systematic evaluations</p></li>
+<li><p><a class="reference internal" href="#./05-best-practices.md"><span class="xref myst">Best Practices</span></a> - Avoid common pitfalls</p></li>
+<li><p><a class="reference internal" href="#../../examples/chapter04/"><span class="xref myst">Examples</span></a> - See metrics in action</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://dspy.ai/learn/evaluation/metrics">DSPy Metrics Documentation</a></p></li>
+<li><p><a class="reference external" href="https://huggingface.co/spaces/evaluate-metric">Evaluation Metrics for NLP</a></p></li>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html">Custom Metrics in Machine Learning</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/04_evaluation"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_creating_datasets.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Creating Datasets</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_evaluation_loops.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Evaluation Loops</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-function-anatomy">Metric Function Anatomy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-three-parameters">The Three Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example-the-ground-truth">1. <code class="docutils literal notranslate"><span class="pre">example</span></code> - The Ground Truth</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pred-the-model-s-prediction">2. <code class="docutils literal notranslate"><span class="pre">pred</span></code> - The Model’s Prediction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-optimization-context">3. <code class="docutils literal notranslate"><span class="pre">trace</span></code> - Optimization Context</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-metrics">Built-in Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semanticf1">SemanticF1</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exact-match">Exact Match</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-correctness">Answer Correctness</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-custom-metrics">Creating Custom Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-boolean-metrics">Simple Boolean Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-metrics">Numeric Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-metrics">Domain-Specific Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#composite-metrics">Composite Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-combination">Weighted Combination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checklist-based-metrics">Checklist-Based Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aspect-metrics">Multi-Aspect Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-trace-parameter-deep-dive">The Trace Parameter Deep Dive</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-trace-matters">Why Trace Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-aware-metric-pattern">Trace-Aware Metric Pattern</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-trace-for-debugging">Using Trace for Debugging</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-metric-patterns">Common Metric Patterns</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-1-exact-match-with-normalization">Pattern 1: Exact Match with Normalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-2-contains-expected">Pattern 2: Contains Expected</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-3-any-of-multiple-correct-answers">Pattern 3: Any of Multiple Correct Answers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-4-threshold-based">Pattern 4: Threshold-Based</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pattern-5-multi-field-match">Pattern 5: Multi-Field Match</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-design-best-practices">Metric Design Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#capture-what-actually-matters">1. Capture What Actually Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#be-robust-to-formatting">2. Be Robust to Formatting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-edge-cases">3. Handle Edge Cases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-metrics-interpretable">4. Make Metrics Interpretable</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-metrics-for-long-form-content-generation">Specialized Metrics for Long-form Content Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topic-coverage-evaluation">Topic Coverage Evaluation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factual-accuracy-factscore">Factual Accuracy (FactScore)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verifiability-assessment">Verifiability Assessment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#citation-quality-metrics">Citation Quality Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#composite-long-form-quality-metric">Composite Long-form Quality Metric</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

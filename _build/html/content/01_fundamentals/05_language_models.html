@@ -1,0 +1,1313 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Language Models &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/01_fundamentals/05_language_models';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 1 Exercises" href="06_exercises.html" />
+    <link rel="prev" title="Your First DSPy Program" href="04_first_dspy_program.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/01_fundamentals/05_language_models.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Language Models</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-language-models">Configuring Language Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basics">The Basics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-providers">Supported Providers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openai">OpenAI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic-claude">Anthropic (Claude)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-models-ollama">Local Models (Ollama)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-providers">Other Providers</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-options">Configuration Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-parameters">Common Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-guide">Temperature Guide</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-multiple-models">Using Multiple Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-selection-guide">Model Selection Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-task-type">By Task Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-budget">By Budget</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-small-scale-up">1. Start Small, Scale Up</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-environment-variables">2. Use Environment Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-appropriate-timeouts">3. Set Appropriate Timeouts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-responses-development">4. Cache Responses (Development)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-rate-limits">5. Handle Rate Limits</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-configurations">Common Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-learning-experimentation">For Learning/Experimentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-production">For Production</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-privacy-sensitive-applications">For Privacy-Sensitive Applications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#switching-models">Switching Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-1-global-configuration">Method 1: Global Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-2-context-manager">Method 2: Context Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-3-per-module">Method 3: Per-Module</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-rate-limit-exceeded">Issue: “Rate limit exceeded”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-connection-timeout">Issue: “Connection timeout”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-insufficient-credits-quota">Issue: “Insufficient credits/quota”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-local-model-responses-are-poor-quality">Issue: Local model responses are poor quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-optimization-tips">Cost Optimization Tips</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-appropriate-models">1. Use Appropriate Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limit-token-usage">2. Limit Token Usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-during-development">3. Cache During Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-similar-requests">4. Batch Similar Requests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-custom-lm-integration">Advanced: Custom LM Integration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">Quick Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">OpenAI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic">Anthropic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ollama-local">Ollama (Local)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#switch-models">Switch Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="language-models">
+<h1>Language Models<a class="headerlink" href="#language-models" title="Link to this heading">#</a></h1>
+<p>DSPy works with various language model providers. This section covers how to configure different LMs, choose the right model for your task, and follow best practices.</p>
+<hr class="docutils" />
+<section id="configuring-language-models">
+<h2>Configuring Language Models<a class="headerlink" href="#configuring-language-models" title="Link to this heading">#</a></h2>
+<section id="the-basics">
+<h3>The Basics<a class="headerlink" href="#the-basics" title="Link to this heading">#</a></h3>
+<p>DSPy uses a consistent interface for all language models:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="c1"># Create an LM instance</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;provider/model-name&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-key&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set it as the default</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once configured, all DSPy modules will use this LM automatically.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="supported-providers">
+<h2>Supported Providers<a class="headerlink" href="#supported-providers" title="Link to this heading">#</a></h2>
+<section id="openai">
+<h3>OpenAI<a class="headerlink" href="#openai" title="Link to this heading">#</a></h3>
+<p><strong>Models available</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code> - Latest flagship model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4o-mini</span></code> - Fast, cost-effective</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4-turbo</span></code> - Previous flagship</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-3.5-turbo</span></code> - Legacy, economical</p></li>
+</ul>
+<p><strong>Configuration</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;sk-your-key-here&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">500</span>
+<span class="p">)</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Best for</strong>: General-purpose tasks, proven reliability</p>
+</section>
+<section id="anthropic-claude">
+<h3>Anthropic (Claude)<a class="headerlink" href="#anthropic-claude" title="Link to this heading">#</a></h3>
+<p><strong>Models available</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code> - Latest, most capable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-5-haiku-20241022</span></code> - Fast, economical</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-opus-20240229</span></code> - Maximum capability</p></li>
+</ul>
+<p><strong>Configuration</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;anthropic/claude-3-5-sonnet-20241022&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-anthropic-key&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1000</span>
+<span class="p">)</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Best for</strong>: Long contexts, detailed analysis, coding</p>
+</section>
+<section id="local-models-ollama">
+<h3>Local Models (Ollama)<a class="headerlink" href="#local-models-ollama" title="Link to this heading">#</a></h3>
+<p><strong>Models available</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">llama3</span></code>, <code class="docutils literal notranslate"><span class="pre">llama3.1</span></code>, <code class="docutils literal notranslate"><span class="pre">llama3.2</span></code> - Meta’s open models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mistral</span></code>, <code class="docutils literal notranslate"><span class="pre">mixtral</span></code> - Mistral AI models</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phi3</span></code> - Microsoft’s small model</p></li>
+<li><p>Many others at <a class="reference external" href="https://ollama.ai/library">ollama.ai/library</a></p></li>
+</ul>
+<p><strong>Configuration</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># No API key needed!</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ollama/llama3&quot;</span><span class="p">,</span>
+    <span class="n">api_base</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434&quot;</span>
+<span class="p">)</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Best for</strong>: Privacy, no API costs, experimentation</p>
+</section>
+<section id="other-providers">
+<h3>Other Providers<a class="headerlink" href="#other-providers" title="Link to this heading">#</a></h3>
+<p>DSPy also supports:</p>
+<ul class="simple">
+<li><p><strong>Google (Gemini)</strong>: <code class="docutils literal notranslate"><span class="pre">gemini/gemini-pro</span></code></p></li>
+<li><p><strong>Cohere</strong>: <code class="docutils literal notranslate"><span class="pre">cohere/command</span></code></p></li>
+<li><p><strong>Together AI</strong>: <code class="docutils literal notranslate"><span class="pre">together/model-name</span></code></p></li>
+<li><p><strong>Anyscale</strong>: <code class="docutils literal notranslate"><span class="pre">anyscale/model-name</span></code></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="configuration-options">
+<h2>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading">#</a></h2>
+<section id="common-parameters">
+<h3>Common Parameters<a class="headerlink" href="#common-parameters" title="Link to this heading">#</a></h3>
+<p>All providers support these parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;provider/model-name&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-key&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Randomness (0.0 = deterministic, 2.0 = very random)</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+
+    <span class="c1"># Maximum response length</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+
+    <span class="c1"># API endpoint (for local/custom servers)</span>
+    <span class="n">api_base</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Request timeout in seconds</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="temperature-guide">
+<h3>Temperature Guide<a class="headerlink" href="#temperature-guide" title="Link to this heading">#</a></h3>
+<p><strong>Temperature</strong> controls output randomness:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Behavior</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.0 - 0.3</p></td>
+<td><p>Deterministic, focused</p></td>
+<td><p>Classification, extraction</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.4 - 0.8</p></td>
+<td><p>Balanced</p></td>
+<td><p>General Q&amp;A, summaries</p></td>
+</tr>
+<tr class="row-even"><td><p>0.9 - 1.5</p></td>
+<td><p>Creative, diverse</p></td>
+<td><p>Creative writing, brainstorming</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.6 - 2.0</p></td>
+<td><p>Very random</p></td>
+<td><p>Experimental, exploration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Example</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For factual tasks - low temperature</span>
+<span class="n">factual_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># For creative tasks - higher temperature</span>
+<span class="n">creative_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="using-multiple-models">
+<h2>Using Multiple Models<a class="headerlink" href="#using-multiple-models" title="Link to this heading">#</a></h2>
+<p>You can use different models for different tasks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="c1"># Fast model for simple tasks</span>
+<span class="n">fast_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">)</span>
+
+<span class="c1"># Powerful model for complex tasks</span>
+<span class="n">smart_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">)</span>
+
+<span class="c1"># Use specific models</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Pipeline</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Simple classification uses fast model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; category&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># Switch to fast model for this step</span>
+        <span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">fast_lm</span><span class="p">):</span>
+            <span class="n">category</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">category</span>
+
+        <span class="c1"># Complex reasoning uses smart model</span>
+        <span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">smart_lm</span><span class="p">):</span>
+            <span class="c1"># ... complex processing</span>
+            <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="model-selection-guide">
+<h2>Model Selection Guide<a class="headerlink" href="#model-selection-guide" title="Link to this heading">#</a></h2>
+<section id="by-task-type">
+<h3>By Task Type<a class="headerlink" href="#by-task-type" title="Link to this heading">#</a></h3>
+<p><strong>Classification / Extraction</strong>:</p>
+<ul class="simple">
+<li><p>OpenAI: <code class="docutils literal notranslate"><span class="pre">gpt-4o-mini</span></code></p></li>
+<li><p>Anthropic: <code class="docutils literal notranslate"><span class="pre">claude-3-5-haiku-20241022</span></code></p></li>
+<li><p>Local: <code class="docutils literal notranslate"><span class="pre">llama3</span></code></p></li>
+</ul>
+<p><strong>Question Answering</strong>:</p>
+<ul class="simple">
+<li><p>OpenAI: <code class="docutils literal notranslate"><span class="pre">gpt-4o-mini</span></code> or <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code></p></li>
+<li><p>Anthropic: <code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code></p></li>
+<li><p>Local: <code class="docutils literal notranslate"><span class="pre">llama3.1</span></code></p></li>
+</ul>
+<p><strong>Complex Reasoning</strong>:</p>
+<ul class="simple">
+<li><p>OpenAI: <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code></p></li>
+<li><p>Anthropic: <code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code></p></li>
+<li><p>Local: <code class="docutils literal notranslate"><span class="pre">llama3.1:70b</span></code> (if you have GPU)</p></li>
+</ul>
+<p><strong>Long Context</strong>:</p>
+<ul class="simple">
+<li><p>Anthropic: <code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code> (200K context)</p></li>
+<li><p>OpenAI: <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code> (128K context)</p></li>
+</ul>
+<p><strong>Code Generation</strong>:</p>
+<ul class="simple">
+<li><p>OpenAI: <code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code></p></li>
+<li><p>Anthropic: <code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code></p></li>
+<li><p>Local: <code class="docutils literal notranslate"><span class="pre">codellama</span></code></p></li>
+</ul>
+</section>
+<section id="by-budget">
+<h3>By Budget<a class="headerlink" href="#by-budget" title="Link to this heading">#</a></h3>
+<p><strong>Free / Low Cost</strong>:</p>
+<ul class="simple">
+<li><p>Local models via Ollama (free, requires GPU)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4o-mini</span></code> (~$0.15 per 1M tokens)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-5-haiku-20241022</span></code> (~$0.25 per 1M tokens)</p></li>
+</ul>
+<p><strong>Balanced</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code> (~$2.50 per 1M tokens)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-5-sonnet-20241022</span></code> (~$3 per 1M tokens)</p></li>
+</ul>
+<p><strong>Maximum Capability</strong> (cost is higher):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gpt-4o</span></code> (latest flagship)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">claude-3-opus-20240229</span></code> (~$15 per 1M tokens)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="start-small-scale-up">
+<h3>1. Start Small, Scale Up<a class="headerlink" href="#start-small-scale-up" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Development: Use small, fast models</span>
+<span class="n">dev_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">)</span>
+
+<span class="c1"># Production: Upgrade when needed</span>
+<span class="n">prod_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">)</span>
+
+<span class="c1"># Easy to switch!</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dev_lm</span> <span class="k">if</span> <span class="n">IS_DEVELOPMENT</span> <span class="k">else</span> <span class="n">prod_lm</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="use-environment-variables">
+<h3>2. Use Environment Variables<a class="headerlink" href="#use-environment-variables" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+
+<span class="n">load_dotenv</span><span class="p">()</span>
+
+<span class="c1"># Never hardcode API keys!</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OPENAI_API_KEY&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="set-appropriate-timeouts">
+<h3>3. Set Appropriate Timeouts<a class="headerlink" href="#set-appropriate-timeouts" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default timeout might be too short for complex tasks</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span>  <span class="c1"># 60 seconds for complex reasoning</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cache-responses-development">
+<h3>4. Cache Responses (Development)<a class="headerlink" href="#cache-responses-development" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># DSPy has built-in caching</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Speeds up development, saves costs</span>
+</pre></div>
+</div>
+</section>
+<section id="handle-rate-limits">
+<h3>5. Handle Rate Limits<a class="headerlink" href="#handle-rate-limits" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_with_retry</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;rate limit&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">wait_time</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span>  <span class="c1"># Exponential backoff</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited. Waiting </span><span class="si">{</span><span class="n">wait_time</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_time</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Max retries exceeded&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="common-configurations">
+<h2>Common Configurations<a class="headerlink" href="#common-configurations" title="Link to this heading">#</a></h2>
+<section id="for-learning-experimentation">
+<h3>For Learning/Experimentation<a class="headerlink" href="#for-learning-experimentation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fast and cheap</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># Save $ during development</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="for-production">
+<h3>For Production<a class="headerlink" href="#for-production" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reliable and capable</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>  <span class="c1"># More deterministic</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># Fresh responses</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="for-privacy-sensitive-applications">
+<h3>For Privacy-Sensitive Applications<a class="headerlink" href="#for-privacy-sensitive-applications" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local model, no data leaves your machine</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ollama/llama3&quot;</span><span class="p">,</span>
+    <span class="n">api_base</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">,</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="switching-models">
+<h2>Switching Models<a class="headerlink" href="#switching-models" title="Link to this heading">#</a></h2>
+<section id="method-1-global-configuration">
+<h3>Method 1: Global Configuration<a class="headerlink" href="#method-1-global-configuration" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set globally</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">))</span>
+
+<span class="c1"># All modules use this model</span>
+<span class="n">qa</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="method-2-context-manager">
+<h3>Method 2: Context Manager<a class="headerlink" href="#method-2-context-manager" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default model</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">))</span>
+
+<span class="n">qa</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+
+<span class="c1"># Temporarily use a different model</span>
+<span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">)):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;Complex question&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="method-3-per-module">
+<h3>Method 3: Per-Module<a class="headerlink" href="#method-3-per-module" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomPipeline</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Each module can have its own LM</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fast_step</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;input -&gt; output&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smart_step</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;input -&gt; output&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_text</span><span class="p">):</span>
+        <span class="c1"># Use fast model</span>
+        <span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">fast_lm</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fast_step</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">input_text</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="c1"># Use smart model</span>
+        <span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">smart_lm</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smart_step</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">temp</span><span class="p">)</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">#</a></h2>
+<section id="issue-rate-limit-exceeded">
+<h3>Issue: “Rate limit exceeded”<a class="headerlink" href="#issue-rate-limit-exceeded" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Reduce request frequency</p></li>
+<li><p>Implement exponential backoff</p></li>
+<li><p>Upgrade your API plan</p></li>
+<li><p>Use a cheaper model for development</p></li>
+</ol>
+</section>
+<section id="issue-connection-timeout">
+<h3>Issue: “Connection timeout”<a class="headerlink" href="#issue-connection-timeout" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Increase timeout</span>
+<span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="issue-insufficient-credits-quota">
+<h3>Issue: “Insufficient credits/quota”<a class="headerlink" href="#issue-insufficient-credits-quota" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Check your billing on the provider’s dashboard</p></li>
+<li><p>Add payment method or increase limits</p></li>
+<li><p>Switch to a local model temporarily</p></li>
+</ol>
+</section>
+<section id="issue-local-model-responses-are-poor-quality">
+<h3>Issue: Local model responses are poor quality<a class="headerlink" href="#issue-local-model-responses-are-poor-quality" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>:</p>
+<ol class="arabic simple">
+<li><p>Try a larger model (<code class="docutils literal notranslate"><span class="pre">llama3.1:70b</span></code> instead of <code class="docutils literal notranslate"><span class="pre">llama3</span></code>)</p></li>
+<li><p>Adjust temperature</p></li>
+<li><p>Provide more context in your signatures</p></li>
+<li><p>Consider using a commercial API for better quality</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cost-optimization-tips">
+<h2>Cost Optimization Tips<a class="headerlink" href="#cost-optimization-tips" title="Link to this heading">#</a></h2>
+<section id="use-appropriate-models">
+<h3>1. Use Appropriate Models<a class="headerlink" href="#use-appropriate-models" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Don&#39;t use gpt-4o for simple tasks!</span>
+<span class="c1"># Use gpt-4o-mini instead</span>
+</pre></div>
+</div>
+</section>
+<section id="limit-token-usage">
+<h3>2. Limit Token Usage<a class="headerlink" href="#limit-token-usage" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">200</span>  <span class="c1"># Shorter responses = lower cost</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cache-during-development">
+<h3>3. Cache During Development<a class="headerlink" href="#cache-during-development" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Repeated queries use cached results</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-similar-requests">
+<h3>4. Batch Similar Requests<a class="headerlink" href="#batch-similar-requests" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process multiple items together when possible</span>
+<span class="n">questions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Q1&quot;</span><span class="p">,</span> <span class="s2">&quot;Q2&quot;</span><span class="p">,</span> <span class="s2">&quot;Q3&quot;</span><span class="p">]</span>
+
+<span class="c1"># Instead of 3 separate calls, batch them</span>
+<span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">:</span>
+    <span class="c1"># DSPy handles this efficiently</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="advanced-custom-lm-integration">
+<h2>Advanced: Custom LM Integration<a class="headerlink" href="#advanced-custom-lm-integration" title="Link to this heading">#</a></h2>
+<p>You can integrate any LM that follows the DSPy interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomLM</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Your custom LM logic here</span>
+        <span class="c1"># Must return a string or list of strings</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">your_custom_model</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+<span class="c1"># Use it</span>
+<span class="n">custom_lm</span> <span class="o">=</span> <span class="n">CustomLM</span><span class="p">()</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">custom_lm</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p><strong>Key Concepts</strong>:</p>
+<ul class="simple">
+<li><p>DSPy supports multiple LM providers (OpenAI, Anthropic, local, etc.)</p></li>
+<li><p>Configure once with <code class="docutils literal notranslate"><span class="pre">dspy.configure(lm=...)</span></code></p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">dspy.context()</span></code> to temporarily switch models</p></li>
+<li><p>Choose models based on task complexity and budget</p></li>
+<li><p>Start with smaller models, scale up as needed</p></li>
+</ul>
+<p><strong>Best Practices</strong>:</p>
+<ul class="simple">
+<li><p>Use environment variables for API keys</p></li>
+<li><p>Set appropriate timeouts and token limits</p></li>
+<li><p>Enable caching during development</p></li>
+<li><p>Choose the right model for each task</p></li>
+<li><p>Handle rate limits gracefully</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>Now that you understand how to work with language models in DSPy, let’s practice with some exercises!</p>
+<p><strong>Continue to</strong>: <a class="reference internal" href="#06-exercises.md"><span class="xref myst">Exercises</span></a></p>
+</section>
+<hr class="docutils" />
+<section id="quick-reference">
+<h2>Quick Reference<a class="headerlink" href="#quick-reference" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>OpenAI<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;openai/gpt-4o-mini&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="anthropic">
+<h3>Anthropic<a class="headerlink" href="#anthropic" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;anthropic/claude-3-5-sonnet-20241022&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ollama-local">
+<h3>Ollama (Local)<a class="headerlink" href="#ollama-local" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">LM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;ollama/llama3&quot;</span><span class="p">,</span> <span class="n">api_base</span><span class="o">=</span><span class="s2">&quot;http://localhost:11434&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="switch-models">
+<h3>Switch Models<a class="headerlink" href="#switch-models" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">different_lm</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="nb">input</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>OpenAI Models</strong>: <a class="reference external" href="https://platform.openai.com/docs/models">https://platform.openai.com/docs/models</a></p></li>
+<li><p><strong>Anthropic Models</strong>: <a class="reference external" href="https://docs.anthropic.com/claude/docs/models-overview">https://docs.anthropic.com/claude/docs/models-overview</a></p></li>
+<li><p><strong>Ollama</strong>: <a class="reference external" href="https://ollama.ai">https://ollama.ai</a></p></li>
+<li><p><strong>DSPy LM Docs</strong>: <a class="reference external" href="https://dspy.ai/api/language-models">https://dspy.ai/api/language-models</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/01_fundamentals"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_first_dspy_program.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Your First DSPy Program</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_exercises.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 1 Exercises</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-language-models">Configuring Language Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basics">The Basics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-providers">Supported Providers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#openai">OpenAI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic-claude">Anthropic (Claude)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-models-ollama">Local Models (Ollama)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-providers">Other Providers</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-options">Configuration Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-parameters">Common Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-guide">Temperature Guide</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-multiple-models">Using Multiple Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-selection-guide">Model Selection Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-task-type">By Task Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#by-budget">By Budget</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-small-scale-up">1. Start Small, Scale Up</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-environment-variables">2. Use Environment Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-appropriate-timeouts">3. Set Appropriate Timeouts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-responses-development">4. Cache Responses (Development)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-rate-limits">5. Handle Rate Limits</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-configurations">Common Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-learning-experimentation">For Learning/Experimentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-production">For Production</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-privacy-sensitive-applications">For Privacy-Sensitive Applications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#switching-models">Switching Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-1-global-configuration">Method 1: Global Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-2-context-manager">Method 2: Context Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#method-3-per-module">Method 3: Per-Module</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#troubleshooting">Troubleshooting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-rate-limit-exceeded">Issue: “Rate limit exceeded”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-connection-timeout">Issue: “Connection timeout”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-insufficient-credits-quota">Issue: “Insufficient credits/quota”</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-local-model-responses-are-poor-quality">Issue: Local model responses are poor quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-optimization-tips">Cost Optimization Tips</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-appropriate-models">1. Use Appropriate Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limit-token-usage">2. Limit Token Usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-during-development">3. Cache During Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-similar-requests">4. Batch Similar Requests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-custom-lm-integration">Advanced: Custom LM Integration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-reference">Quick Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">OpenAI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic">Anthropic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ollama-local">Ollama (Local)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#switch-models">Switch Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">Additional Resources</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

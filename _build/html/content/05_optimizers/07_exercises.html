@@ -1,0 +1,1961 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 5 Exercises: Optimizers &amp; Compilation &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/07_exercises';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients" href="08_reflective_prompt_evolution.html" />
+    <link rel="prev" title="Constraint-Driven Optimization" href="07_constraint_driven_optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/07_exercises.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 5 Exercises: Optimizers & Compilation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-basic-bootstrapfewshot-optimization">Exercise 1: Basic BootstrapFewShot Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#starter-code">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tasks">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hints">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-output">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-knnfewshot-for-context-aware-selection">Exercise 2: KNNFewShot for Context-Aware Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-mipro-for-complex-reasoning-tasks">Exercise 3: MIPRO for Complex Reasoning Tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-optimizer-comparison">Exercise 4: Optimizer Comparison</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-custom-optimization-strategy">Exercise 5: Custom Optimization Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-6-optimization-debugging">Exercise 6: Optimization Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-7-real-world-optimization-scenario">Exercise 7: Real-World Optimization Scenario</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-7-reflective-prompt-evolution-for-complex-reasoning">Exercise 7: Reflective Prompt Evolution for Complex Reasoning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-8-joint-optimization-with-copa">Exercise 8: Joint Optimization with COPA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">Expected Output</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-extension">Challenge Extension</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-solutions">Exercise Solutions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-5-exercises-optimizers-compilation">
+<h1>Chapter 5 Exercises: Optimizers &amp; Compilation<a class="headerlink" href="#chapter-5-exercises-optimizers-compilation" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>These exercises provide hands-on practice with DSPy’s optimization capabilities. You’ll work with different optimizers, understand their trade-offs, and learn to choose the right approach for various scenarios.</p>
+</section>
+<section id="exercise-1-basic-bootstrapfewshot-optimization">
+<h2>Exercise 1: Basic BootstrapFewShot Optimization<a class="headerlink" href="#exercise-1-basic-bootstrapfewshot-optimization" title="Link to this heading">#</a></h2>
+<section id="objective">
+<h3>Objective<a class="headerlink" href="#objective" title="Link to this heading">#</a></h3>
+<p>Learn to use BootstrapFewShot to improve a simple QA system.</p>
+</section>
+<section id="problem">
+<h3>Problem<a class="headerlink" href="#problem" title="Link to this heading">#</a></h3>
+<p>You have a basic question-answering system that needs improvement. Use BootstrapFewShot to optimize it with provided training data.</p>
+</section>
+<section id="starter-code">
+<h3>Starter Code<a class="headerlink" href="#starter-code" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BasicQA</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># Training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is 2+2?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;4&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is the capital of France?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;Who wrote Romeo and Juliet?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;William Shakespeare&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is H2O?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Water&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;How many continents are there?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;7&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># Test data</span>
+<span class="n">testset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is 3+3?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;6&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is the capital of Spain?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Madrid&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;Who wrote Hamlet?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;William Shakespeare&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement this function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bootstrap_optimize</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">max_demos</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize the program using BootstrapFewShot.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="tasks">
+<h3>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Define an exact match metric</p></li>
+<li><p>Create a BootstrapFewShot optimizer</p></li>
+<li><p>Compile the program with training data</p></li>
+<li><p>Evaluate on test data</p></li>
+<li><p>Compare with baseline performance</p></li>
+</ol>
+</section>
+<section id="hints">
+<h3>Hints<a class="headerlink" href="#hints" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use string comparison for exact matching</p></li>
+<li><p>Remember to configure <code class="docutils literal notranslate"><span class="pre">max_bootstrapped_demos</span></code></p></li>
+<li><p>Create both baseline and compiled versions for comparison</p></li>
+</ul>
+</section>
+<section id="expected-output">
+<h3>Expected Output<a class="headerlink" href="#expected-output" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Baseline</span> <span class="n">accuracy</span><span class="p">:</span> <span class="mf">0.00</span><span class="o">%</span>
+<span class="n">Optimized</span> <span class="n">accuracy</span><span class="p">:</span> <span class="mf">33.33</span><span class="o">%</span>
+<span class="n">Improvement</span><span class="p">:</span> <span class="o">+</span><span class="mf">33.33</span><span class="o">%</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-2-knnfewshot-for-context-aware-selection">
+<h2>Exercise 2: KNNFewShot for Context-Aware Selection<a class="headerlink" href="#exercise-2-knnfewshot-for-context-aware-selection" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Objective<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Implement KNNFewShot to select relevant examples dynamically based on query similarity.</p>
+</section>
+<section id="id2">
+<h3>Problem<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Build a context-aware classifier that selects different examples based on the input text’s topic.</p>
+</section>
+<section id="id3">
+<h3>Starter Code<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNNFewShot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sentence_transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformer</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TopicClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text, examples -&gt; topic&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># Diverse training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;The company&#39;s stock price increased by 5</span><span class="si">% a</span><span class="s2">fter earnings report&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;finance&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;New study reveals the effectiveness of mRNA vaccines&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;healthcare&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;The court ruled in favor of the plaintiff in the trademark case&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;legal&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;The quarterback threw a touchdown pass in the final minute&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;sports&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;The new iPhone features improved camera technology&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;technology&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples for each category</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_knn_optimizer</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">similarity_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create KNNFewShot optimizer with custom similarity.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">semantic_similarity</span><span class="p">(</span><span class="n">text1</span><span class="p">,</span> <span class="n">text2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate semantic similarity between texts.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_classifier</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate classifier accuracy.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Tasks<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Implement semantic similarity using sentence transformers</p></li>
+<li><p>Create KNNFewShot optimizer with k=3</p></li>
+<li><p>Compile the classifier</p></li>
+<li><p>Test with domain-specific queries</p></li>
+<li><p>Observe how different examples are selected</p></li>
+</ol>
+</section>
+<section id="id5">
+<h3>Hints<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">sentence-transformers</span></code> for embeddings</p></li>
+<li><p>Cosine similarity works well for text similarity</p></li>
+<li><p>Print selected examples to understand the selection process</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Expected Output<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Query</span><span class="p">:</span> <span class="s2">&quot;The merger was approved by shareholders&quot;</span>
+<span class="n">Selected</span> <span class="n">topic</span><span class="p">:</span> <span class="n">finance</span>
+<span class="n">Selected</span> <span class="n">examples</span><span class="p">:</span>
+<span class="mf">1.</span> <span class="n">Text</span> <span class="n">about</span> <span class="n">stock</span> <span class="n">prices</span> <span class="p">(</span><span class="n">Topic</span><span class="p">:</span> <span class="n">finance</span><span class="p">)</span>
+<span class="mf">2.</span> <span class="n">Text</span> <span class="n">about</span> <span class="n">company</span> <span class="n">earnings</span> <span class="p">(</span><span class="n">Topic</span><span class="p">:</span> <span class="n">finance</span><span class="p">)</span>
+<span class="mf">3.</span> <span class="n">Text</span> <span class="n">about</span> <span class="n">market</span> <span class="n">trends</span> <span class="p">(</span><span class="n">Topic</span><span class="p">:</span> <span class="n">finance</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-3-mipro-for-complex-reasoning-tasks">
+<h2>Exercise 3: MIPRO for Complex Reasoning Tasks<a class="headerlink" href="#exercise-3-mipro-for-complex-reasoning-tasks" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>Objective<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>Use MIPRO to optimize a Chain of Thought program for mathematical reasoning.</p>
+</section>
+<section id="id8">
+<h3>Problem<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>Improve a mathematical problem solver that requires step-by-step reasoning.</p>
+</section>
+<section id="id9">
+<h3>Starter Code<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">MIPRO</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MathSolver</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;problem -&gt; steps, answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">rationale</span><span class="p">,</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span>
+        <span class="p">)</span>
+
+<span class="c1"># Math problems with solutions</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;A rope is 12 meters long and cut into 3 equal pieces. How long is each piece?&quot;</span><span class="p">,</span>
+        <span class="n">steps</span><span class="o">=</span><span class="s2">&quot;1. Divide 12 by 3</span><span class="se">\n</span><span class="s2">2. 12 ÷ 3 = 4</span><span class="se">\n</span><span class="s2">3. Each piece is 4 meters&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;4 meters&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;If a train travels 60 km in 1 hour, how far in 3 hours?&quot;</span><span class="p">,</span>
+        <span class="n">steps</span><span class="o">=</span><span class="s2">&quot;1. Calculate speed: 60 km/hour</span><span class="se">\n</span><span class="s2">2. Multiply by time: 60 × 3</span><span class="se">\n</span><span class="s2">3. Total distance: 180 km&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;180 km&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;A box has 8 rows of 5 apples each. How many apples total?&quot;</span><span class="p">,</span>
+        <span class="n">steps</span><span class="o">=</span><span class="s2">&quot;1. Multiply rows by apples per row</span><span class="se">\n</span><span class="s2">2. 8 × 5 = 40</span><span class="se">\n</span><span class="s2">3. Total apples: 40&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;40 apples&quot;</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_math_metric</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a metric for evaluating math solutions.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_numbers</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract numerical values from text.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mipro_optimize</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize the math solver using MIPRO.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h3>Tasks<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Create a comprehensive metric for math problems</p></li>
+<li><p>Configure MIPRO with appropriate parameters</p></li>
+<li><p>Optimize the math solver</p></li>
+<li><p>Test with unseen problems</p></li>
+<li><p>Analyze the improved reasoning</p></li>
+</ol>
+</section>
+<section id="id11">
+<h3>Hints<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Check both the final answer and reasoning steps</p></li>
+<li><p>MIPRO benefits from more candidates for complex tasks</p></li>
+<li><p>Consider partial credit for correct steps</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>Expected Output<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Problem: &quot;John saves $200 per month. How much in 6 months?&quot;
+Original reasoning: Basic calculation
+Optimized reasoning:
+1. Identify monthly savings: $200
+2. Calculate total period: 6 months
+3. Multiply: $200 × 6 = $1,200
+4. Total savings: $1,200
+
+Answer: $1,200
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-4-optimizer-comparison">
+<h2>Exercise 4: Optimizer Comparison<a class="headerlink" href="#exercise-4-optimizer-comparison" title="Link to this heading">#</a></h2>
+<section id="id13">
+<h3>Objective<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<p>Compare different optimizers on the same task to understand their trade-offs.</p>
+</section>
+<section id="id14">
+<h3>Problem<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<p>Build a sentiment analyzer and optimize it with different approaches, then compare results.</p>
+</section>
+<section id="id15">
+<h3>Starter Code<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">KNNFewShot</span><span class="p">,</span> <span class="n">MIPRO</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SentimentAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyze</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; sentiment, confidence&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># Sentiment training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;I love this product!&quot;</span><span class="p">,</span> <span class="n">sentiment</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;This is terrible quality.&quot;</span><span class="p">,</span> <span class="n">sentiment</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;It works as expected.&quot;</span><span class="p">,</span> <span class="n">sentiment</span><span class="o">=</span><span class="s2">&quot;neutral&quot;</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Outstanding service and support.&quot;</span><span class="p">,</span> <span class="n">sentiment</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Would not recommend to anyone.&quot;</span><span class="p">,</span> <span class="n">sentiment</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_sentiment</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate sentiment analyzer performance.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">benchmark_optimizers</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare multiple optimizers.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Test baseline</span>
+    <span class="n">baseline_score</span> <span class="o">=</span> <span class="n">evaluate_sentiment</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;Baseline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">baseline_score</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="c1"># Test BootstrapFewShot</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Test KNNFewShot</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Test MIPRO</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_results</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a comparison report.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>Tasks<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Implement evaluation for sentiment analysis</p></li>
+<li><p>Test all three optimizers</p></li>
+<li><p>Measure compilation time for each</p></li>
+<li><p>Create a comparison report</p></li>
+<li><p>Analyze the trade-offs</p></li>
+</ol>
+</section>
+<section id="id17">
+<h3>Hints<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use exact match for sentiment</p></li>
+<li><p>Consider confidence scores in evaluation</p></li>
+<li><p>Track both accuracy and compilation time</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>Expected Output<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Optimizer</span> <span class="n">Comparison</span> <span class="n">Report</span><span class="p">:</span>
+<span class="o">================================</span>
+<span class="n">Baseline</span><span class="p">:</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">60.0</span><span class="o">%</span>
+  <span class="n">Compile</span> <span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="n">s</span>
+
+<span class="n">BootstrapFewShot</span><span class="p">:</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">75.0</span><span class="o">%</span>
+  <span class="n">Compile</span> <span class="n">Time</span><span class="p">:</span> <span class="mi">45</span><span class="n">s</span>
+  <span class="n">Improvement</span><span class="p">:</span> <span class="o">+</span><span class="mf">15.0</span><span class="o">%</span>
+
+<span class="n">KNNFewShot</span><span class="p">:</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">72.0</span><span class="o">%</span>
+  <span class="n">Compile</span> <span class="n">Time</span><span class="p">:</span> <span class="mi">30</span><span class="n">s</span>
+  <span class="n">Improvement</span><span class="p">:</span> <span class="o">+</span><span class="mf">12.0</span><span class="o">%</span>
+
+<span class="n">MIPRO</span><span class="p">:</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">80.0</span><span class="o">%</span>
+  <span class="n">Compile</span> <span class="n">Time</span><span class="p">:</span> <span class="mi">180</span><span class="n">s</span>
+  <span class="n">Improvement</span><span class="p">:</span> <span class="o">+</span><span class="mf">20.0</span><span class="o">%</span>
+
+<span class="n">Best</span> <span class="n">Performance</span><span class="p">:</span> <span class="n">MIPRO</span>
+<span class="n">Fastest</span> <span class="n">Optimization</span><span class="p">:</span> <span class="n">BootstrapFewShot</span>
+<span class="n">Best</span> <span class="n">ROI</span><span class="p">:</span> <span class="n">BootstrapFewShot</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-5-custom-optimization-strategy">
+<h2>Exercise 5: Custom Optimization Strategy<a class="headerlink" href="#exercise-5-custom-optimization-strategy" title="Link to this heading">#</a></h2>
+<section id="id19">
+<h3>Objective<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<p>Design and implement a custom optimization strategy for a specific use case.</p>
+</section>
+<section id="id20">
+<h3>Problem<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<p>Create an optimization strategy for a multi-language chatbot that handles English, Spanish, and French.</p>
+</section>
+<section id="id21">
+<h3>Starter Code<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">KNNFewShot</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiLangChatbot</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text, source_lang, target_lang -&gt; translation&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">respond</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query, context -&gt; response&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">):</span>
+        <span class="c1"># If not English, translate first</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="o">!=</span> <span class="s2">&quot;english&quot;</span><span class="p">:</span>
+            <span class="n">english_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                <span class="n">source_lang</span><span class="o">=</span><span class="n">language</span><span class="p">,</span>
+                <span class="n">target_lang</span><span class="o">=</span><span class="s2">&quot;english&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">translation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">english_query</span> <span class="o">=</span> <span class="n">query</span>
+
+        <span class="c1"># Generate response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">respond</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">english_query</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s2">&quot;customer_service&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If not English, translate back</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="o">!=</span> <span class="s2">&quot;english&quot;</span><span class="p">:</span>
+            <span class="n">final_response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">response</span><span class="p">,</span>
+                <span class="n">source_lang</span><span class="o">=</span><span class="s2">&quot;english&quot;</span><span class="p">,</span>
+                <span class="n">target_lang</span><span class="o">=</span><span class="n">language</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">translation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">final_response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">response</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span><span class="n">response</span><span class="o">=</span><span class="n">final_response</span><span class="p">)</span>
+
+<span class="c1"># Multi-language training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;english&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;Where is my order?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;Your order will arrive tomorrow&quot;</span><span class="p">),</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;How do I return an item?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;You can return within 30 days&quot;</span><span class="p">),</span>
+        <span class="c1"># ... more examples</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;spanish&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;¿Dónde está mi pedido?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;Tu pedido llegará mañana&quot;</span><span class="p">),</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;¿Cómo devuelvo un artículo?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;Puedes devolver en 30 días&quot;</span><span class="p">),</span>
+        <span class="c1"># ... more examples</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;french&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;Où est ma commande?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;Votre commande arrivera demain&quot;</span><span class="p">),</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;Comment retourner un article?&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">=</span><span class="s2">&quot;Vous pouvez retourner en 30 jours&quot;</span><span class="p">),</span>
+        <span class="c1"># ... more examples</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_language_specific_optimizer</span><span class="p">(</span><span class="n">language</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create optimizer specific to language.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_multilingual_bot</span><span class="p">(</span><span class="n">chatbot</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize bot for all languages.&quot;&quot;&quot;</span>
+    <span class="n">optimized_bots</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">trainset</span><span class="p">:</span>
+        <span class="c1"># Your code here</span>
+        <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">optimized_bots</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_multilingual</span><span class="p">(</span><span class="n">bots</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate performance across languages.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id22">
+<h3>Tasks<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Design optimization strategy for multi-language support</p></li>
+<li><p>Implement language-specific optimization</p></li>
+<li><p>Optimize for each language separately</p></li>
+<li><p>Create a unified evaluation metric</p></li>
+<li><p>Test performance across languages</p></li>
+</ol>
+</section>
+<section id="id23">
+<h3>Hints<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Consider different k values for different languages</p></li>
+<li><p>Some languages might need more examples than others</p></li>
+<li><p>Evaluate language-specific performance</p></li>
+</ul>
+</section>
+<section id="id24">
+<h3>Expected Output<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Multi</span><span class="o">-</span><span class="n">Language</span> <span class="n">Optimization</span> <span class="n">Results</span><span class="p">:</span>
+<span class="o">====================================</span>
+<span class="n">English</span><span class="p">:</span>
+  <span class="n">Examples</span> <span class="n">used</span><span class="p">:</span> <span class="mi">50</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">85.0</span><span class="o">%</span>
+
+<span class="n">Spanish</span><span class="p">:</span>
+  <span class="n">Examples</span> <span class="n">used</span><span class="p">:</span> <span class="mi">40</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">82.0</span><span class="o">%</span>
+
+<span class="n">French</span><span class="p">:</span>
+  <span class="n">Examples</span> <span class="n">used</span><span class="p">:</span> <span class="mi">35</span>
+  <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">78.0</span><span class="o">%</span>
+
+<span class="n">Overall</span> <span class="n">Performance</span><span class="p">:</span> <span class="mf">81.7</span><span class="o">%</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-6-optimization-debugging">
+<h2>Exercise 6: Optimization Debugging<a class="headerlink" href="#exercise-6-optimization-debugging" title="Link to this heading">#</a></h2>
+<section id="id25">
+<h3>Objective<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<p>Identify and fix issues in optimization that lead to poor performance.</p>
+</section>
+<section id="id26">
+<h3>Problem<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<p>A classifier is performing poorly after optimization. Debug and fix the issues.</p>
+</section>
+<section id="id27">
+<h3>Starter Code<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ProblematicClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; category&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># BUG: Returns wrong attribute</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
+
+<span class="c1"># Poor quality training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Good&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Bad&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Not good&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">),</span>
+    <span class="c1"># Too few examples</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">debug_classifier</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Debug the classifier issues.&quot;&quot;&quot;</span>
+    <span class="n">bugs_found</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check data quality</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Check attribute mismatch</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Check metric issues</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="k">return</span> <span class="n">bugs_found</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fix_classifier</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply fixes to the classifier.&quot;&quot;&quot;</span>
+    <span class="c1"># Fix attribute issue</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Improve training data</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="k">return</span> <span class="n">classifier</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_better_metric</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a more robust evaluation metric.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id28">
+<h3>Tasks<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Identify the bug in the classifier</p></li>
+<li><p>Spot issues with training data</p></li>
+<li><p>Fix the problems</p></li>
+<li><p>Re-optimize with corrections</p></li>
+<li><p>Verify improved performance</p></li>
+</ol>
+</section>
+<section id="id29">
+<h3>Hints<a class="headerlink" href="#id29" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Check attribute names carefully</p></li>
+<li><p>More diverse training data helps</p></li>
+<li><p>Consider case sensitivity in text</p></li>
+</ul>
+</section>
+<section id="id30">
+<h3>Expected Output<a class="headerlink" href="#id30" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Debug</span> <span class="n">Results</span><span class="p">:</span>
+<span class="o">===============</span>
+<span class="n">Bugs</span> <span class="n">Found</span><span class="p">:</span>
+<span class="mf">1.</span> <span class="n">Attribute</span> <span class="n">mismatch</span><span class="p">:</span> <span class="s1">&#39;category&#39;</span> <span class="n">vs</span> <span class="s1">&#39;label&#39;</span>
+<span class="mf">2.</span> <span class="n">Insufficient</span> <span class="n">training</span> <span class="n">data</span> <span class="p">(</span><span class="n">only</span> <span class="mi">3</span> <span class="n">examples</span><span class="p">)</span>
+<span class="mf">3.</span> <span class="n">No</span> <span class="n">text</span> <span class="n">normalization</span>
+<span class="mf">4.</span> <span class="n">No</span> <span class="n">case</span><span class="o">-</span><span class="n">insensitive</span> <span class="n">matching</span>
+
+<span class="n">Fixes</span> <span class="n">Applied</span><span class="p">:</span>
+<span class="mf">1.</span> <span class="n">Fixed</span> <span class="n">attribute</span> <span class="n">mapping</span>
+<span class="mf">2.</span> <span class="n">Expanded</span> <span class="n">training</span> <span class="n">data</span> <span class="n">to</span> <span class="mi">20</span> <span class="n">examples</span>
+<span class="mf">3.</span> <span class="n">Added</span> <span class="n">text</span> <span class="n">preprocessing</span>
+<span class="mf">4.</span> <span class="n">Implemented</span> <span class="n">case</span><span class="o">-</span><span class="n">insensitive</span> <span class="n">metric</span>
+
+<span class="n">Performance</span> <span class="n">Before</span><span class="p">:</span> <span class="mf">20.0</span><span class="o">%</span>
+<span class="n">Performance</span> <span class="n">After</span><span class="p">:</span> <span class="mf">85.0</span><span class="o">%</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-7-real-world-optimization-scenario">
+<h2>Exercise 7: Real-World Optimization Scenario<a class="headerlink" href="#exercise-7-real-world-optimization-scenario" title="Link to this heading">#</a></h2>
+<section id="id31">
+<h3>Objective<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<p>Apply optimization techniques to a realistic scenario.</p>
+</section>
+<section id="id32">
+<h3>Problem<a class="headerlink" href="#id32" title="Link to this heading">#</a></h3>
+<p>Optimize a customer support ticket classifier that categorizes and prioritizes support requests.</p>
+</section>
+<section id="id33">
+<h3>Starter Code<a class="headerlink" href="#id33" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNNFewShot</span><span class="p">,</span> <span class="n">MIPRO</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SupportTicketAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categorize</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;ticket_text -&gt; category, priority&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_details</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;ticket_text -&gt; product, issue_type&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticket_text</span><span class="p">):</span>
+        <span class="c1"># Categorize and prioritize</span>
+        <span class="n">cat_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">categorize</span><span class="p">(</span><span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket_text</span><span class="p">)</span>
+
+        <span class="c1"># Extract details</span>
+        <span class="n">det_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_details</span><span class="p">(</span><span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket_text</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">cat_result</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+            <span class="n">priority</span><span class="o">=</span><span class="n">cat_result</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+            <span class="n">product</span><span class="o">=</span><span class="n">det_result</span><span class="o">.</span><span class="n">product</span><span class="p">,</span>
+            <span class="n">issue_type</span><span class="o">=</span><span class="n">det_result</span><span class="o">.</span><span class="n">issue_type</span>
+        <span class="p">)</span>
+
+<span class="c1"># Support ticket training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">ticket_text</span><span class="o">=</span><span class="s2">&quot;I can&#39;t log in to my account. It says invalid password.&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;authentication&quot;</span><span class="p">,</span>
+        <span class="n">priority</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">,</span>
+        <span class="n">product</span><span class="o">=</span><span class="s2">&quot;mobile_app&quot;</span><span class="p">,</span>
+        <span class="n">issue_type</span><span class="o">=</span><span class="s2">&quot;login_issue&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">ticket_text</span><span class="o">=</span><span class="s2">&quot;The application crashes when I try to upload photos.&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;bug&quot;</span><span class="p">,</span>
+        <span class="n">priority</span><span class="o">=</span><span class="s2">&quot;high&quot;</span><span class="p">,</span>
+        <span class="n">product</span><span class="o">=</span><span class="s2">&quot;mobile_app&quot;</span><span class="p">,</span>
+        <span class="n">issue_type</span><span class="o">=</span><span class="s2">&quot;crash&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">ticket_text</span><span class="o">=</span><span class="s2">&quot;How do I change my notification settings?&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;how_to&quot;</span><span class="p">,</span>
+        <span class="n">priority</span><span class="o">=</span><span class="s2">&quot;low&quot;</span><span class="p">,</span>
+        <span class="n">product</span><span class="o">=</span><span class="s2">&quot;mobile_app&quot;</span><span class="p">,</span>
+        <span class="n">issue_type</span><span class="o">=</span><span class="s2">&quot;settings&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">support_ticket_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Multi-faceted metric for support tickets.&quot;&quot;&quot;</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Category accuracy</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Priority accuracy</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Product accuracy</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Issue type accuracy</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Return weighted average</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_support_system</span><span class="p">(</span><span class="n">analyzer</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Choose and apply the best optimizer.&quot;&quot;&quot;</span>
+    <span class="c1"># Analyze data characteristics</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Select appropriate optimizer</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Optimize the system</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="k">return</span> <span class="n">optimized_analyzer</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_performance</span><span class="p">(</span><span class="n">optimized_system</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze performance across different aspects.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id34">
+<h3>Tasks<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Create a comprehensive metric for multi-output prediction</p></li>
+<li><p>Select the best optimizer based on data analysis</p></li>
+<li><p>Optimize the support system</p></li>
+<li><p>Evaluate performance by category and priority</p></li>
+<li><p>Generate insights about optimization choices</p></li>
+</ol>
+</section>
+<section id="id35">
+<h3>Hints<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Weight different outputs by importance</p></li>
+<li><p>Priority accuracy is often most critical</p></li>
+<li><p>Consider using different optimizers for different components</p></li>
+</ul>
+</section>
+<section id="id36">
+<h3>Expected Output<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Support</span> <span class="n">System</span> <span class="n">Optimization</span> <span class="n">Report</span><span class="p">:</span>
+<span class="o">==================================</span>
+<span class="n">Data</span> <span class="n">Analysis</span><span class="p">:</span>
+  <span class="n">Total</span> <span class="n">examples</span><span class="p">:</span> <span class="mi">100</span>
+  <span class="n">Categories</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="n">Priority</span> <span class="n">levels</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="n">Products</span><span class="p">:</span> <span class="mi">4</span>
+
+<span class="n">Selected</span> <span class="n">Optimizer</span><span class="p">:</span> <span class="n">KNNFewShot</span> <span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">Reasoning</span><span class="p">:</span> <span class="n">Context</span><span class="o">-</span><span class="n">sensitive</span> <span class="n">categorization</span> <span class="n">benefits</span> <span class="kn">from</span><span class="w"> </span><span class="nn">similarity</span>
+
+<span class="n">Performance</span> <span class="n">by</span> <span class="n">Category</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Authentication</span><span class="p">:</span> <span class="mi">92</span><span class="o">%</span> <span class="n">accuracy</span>
+<span class="o">-</span> <span class="n">Bug</span> <span class="n">Reports</span><span class="p">:</span> <span class="mi">88</span><span class="o">%</span> <span class="n">accuracy</span>
+<span class="o">-</span> <span class="n">How</span> <span class="n">To</span><span class="p">:</span> <span class="mi">95</span><span class="o">%</span> <span class="n">accuracy</span>
+<span class="o">-</span> <span class="n">Billing</span><span class="p">:</span> <span class="mi">90</span><span class="o">%</span> <span class="n">accuracy</span>
+<span class="o">-</span> <span class="n">Feature</span> <span class="n">Request</span><span class="p">:</span> <span class="mi">85</span><span class="o">%</span> <span class="n">accuracy</span>
+
+<span class="n">Performance</span> <span class="n">by</span> <span class="n">Priority</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">High</span><span class="p">:</span> <span class="mi">95</span><span class="o">%</span> <span class="n">accuracy</span> <span class="p">(</span><span class="n">critical</span> <span class="k">for</span> <span class="n">SLA</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Medium</span><span class="p">:</span> <span class="mi">87</span><span class="o">%</span> <span class="n">accuracy</span>
+<span class="o">-</span> <span class="n">Low</span><span class="p">:</span> <span class="mi">82</span><span class="o">%</span> <span class="n">accuracy</span>
+
+<span class="n">Overall</span> <span class="n">Score</span><span class="p">:</span> <span class="mf">89.5</span><span class="o">%</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-7-reflective-prompt-evolution-for-complex-reasoning">
+<h2>Exercise 7: Reflective Prompt Evolution for Complex Reasoning<a class="headerlink" href="#exercise-7-reflective-prompt-evolution-for-complex-reasoning" title="Link to this heading">#</a></h2>
+<section id="id37">
+<h3>Objective<a class="headerlink" href="#id37" title="Link to this heading">#</a></h3>
+<p>Learn to use Reflective Prompt Evolution (RPE) for optimizing complex multi-step reasoning tasks.</p>
+</section>
+<section id="id38">
+<h3>Problem<a class="headerlink" href="#id38" title="Link to this heading">#</a></h3>
+<p>You have a multi-hop reasoning task that requires understanding relationships between multiple pieces of information. Use RPE to evolve better reasoning prompts.</p>
+</section>
+<section id="id39">
+<h3>Starter Code<a class="headerlink" href="#id39" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReflectivePromptEvolution</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiHopReasoner</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hop1</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; first_answer&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hop2</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question, first_answer -&gt; second_answer&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hop3</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question, first_answer, second_answer -&gt; final_answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">result1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hop1</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+        <span class="n">result2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hop2</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">first_answer</span><span class="o">=</span><span class="n">result1</span><span class="o">.</span><span class="n">first_answer</span><span class="p">)</span>
+        <span class="n">result3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hop3</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">first_answer</span><span class="o">=</span><span class="n">result1</span><span class="o">.</span><span class="n">first_answer</span><span class="p">,</span>
+            <span class="n">second_answer</span><span class="o">=</span><span class="n">result2</span><span class="o">.</span><span class="n">second_answer</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">result3</span><span class="o">.</span><span class="n">final_answer</span><span class="p">,</span>
+            <span class="n">reasoning_chain</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">result1</span><span class="o">.</span><span class="n">reasoning</span><span class="p">,</span>
+                <span class="n">result2</span><span class="o">.</span><span class="n">reasoning</span><span class="p">,</span>
+                <span class="n">result3</span><span class="o">.</span><span class="n">reasoning</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+<span class="c1"># Multi-hop reasoning dataset</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;Who was the US President when the author of &#39;To Kill a Mockingbird&#39; was born?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Herbert Hoover&quot;</span><span class="p">,</span>
+        <span class="n">hops</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;Author of &#39;To Kill a Mockingbird&#39; is Harper Lee&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Harper Lee was born in 1926&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Herbert Hoover was president in 1926&quot;</span>
+        <span class="p">]</span>
+    <span class="p">),</span>
+    <span class="c1"># Add more multi-hop examples...</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rpe_optimize</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize using Reflective Prompt Evolution.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_evolution_progress</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze how RPE evolves the prompts over generations.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_mutation_operator</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">domain_knowledge</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply domain-specific mutations.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="id40">
+<h3>Tasks<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Basic RPE Setup</strong> (15 minutes)</p>
+<ul class="simple">
+<li><p>Initialize RPE with appropriate parameters</p></li>
+<li><p>Run basic optimization</p></li>
+<li><p>Compare with baseline performance</p></li>
+</ul>
+</li>
+<li><p><strong>Custom Reflection</strong> (20 minutes)</p>
+<ul class="simple">
+<li><p>Implement custom reflection prompt templates</p></li>
+<li><p>Add domain-specific reflection questions</p></li>
+<li><p>Improve reflection quality</p></li>
+</ul>
+</li>
+<li><p><strong>Mutation Strategies</strong> (25 minutes)</p>
+<ul class="simple">
+<li><p>Implement custom mutation operators</p></li>
+<li><p>Add domain-specific mutations</p></li>
+<li><p>Balance exploration vs exploitation</p></li>
+</ul>
+</li>
+<li><p><strong>Diversity Analysis</strong> (20 minutes)</p>
+<ul class="simple">
+<li><p>Track population diversity</p></li>
+<li><p>Implement diversity maintenance</p></li>
+<li><p>Analyze convergence patterns</p></li>
+</ul>
+</li>
+<li><p><strong>Comparative Analysis</strong> (20 minutes)</p>
+<ul class="simple">
+<li><p>Compare RPE with MIPRO on the same task</p></li>
+<li><p>Analyze trade-offs</p></li>
+<li><p>Document findings</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id41">
+<h3>Expected Output<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RPE</span> <span class="n">Optimization</span> <span class="n">Report</span><span class="p">:</span>
+<span class="o">=======================</span>
+<span class="n">Configuration</span><span class="p">:</span>
+  <span class="n">Population</span> <span class="n">size</span><span class="p">:</span> <span class="mi">12</span>
+  <span class="n">Generations</span><span class="p">:</span> <span class="mi">6</span>
+  <span class="n">Mutation</span> <span class="n">rate</span><span class="p">:</span> <span class="mf">0.3</span>
+  <span class="n">Selection</span> <span class="n">pressure</span><span class="p">:</span> <span class="mf">0.5</span>
+
+<span class="n">Evolution</span> <span class="n">Progress</span><span class="p">:</span>
+  <span class="n">Gen</span> <span class="mi">0</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">45.2</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.85</span>
+  <span class="n">Gen</span> <span class="mi">1</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">52.1</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.78</span>
+  <span class="n">Gen</span> <span class="mi">2</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">61.3</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.71</span>
+  <span class="n">Gen</span> <span class="mi">3</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">68.9</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.65</span>
+  <span class="n">Gen</span> <span class="mi">4</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">73.4</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.58</span>
+  <span class="n">Gen</span> <span class="mi">5</span><span class="p">:</span> <span class="n">Best</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">76.2</span><span class="o">%</span><span class="p">,</span> <span class="n">Diversity</span> <span class="o">=</span> <span class="mf">0.52</span>
+
+<span class="n">Evolved</span> <span class="n">Prompt</span> <span class="n">Features</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">Added</span> <span class="n">explicit</span> <span class="n">multi</span><span class="o">-</span><span class="n">step</span> <span class="n">instructions</span>
+  <span class="o">-</span> <span class="n">Improved</span> <span class="n">error</span> <span class="n">checking</span> <span class="n">mechanisms</span>
+  <span class="o">-</span> <span class="n">Better</span> <span class="n">context</span> <span class="n">preservation</span> <span class="n">between</span> <span class="n">hops</span>
+  <span class="o">-</span> <span class="n">Enhanced</span> <span class="n">reasoning</span> <span class="n">verification</span>
+
+<span class="n">Comparison</span> <span class="k">with</span> <span class="n">MIPRO</span><span class="p">:</span>
+  <span class="n">RPE</span><span class="p">:</span> <span class="mf">76.2</span><span class="o">%</span> <span class="n">accuracy</span> <span class="p">(</span><span class="mi">45</span> <span class="nb">min</span> <span class="n">optimization</span><span class="p">)</span>
+  <span class="n">MIPRO</span><span class="p">:</span> <span class="mf">72.8</span><span class="o">%</span> <span class="n">accuracy</span> <span class="p">(</span><span class="mi">30</span> <span class="nb">min</span> <span class="n">optimization</span><span class="p">)</span>
+  <span class="n">BootstrapFewShot</span><span class="p">:</span> <span class="mf">58.3</span><span class="o">%</span> <span class="n">accuracy</span> <span class="p">(</span><span class="mi">5</span> <span class="nb">min</span> <span class="n">optimization</span><span class="p">)</span>
+
+<span class="n">RPE</span> <span class="n">Strengths</span><span class="p">:</span>
+  <span class="o">+</span> <span class="n">Discovered</span> <span class="n">novel</span> <span class="n">reasoning</span> <span class="n">patterns</span>
+  <span class="o">+</span> <span class="n">Better</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">edge</span> <span class="n">cases</span>
+  <span class="o">+</span> <span class="n">More</span> <span class="n">diverse</span> <span class="n">solution</span> <span class="n">approaches</span>
+  <span class="o">+</span> <span class="n">Continuous</span> <span class="n">improvement</span> <span class="n">over</span> <span class="n">generations</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-8-joint-optimization-with-copa">
+<h2>Exercise 8: Joint Optimization with COPA<a class="headerlink" href="#exercise-8-joint-optimization-with-copa" title="Link to this heading">#</a></h2>
+<section id="id42">
+<h3>Objective<a class="headerlink" href="#id42" title="Link to this heading">#</a></h3>
+<p>Apply combined fine-tuning and prompt optimization to achieve maximum performance on a mathematical reasoning task, demonstrating 3-8x improvements over baseline.</p>
+</section>
+<section id="background">
+<h3>Background<a class="headerlink" href="#background" title="Link to this heading">#</a></h3>
+<p>Research on joint optimization shows that combining fine-tuning with prompt optimization achieves synergistic effects that exceed additive improvements. This exercise demonstrates this approach on mathematical reasoning.</p>
+</section>
+<section id="id43">
+<h3>Problem<a class="headerlink" href="#id43" title="Link to this heading">#</a></h3>
+<p>Optimize a mathematical reasoning system using the COPA approach (fine-tuning + prompt optimization).</p>
+</section>
+<section id="id44">
+<h3>Starter Code<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">MIPRO</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MathReasoner</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mathematical reasoning with Chain of Thought.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reason</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;problem -&gt; steps, intermediate_results, final_answer&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="n">problem</span><span class="o">=</span><span class="n">problem</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">steps</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">rationale</span><span class="p">,</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">final_answer</span>
+        <span class="p">)</span>
+
+<span class="c1"># GSM8K-style math problems</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;Janet&#39;s ducks lay 16 eggs per day. She eats 3 for breakfast every morning and bakes muffins for her friends with 4 every day. She sells the remainder at the farmers&#39; market daily for $2 per egg. How much does she make daily?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;$18&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;A robe takes 2 bolts of blue fiber and half that much white fiber. How many bolts in total does it take?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;3&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;Josh decides to try flipping a house. He buys a house for $80,000 and puts $50,000 in repairs. This increased the value to 150</span><span class="si">% o</span><span class="s2">f the initial purchase price. How much profit did he make?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;$-10,000&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples (aim for 50-100 total)</span>
+<span class="p">]</span>
+
+<span class="c1"># Test set</span>
+<span class="n">testset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">problem</span><span class="o">=</span><span class="s2">&quot;A farmer has 100 chickens. 20</span><span class="si">% a</span><span class="s2">re roosters. Half of the hens lay an egg a day. How many eggs per day?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;40&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more test examples</span>
+<span class="p">]</span>
+
+<span class="c1"># TODO: Implement these functions</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">math_accuracy_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Evaluate mathematical answer accuracy.</span>
+<span class="sd">    Handle numeric comparisons and text variations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract numerical answer</span>
+    <span class="c1"># Compare with tolerance for floating point</span>
+    <span class="c1"># Return 1.0 for correct, 0.0 for incorrect</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">finetune_math_model</span><span class="p">(</span><span class="n">base_model_name</span><span class="p">,</span> <span class="n">training_data</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fine-tune a small model for mathematical reasoning.</span>
+<span class="sd">    Focus on instruction-following for math problems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Load model with QLoRA</span>
+    <span class="c1"># Prepare math-specific training format</span>
+    <span class="c1"># Fine-tune with appropriate hyperparameters</span>
+    <span class="c1"># Return fine-tuned model</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">joint_optimization_pipeline</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">base_model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute COPA-style joint optimization:</span>
+<span class="sd">    1. Fine-tune the base model</span>
+<span class="sd">    2. Apply prompt optimization to fine-tuned model</span>
+
+<span class="sd">    Returns: optimized_program, finetuned_model, results_dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Step 1: Baseline evaluation</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating baseline...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Step 2: Fine-tune the model</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fine-tuning model...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Step 3: Evaluate fine-tuned only</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Evaluating fine-tuned model...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Step 4: Apply prompt optimization to base model</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prompt optimization (base model)...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Step 5: Apply prompt optimization to fine-tuned model (COPA)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;COPA optimization (fine-tuned + prompts)...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="c1"># Step 6: Calculate synergy</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating synergy...&quot;</span><span class="p">)</span>
+    <span class="c1"># Your code here</span>
+
+    <span class="k">return</span> <span class="n">optimized_program</span><span class="p">,</span> <span class="n">finetuned_model</span><span class="p">,</span> <span class="n">results</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_synergy</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate synergistic improvement from joint optimization.</span>
+
+<span class="sd">    Synergy = Combined - (Baseline + FT_Improvement + PO_Improvement)</span>
+
+<span class="sd">    Returns synergy value and interpretation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;baseline&quot;</span><span class="p">]</span>
+    <span class="n">ft_only</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;fine_tuning_only&quot;</span><span class="p">]</span>
+    <span class="n">po_only</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;prompt_opt_only&quot;</span><span class="p">]</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;copa&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Expected additive improvement</span>
+    <span class="n">ft_improvement</span> <span class="o">=</span> <span class="n">ft_only</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="n">po_improvement</span> <span class="o">=</span> <span class="n">po_only</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="n">additive_expected</span> <span class="o">=</span> <span class="n">baseline</span> <span class="o">+</span> <span class="n">ft_improvement</span> <span class="o">+</span> <span class="n">po_improvement</span>
+
+    <span class="c1"># Actual synergy</span>
+    <span class="n">synergy</span> <span class="o">=</span> <span class="n">combined</span> <span class="o">-</span> <span class="n">additive_expected</span>
+    <span class="n">improvement_factor</span> <span class="o">=</span> <span class="n">combined</span> <span class="o">/</span> <span class="n">baseline</span> <span class="k">if</span> <span class="n">baseline</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;synergy_absolute&quot;</span><span class="p">:</span> <span class="n">synergy</span><span class="p">,</span>
+        <span class="s2">&quot;improvement_factor&quot;</span><span class="p">:</span> <span class="n">improvement_factor</span><span class="p">,</span>
+        <span class="s2">&quot;additive_expected&quot;</span><span class="p">:</span> <span class="n">additive_expected</span><span class="p">,</span>
+        <span class="s2">&quot;actual_combined&quot;</span><span class="p">:</span> <span class="n">combined</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id45">
+<h3>Tasks<a class="headerlink" href="#id45" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Implement the Evaluation Metric</strong> (15 minutes)</p>
+<ul class="simple">
+<li><p>Handle numeric extraction from text</p></li>
+<li><p>Compare with tolerance for floating point</p></li>
+<li><p>Account for different answer formats ($18 vs 18 dollars)</p></li>
+</ul>
+</li>
+<li><p><strong>Fine-Tune the Model</strong> (30 minutes)</p>
+<ul class="simple">
+<li><p>Use QLoRA for memory-efficient fine-tuning</p></li>
+<li><p>Format training data for math instruction following</p></li>
+<li><p>Train for 3 epochs with appropriate learning rate</p></li>
+</ul>
+</li>
+<li><p><strong>Execute Joint Optimization</strong> (20 minutes)</p>
+<ul class="simple">
+<li><p>Follow correct order: fine-tune FIRST, then prompt optimize</p></li>
+<li><p>Use MIPRO for prompt optimization</p></li>
+<li><p>Track results at each stage</p></li>
+</ul>
+</li>
+<li><p><strong>Analyze Synergy</strong> (15 minutes)</p>
+<ul class="simple">
+<li><p>Calculate improvement beyond additive expectations</p></li>
+<li><p>Understand why synergy occurs</p></li>
+<li><p>Document findings</p></li>
+</ul>
+</li>
+<li><p><strong>Benchmark Comparison</strong> (20 minutes)</p>
+<ul class="simple">
+<li><p>Compare all approaches: baseline, FT-only, PO-only, COPA</p></li>
+<li><p>Calculate improvement factors</p></li>
+<li><p>Identify optimal strategy for your compute budget</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id46">
+<h3>Hints<a class="headerlink" href="#id46" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Extract numbers using regex: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">re;</span> <span class="pre">numbers</span> <span class="pre">=</span> <span class="pre">re.findall(r'-?\d+\.?\d*',</span> <span class="pre">text)</span></code></p></li>
+<li><p>Order matters: fine-tune first consistently outperforms prompt-first</p></li>
+<li><p>Synergy is highest for complex reasoning tasks</p></li>
+<li><p>Fine-tuned models need fewer demonstrations (3-shot vs 8-shot)</p></li>
+<li><p>Data requirement: aim for 50-100 training examples</p></li>
+</ul>
+</section>
+<section id="id47">
+<h3>Expected Output<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">COPA</span> <span class="n">Joint</span> <span class="n">Optimization</span> <span class="n">Report</span>
+<span class="o">==============================</span>
+
+<span class="n">Data</span> <span class="n">Analysis</span><span class="p">:</span>
+  <span class="n">Training</span> <span class="n">examples</span><span class="p">:</span> <span class="mi">75</span>
+  <span class="n">Validation</span> <span class="n">examples</span><span class="p">:</span> <span class="mi">25</span>
+  <span class="n">Test</span> <span class="n">examples</span><span class="p">:</span> <span class="mi">50</span>
+
+<span class="n">Optimization</span> <span class="n">Results</span><span class="p">:</span>
+<span class="o">---------------------</span>
+<span class="n">Baseline</span> <span class="p">(</span><span class="n">no</span> <span class="n">optimization</span><span class="p">):</span>     <span class="mf">11.2</span><span class="o">%</span>
+<span class="n">Fine</span><span class="o">-</span><span class="n">tuning</span> <span class="n">only</span><span class="p">:</span>               <span class="mf">32.4</span><span class="o">%</span>  <span class="p">(</span><span class="o">+</span><span class="mf">21.2</span><span class="o">%</span><span class="p">)</span>
+<span class="n">Prompt</span> <span class="n">optimization</span> <span class="n">only</span><span class="p">:</span>       <span class="mf">22.8</span><span class="o">%</span>  <span class="p">(</span><span class="o">+</span><span class="mf">11.6</span><span class="o">%</span><span class="p">)</span>
+<span class="n">COPA</span> <span class="p">(</span><span class="n">combined</span><span class="p">):</span>                <span class="mf">54.6</span><span class="o">%</span>  <span class="p">(</span><span class="o">+</span><span class="mf">43.4</span><span class="o">%</span><span class="p">)</span>
+
+<span class="n">Synergy</span> <span class="n">Analysis</span><span class="p">:</span>
+<span class="o">----------------</span>
+<span class="n">Expected</span> <span class="n">additive</span><span class="p">:</span>              <span class="mf">44.0</span><span class="o">%</span>
+<span class="n">Actual</span> <span class="n">combined</span><span class="p">:</span>                <span class="mf">54.6</span><span class="o">%</span>
+<span class="n">Synergistic</span> <span class="n">gain</span><span class="p">:</span>               <span class="mf">10.6</span><span class="o">%</span>
+<span class="n">Improvement</span> <span class="n">factor</span><span class="p">:</span>             <span class="mf">4.9</span><span class="n">x</span>
+
+<span class="n">Key</span> <span class="n">Findings</span><span class="p">:</span>
+<span class="mf">1.</span> <span class="n">Order</span> <span class="n">matters</span><span class="p">:</span> <span class="n">FT</span><span class="o">-&gt;</span><span class="n">PO</span> <span class="n">achieved</span> <span class="mf">54.6</span><span class="o">%</span><span class="p">,</span> <span class="n">PO</span><span class="o">-&gt;</span><span class="n">FT</span> <span class="n">only</span> <span class="mf">38.2</span><span class="o">%</span>
+<span class="mf">2.</span> <span class="n">Synergy</span> <span class="n">effect</span><span class="p">:</span> <span class="mf">10.6</span><span class="o">%</span> <span class="n">beyond</span> <span class="n">additive</span> <span class="n">expectations</span>
+<span class="mf">3.</span> <span class="n">Demo</span> <span class="n">efficiency</span><span class="p">:</span> <span class="n">Fine</span><span class="o">-</span><span class="n">tuned</span> <span class="n">model</span> <span class="n">achieves</span> <span class="mi">8</span><span class="o">-</span><span class="n">shot</span> <span class="n">baseline</span> <span class="k">with</span> <span class="n">just</span> <span class="mi">3</span> <span class="n">demos</span>
+<span class="mf">4.</span> <span class="n">Instruction</span> <span class="n">complexity</span><span class="p">:</span> <span class="n">Fine</span><span class="o">-</span><span class="n">tuned</span> <span class="n">model</span> <span class="n">follows</span> <span class="nb">complex</span> <span class="n">multi</span><span class="o">-</span><span class="n">step</span> <span class="n">instructions</span>
+
+<span class="n">Recommendations</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">Use</span> <span class="n">joint</span> <span class="n">optimization</span> <span class="k">for</span> <span class="nb">complex</span> <span class="n">reasoning</span> <span class="n">tasks</span>
+<span class="o">-</span> <span class="n">Minimum</span> <span class="mi">50</span> <span class="n">training</span> <span class="n">examples</span> <span class="k">for</span> <span class="n">effective</span> <span class="n">fine</span><span class="o">-</span><span class="n">tuning</span>
+<span class="o">-</span> <span class="n">Always</span> <span class="n">fine</span><span class="o">-</span><span class="n">tune</span> <span class="n">first</span><span class="p">,</span> <span class="n">then</span> <span class="n">apply</span> <span class="n">prompt</span> <span class="n">optimization</span>
+<span class="o">-</span> <span class="n">Consider</span> <span class="n">compute</span> <span class="n">budget</span><span class="p">:</span> <span class="n">COPA</span> <span class="n">requires</span> <span class="o">~</span><span class="mi">2</span> <span class="n">GPU</span> <span class="n">hours</span> <span class="o">+</span> <span class="n">API</span> <span class="n">calls</span>
+</pre></div>
+</div>
+</section>
+<section id="challenge-extension">
+<h3>Challenge Extension<a class="headerlink" href="#challenge-extension" title="Link to this heading">#</a></h3>
+<p>For advanced practice:</p>
+<ol class="arabic simple">
+<li><p>Implement Monte Carlo exploration of prompt configurations</p></li>
+<li><p>Add Bayesian optimization for hyperparameter selection</p></li>
+<li><p>Compare COPA with RPE on the same task</p></li>
+<li><p>Measure demonstration efficiency improvements</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="exercise-solutions">
+<h2>Exercise Solutions<a class="headerlink" href="#exercise-solutions" title="Link to this heading">#</a></h2>
+<p>After completing these exercises, you’ll have:</p>
+<ol class="arabic simple">
+<li><p><strong>Hands-on experience</strong> with all major DSPy optimizers</p></li>
+<li><p><strong>Understanding of trade-offs</strong> between different approaches</p></li>
+<li><p><strong>Debugging skills</strong> for optimization issues</p></li>
+<li><p><strong>Real-world application</strong> knowledge</p></li>
+<li><p><strong>Decision-making framework</strong> for choosing optimizers</p></li>
+</ol>
+<p>Remember to:</p>
+<ul class="simple">
+<li><p>Start simple and iterate</p></li>
+<li><p>Monitor both accuracy and computation cost</p></li>
+<li><p>Validate on held-out data</p></li>
+<li><p>Consider your specific use case requirements</p></li>
+<li><p>Document your optimization choices</p></li>
+</ul>
+<p>Good luck with your optimization journey!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_constraint_driven_optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Constraint-Driven Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="08_reflective_prompt_evolution.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-basic-bootstrapfewshot-optimization">Exercise 1: Basic BootstrapFewShot Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#starter-code">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tasks">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hints">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-output">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-knnfewshot-for-context-aware-selection">Exercise 2: KNNFewShot for Context-Aware Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-mipro-for-complex-reasoning-tasks">Exercise 3: MIPRO for Complex Reasoning Tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-4-optimizer-comparison">Exercise 4: Optimizer Comparison</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-5-custom-optimization-strategy">Exercise 5: Custom Optimization Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-6-optimization-debugging">Exercise 6: Optimization Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-7-real-world-optimization-scenario">Exercise 7: Real-World Optimization Scenario</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-7-reflective-prompt-evolution-for-complex-reasoning">Exercise 7: Reflective Prompt Evolution for Complex Reasoning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Expected Output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-8-joint-optimization-with-copa">Exercise 8: Joint Optimization with COPA</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Objective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Starter Code</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Tasks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Hints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">Expected Output</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-extension">Challenge Extension</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-solutions">Exercise Solutions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1368 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Study 1: Building an Enterprise RAG System &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/08_case_studies/01_enterprise_rag_system';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Case Study 1: Clinical Notes Analysis with DSPy" href="01a_healthcare_clinical_notes.html" />
+    <link rel="prev" title="Chapter 8: Case Studies" href="00_introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_introduction.html">Chapter 8: Case Studies</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/08_case_studies/01_enterprise_rag_system.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case Study 1: Building an Enterprise RAG System</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#document-processing-pipeline">1. Document Processing Pipeline</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-system">2. Retrieval System</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generation-system">3. Generation System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#document-indexing-module">1. Document Indexing Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-module">2. Retrieval Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-generation-module">3. Answer Generation Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#security-module">4. Security Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-and-orchestration">Integration and Orchestration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-tests">Unit Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-tests">Integration Tests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-strategy">1. Caching Strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parallel-processing">2. Parallel Processing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#index-optimization">3. Index Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#container-configuration">Container Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-setup">Monitoring Setup</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommendations">Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-1-building-an-enterprise-rag-system">
+<h1>Case Study 1: Building an Enterprise RAG System<a class="headerlink" href="#case-study-1-building-an-enterprise-rag-system" title="Link to this heading">#</a></h1>
+<section id="problem-definition">
+<h2>Problem Definition<a class="headerlink" href="#problem-definition" title="Link to this heading">#</a></h2>
+<section id="business-challenge">
+<h3>Business Challenge<a class="headerlink" href="#business-challenge" title="Link to this heading">#</a></h3>
+<p>A multinational corporation needed a unified solution to help employees quickly find and understand information across thousands of internal documents, including:</p>
+<ul class="simple">
+<li><p>Technical documentation</p></li>
+<li><p>HR policies and procedures</p></li>
+<li><p>Legal contracts and compliance documents</p></li>
+<li><p>Product specifications</p></li>
+<li><p>Training materials</p></li>
+</ul>
+</section>
+<section id="key-requirements">
+<h3>Key Requirements<a class="headerlink" href="#key-requirements" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Accurate Retrieval</strong>: Find relevant documents with high precision</p></li>
+<li><p><strong>Comprehensive Answers</strong>: Generate responses that synthesize information from multiple sources</p></li>
+<li><p><strong>Security</strong>: Respect document access permissions</p></li>
+<li><p><strong>Scalability</strong>: Handle millions of documents and thousands of concurrent users</p></li>
+<li><p><strong>Multilingual Support</strong>: Support content in 15+ languages</p></li>
+<li><p><strong>Real-time Updates</strong>: Incorporate new documents within minutes</p></li>
+</ol>
+</section>
+</section>
+<section id="system-design">
+<h2>System Design<a class="headerlink" href="#system-design" title="Link to this heading">#</a></h2>
+<section id="architecture-overview">
+<h3>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Document      │    │   Processing    │    │   Vector Store  │
+│   Sources       │───▶│   Pipeline      │───▶│   (Pinecone/     │
+│                 │    │                 │    │   Weaviate)     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Document      │    │   Metadata      │    │   Index         │
+│   Monitoring    │    │   Store         │    │   Management    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                 │                       │
+                                 └───────────┬───────────┘
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   DSPy RAG      │
+                                   │   Application   │
+                                   └─────────────────┘
+                                             │
+                                 ┌───────────┴───────────┐
+                                 ▼                       ▼
+                       ┌─────────────────┐    ┌─────────────────┐
+                       │   API Gateway   │    │   Web UI        │
+                       └─────────────────┘    └─────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="component-details">
+<h3>Component Details<a class="headerlink" href="#component-details" title="Link to this heading">#</a></h3>
+<section id="document-processing-pipeline">
+<h4>1. Document Processing Pipeline<a class="headerlink" href="#document-processing-pipeline" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Ingestion Layer</strong>: Support for multiple formats (PDF, DOCX, HTML, etc.)</p></li>
+<li><p><strong>Text Extraction</strong>: OCR for scanned documents, table extraction</p></li>
+<li><p><strong>Chunking Strategy</strong>: Semantic chunking with overlap for context preservation</p></li>
+<li><p><strong>Language Detection</strong>: Automatic language identification</p></li>
+<li><p><strong>Preprocessing</strong>: Cleaning, normalization, and entity extraction</p></li>
+</ul>
+</section>
+<section id="retrieval-system">
+<h4>2. Retrieval System<a class="headerlink" href="#retrieval-system" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Hybrid Search</strong>: Combination of vector similarity and keyword search</p></li>
+<li><p><strong>Re-ranking</strong>: Neural re-ranking for improved precision</p></li>
+<li><p><strong>Multi-vector Strategy</strong>: Separate embeddings for document title, content, and metadata</p></li>
+<li><p><strong>Cache Layer</strong>: Redis for frequent queries</p></li>
+<li><p><strong>Filtering</strong>: Metadata-based filtering for security</p></li>
+</ul>
+</section>
+<section id="generation-system">
+<h4>3. Generation System<a class="headerlink" href="#generation-system" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Context Management</strong>: Intelligent context window management</p></li>
+<li><p><strong>Citation Generation</strong>: Automatic source attribution</p></li>
+<li><p><strong>Answer Synthesis</strong>: Combining information from multiple documents</p></li>
+<li><p><strong>Fact Verification</strong>: Cross-referencing for accuracy</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="implementation-with-dspy">
+<h2>Implementation with DSPy<a class="headerlink" href="#implementation-with-dspy" title="Link to this heading">#</a></h2>
+<section id="core-dspy-components">
+<h3>Core DSPy Components<a class="headerlink" href="#core-dspy-components" title="Link to this heading">#</a></h3>
+<section id="document-indexing-module">
+<h4>1. Document Indexing Module<a class="headerlink" href="#document-indexing-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DocumentChunk</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;en&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DocumentIndexer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Module for indexing documents into the RAG system.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embedding_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_model</span> <span class="o">=</span> <span class="n">embedding_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_overlap</span> <span class="o">=</span> <span class="mi">200</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DocumentChunk</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process and chunk a document for indexing.&quot;&quot;&quot;</span>
+        <span class="c1"># Extract text from document</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_text</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+
+        <span class="c1"># Detect language</span>
+        <span class="n">language</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect_language</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Split into semantic chunks</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_chunks</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">language</span><span class="p">)</span>
+
+        <span class="c1"># Create DocumentChunk objects</span>
+        <span class="n">document_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk_text</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">):</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">DocumentChunk</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">document</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">chunk_text</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;document_id&quot;</span><span class="p">:</span> <span class="n">document</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">document</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;department&quot;</span><span class="p">:</span> <span class="n">document</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;access_level&quot;</span><span class="p">:</span> <span class="n">document</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_level&quot;</span><span class="p">,</span> <span class="s2">&quot;internal&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;chunk_index&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+                    <span class="s2">&quot;language&quot;</span><span class="p">:</span> <span class="n">language</span>
+                <span class="p">},</span>
+                <span class="n">language</span><span class="o">=</span><span class="n">language</span>
+            <span class="p">)</span>
+            <span class="n">document_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">document_chunks</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract text from various document formats.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation depends on document type</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_detect_language</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect the language of the text.&quot;&quot;&quot;</span>
+        <span class="c1"># Use langdetect or similar library</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_chunks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create semantic chunks from text.&quot;&quot;&quot;</span>
+        <span class="c1"># Use semantic chunking with overlap</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="retrieval-module">
+<h4>2. Retrieval Module<a class="headerlink" href="#retrieval-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RetrieverSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for document retrieval.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;User query&quot;</span><span class="p">)</span>
+    <span class="n">filters</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Metadata filters (optional)&quot;</span><span class="p">)</span>
+    <span class="n">top_k</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Number of documents to retrieve&quot;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Retrieved document contexts&quot;</span><span class="p">)</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Source document information&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">HybridRetriever</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hybrid retrieval combining vector and keyword search.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector_store</span><span class="p">,</span> <span class="n">index_store</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector_store</span> <span class="o">=</span> <span class="n">vector_store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_store</span> <span class="o">=</span> <span class="n">index_store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">RetrieverSignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform hybrid retrieval.&quot;&quot;&quot;</span>
+        <span class="c1"># Vector search</span>
+        <span class="n">vector_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vector_search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">top_k</span><span class="p">)</span>
+
+        <span class="c1"># Keyword search</span>
+        <span class="n">keyword_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keyword_search</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">top_k</span><span class="p">)</span>
+
+        <span class="c1"># Combine and re-rank results</span>
+        <span class="n">combined_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combine_results</span><span class="p">(</span>
+            <span class="n">vector_results</span><span class="p">,</span>
+            <span class="n">keyword_results</span><span class="p">,</span>
+            <span class="n">top_k</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Format for DSPy</span>
+        <span class="n">contexts</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">content</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">combined_results</span><span class="p">]</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;document_id&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;department&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;chunk&quot;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;chunk_index&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">combined_results</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">contexts</span><span class="p">),</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_vector_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform vector similarity search.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation using vector store</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_keyword_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform keyword-based search.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation using full-text search</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_combine_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector_results</span><span class="p">,</span> <span class="n">keyword_results</span><span class="p">,</span> <span class="n">top_k</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine and re-rank results from both searches.&quot;&quot;&quot;</span>
+        <span class="c1"># Implement fusion and re-ranking</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="answer-generation-module">
+<h4>3. Answer Generation Module<a class="headerlink" href="#answer-generation-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GenerateAnswerSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for generating answers from retrieved context.&quot;&quot;&quot;</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Retrieved document contexts&quot;</span><span class="p">)</span>
+    <span class="n">question</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;User question&quot;</span><span class="p">)</span>
+    <span class="n">conversation_history</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Previous conversation (optional)&quot;</span><span class="p">)</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Generated answer&quot;</span><span class="p">)</span>
+    <span class="n">citations</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Source citations for the answer&quot;</span><span class="p">)</span>
+    <span class="n">confidence</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Confidence in the answer (0-1)&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RAGGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate answers from retrieved context with citations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">GenerateAnswerSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">VerifyAnswerSignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">sources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span> <span class="n">history</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate answer with citations.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate initial answer</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">conversation_history</span><span class="o">=</span><span class="n">history</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Verify and refine answer</span>
+        <span class="n">verification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Extract citations</span>
+        <span class="n">citations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_citations</span><span class="p">(</span>
+            <span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">sources</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">verification</span><span class="o">.</span><span class="n">refined_answer</span><span class="p">,</span>
+            <span class="n">citations</span><span class="o">=</span><span class="n">citations</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">verification</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">sources</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_citations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract and format citations from the answer.&quot;&quot;&quot;</span>
+        <span class="c1"># Implement citation extraction logic</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="security-module">
+<h4>4. Security Module<a class="headerlink" href="#security-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SecurityFilter</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter results based on user permissions.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">permission_service</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">permission_service</span> <span class="o">=</span> <span class="n">permission_service</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DocumentChunk</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter results based on user permissions.&quot;&quot;&quot;</span>
+        <span class="n">filtered_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="c1"># Check access permissions</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_access</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">metadata</span><span class="p">):</span>
+                <span class="n">filtered_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">filtered_results</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_has_access</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if user has access to document.&quot;&quot;&quot;</span>
+        <span class="n">access_level</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_level&quot;</span><span class="p">,</span> <span class="s2">&quot;internal&quot;</span><span class="p">)</span>
+        <span class="n">department</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Query permission service</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">permission_service</span><span class="o">.</span><span class="n">check_access</span><span class="p">(</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">access_level</span><span class="o">=</span><span class="n">access_level</span><span class="p">,</span>
+            <span class="n">department</span><span class="o">=</span><span class="n">department</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="integration-and-orchestration">
+<h3>Integration and Orchestration<a class="headerlink" href="#integration-and-orchestration" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">EnterpriseRAGSystem</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete enterprise RAG system.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span> <span class="o">=</span> <span class="n">DocumentIndexer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;embedding_model&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">HybridRetriever</span><span class="p">(</span>
+            <span class="n">vector_store</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;vector_store&quot;</span><span class="p">],</span>
+            <span class="n">index_store</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;index_store&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">RAGGenerator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">SecurityFilter</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;permission_service&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">3</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">index_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Index a new document.&quot;&quot;&quot;</span>
+        <span class="c1"># Process and chunk document</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indexer</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+
+        <span class="c1"># Generate embeddings</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunks</span><span class="p">:</span>
+            <span class="n">chunk</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_embedding</span><span class="p">(</span><span class="n">chunk</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="c1"># Store in vector database</span>
+        <span class="n">document_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_chunks</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">document_id</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+              <span class="n">filters</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">history</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process user query.&quot;&quot;&quot;</span>
+        <span class="c1"># Retrieve documents</span>
+        <span class="n">retrieval_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+            <span class="n">top_k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;top_k&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Apply security filtering</span>
+        <span class="n">filtered_chunks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">security</span><span class="p">(</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">results</span><span class="o">=</span><span class="n">retrieval_results</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate answer</span>
+        <span class="k">if</span> <span class="n">filtered_chunks</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
+                <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">content</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">filtered_chunks</span><span class="p">]),</span>
+                <span class="n">sources</span><span class="o">=</span><span class="n">retrieval_results</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span>
+                <span class="n">history</span><span class="o">=</span><span class="n">history</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;I don&#39;t have access to information about this topic.&quot;</span><span class="p">,</span>
+                <span class="n">citations</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">sources</span><span class="o">=</span><span class="p">[]</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="s2">&quot;citations&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="o">.</span><span class="n">citations</span><span class="p">,</span>
+            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="n">answer</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span>
+            <span class="s2">&quot;retrieved_docs&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_chunks</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize the system using training data.&quot;&quot;&quot;</span>
+        <span class="c1"># Create training examples</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">training_data</span><span class="p">:</span>
+            <span class="n">example</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+                <span class="n">question</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;question&quot;</span><span class="p">],</span>
+                <span class="n">context</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;context&quot;</span><span class="p">],</span>
+                <span class="n">answer</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;context&quot;</span><span class="p">)</span>
+            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="c1"># Optimize the generator</span>
+        <span class="n">optimized_generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">examples</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Update the system</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">optimized_generator</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<section id="unit-tests">
+<h3>Unit Tests<a class="headerlink" href="#unit-tests" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mock</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestEnterpriseRAGSystem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test suite for EnterpriseRAGSystem.&quot;&quot;&quot;</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rag_system</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a test RAG system.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;vector_store&quot;</span><span class="p">:</span> <span class="n">Mock</span><span class="p">(),</span>
+            <span class="s2">&quot;index_store&quot;</span><span class="p">:</span> <span class="n">Mock</span><span class="p">(),</span>
+            <span class="s2">&quot;permission_service&quot;</span><span class="p">:</span> <span class="n">Mock</span><span class="p">(),</span>
+            <span class="s2">&quot;top_k&quot;</span><span class="p">:</span> <span class="mi">5</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">EnterpriseRAGSystem</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_document_indexing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rag_system</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test document indexing functionality.&quot;&quot;&quot;</span>
+        <span class="n">document</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;doc1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Test Document&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a test document.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;department&quot;</span><span class="p">:</span> <span class="s2">&quot;engineering&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;access_level&quot;</span><span class="p">:</span> <span class="s2">&quot;internal&quot;</span>
+        <span class="p">}</span>
+
+        <span class="n">doc_id</span> <span class="o">=</span> <span class="n">rag_system</span><span class="o">.</span><span class="n">index_document</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">doc_id</span> <span class="o">==</span> <span class="s2">&quot;doc1&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_query_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rag_system</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test query processing.&quot;&quot;&quot;</span>
+        <span class="c1"># Mock the components</span>
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">retriever</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Test context&quot;</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;doc1&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Test&quot;</span><span class="p">}]</span>
+        <span class="p">)</span>
+
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">security</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Mock</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">&quot;Test context&quot;</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{})</span>
+        <span class="p">]</span>
+
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">rag_system</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Test answer&quot;</span><span class="p">,</span>
+            <span class="n">citations</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;doc1&quot;</span><span class="p">}]</span>
+        <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">rag_system</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user1&quot;</span><span class="p">,</span>
+            <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is test?&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Test answer&quot;</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-tests">
+<h3>Integration Tests<a class="headerlink" href="#integration-tests" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TestRAGIntegration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integration tests for RAG system.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_end_to_end_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test complete query flow.&quot;&quot;&quot;</span>
+        <span class="c1"># Setup test environment</span>
+        <span class="n">rag_system</span> <span class="o">=</span> <span class="n">setup_test_system</span><span class="p">()</span>
+
+        <span class="c1"># Index test documents</span>
+        <span class="n">documents</span> <span class="o">=</span> <span class="n">load_test_documents</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+            <span class="n">rag_system</span><span class="o">.</span><span class="n">index_document</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+        <span class="c1"># Test query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">rag_system</span><span class="o">.</span><span class="n">query</span><span class="p">(</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;test_user&quot;</span><span class="p">,</span>
+            <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is the company policy on remote work?&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Verify results</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;answer&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;citations&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-optimization">
+<h2>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">#</a></h2>
+<section id="caching-strategy">
+<h3>1. Caching Strategy<a class="headerlink" href="#caching-strategy" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Query Cache</strong>: Store frequent queries and results</p></li>
+<li><p><strong>Document Cache</strong>: Cache document chunks in memory</p></li>
+<li><p><strong>Embedding Cache</strong>: Cache computed embeddings</p></li>
+</ul>
+</section>
+<section id="parallel-processing">
+<h3>2. Parallel Processing<a class="headerlink" href="#parallel-processing" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Async Retrieval</strong>: Parallel vector and keyword search</p></li>
+<li><p><strong>Batch Processing</strong>: Process multiple documents simultaneously</p></li>
+<li><p><strong>Concurrent Queries</strong>: Handle multiple user requests</p></li>
+</ul>
+</section>
+<section id="index-optimization">
+<h3>3. Index Optimization<a class="headerlink" href="#index-optimization" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Hierarchical Indexing</strong>: Multiple levels of document indexing</p></li>
+<li><p><strong>Selective Retrieval</strong>: Only search relevant document subsets</p></li>
+<li><p><strong>Index Pruning</strong>: Remove outdated or redundant documents</p></li>
+</ul>
+</section>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h2>
+<section id="container-configuration">
+<h3>Container Configuration<a class="headerlink" href="#container-configuration" title="Link to this heading">#</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># docker-compose.yml</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.8&#39;</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">rag-api</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VECTOR_STORE_URL=${VECTOR_STORE_URL}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">REDIS_URL=${REDIS_URL}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OPENAI_API_KEY=${OPENAI_API_KEY}</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8000:8000&quot;</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+
+<span class="w">  </span><span class="nt">redis</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis:7-alpine</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;6379:6379&quot;</span>
+
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:8.11.0</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="monitoring-setup">
+<h3>Monitoring Setup<a class="headerlink" href="#monitoring-setup" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">prometheus_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">Histogram</span><span class="p">,</span> <span class="n">generate_latest</span>
+
+<span class="c1"># Metrics</span>
+<span class="n">QUERY_COUNT</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="s1">&#39;rag_queries_total&#39;</span><span class="p">,</span> <span class="s1">&#39;Total queries processed&#39;</span><span class="p">)</span>
+<span class="n">QUERY_LATENCY</span> <span class="o">=</span> <span class="n">Histogram</span><span class="p">(</span><span class="s1">&#39;rag_query_duration_seconds&#39;</span><span class="p">,</span> <span class="s1">&#39;Query processing time&#39;</span><span class="p">)</span>
+<span class="n">CACHE_HIT_RATE</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="s1">&#39;rag_cache_hits_total&#39;</span><span class="p">,</span> <span class="s1">&#39;Cache hits&#39;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MonitoringMiddleware</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Middleware for monitoring RAG system performance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Process request</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+
+        <span class="c1"># Record metrics</span>
+        <span class="n">QUERY_COUNT</span><span class="o">.</span><span class="n">inc</span><span class="p">()</span>
+        <span class="n">QUERY_LATENCY</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="lessons-learned">
+<h2>Lessons Learned<a class="headerlink" href="#lessons-learned" title="Link to this heading">#</a></h2>
+<section id="success-factors">
+<h3>Success Factors<a class="headerlink" href="#success-factors" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Start Simple</strong>: Begin with basic retrieval and gradually add complexity</p></li>
+<li><p><strong>User Feedback</strong>: Implement continuous feedback loops for improvement</p></li>
+<li><p><strong>Monitoring</strong>: Comprehensive monitoring is essential for production</p></li>
+<li><p><strong>Security First</strong>: Always consider access control from the beginning</p></li>
+<li><p><strong>Iterative Optimization</strong>: Use real usage data to guide improvements</p></li>
+</ol>
+</section>
+<section id="challenges-faced">
+<h3>Challenges Faced<a class="headerlink" href="#challenges-faced" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Context Window Management</strong>: Balancing context length with completeness</p></li>
+<li><p><strong>Latency vs Quality</strong>: Trade-offs between response time and answer quality</p></li>
+<li><p><strong>Multi-language Support</strong>: Handling language-specific nuances</p></li>
+<li><p><strong>Permission Complexity</strong>: Implementing fine-grained access control</p></li>
+<li><p><strong>Data Quality</strong>: Dealing with inconsistent or outdated documents</p></li>
+</ol>
+</section>
+<section id="recommendations">
+<h3>Recommendations<a class="headerlink" href="#recommendations" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Invest in Data Quality</strong>: Clean, structured documents lead to better results</p></li>
+<li><p><strong>Implement A/B Testing</strong>: Continuously test different approaches</p></li>
+<li><p><strong>User Education</strong>: Help users formulate effective queries</p></li>
+<li><p><strong>Regular Updates</strong>: Keep the system updated with new documents</p></li>
+<li><p><strong>Performance Budgeting</strong>: Set clear performance targets and monitor them</p></li>
+</ol>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This enterprise RAG system demonstrates how DSPy can be used to build production-ready AI applications that solve real business problems. The modular architecture allows for easy extension and optimization, while the comprehensive testing and monitoring ensure reliability in production environments.</p>
+<p>The key success factors include:</p>
+<ul class="simple">
+<li><p>Careful system design with scalability in mind</p></li>
+<li><p>Implementation of proper security and access controls</p></li>
+<li><p>Continuous optimization based on real usage data</p></li>
+<li><p>Comprehensive monitoring and alerting</p></li>
+</ul>
+<p>This case study serves as a template for building similar systems in other organizations, with the flexibility to adapt to specific requirements and constraints.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/08_case_studies"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="00_introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 8: Case Studies</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="01a_healthcare_clinical_notes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Case Study 1: Clinical Notes Analysis with DSPy</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#document-processing-pipeline">1. Document Processing Pipeline</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-system">2. Retrieval System</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generation-system">3. Generation System</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#document-indexing-module">1. Document Indexing Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieval-module">2. Retrieval Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-generation-module">3. Answer Generation Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#security-module">4. Security Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-and-orchestration">Integration and Orchestration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-tests">Unit Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-tests">Integration Tests</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-strategy">1. Caching Strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parallel-processing">2. Parallel Processing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#index-optimization">3. Index Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#container-configuration">Container Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-setup">Monitoring Setup</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommendations">Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

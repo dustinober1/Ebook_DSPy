@@ -1,0 +1,1573 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bayesian Optimization for Prompt Tuning &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/12_bayesian_optimization';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Comprehensive Examples and Implementation Guide" href="13_comprehensive_examples.html" />
+    <link rel="prev" title="Monte Carlo Optimization in DSPy" href="11_monte_carlo_optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/12_bayesian_optimization.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Bayesian Optimization for Prompt Tuning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-optimization-fundamentals">Bayesian Optimization Fundamentals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-process-surrogate-model">Gaussian Process Surrogate Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-functions">Acquisition Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-bayesian-optimization-techniques">Advanced Bayesian Optimization Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-bayesian-optimization">Multi-Objective Bayesian Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contextual-bayesian-optimization">Contextual Bayesian Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implementation">Practical Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-bayesian-optimization-pipeline">Complete Bayesian Optimization Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-optimizing-chain-of-thought-prompts">Example: Optimizing Chain-of-Thought Prompts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-and-analysis">Evaluation and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-analysis">Convergence Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-other-methods">Comparison with Other Methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-optimization-configuration">Bayesian Optimization Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="bayesian-optimization-for-prompt-tuning">
+<h1>Bayesian Optimization for Prompt Tuning<a class="headerlink" href="#bayesian-optimization-for-prompt-tuning" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Bayesian Optimization (BO) is a powerful global optimization technique that excels at optimizing expensive black-box functions with few evaluations. In the context of DSPy and prompt tuning, BO provides a principled approach to navigating the vast space of possible prompt configurations by building a probabilistic model of the performance landscape. This model allows BO to make intelligent decisions about which configurations to evaluate next, effectively balancing exploration (trying uncertain regions) and exploitation (refining promising areas).</p>
+<section id="learning-objectives">
+<h3>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h3>
+<p>By the end of this section, you will:</p>
+<ul class="simple">
+<li><p>Understand Bayesian optimization principles and their application to prompt tuning</p></li>
+<li><p>Implement Gaussian Process-based optimization for prompts</p></li>
+<li><p>Master acquisition functions for intelligent exploration</p></li>
+<li><p>Apply BO to various prompt optimization scenarios</p></li>
+<li><p>Evaluate and tune BO hyperparameters for optimal performance</p></li>
+</ul>
+</section>
+</section>
+<section id="bayesian-optimization-fundamentals">
+<h2>Bayesian Optimization Fundamentals<a class="headerlink" href="#bayesian-optimization-fundamentals" title="Link to this heading">#</a></h2>
+<section id="core-components">
+<h3>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">#</a></h3>
+<p>Bayesian Optimization consists of four main components:</p>
+<ol class="arabic simple">
+<li><p><strong>Search Space</strong>: The domain of possible configurations</p></li>
+<li><p><strong>Surrogate Model</strong>: A probabilistic model approximating the objective function</p></li>
+<li><p><strong>Acquisition Function</strong>: Guides the selection of next evaluation points</p></li>
+<li><p><strong>Optimization Loop</strong>: Iteratively selects and evaluates configurations</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BayesianPromptOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bayesian Optimization framework for prompt tuning in DSPy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">task_signature</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="p">,</span>
+        <span class="n">valset</span><span class="p">,</span>
+        <span class="n">metric_fn</span><span class="p">,</span>
+        <span class="n">search_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">surrogate_model</span><span class="o">=</span><span class="s2">&quot;gp&quot;</span><span class="p">,</span>  <span class="c1"># Gaussian Process</span>
+        <span class="n">acquisition</span><span class="o">=</span><span class="s2">&quot;ei&quot;</span><span class="p">,</span>  <span class="c1"># Expected Improvement</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">n_initial_points</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span> <span class="o">=</span> <span class="n">task_signature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span> <span class="o">=</span> <span class="n">trainset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valset</span> <span class="o">=</span> <span class="n">valset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_fn</span> <span class="o">=</span> <span class="n">metric_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_space</span> <span class="o">=</span> <span class="n">search_space</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_search_space</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">=</span> <span class="n">max_iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span> <span class="o">=</span> <span class="n">n_initial_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surrogate_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_surrogate_model</span><span class="p">(</span><span class="n">surrogate_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acquisition_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_acquisition_function</span><span class="p">(</span><span class="n">acquisition</span><span class="p">)</span>
+
+        <span class="c1"># Storage for observations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_observed</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Evaluated configurations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_observed</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Corresponding scores</span>
+
+        <span class="c1"># Track best solution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_config</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_define_search_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define the search space for prompt optimization.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;instruction_length&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;discrete&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]},</span>
+            <span class="s2">&quot;instruction_style&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;direct&quot;</span><span class="p">,</span> <span class="s2">&quot;polite&quot;</span><span class="p">,</span> <span class="s2">&quot;detailed&quot;</span><span class="p">,</span> <span class="s2">&quot;concise&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;n_examples&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;discrete&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]},</span>
+            <span class="s2">&quot;example_complexity&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;simple&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span> <span class="s2">&quot;complex&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]},</span>
+            <span class="s2">&quot;top_p&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]},</span>
+            <span class="s2">&quot;max_tokens&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;discrete&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">]},</span>
+            <span class="s2">&quot;format_style&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;qa&quot;</span><span class="p">,</span> <span class="s2">&quot;instruction&quot;</span><span class="p">,</span> <span class="s2">&quot;conversation&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute Bayesian optimization.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting Bayesian optimization for prompt tuning...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max iterations: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Initial random points: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Phase 1: Initial random exploration</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Phase 1: Initial Exploration ===&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_random_configuration</span><span class="p">()</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_configuration</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_observation</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+
+        <span class="c1"># Phase 2: Bayesian optimization loop</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Phase 2: Bayesian Optimization ===&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Iteration </span><span class="si">{</span><span class="n">iteration</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Fit surrogate model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surrogate_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_observed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_observed</span><span class="p">)</span>
+
+            <span class="c1"># Find next point to evaluate</span>
+            <span class="n">next_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_next_configuration</span><span class="p">()</span>
+
+            <span class="c1"># Evaluate selected configuration</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_configuration</span><span class="p">(</span><span class="n">next_config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_observation</span><span class="p">(</span><span class="n">next_config</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+
+            <span class="c1"># Report progress</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (Best: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span>
+</pre></div>
+</div>
+</section>
+<section id="gaussian-process-surrogate-model">
+<h3>Gaussian Process Surrogate Model<a class="headerlink" href="#gaussian-process-surrogate-model" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GaussianProcessSurrogate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gaussian Process surrogate model for Bayesian optimization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">,</span>  <span class="c1"># Radial Basis Function</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>  <span class="c1"># Noise parameter</span>
+        <span class="n">length_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">length_scale_bounds</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span> <span class="o">=</span> <span class="n">length_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length_scale_bounds</span> <span class="o">=</span> <span class="n">length_scale_bounds</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Cholesky decomposition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha_vec</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit the Gaussian Process to observed data.&quot;&quot;&quot;</span>
+        <span class="c1"># Convert configurations to feature vectors</span>
+        <span class="n">X_encoded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_configurations</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Center the target values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">y_centered</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_mean</span>
+
+        <span class="c1"># Compute kernel matrix</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_kernel_matrix</span><span class="p">(</span><span class="n">X_encoded</span><span class="p">)</span>
+
+        <span class="c1"># Add noise for numerical stability</span>
+        <span class="n">K</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Cholesky decomposition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+
+        <span class="c1"># Solve for alpha vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">y_centered</span><span class="p">))</span>
+
+        <span class="c1"># Store training data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span> <span class="o">=</span> <span class="n">X_encoded</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">return_std</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict mean and uncertainty for new configurations.&quot;&quot;&quot;</span>
+        <span class="n">X_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_configurations</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Compute kernel between new points and training points</span>
+        <span class="n">K_star</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_cross_kernel</span><span class="p">(</span><span class="n">X_new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_train</span><span class="p">)</span>
+
+        <span class="c1"># Predict mean</span>
+        <span class="n">y_mean</span> <span class="o">=</span> <span class="n">K_star</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_vec</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_mean</span>
+
+        <span class="k">if</span> <span class="n">return_std</span><span class="p">:</span>
+            <span class="c1"># Compute variance</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">K_star</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">y_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_kernel_diagonal</span><span class="p">(</span><span class="n">X_new</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">y_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">y_var</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">y_mean</span><span class="p">,</span> <span class="n">y_std</span>
+
+        <span class="k">return</span> <span class="n">y_mean</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_encode_configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Encode configurations as feature vectors.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">configs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
+
+        <span class="n">encoded</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
+            <span class="n">vector</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># One-hot encode categorical variables</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="c1"># Get all possible values for this parameter</span>
+                    <span class="n">all_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_param_values</span><span class="p">(</span><span class="n">param_name</span><span class="p">)</span>
+                    <span class="n">one_hot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">param_value</span> <span class="k">else</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_values</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">one_hot</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Normalize continuous and discrete values</span>
+                    <span class="n">normalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_parameter</span><span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="n">param_value</span><span class="p">)</span>
+                    <span class="n">vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized</span><span class="p">)</span>
+            <span class="n">encoded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_kernel_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the kernel matrix.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;rbf&quot;</span><span class="p">:</span>
+            <span class="c1"># RBF kernel</span>
+            <span class="n">sq_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                      <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sq_dist</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;matern&quot;</span><span class="p">:</span>
+            <span class="c1"># Matérn kernel (ν = 3/2)</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                          <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">)</span> <span class="o">*</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown kernel: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">K</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_cross_kernel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute kernel between two sets of points.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;rbf&quot;</span><span class="p">:</span>
+            <span class="n">sq_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X1</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                      <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sq_dist</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">==</span> <span class="s2">&quot;matern&quot;</span><span class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X1</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
+                          <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">)</span> <span class="o">*</span> \
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">dist</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown kernel: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">K</span>
+</pre></div>
+</div>
+</section>
+<section id="acquisition-functions">
+<h3>Acquisition Functions<a class="headerlink" href="#acquisition-functions" title="Link to this heading">#</a></h3>
+<p>Acquisition functions guide the optimization by balancing exploration and exploitation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AcquisitionFunctions</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Collection of acquisition functions for Bayesian optimization.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">expected_improvement</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">best_y</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Expected Improvement acquisition function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mean: Predicted mean values</span>
+<span class="sd">            std: Predicted standard deviations</span>
+<span class="sd">            best_y: Best observed value so far</span>
+<span class="sd">            xi: Exploration-exploitation trade-off</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">):</span>
+            <span class="n">imp</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">-</span> <span class="n">best_y</span> <span class="o">-</span> <span class="n">xi</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">imp</span> <span class="o">/</span> <span class="n">std</span>
+            <span class="n">ei</span> <span class="o">=</span> <span class="n">imp</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="o">+</span> <span class="n">std</span> <span class="o">*</span> <span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
+            <span class="n">ei</span><span class="p">[</span><span class="n">std</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="n">ei</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">probability_of_improvement</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">best_y</span><span class="p">,</span> <span class="n">xi</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Probability of Improvement acquisition function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;warn&#39;</span><span class="p">):</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="p">(</span><span class="n">mean</span> <span class="o">-</span> <span class="n">best_y</span> <span class="o">-</span> <span class="n">xi</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+            <span class="n">pi</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
+            <span class="n">pi</span><span class="p">[</span><span class="n">std</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="n">pi</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upper_confidence_bound</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">kappa</span><span class="o">=</span><span class="mf">2.576</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upper Confidence Bound acquisition function.</span>
+
+<span class="sd">        kappa determines the confidence level (2.576 for 99% confidence)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">kappa</span> <span class="o">*</span> <span class="n">std</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">thompson_sampling</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Thompson Sampling acquisition function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mean</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-bayesian-optimization-techniques">
+<h2>Advanced Bayesian Optimization Techniques<a class="headerlink" href="#advanced-bayesian-optimization-techniques" title="Link to this heading">#</a></h2>
+<section id="multi-objective-bayesian-optimization">
+<h3>Multi-Objective Bayesian Optimization<a class="headerlink" href="#multi-objective-bayesian-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiObjectiveBayesianOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bayesian optimizer for multiple objectives (e.g., accuracy and latency).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">objectives</span><span class="p">,</span>
+        <span class="n">task_signature</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="p">,</span>
+        <span class="n">valset</span><span class="p">,</span>
+        <span class="n">metric_fns</span><span class="p">,</span>
+        <span class="n">search_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">preference_weights</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="n">objectives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span> <span class="o">=</span> <span class="n">task_signature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span> <span class="o">=</span> <span class="n">trainset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valset</span> <span class="o">=</span> <span class="n">valset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_fns</span> <span class="o">=</span> <span class="n">metric_fns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_space</span> <span class="o">=</span> <span class="n">search_space</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_define_search_space</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preference_weights</span> <span class="o">=</span> <span class="n">preference_weights</span> <span class="ow">or</span> <span class="p">{</span><span class="n">obj</span><span class="p">:</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">}</span>
+
+        <span class="c1"># Initialize separate surrogate models for each objective</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surrogates</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">obj</span><span class="p">:</span> <span class="n">GaussianProcessSurrogate</span><span class="p">()</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objectives</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Storage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">X_observed</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_observed</span> <span class="o">=</span> <span class="p">{</span><span class="n">obj</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute multi-objective optimization.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting multi-objective Bayesian optimization...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objectives: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objectives</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initial random exploration</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_random_configuration</span><span class="p">()</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_multi_objective</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_observation</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+
+        <span class="c1"># Optimization loop</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iterations</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_initial_points</span><span class="p">):</span>
+            <span class="c1"># Fit all surrogates</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">surrogates</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X_observed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_observed</span><span class="p">[</span><span class="n">obj</span><span class="p">])</span>
+
+            <span class="c1"># Select next configuration using hypervolume improvement</span>
+            <span class="n">next_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_next_hvi_configuration</span><span class="p">()</span>
+
+            <span class="c1"># Evaluate</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_multi_objective</span><span class="p">(</span><span class="n">next_config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_observation</span><span class="p">(</span><span class="n">next_config</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+
+            <span class="c1"># Update Pareto front</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_pareto_front</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_select_next_hvi_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select next configuration using Expected Hypervolume Improvement.&quot;&quot;&quot;</span>
+        <span class="c1"># Generate candidate configurations</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_candidates</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+
+        <span class="c1"># Predict performance for all objectives</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">uncertainties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span><span class="p">:</span>
+            <span class="n">mean</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surrogates</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">return_std</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">predictions</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span>
+            <span class="n">uncertainties</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span>
+
+        <span class="c1"># Compute hypervolume improvement for each candidate</span>
+        <span class="n">hvi_scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">reference_point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_reference_point</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">candidates</span><span class="p">):</span>
+            <span class="c1"># Sample possible outcomes</span>
+            <span class="n">n_samples</span> <span class="o">=</span> <span class="mi">100</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_samples</span><span class="p">):</span>
+                <span class="n">sample_scores</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span><span class="p">:</span>
+                    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+                        <span class="n">predictions</span><span class="p">[</span><span class="n">obj</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">uncertainties</span><span class="p">[</span><span class="n">obj</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">sample_scores</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span>
+                <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+
+            <span class="c1"># Compute expected hypervolume improvement</span>
+            <span class="n">hvi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expected_hypervolume_improvement</span><span class="p">(</span>
+                <span class="n">samples</span><span class="p">,</span> <span class="n">reference_point</span>
+            <span class="p">)</span>
+            <span class="n">hvi_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hvi</span><span class="p">)</span>
+
+        <span class="c1"># Select candidate with highest hypervolume improvement</span>
+        <span class="n">best_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">hvi_scores</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">candidates</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_expected_hypervolume_improvement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute expected hypervolume improvement.&quot;&quot;&quot;</span>
+        <span class="c1"># Compute hypervolume of current Pareto front</span>
+        <span class="n">current_hv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_hypervolume</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">)</span>
+
+        <span class="c1"># Add samples to Pareto front and compute new hypervolumes</span>
+        <span class="n">hvs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+            <span class="n">temp_front</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span> <span class="o">+</span> <span class="p">[</span><span class="n">sample</span><span class="p">]</span>
+            <span class="n">temp_front</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_dominated</span><span class="p">(</span><span class="n">temp_front</span><span class="p">)</span>
+            <span class="n">hv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_hypervolume</span><span class="p">(</span><span class="n">temp_front</span><span class="p">,</span> <span class="n">reference_point</span><span class="p">)</span>
+            <span class="n">hvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hv</span><span class="p">)</span>
+
+        <span class="c1"># Expected improvement</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">hvs</span><span class="p">)</span> <span class="o">-</span> <span class="n">current_hv</span>
+</pre></div>
+</div>
+</section>
+<section id="contextual-bayesian-optimization">
+<h3>Contextual Bayesian Optimization<a class="headerlink" href="#contextual-bayesian-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ContextualBayesianOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bayesian optimizer that considers context (e.g., task difficulty, domain).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">contexts</span><span class="p">,</span>
+        <span class="n">base_optimizer</span><span class="p">,</span>
+        <span class="n">context_features</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span> <span class="o">=</span> <span class="n">contexts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span> <span class="o">=</span> <span class="n">base_optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_features</span> <span class="o">=</span> <span class="n">context_features</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_context_features</span><span class="p">()</span>
+
+        <span class="c1"># Learn context-dependent search spaces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contextual_search_spaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_learn_contextual_spaces</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_with_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize for a specific context.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizing for context: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get context-specific search space</span>
+        <span class="n">search_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">contextual_search_spaces</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">search_space</span><span class="p">)</span>
+
+        <span class="c1"># Create context-aware optimizer</span>
+        <span class="n">context_optimizer</span> <span class="o">=</span> <span class="n">BayesianPromptOptimizer</span><span class="p">(</span>
+            <span class="n">task_signature</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">task_signature</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">trainset</span><span class="p">,</span>
+            <span class="n">valset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">valset</span><span class="p">,</span>
+            <span class="n">metric_fn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">metric_fn</span><span class="p">,</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="n">search_space</span><span class="p">,</span>
+            <span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Warm-start with knowledge from similar contexts</span>
+        <span class="n">similar_contexts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_similar_contexts</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">similar_contexts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_warm_start_optimizer</span><span class="p">(</span><span class="n">context_optimizer</span><span class="p">,</span> <span class="n">similar_contexts</span><span class="p">)</span>
+
+        <span class="c1"># Run optimization</span>
+        <span class="k">return</span> <span class="n">context_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_learn_contextual_spaces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Learn context-specific search spaces.&quot;&quot;&quot;</span>
+        <span class="n">contextual_spaces</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">context</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">contexts</span><span class="p">:</span>
+            <span class="c1"># Analyze successful configurations for this context</span>
+            <span class="n">successful_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_successful_configs</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+            <span class="c1"># Infer promising ranges and values</span>
+            <span class="n">inferred_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_search_space</span><span class="p">(</span><span class="n">successful_configs</span><span class="p">)</span>
+            <span class="n">contextual_spaces</span><span class="p">[</span><span class="n">context</span><span class="p">]</span> <span class="o">=</span> <span class="n">inferred_space</span>
+
+        <span class="k">return</span> <span class="n">contextual_spaces</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-implementation">
+<h2>Practical Implementation<a class="headerlink" href="#practical-implementation" title="Link to this heading">#</a></h2>
+<section id="complete-bayesian-optimization-pipeline">
+<h3>Complete Bayesian Optimization Pipeline<a class="headerlink" href="#complete-bayesian-optimization-pipeline" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">optimize_dspy_prompts_with_bo</span><span class="p">(</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;qa&quot;</span><span class="p">,</span>
+    <span class="n">trainset_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">valset_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">optimization_budget</span><span class="o">=</span><span class="mi">200</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete Bayesian optimization pipeline for DSPy prompts.&quot;&quot;&quot;</span>
+
+    <span class="c1"># 1. Load and prepare data</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Loading and Preparing Data ===&quot;</span><span class="p">)</span>
+    <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span> <span class="o">=</span> <span class="n">load_and_prepare_data</span><span class="p">(</span>
+        <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span><span class="p">,</span>
+        <span class="n">train_size</span><span class="o">=</span><span class="n">trainset_size</span><span class="p">,</span>
+        <span class="n">val_size</span><span class="o">=</span><span class="n">valset_size</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 2. Define task signature</span>
+    <span class="k">if</span> <span class="n">task_type</span> <span class="o">==</span> <span class="s2">&quot;qa&quot;</span><span class="p">:</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">QASignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Answer questions based on provided context.&quot;&quot;&quot;</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Relevant context&quot;</span><span class="p">)</span>
+            <span class="n">question</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Question to answer&quot;</span><span class="p">)</span>
+            <span class="n">answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Answer&quot;</span><span class="p">)</span>
+
+        <span class="n">task_signature</span> <span class="o">=</span> <span class="n">QASignature</span>
+
+    <span class="c1"># 3. Define evaluation metric</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluation_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">task_type</span> <span class="o">==</span> <span class="s2">&quot;qa&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">evaluate_qa_performance</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+        <span class="c1"># Add other task types as needed</span>
+
+    <span class="c1"># 4. Create Bayesian optimizer</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Initializing Bayesian Optimizer ===&quot;</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">BayesianPromptOptimizer</span><span class="p">(</span>
+        <span class="n">task_signature</span><span class="o">=</span><span class="n">task_signature</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+        <span class="n">valset</span><span class="o">=</span><span class="n">valset</span><span class="p">,</span>
+        <span class="n">metric_fn</span><span class="o">=</span><span class="n">evaluation_metric</span><span class="p">,</span>
+        <span class="n">surrogate_model</span><span class="o">=</span><span class="s2">&quot;gp&quot;</span><span class="p">,</span>
+        <span class="n">acquisition</span><span class="o">=</span><span class="s2">&quot;ei&quot;</span><span class="p">,</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="n">optimization_budget</span><span class="p">,</span>
+        <span class="n">n_initial_points</span><span class="o">=</span><span class="mi">20</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 5. Run optimization</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Running Bayesian Optimization ===&quot;</span><span class="p">)</span>
+    <span class="n">best_config</span><span class="p">,</span> <span class="n">best_score</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+
+    <span class="c1"># 6. Create optimized prompt module</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Creating Optimized Module ===&quot;</span><span class="p">)</span>
+    <span class="n">optimized_module</span> <span class="o">=</span> <span class="n">create_module_from_config</span><span class="p">(</span>
+        <span class="n">task_signature</span><span class="p">,</span>
+        <span class="n">best_config</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 7. Evaluate on test set</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Final Evaluation ===&quot;</span><span class="p">)</span>
+    <span class="n">testset</span> <span class="o">=</span> <span class="n">load_test_data</span><span class="p">(</span><span class="n">task_type</span><span class="p">)</span>
+    <span class="n">final_score</span> <span class="o">=</span> <span class="n">evaluate_module</span><span class="p">(</span><span class="n">optimized_module</span><span class="p">,</span> <span class="n">testset</span><span class="p">,</span> <span class="n">evaluation_metric</span><span class="p">)</span>
+
+    <span class="c1"># 8. Report results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Optimization Results ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best validation score: </span><span class="si">{</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test score: </span><span class="si">{</span><span class="n">final_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best configuration:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">best_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">optimized_module</span><span class="p">,</span>
+        <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">best_config</span><span class="p">,</span>
+        <span class="s2">&quot;val_score&quot;</span><span class="p">:</span> <span class="n">best_score</span><span class="p">,</span>
+        <span class="s2">&quot;test_score&quot;</span><span class="p">:</span> <span class="n">final_score</span><span class="p">,</span>
+        <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">X_observed</span><span class="p">,</span>
+        <span class="s2">&quot;scores&quot;</span><span class="p">:</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">y_observed</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_module_from_config</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a DSPy module from optimized configuration.&quot;&quot;&quot;</span>
+    <span class="c1"># Build instruction</span>
+    <span class="n">instruction</span> <span class="o">=</span> <span class="n">build_instruction_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Create enhanced signature</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">OptimizedSignature</span><span class="p">(</span><span class="n">signature</span><span class="p">):</span>
+        <span class="n">instructions</span> <span class="o">=</span> <span class="n">instruction</span>
+
+    <span class="c1"># Create module</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;chain_of_thought&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">OptimizedSignature</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">OptimizedSignature</span><span class="p">)</span>
+
+    <span class="c1"># Configure LM parameters</span>
+    <span class="n">module</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span>
+        <span class="n">top_p</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;top_p&quot;</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_tokens&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Add examples if configured</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_examples&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="n">select_examples</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;n_examples&quot;</span><span class="p">])</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">with_demos</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">module</span>
+</pre></div>
+</div>
+</section>
+<section id="example-optimizing-chain-of-thought-prompts">
+<h3>Example: Optimizing Chain-of-Thought Prompts<a class="headerlink" href="#example-optimizing-chain-of-thought-prompts" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CoTBayesianOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specialized Bayesian optimizer for Chain-of-Thought prompts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_signature</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">metric_fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span> <span class="o">=</span> <span class="n">task_signature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span> <span class="o">=</span> <span class="n">trainset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valset</span> <span class="o">=</span> <span class="n">valset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_fn</span> <span class="o">=</span> <span class="n">metric_fn</span>
+
+        <span class="c1"># CoT-specific search space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cot_search_space</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;reasoning_instruction&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;Think step by step.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Break down the problem.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Reason through this carefully.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Work through this methodically.&quot;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;show_reasoning&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;before&quot;</span><span class="p">,</span> <span class="s2">&quot;after&quot;</span><span class="p">,</span> <span class="s2">&quot;integrated&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;n_demonstrations&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;discrete&quot;</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]},</span>
+            <span class="s2">&quot;demo_complexity&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;minimal&quot;</span><span class="p">,</span> <span class="s2">&quot;detailed&quot;</span><span class="p">,</span> <span class="s2">&quot;verbose&quot;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;final_instruction&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;Finally, provide the answer.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Now give the final answer.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;The answer is:&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Therefore:&quot;</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">BayesianPromptOptimizer</span><span class="p">(</span>
+            <span class="n">task_signature</span><span class="o">=</span><span class="n">task_signature</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+            <span class="n">valset</span><span class="o">=</span><span class="n">valset</span><span class="p">,</span>
+            <span class="n">metric_fn</span><span class="o">=</span><span class="n">metric_fn</span><span class="p">,</span>
+            <span class="n">search_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cot_search_space</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_cot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize Chain-of-Thought prompt configuration.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Optimizing Chain-of-Thought Configuration ===&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Special evaluation for CoT</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">cot_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="c1"># Base task performance</span>
+            <span class="n">base_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_fn</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+            <span class="c1"># Reasoning quality</span>
+            <span class="n">reasoning_score</span> <span class="o">=</span> <span class="n">evaluate_reasoning_quality</span><span class="p">(</span>
+                <span class="n">pred</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rationale&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">example</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoning_steps&quot;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Combined score</span>
+            <span class="k">return</span> <span class="mf">0.7</span> <span class="o">*</span> <span class="n">base_score</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">reasoning_score</span>
+
+        <span class="c1"># Update optimizer metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">metric_fn</span> <span class="o">=</span> <span class="n">cot_metric</span>
+
+        <span class="c1"># Run optimization</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">max_iterations</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_cot_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create optimized CoT module.&quot;&quot;&quot;</span>
+        <span class="c1"># Build CoT instruction</span>
+        <span class="n">cot_instruction</span> <span class="o">=</span> <span class="n">build_cot_instruction</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># Create enhanced signature</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">OptimizedCoTSignature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span><span class="p">):</span>
+            <span class="n">instructions</span> <span class="o">=</span> <span class="n">cot_instruction</span>
+
+        <span class="c1"># Create CoT module</span>
+        <span class="n">cot_module</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">OptimizedCoTSignature</span><span class="p">)</span>
+
+        <span class="c1"># Add demonstrations</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;n_demonstrations&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">demos</span> <span class="o">=</span> <span class="n">create_cot_demonstrations</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span><span class="p">[:</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;n_demonstrations&quot;</span><span class="p">]],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;demo_complexity&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">cot_module</span> <span class="o">=</span> <span class="n">cot_module</span><span class="o">.</span><span class="n">with_demos</span><span class="p">(</span><span class="n">demos</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cot_module</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="evaluation-and-analysis">
+<h2>Evaluation and Analysis<a class="headerlink" href="#evaluation-and-analysis" title="Link to this heading">#</a></h2>
+<section id="convergence-analysis">
+<h3>Convergence Analysis<a class="headerlink" href="#convergence-analysis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_bo_convergence</span><span class="p">(</span><span class="n">optimizer_history</span><span class="p">,</span> <span class="n">true_optimum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze the convergence of Bayesian optimization.&quot;&quot;&quot;</span>
+    <span class="n">iterations</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">optimizer_history</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]))</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">optimizer_history</span><span class="p">[</span><span class="s2">&quot;scores&quot;</span><span class="p">]</span>
+    <span class="n">best_so_far</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+    <span class="c1"># Plot convergence</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;All evaluations&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">best_so_far</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Best so far&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">true_optimum</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">true_optimum</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;True optimum&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;BO Convergence&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="c1"># Plot exploration vs exploitation</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">uncertainty</span> <span class="o">=</span> <span class="n">optimizer_history</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uncertainty&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">uncertainty</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Score&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Uncertainty&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Exploration Pattern&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Compute convergence metrics</span>
+    <span class="n">convergence_metrics</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;initial_improvement&quot;</span><span class="p">:</span> <span class="n">best_so_far</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">-</span> <span class="n">scores</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;final_improvement&quot;</span><span class="p">:</span> <span class="n">best_so_far</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">best_so_far</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="k">else</span> <span class="n">best_so_far</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">scores</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">&quot;iterations_to_90_percent&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">best_so_far</span> <span class="o">&gt;=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">best_so_far</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">best_so_far</span> <span class="o">&gt;=</span> <span class="mf">0.9</span> <span class="o">*</span> <span class="n">best_so_far</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;regret&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">true_optimum</span> <span class="o">-</span> <span class="n">best_so_far</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="n">true_optimum</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">}</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Convergence Metrics ===&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">convergence_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">convergence_metrics</span>
+</pre></div>
+</div>
+</section>
+<section id="comparison-with-other-methods">
+<h3>Comparison with Other Methods<a class="headerlink" href="#comparison-with-other-methods" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compare_optimization_methods</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare Bayesian optimization with other optimization methods.&quot;&quot;&quot;</span>
+
+    <span class="n">methods</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Bayesian Optimization&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">run_bayesian_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="n">budget</span><span class="p">),</span>
+        <span class="s2">&quot;Random Search&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">run_random_search</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="n">budget</span><span class="p">),</span>
+        <span class="s2">&quot;Grid Search&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">run_grid_search</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="n">budget</span><span class="o">//</span><span class="mi">10</span><span class="p">),</span>  <span class="c1"># Grid search is expensive</span>
+        <span class="s2">&quot;Genetic Algorithm&quot;</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">run_genetic_algorithm</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">method_fn</span> <span class="ow">in</span> <span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Running </span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2"> ===&quot;</span><span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">best_config</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">history</span> <span class="o">=</span> <span class="n">method_fn</span><span class="p">()</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="n">method_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;best_score&quot;</span><span class="p">:</span> <span class="n">best_score</span><span class="p">,</span>
+            <span class="s2">&quot;best_config&quot;</span><span class="p">:</span> <span class="n">best_config</span><span class="p">,</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span>
+            <span class="s2">&quot;history&quot;</span><span class="p">:</span> <span class="n">history</span>
+        <span class="p">}</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best score: </span><span class="si">{</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time: </span><span class="si">{</span><span class="n">end_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Analysis</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Comparison Summary ===&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">efficiency</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;best_score&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Score: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;best_score&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Time: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Efficiency: </span><span class="si">{</span><span class="n">efficiency</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="bayesian-optimization-configuration">
+<h3>Bayesian Optimization Configuration<a class="headerlink" href="#bayesian-optimization-configuration" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For high-dimensional spaces</span>
+<span class="n">high_dim_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;surrogate_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kernel&quot;</span><span class="p">:</span> <span class="s2">&quot;matern&quot;</span><span class="p">,</span>  <span class="c1"># Better for high dimensions</span>
+    <span class="s2">&quot;acquisition&quot;</span><span class="p">:</span> <span class="s2">&quot;ei&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;max_iterations&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+    <span class="s2">&quot;n_initial_points&quot;</span><span class="p">:</span> <span class="mi">50</span>  <span class="c1"># More initial points</span>
+<span class="p">}</span>
+
+<span class="c1"># For noisy evaluations</span>
+<span class="n">noisy_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;surrogate_model&quot;</span><span class="p">:</span> <span class="s2">&quot;gp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>  <span class="c1"># Higher noise parameter</span>
+    <span class="s2">&quot;acquisition&quot;</span><span class="p">:</span> <span class="s2">&quot;ucb&quot;</span><span class="p">,</span>  <span class="c1"># More exploration</span>
+    <span class="s2">&quot;kappa&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="s2">&quot;max_iterations&quot;</span><span class="p">:</span> <span class="mi">300</span>
+<span class="p">}</span>
+
+<span class="c1"># For expensive evaluations</span>
+<span class="n">expensive_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;max_iterations&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># Fewer evaluations</span>
+    <span class="s2">&quot;n_initial_points&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;acquisition&quot;</span><span class="p">:</span> <span class="s2">&quot;ei&quot;</span><span class="p">,</span>  <span class="c1"># Good exploitation</span>
+    <span class="s2">&quot;xi&quot;</span><span class="p">:</span> <span class="mf">0.1</span>  <span class="c1"># More exploitation</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="common-pitfalls-and-solutions">
+<h3>Common Pitfalls and Solutions<a class="headerlink" href="#common-pitfalls-and-solutions" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Poor Search Space Definition</strong>:</p>
+<ul class="simple">
+<li><p>Problem: Too large or inappropriate search space</p></li>
+<li><p>Solution: Start with a focused search space and expand if needed</p></li>
+</ul>
+</li>
+<li><p><strong>Insufficient Initial Points</strong>:</p>
+<ul class="simple">
+<li><p>Problem: Poor initial model fitting</p></li>
+<li><p>Solution: Use at least 10-20 initial random points</p></li>
+</ul>
+</li>
+<li><p><strong>Local Optima</strong>:</p>
+<ul class="simple">
+<li><p>Problem: Getting stuck in suboptimal regions</p></li>
+<li><p>Solution: Use exploration-focused acquisition functions</p></li>
+</ul>
+</li>
+<li><p><strong>Noisy Evaluations</strong>:</p>
+<ul class="simple">
+<li><p>Problem: Inconsistent evaluation scores</p></li>
+<li><p>Solution: Increase noise parameter and use multiple evaluations</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Bayesian optimization provides a principled and efficient approach to prompt tuning in DSPy. By building a probabilistic model of the performance landscape, BO can make intelligent decisions about which configurations to evaluate next, achieving superior performance with fewer evaluations compared to traditional optimization methods.</p>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>BO balances exploration and exploitation through acquisition functions</p></li>
+<li><p>Gaussian Processes provide effective surrogate models for prompt optimization</p></li>
+<li><p>Multi-objective optimization can handle multiple metrics simultaneously</p></li>
+<li><p>Contextual BO adapts optimization to different task characteristics</p></li>
+<li><p>Proper configuration is crucial for success</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore advanced optimization strategies that combine multiple techniques and discuss how to choose the right optimizer for specific use cases.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_monte_carlo_optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Monte Carlo Optimization in DSPy</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="13_comprehensive_examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Comprehensive Examples and Implementation Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-optimization-fundamentals">Bayesian Optimization Fundamentals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-process-surrogate-model">Gaussian Process Surrogate Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#acquisition-functions">Acquisition Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-bayesian-optimization-techniques">Advanced Bayesian Optimization Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-bayesian-optimization">Multi-Objective Bayesian Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contextual-bayesian-optimization">Contextual Bayesian Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implementation">Practical Implementation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-bayesian-optimization-pipeline">Complete Bayesian Optimization Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-optimizing-chain-of-thought-prompts">Example: Optimizing Chain-of-Thought Prompts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-and-analysis">Evaluation and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-analysis">Convergence Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison-with-other-methods">Comparison with Other Methods</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bayesian-optimization-configuration">Bayesian Optimization Configuration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Joint Optimization: Fine-Tuning and Prompt Synergy &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/10_joint_optimization';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Monte Carlo Optimization in DSPy" href="11_monte_carlo_optimization.html" />
+    <link rel="prev" title="COPA: Combined Fine-Tuning and Prompt Optimization" href="09a_copa_method.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/10_joint_optimization.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Joint Optimization: Fine-Tuning and Prompt Synergy</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-foundations">Theoretical Foundations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-joint-optimization-matters">Why Joint Optimization Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-framework">Mathematical Framework</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization-strategies">Joint Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternating-optimization">1. Alternating Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simultaneous-gradient-based-optimization">2. Simultaneous Gradient-Based Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">3. Multi-Objective Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implementation-in-dspy">Practical Implementation in DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization-module">Joint Optimization Module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-joint-optimization-for-rag">Example: Joint Optimization for RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-techniques">Advanced Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curriculum-joint-optimization">Curriculum Joint Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-learning-for-joint-optimization">Meta-Learning for Joint Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-and-analysis">Evaluation and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparative-evaluation">Comparative Evaluation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-joint-optimization">When to Use Joint Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-guidelines">Configuration Guidelines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges">Common Challenges</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="joint-optimization-fine-tuning-and-prompt-synergy">
+<h1>Joint Optimization: Fine-Tuning and Prompt Synergy<a class="headerlink" href="#joint-optimization-fine-tuning-and-prompt-synergy" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Joint optimization in DSPy represents a paradigm shift from treating fine-tuning and prompt optimization as separate processes. Instead, it recognizes that these two optimization dimensions are deeply interconnected and can be optimized together to achieve superior performance. This approach simultaneously adjusts model parameters and prompt structures, creating a cohesive optimization strategy that leverages the strengths of both approaches.</p>
+<section id="learning-objectives">
+<h3>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h3>
+<p>By the end of this section, you will:</p>
+<ul class="simple">
+<li><p>Understand the theoretical foundation of joint optimization</p></li>
+<li><p>Implement joint optimization strategies in DSPy</p></li>
+<li><p>Master techniques for coordinating parameter and prompt updates</p></li>
+<li><p>Apply joint optimization to various task types</p></li>
+<li><p>Evaluate the benefits of joint vs. sequential optimization</p></li>
+</ul>
+</section>
+</section>
+<section id="theoretical-foundations">
+<h2>Theoretical Foundations<a class="headerlink" href="#theoretical-foundations" title="Link to this heading">#</a></h2>
+<section id="why-joint-optimization-matters">
+<h3>Why Joint Optimization Matters<a class="headerlink" href="#why-joint-optimization-matters" title="Link to this heading">#</a></h3>
+<p>Traditional approaches often follow a sequential pattern:</p>
+<ol class="arabic simple">
+<li><p>Fine-tune the model on task-specific data</p></li>
+<li><p>Optimize prompts for the fine-tuned model</p></li>
+</ol>
+<p>However, this approach has limitations:</p>
+<ul class="simple">
+<li><p><strong>Suboptimal Local Minima</strong>: Each optimization phase gets stuck in its own local optimum</p></li>
+<li><p><strong>Mismatched Representations</strong>: The fine-tuned model and optimized prompts may not be perfectly aligned</p></li>
+<li><p><strong>Inefficient Exploration</strong>: Sequential optimization doesn’t explore the full parameter-prompt space</p></li>
+</ul>
+<p>Joint optimization addresses these issues by:</p>
+<ul class="simple">
+<li><p><strong>Simultaneous Exploration</strong>: Exploring the combined space of parameters and prompts</p></li>
+<li><p><strong>Coordinated Updates</strong>: Ensuring parameter and prompt updates complement each other</p></li>
+<li><p><strong>Global Optimum Seeking</strong>: Working toward a true global optimum across both dimensions</p></li>
+</ul>
+</section>
+<section id="mathematical-framework">
+<h3>Mathematical Framework<a class="headerlink" href="#mathematical-framework" title="Link to this heading">#</a></h3>
+<p>Let θ represent model parameters and p represent prompts. The objective is to maximize:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">L</span><span class="p">(</span><span class="n">θ</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="n">Σ_i</span> <span class="n">log</span> <span class="n">P</span><span class="p">(</span><span class="n">y_i</span> <span class="o">|</span> <span class="n">x_i</span><span class="p">;</span> <span class="n">θ</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="n">λ1</span> <span class="o">*</span> <span class="n">R1</span><span class="p">(</span><span class="n">θ</span><span class="p">)</span> <span class="o">+</span> <span class="n">λ2</span> <span class="o">*</span> <span class="n">R2</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p>R1(θ) is a regularization term for parameters</p></li>
+<li><p>R2(p) is a regularization term for prompts</p></li>
+<li><p>λ1, λ2 are weighting factors</p></li>
+</ul>
+<p>The joint optimization problem can be solved using various strategies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JointOptimizationFramework</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Framework for joint optimization of model parameters and prompts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">prompt_templates</span><span class="p">,</span>
+        <span class="n">learning_rates</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="n">regularization</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="n">optimization_strategy</span><span class="o">=</span><span class="s2">&quot;alternating&quot;</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span> <span class="o">=</span> <span class="n">prompt_templates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rates</span> <span class="o">=</span> <span class="n">learning_rates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regularization</span> <span class="o">=</span> <span class="n">regularization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimization_strategy</span> <span class="o">=</span> <span class="n">optimization_strategy</span>
+
+        <span class="c1"># Initialize optimizers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+            <span class="n">lr</span><span class="o">=</span><span class="n">learning_rates</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">],</span>
+            <span class="n">weight_decay</span><span class="o">=</span><span class="n">regularization</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Prompt optimizer (could be gradient-based or discrete)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_prompt_optimizer</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_prompt_optimizer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create appropriate optimizer for prompts.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimization_strategy</span> <span class="o">==</span> <span class="s2">&quot;gradient_based&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span>
+                <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">learning_rates</span><span class="p">[</span><span class="s2">&quot;prompts&quot;</span><span class="p">],</span>
+                <span class="n">weight_decay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regularization</span><span class="p">[</span><span class="s2">&quot;prompts&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimization_strategy</span> <span class="o">==</span> <span class="s2">&quot;discrete&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DiscretePromptOptimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">EvolutionaryPromptOptimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="joint-optimization-strategies">
+<h2>Joint Optimization Strategies<a class="headerlink" href="#joint-optimization-strategies" title="Link to this heading">#</a></h2>
+<section id="alternating-optimization">
+<h3>1. Alternating Optimization<a class="headerlink" href="#alternating-optimization" title="Link to this heading">#</a></h3>
+<p>The most common approach where parameters and prompts are optimized in alternating phases:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AlternatingJointOptimizer</span><span class="p">(</span><span class="n">JointOptimizationFramework</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Alternating optimization between parameters and prompts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute alternating joint optimization.&quot;&quot;&quot;</span>
+
+        <span class="n">best_metric</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">best_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Phase 1: Parameter optimization (k steps)</span>
+            <span class="n">param_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimize_parameters</span><span class="p">(</span>
+                <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">5</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Phase 2: Prompt optimization (1 step)</span>
+            <span class="n">prompt_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimize_prompts</span><span class="p">(</span>
+                <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Evaluate combined performance</span>
+            <span class="n">combined_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Param improvement: </span><span class="si">{</span><span class="n">param_metrics</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prompt improvement: </span><span class="si">{</span><span class="n">prompt_metrics</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Combined metric: </span><span class="si">{</span><span class="n">combined_metric</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Track best performance</span>
+            <span class="k">if</span> <span class="n">combined_metric</span> <span class="o">&gt;</span> <span class="n">best_metric</span><span class="p">:</span>
+                <span class="n">best_metric</span> <span class="o">=</span> <span class="n">combined_metric</span>
+                <span class="n">best_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_state</span><span class="p">()</span>
+
+        <span class="c1"># Restore best state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_state</span><span class="p">(</span><span class="n">best_state</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_metric</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_optimize_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize model parameters with fixed prompts.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="n">initial_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+        <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">train_data</span><span class="p">:</span>
+                <span class="c1"># Forward pass</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_with_fixed_prompts</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+                <span class="c1"># Backward pass</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="n">final_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">final_metric</span> <span class="o">-</span> <span class="n">initial_metric</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_optimize_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize prompts with fixed parameters.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+        <span class="n">initial_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+
+        <span class="c1"># Use DSPy&#39;s prompt optimizers</span>
+        <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="c1"># Extract current prompt templates</span>
+            <span class="n">current_templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">get_templates</span><span class="p">()</span>
+
+            <span class="c1"># Optimize using DSPy optimizer</span>
+            <span class="n">optimized_templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dspy_prompt_optimize</span><span class="p">(</span>
+                <span class="n">current_templates</span><span class="p">,</span> <span class="n">train_data</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Update prompts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">update_templates</span><span class="p">(</span><span class="n">optimized_templates</span><span class="p">)</span>
+
+        <span class="n">final_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">final_metric</span> <span class="o">-</span> <span class="n">initial_metric</span>
+</pre></div>
+</div>
+</section>
+<section id="simultaneous-gradient-based-optimization">
+<h3>2. Simultaneous Gradient-Based Optimization<a class="headerlink" href="#simultaneous-gradient-based-optimization" title="Link to this heading">#</a></h3>
+<p>For soft prompts that can be optimized with gradients:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimultaneousJointOptimizer</span><span class="p">(</span><span class="n">JointOptimizationFramework</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simultaneous optimization using gradient-based methods.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">optimization_strategy</span><span class="o">=</span><span class="s2">&quot;gradient_based&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">num_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute simultaneous gradient-based optimization.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_epochs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+            <span class="n">epoch_loss</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">num_batches</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">train_data</span><span class="p">:</span>
+                <span class="c1"># Forward pass with both parameter and prompt gradients</span>
+                <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_joint_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+                <span class="c1"># Backward pass</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prompt_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+                <span class="c1"># Apply different learning rates</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prompt_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+                <span class="n">epoch_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                <span class="n">num_batches</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Evaluate on validation set</span>
+            <span class="n">val_metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+            <span class="n">avg_loss</span> <span class="o">=</span> <span class="n">epoch_loss</span> <span class="o">/</span> <span class="n">num_batches</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average loss: </span><span class="si">{</span><span class="n">avg_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation metric: </span><span class="si">{</span><span class="n">val_metric</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_joint_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute joint loss considering both parameters and prompts.&quot;&quot;&quot;</span>
+        <span class="c1"># Task-specific loss</span>
+        <span class="n">task_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_task_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+        <span class="c1"># Parameter regularization</span>
+        <span class="n">param_reg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_parameter_regularization</span><span class="p">()</span>
+
+        <span class="c1"># Prompt regularization (encourage diversity, etc.)</span>
+        <span class="n">prompt_reg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_prompt_regularization</span><span class="p">()</span>
+
+        <span class="c1"># Alignment loss (ensure parameters and prompts are aligned)</span>
+        <span class="n">alignment_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_alignment_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+        <span class="c1"># Combined loss</span>
+        <span class="n">total_loss</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">task_loss</span> <span class="o">+</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regularization</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">param_reg</span> <span class="o">+</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regularization</span><span class="p">[</span><span class="s2">&quot;prompts&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">prompt_reg</span> <span class="o">+</span>
+            <span class="mf">0.1</span> <span class="o">*</span> <span class="n">alignment_loss</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_loss</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-objective-optimization">
+<h3>3. Multi-Objective Optimization<a class="headerlink" href="#multi-objective-optimization" title="Link to this heading">#</a></h3>
+<p>Treating parameter and prompt optimization as multiple objectives:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiObjectiveJointOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multi-objective optimization for parameters and prompts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">prompt_templates</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_templates</span> <span class="o">=</span> <span class="n">prompt_templates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute multi-objective optimization.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize population</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_population</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">generations</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Generation </span><span class="si">{</span><span class="n">gen</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">generations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate all individuals</span>
+            <span class="n">evaluated</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">population</span><span class="p">:</span>
+                <span class="n">param_score</span><span class="p">,</span> <span class="n">prompt_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_individual</span><span class="p">(</span>
+                    <span class="n">individual</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span>
+                <span class="p">)</span>
+                <span class="n">evaluated</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;individual&quot;</span><span class="p">:</span> <span class="n">individual</span><span class="p">,</span>
+                    <span class="s2">&quot;param_score&quot;</span><span class="p">:</span> <span class="n">param_score</span><span class="p">,</span>
+                    <span class="s2">&quot;prompt_score&quot;</span><span class="p">:</span> <span class="n">prompt_score</span>
+                <span class="p">})</span>
+
+            <span class="c1"># Update Pareto front</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_pareto_front</span><span class="p">(</span><span class="n">evaluated</span><span class="p">)</span>
+
+            <span class="c1"># Create next generation</span>
+            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_next_generation</span><span class="p">(</span><span class="n">evaluated</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_individual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate an individual&#39;s performance on both objectives.&quot;&quot;&quot;</span>
+        <span class="c1"># Apply individual&#39;s parameters and prompts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_apply_individual</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span>
+
+        <span class="c1"># Parameter optimization score</span>
+        <span class="n">param_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_parameter_performance</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+
+        <span class="c1"># Prompt optimization score</span>
+        <span class="n">prompt_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_prompt_performance</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">param_score</span><span class="p">,</span> <span class="n">prompt_score</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_pareto_front</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evaluated</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the Pareto front with non-dominated solutions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">eval_item</span> <span class="ow">in</span> <span class="n">evaluated</span><span class="p">:</span>
+            <span class="n">dominated</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># Check if this solution is dominated by any in Pareto front</span>
+            <span class="k">for</span> <span class="n">pareto_item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pareto_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="ow">and</span>
+                    <span class="n">pareto_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="n">pareto_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="ow">or</span>
+                     <span class="n">pareto_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">])):</span>
+                    <span class="n">dominated</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="c1"># If not dominated, add to Pareto front and remove dominated solutions</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dominated</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="ow">and</span>
+                           <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="ow">and</span>
+                           <span class="p">(</span><span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;param_score&quot;</span><span class="p">]</span> <span class="ow">or</span>
+                            <span class="n">eval_item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;prompt_score&quot;</span><span class="p">]))</span>
+                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pareto_front</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eval_item</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-implementation-in-dspy">
+<h2>Practical Implementation in DSPy<a class="headerlink" href="#practical-implementation-in-dspy" title="Link to this heading">#</a></h2>
+<section id="joint-optimization-module">
+<h3>Joint Optimization Module<a class="headerlink" href="#joint-optimization-module" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DSPyJointOptimizer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DSPy module for joint optimization of fine-tuning and prompts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">base_model</span><span class="p">,</span>
+        <span class="n">task_signature</span><span class="p">,</span>
+        <span class="n">optimization_config</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span> <span class="o">=</span> <span class="n">base_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span> <span class="o">=</span> <span class="n">task_signature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">optimization_config</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_config</span><span class="p">()</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prompt_optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_prompt_optimizer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fine_tuner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_fine_tuner</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinator</span> <span class="o">=</span> <span class="n">OptimizationCoordinator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default configuration for joint optimization.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;alternating_schedule&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;param_steps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;prompt_steps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s2">&quot;warmup_iterations&quot;</span><span class="p">:</span> <span class="mi">3</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;learning_rates&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="mf">2e-5</span><span class="p">,</span>
+                <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.1</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;regularization&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.05</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;evaluation&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                <span class="s2">&quot;early_stopping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;patience&quot;</span><span class="p">:</span> <span class="mi">5</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute joint optimization.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize optimization state</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">OptimizationState</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">,</span>
+            <span class="n">prompts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initialize_prompts</span><span class="p">(),</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+            <span class="n">valset</span><span class="o">=</span><span class="n">valset</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">metric</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Run optimization</span>
+        <span class="n">best_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinator</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_state</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">best_state</span><span class="o">.</span><span class="n">prompts</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize learnable prompts.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;prompt_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;soft&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SoftPromptTemplates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;prompt_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hard&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">HardPromptTemplates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">HybridPromptTemplates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_signature</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizationCoordinator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coordinates the joint optimization process.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the optimization coordination.&quot;&quot;&quot;</span>
+        <span class="n">best_metric</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">best_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">patience_counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;max_iterations&quot;</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Iteration </span><span class="si">{</span><span class="n">iteration</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Determine optimization phase</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;alternating_schedule&quot;</span><span class="p">][</span><span class="s2">&quot;warmup_iterations&quot;</span><span class="p">]:</span>
+                <span class="c1"># Warmup: alternate frequently</span>
+                <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_optimization_step</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_step</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Regular schedule</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;alternating_schedule&quot;</span><span class="p">][</span><span class="s2">&quot;param_steps&quot;</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parameter_optimization_step</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;alternating_schedule&quot;</span><span class="p">][</span><span class="s2">&quot;prompt_steps&quot;</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_step</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;evaluation&quot;</span><span class="p">][</span><span class="s2">&quot;frequency&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">metric_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;iteration&quot;</span><span class="p">:</span> <span class="n">iteration</span><span class="p">,</span>
+                    <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="n">metric_value</span>
+                <span class="p">})</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Evaluation metric: </span><span class="si">{</span><span class="n">metric_value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Early stopping</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;evaluation&quot;</span><span class="p">][</span><span class="s2">&quot;early_stopping&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">metric_value</span> <span class="o">&gt;</span> <span class="n">best_metric</span><span class="p">:</span>
+                        <span class="n">best_metric</span> <span class="o">=</span> <span class="n">metric_value</span>
+                        <span class="n">best_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="n">patience_counter</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">patience_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">if</span> <span class="n">patience_counter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;evaluation&quot;</span><span class="p">][</span><span class="s2">&quot;patience&quot;</span><span class="p">]:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Early stopping triggered&quot;</span><span class="p">)</span>
+                            <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">best_state</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parameter_optimization_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute one parameter optimization step.&quot;&quot;&quot;</span>
+        <span class="c1"># Sample batch from trainset</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">trainset</span><span class="o">.</span><span class="n">sample_batch</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Forward pass</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">forward_with_prompts</span><span class="p">(</span>
+            <span class="n">batch</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">prompts</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compute loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_parameter_loss</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+        <span class="c1"># Backward pass</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">param_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prompt_optimization_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute one prompt optimization step.&quot;&quot;&quot;</span>
+        <span class="c1"># Use DSPy&#39;s prompt optimizers</span>
+        <span class="n">current_prompt</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">prompts</span><span class="o">.</span><span class="n">get_current_template</span><span class="p">()</span>
+
+        <span class="c1"># Optimize prompt</span>
+        <span class="n">optimized_prompt</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">prompt_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
+            <span class="n">current_prompt</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">trainset</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">model</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Update prompts</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">prompts</span><span class="o">.</span><span class="n">update_template</span><span class="p">(</span><span class="n">optimized_prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-joint-optimization-for-rag">
+<h3>Example: Joint Optimization for RAG<a class="headerlink" href="#example-joint-optimization-for-rag" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">JointOptimizedRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    RAG system with joint optimization of retriever and generator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_passages</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_passages</span> <span class="o">=</span> <span class="n">num_passages</span>
+
+        <span class="c1"># Initialize retriever (learnable)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">num_passages</span><span class="p">)</span>
+
+        <span class="c1"># Initialize generator with learnable prompts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="n">GenerateAnswerSignature</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Learnable components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_translator</span> <span class="o">=</span> <span class="n">LearnableQueryTranslator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">passage_reranker</span> <span class="o">=</span> <span class="n">LearnableReranker</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Translate and optimize query</span>
+        <span class="n">optimized_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_translator</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve passages</span>
+        <span class="n">passages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span><span class="p">(</span><span class="n">optimized_query</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Rerank passages</span>
+        <span class="n">ranked_passages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passage_reranker</span><span class="p">(</span><span class="n">passages</span><span class="p">,</span> <span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Generate answer with context</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ranked_passages</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">num_passages</span><span class="p">])</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">ranked_passages</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">joint_optimize_rag</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Jointly optimize RAG system.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Initialize RAG system</span>
+    <span class="n">rag</span> <span class="o">=</span> <span class="n">JointOptimizedRAG</span><span class="p">()</span>
+
+    <span class="c1"># Create joint optimizer</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">DSPyJointOptimizer</span><span class="p">(</span>
+        <span class="n">base_model</span><span class="o">=</span><span class="n">rag</span><span class="p">,</span>
+        <span class="n">task_signature</span><span class="o">=</span><span class="n">GenerateAnswerSignature</span><span class="p">(),</span>
+        <span class="n">optimization_config</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;max_iterations&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="s2">&quot;prompt_type&quot;</span><span class="p">:</span> <span class="s2">&quot;hybrid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;alternating_schedule&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;param_steps&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;prompt_steps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;warmup_iterations&quot;</span><span class="p">:</span> <span class="mi">5</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Define evaluation metric</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rag_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Answer correctness</span>
+        <span class="n">answer_score</span> <span class="o">=</span> <span class="n">evaluate_answer_faithfulness</span><span class="p">(</span>
+            <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Retrieval quality</span>
+        <span class="n">retrieval_score</span> <span class="o">=</span> <span class="n">evaluate_retrieval_quality</span><span class="p">(</span>
+            <span class="n">pred</span><span class="o">.</span><span class="n">context</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">relevant_passages</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Faithfulness to context</span>
+        <span class="n">faithfulness_score</span> <span class="o">=</span> <span class="n">evaluate_faithfulness</span><span class="p">(</span>
+            <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="mf">0.4</span> <span class="o">*</span> <span class="n">answer_score</span> <span class="o">+</span>
+            <span class="mf">0.3</span> <span class="o">*</span> <span class="n">retrieval_score</span> <span class="o">+</span>
+            <span class="mf">0.3</span> <span class="o">*</span> <span class="n">faithfulness_score</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Run joint optimization</span>
+    <span class="n">optimized_rag</span><span class="p">,</span> <span class="n">optimized_prompts</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
+        <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">rag_metric</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimized_rag</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-techniques">
+<h2>Advanced Techniques<a class="headerlink" href="#advanced-techniques" title="Link to this heading">#</a></h2>
+<section id="curriculum-joint-optimization">
+<h3>Curriculum Joint Optimization<a class="headerlink" href="#curriculum-joint-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CurriculumJointOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Joint optimization with curriculum learning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_optimizer</span><span class="p">,</span> <span class="n">curriculum_strategy</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span> <span class="o">=</span> <span class="n">base_optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curriculum_strategy</span> <span class="o">=</span> <span class="n">curriculum_strategy</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full_trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize with curriculum learning.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize curriculum</span>
+        <span class="n">curriculum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curriculum_strategy</span><span class="o">.</span><span class="n">create_curriculum</span><span class="p">(</span><span class="n">full_trainset</span><span class="p">)</span>
+
+        <span class="c1"># Iterate through curriculum stages</span>
+        <span class="k">for</span> <span class="n">stage_idx</span><span class="p">,</span> <span class="n">stage_data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">curriculum</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Curriculum Stage </span><span class="si">{</span><span class="n">stage_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> ===&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stage examples: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">stage_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Adjust optimization parameters based on stage</span>
+            <span class="n">stage_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_stage_config</span><span class="p">(</span><span class="n">stage_idx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">update_config</span><span class="p">(</span><span class="n">stage_config</span><span class="p">)</span>
+
+            <span class="c1"># Optimize on current stage data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">stage_data</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+        <span class="c1"># Final optimization on full dataset</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Final Optimization on Full Dataset ===&quot;</span><span class="p">)</span>
+        <span class="n">final_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_final_config</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">update_config</span><span class="p">(</span><span class="n">final_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">full_trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_stage_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage_idx</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get configuration for specific curriculum stage.&quot;&quot;&quot;</span>
+        <span class="c1"># Gradually increase complexity</span>
+        <span class="n">base_lr</span> <span class="o">=</span> <span class="mf">1e-5</span>
+        <span class="n">stage_lr</span> <span class="o">=</span> <span class="n">base_lr</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">stage_idx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="n">stage_lr</span><span class="p">,</span>
+            <span class="s2">&quot;optimization_intensity&quot;</span><span class="p">:</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">stage_idx</span><span class="p">,</span>
+            <span class="s2">&quot;prompt_complexity&quot;</span><span class="p">:</span> <span class="s2">&quot;simple&quot;</span> <span class="k">if</span> <span class="n">stage_idx</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="s2">&quot;complex&quot;</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="meta-learning-for-joint-optimization">
+<h3>Meta-Learning for Joint Optimization<a class="headerlink" href="#meta-learning-for-joint-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MetaJointOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Meta-learning approach for joint optimization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_tasks</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_tasks</span> <span class="o">=</span> <span class="n">base_tasks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_knowledge</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">meta_train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train meta-learner on multiple tasks.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">task_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_tasks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Meta-training on task: </span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Run joint optimization</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">DSPyJointOptimizer</span><span class="p">(</span>
+                <span class="n">base_model</span><span class="o">=</span><span class="n">task_data</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
+                <span class="n">task_signature</span><span class="o">=</span><span class="n">task_data</span><span class="p">[</span><span class="s2">&quot;signature&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
+                <span class="n">task_data</span><span class="p">[</span><span class="s2">&quot;trainset&quot;</span><span class="p">],</span>
+                <span class="n">task_data</span><span class="p">[</span><span class="s2">&quot;valset&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Extract meta-knowledge</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_extract_meta_knowledge</span><span class="p">(</span><span class="n">task_name</span><span class="p">,</span> <span class="n">optimized</span><span class="p">)</span>
+
+        <span class="c1"># Consolidate meta-knowledge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_consolidate_meta_knowledge</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">adapt_to_new_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_task_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adapt to new task using meta-knowledge.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize with meta-knowledge</span>
+        <span class="n">init_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_init_config_from_meta</span><span class="p">(</span><span class="n">new_task_data</span><span class="p">)</span>
+
+        <span class="c1"># Create optimizer with meta-knowledge</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">DSPyJointOptimizer</span><span class="p">(</span>
+            <span class="n">base_model</span><span class="o">=</span><span class="n">new_task_data</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">],</span>
+            <span class="n">task_signature</span><span class="o">=</span><span class="n">new_task_data</span><span class="p">[</span><span class="s2">&quot;signature&quot;</span><span class="p">],</span>
+            <span class="n">optimization_config</span><span class="o">=</span><span class="n">init_config</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Fast adaptation</span>
+        <span class="k">return</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
+            <span class="n">new_task_data</span><span class="p">[</span><span class="s2">&quot;trainset&quot;</span><span class="p">],</span>
+            <span class="n">new_task_data</span><span class="p">[</span><span class="s2">&quot;valset&quot;</span><span class="p">],</span>
+            <span class="n">num_iterations</span><span class="o">=</span><span class="mi">10</span>  <span class="c1"># Fewer iterations for fast adaptation</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="evaluation-and-analysis">
+<h2>Evaluation and Analysis<a class="headerlink" href="#evaluation-and-analysis" title="Link to this heading">#</a></h2>
+<section id="comparative-evaluation">
+<h3>Comparative Evaluation<a class="headerlink" href="#comparative-evaluation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compare_optimization_strategies</span><span class="p">(</span><span class="n">task_data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare different optimization strategies.&quot;&quot;&quot;</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># 1. Sequential optimization</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Sequential Optimization ===&quot;</span><span class="p">)</span>
+    <span class="n">sequential_result</span> <span class="o">=</span> <span class="n">run_sequential_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;sequential&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sequential_result</span>
+
+    <span class="c1"># 2. Joint optimization</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Joint Optimization ===&quot;</span><span class="p">)</span>
+    <span class="n">joint_result</span> <span class="o">=</span> <span class="n">run_joint_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;joint&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">joint_result</span>
+
+    <span class="c1"># 3. Multi-objective optimization</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Multi-Objective Optimization ===&quot;</span><span class="p">)</span>
+    <span class="n">mo_result</span> <span class="o">=</span> <span class="n">run_multi_objective_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;multi_objective&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mo_result</span>
+
+    <span class="c1"># Analyze results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Results Analysis ===&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">strategy</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Final metric: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;final_metric&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Training time: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;training_time&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Convergence iteration: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;convergence_iter&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Compute efficiency</span>
+        <span class="n">efficiency</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;final_metric&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;training_time&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Efficiency: </span><span class="si">{</span><span class="n">efficiency</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_joint_optimization_effects</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze the effects of joint optimization.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Load multiple tasks</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">load_benchmark_tasks</span><span class="p">()</span>
+
+    <span class="n">effects</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;improvement_over_sequential&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;convergence_speed&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;final_performance&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;stability&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">task_data</span> <span class="ow">in</span> <span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Run both approaches</span>
+        <span class="n">sequential</span> <span class="o">=</span> <span class="n">run_sequential_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">)</span>
+        <span class="n">joint</span> <span class="o">=</span> <span class="n">run_joint_optimization</span><span class="p">(</span><span class="n">task_data</span><span class="p">)</span>
+
+        <span class="c1"># Calculate effects</span>
+        <span class="n">improvement</span> <span class="o">=</span> <span class="p">(</span><span class="n">joint</span><span class="p">[</span><span class="s2">&quot;final_metric&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">sequential</span><span class="p">[</span><span class="s2">&quot;final_metric&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">sequential</span><span class="p">[</span><span class="s2">&quot;final_metric&quot;</span><span class="p">]</span>
+        <span class="n">convergence_speed</span> <span class="o">=</span> <span class="n">sequential</span><span class="p">[</span><span class="s2">&quot;convergence_iter&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">joint</span><span class="p">[</span><span class="s2">&quot;convergence_iter&quot;</span><span class="p">]</span>
+
+        <span class="n">effects</span><span class="p">[</span><span class="s2">&quot;improvement_over_sequential&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">improvement</span><span class="p">)</span>
+        <span class="n">effects</span><span class="p">[</span><span class="s2">&quot;convergence_speed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convergence_speed</span><span class="p">)</span>
+        <span class="n">effects</span><span class="p">[</span><span class="s2">&quot;final_performance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint</span><span class="p">[</span><span class="s2">&quot;final_metric&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Stability: measure variance across multiple runs</span>
+        <span class="n">joint_stability</span> <span class="o">=</span> <span class="n">measure_stability</span><span class="p">(</span><span class="n">task_data</span><span class="p">,</span> <span class="s2">&quot;joint&quot;</span><span class="p">)</span>
+        <span class="n">effects</span><span class="p">[</span><span class="s2">&quot;stability&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">joint_stability</span><span class="p">)</span>
+
+    <span class="c1"># Report aggregate statistics</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Joint Optimization Effects ===&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">effects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Mean: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Std: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Min: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Max: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effects</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="when-to-use-joint-optimization">
+<h3>When to Use Joint Optimization<a class="headerlink" href="#when-to-use-joint-optimization" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Complex Tasks</strong>: Multi-step reasoning or multi-component systems</p></li>
+<li><p><strong>Limited Compute</strong>: When you need maximum efficiency</p></li>
+<li><p><strong>Performance Critical</strong>: Applications requiring highest possible accuracy</p></li>
+<li><p><strong>Domain Adaptation</strong>: Adapting to new domains with limited data</p></li>
+</ol>
+</section>
+<section id="configuration-guidelines">
+<h3>Configuration Guidelines<a class="headerlink" href="#configuration-guidelines" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For small models (&lt; 1B parameters)</span>
+<span class="n">small_model_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;optimization_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;alternating&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;param_steps&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;prompt_steps&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;learning_rates&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="mf">5e-5</span><span class="p">,</span> <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># For medium models (1-7B parameters)</span>
+<span class="n">medium_model_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;optimization_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;simultaneous&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;learning_rates&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="mf">2e-5</span><span class="p">,</span> <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># For large models (&gt; 7B parameters)</span>
+<span class="n">large_model_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;optimization_strategy&quot;</span><span class="p">:</span> <span class="s2">&quot;alternating&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;param_steps&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;prompt_steps&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;learning_rates&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="s2">&quot;prompts&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="common-challenges">
+<h3>Common Challenges<a class="headerlink" href="#common-challenges" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Gradient Magnitude Mismatch</strong>: Parameters and prompts may have different gradient scales</p></li>
+<li><p><strong>Optimization Instability</strong>: Joint optimization can be less stable</p></li>
+<li><p><strong>Memory Constraints</strong>: Storing both parameter and prompt states requires more memory</p></li>
+<li><p><strong>Evaluation Complexity</strong>: Need to evaluate both dimensions separately and jointly</p></li>
+</ol>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Joint optimization represents a powerful approach for maximizing performance in language model systems. By optimizing parameters and prompts together, we can achieve synergistic effects that outperform traditional sequential approaches. The flexibility of the framework allows it to adapt to different model sizes, task complexities, and computational constraints.</p>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Joint optimization simultaneously optimizes model parameters and prompts</p></li>
+<li><p>Multiple strategies exist: alternating, simultaneous, and multi-objective</p></li>
+<li><p>The approach achieves superior performance on complex tasks</p></li>
+<li><p>Proper configuration is crucial for stability and efficiency</p></li>
+<li><p>Meta-learning can accelerate optimization on new tasks</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore Monte Carlo optimization methods, which provide stochastic approaches for navigating complex optimization spaces in DSPy.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="09a_copa_method.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">COPA: Combined Fine-Tuning and Prompt Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="11_monte_carlo_optimization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Monte Carlo Optimization in DSPy</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-foundations">Theoretical Foundations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-joint-optimization-matters">Why Joint Optimization Matters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-framework">Mathematical Framework</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization-strategies">Joint Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#alternating-optimization">1. Alternating Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simultaneous-gradient-based-optimization">2. Simultaneous Gradient-Based Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">3. Multi-Objective Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implementation-in-dspy">Practical Implementation in DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization-module">Joint Optimization Module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-joint-optimization-for-rag">Example: Joint Optimization for RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-techniques">Advanced Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curriculum-joint-optimization">Curriculum Joint Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-learning-for-joint-optimization">Meta-Learning for Joint Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-and-analysis">Evaluation and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparative-evaluation">Comparative Evaluation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-to-use-joint-optimization">When to Use Joint Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-guidelines">Configuration Guidelines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges">Common Challenges</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

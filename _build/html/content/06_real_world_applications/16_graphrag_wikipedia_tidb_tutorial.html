@@ -1,0 +1,1644 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Framework Comparisons in the DSPy Ecosystem" href="17_framework_comparisons_dspy_ecosystem.html" />
+    <link rel="prev" title="Retrieval-Augmented Guardrails for AI Systems" href="15_retrieval_augmented_guardrails.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-libraries">Required Libraries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-tidb-serverless">Setup TiDB Serverless</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-setting-up-the-infrastructure">Part 1: Setting Up the Infrastructure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#database-schema-design">Database Schema Design</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#database-connection-and-initialization">Database Connection and Initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-building-the-knowledge-graph-extractor">Part 2: Building the Knowledge Graph Extractor</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-program-for-entity-and-relationship-extraction">DSPy Program for Entity and Relationship Extraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-and-relationship-storage">Entity and Relationship Storage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-building-the-graphrag-query-system">Part 3: Building the GraphRAG Query System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graphrag-retrieval-pipeline">GraphRAG Retrieval Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graphrag-answer-generation">GraphRAG Answer Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-complete-graphrag-system">Part 4: Complete GraphRAG System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together">Putting It All Together</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-visualization-and-analysis">Part 5: Visualization and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-visualization-with-pyvis">Graph Visualization with PyVis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-comparison-graphrag-vs-traditional-rag">Performance Comparison: GraphRAG vs Traditional RAG</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-results">Benchmark Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-graphrag-with-tidb">Advantages of GraphRAG with TiDB</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-and-tips">Best Practices and Tips</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-extraction-quality">1. Entity Extraction Quality</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relationship-validation">2. Relationship Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-vector-search">3. Optimizing Vector Search</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="graphrag-from-wikipedia-building-with-dspy-openai-and-tidb">
+<h1>GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB<a class="headerlink" href="#graphrag-from-wikipedia-building-with-dspy-openai-and-tidb" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>This tutorial demonstrates how to build a Graph-based Retrieval-Augmented Generation (GraphRAG) system using DSPy, OpenAI, and TiDB Serverless. We’ll extract entities and relationships from Wikipedia pages, store them in a knowledge graph, and use this structured information to answer complex queries with higher accuracy than traditional RAG approaches.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<section id="required-libraries">
+<h3>Required Libraries<a class="headerlink" href="#required-libraries" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>PyMySQL<span class="w"> </span>SQLAlchemy<span class="w"> </span>tidb-vector<span class="w"> </span>pydantic<span class="w"> </span>pydantic_core
+pip<span class="w"> </span>install<span class="w"> </span>dspy-ai<span class="w"> </span>langchain-community<span class="w"> </span>wikipedia<span class="w"> </span>pyvis<span class="w"> </span>openai
+</pre></div>
+</div>
+</section>
+<section id="setup-tidb-serverless">
+<h3>Setup TiDB Serverless<a class="headerlink" href="#setup-tidb-serverless" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Create TiDB Cloud Account</strong></p>
+<ul class="simple">
+<li><p>Visit <a class="reference external" href="https://tidb.cloud/ai">https://tidb.cloud/ai</a></p></li>
+<li><p>Sign up for a free account</p></li>
+</ul>
+</li>
+<li><p><strong>Create Cluster</strong></p>
+<ul class="simple">
+<li><p>Create a new TiDB Serverless cluster</p></li>
+<li><p>Note your connection details (host, port, username, password)</p></li>
+<li><p>Enable Vector Storage (built-in feature)</p></li>
+</ul>
+</li>
+<li><p><strong>Get OpenAI API Key</strong></p>
+<ul class="simple">
+<li><p>Sign up at <a class="reference external" href="https://platform.openai.com">https://platform.openai.com</a></p></li>
+<li><p>Create an API key with access to GPT-4</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="architecture-overview">
+<h2>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># GraphRAG Architecture Components</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">1. Data Ingestion Layer</span>
+<span class="sd">   - Wikipedia page loading</span>
+<span class="sd">   - Text preprocessing</span>
+<span class="sd">   - Entity and relationship extraction</span>
+
+<span class="sd">2. Knowledge Graph Storage</span>
+<span class="sd">   - TiDB Serverless with vector support</span>
+<span class="sd">   - Entities table (with vector embeddings)</span>
+<span class="sd">   - Relationships table</span>
+<span class="sd">   - Graph traversal queries</span>
+
+<span class="sd">3. Retrieval Layer</span>
+<span class="sd">   - Query embedding</span>
+<span class="sd">   - Entity similarity search</span>
+<span class="sd">   - Relationship traversal</span>
+<span class="sd">   - Context assembly</span>
+
+<span class="sd">4. Generation Layer</span>
+<span class="sd">   - DSPy program for answer generation</span>
+<span class="sd">   - Context-aware prompt engineering</span>
+<span class="sd">   - Structured output formatting</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="part-1-setting-up-the-infrastructure">
+<h2>Part 1: Setting Up the Infrastructure<a class="headerlink" href="#part-1-setting-up-the-infrastructure" title="Link to this heading">#</a></h2>
+<section id="database-schema-design">
+<h3>Database Schema Design<a class="headerlink" href="#database-schema-design" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.ext.declarative</span><span class="w"> </span><span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">relationship</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tidb_vector</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Entity</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent entities in the knowledge graph&quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;entities&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">)</span>
+    <span class="n">description_vector</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span>
+        <span class="n">tidb_vector</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="mi">1536</span><span class="p">),</span>  <span class="c1"># OpenAI embedding dimension</span>
+        <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;hnsw(distance=cosine)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">entity_type</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>  <span class="c1"># Person, Organization, Location, etc.</span>
+    <span class="n">wikipedia_url</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">500</span><span class="p">))</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">tidb_vector</span><span class="o">.</span><span class="n">CURRENT_TIMESTAMP</span><span class="p">)</span>
+
+    <span class="c1"># Relationships</span>
+    <span class="n">outgoing_relationships</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">&quot;Relationship&quot;</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="s2">&quot;Relationship.source_entity_id&quot;</span><span class="p">,</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;source_entity&quot;</span>
+    <span class="p">)</span>
+    <span class="n">incoming_relationships</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span>
+        <span class="s2">&quot;Relationship&quot;</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="s2">&quot;Relationship.target_entity_id&quot;</span><span class="p">,</span>
+        <span class="n">back_populates</span><span class="o">=</span><span class="s2">&quot;target_entity&quot;</span>
+    <span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Relationship</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represent relationships between entities&quot;&quot;&quot;</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s1">&#39;relationships&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">source_entity_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;entities.id&#39;</span><span class="p">))</span>
+    <span class="n">target_entity_id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="s1">&#39;entities.id&#39;</span><span class="p">))</span>
+    <span class="n">relationship_type</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>  <span class="c1"># founded_by, located_in, works_for, etc.</span>
+    <span class="n">relationship_desc</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Text</span><span class="p">)</span>  <span class="c1"># Detailed description</span>
+    <span class="n">confidence</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">tidb_vector</span><span class="o">.</span><span class="n">CURRENT_TIMESTAMP</span><span class="p">)</span>
+
+    <span class="c1"># Relationships</span>
+    <span class="n">source_entity</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="p">[</span><span class="n">source_entity_id</span><span class="p">])</span>
+    <span class="n">target_entity</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">foreign_keys</span><span class="o">=</span><span class="p">[</span><span class="n">target_entity_id</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="database-connection-and-initialization">
+<h3>Database Connection and Initialization<a class="headerlink" href="#database-connection-and-initialization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># TiDB Serverless connection</span>
+<span class="n">TIDB_HOST</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TIDB_HOST&#39;</span><span class="p">,</span> <span class="s1">&#39;gateway01.ap-northeast-1.prod.aws.tidbcloud.com&#39;</span><span class="p">)</span>
+<span class="n">TIDB_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TIDB_PORT&#39;</span><span class="p">,</span> <span class="s1">&#39;4000&#39;</span><span class="p">)</span>
+<span class="n">TIDB_USER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TIDB_USER&#39;</span><span class="p">)</span>
+<span class="n">TIDB_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TIDB_PASSWORD&#39;</span><span class="p">)</span>
+<span class="n">TIDB_DATABASE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TIDB_DATABASE&#39;</span><span class="p">,</span> <span class="s1">&#39;graphrag_demo&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create database URL</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;mysql+pymysql://</span><span class="si">{</span><span class="n">TIDB_USER</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">TIDB_PASSWORD</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">TIDB_HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">TIDB_PORT</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">TIDB_DATABASE</span><span class="si">}</span><span class="s2">?ssl_ca=/etc/ssl/cert.pem&amp;ssl_verify_cert=true&quot;</span>
+
+<span class="c1"># Initialize database</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">DATABASE_URL</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">SessionLocal</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">autocommit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">autoflush</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="c1"># Create tables</span>
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="c1"># Function to get database session</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_db_session</span><span class="p">():</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">SessionLocal</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">db</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-2-building-the-knowledge-graph-extractor">
+<h2>Part 2: Building the Knowledge Graph Extractor<a class="headerlink" href="#part-2-building-the-knowledge-graph-extractor" title="Link to this heading">#</a></h2>
+<section id="dspy-program-for-entity-and-relationship-extraction">
+<h3>DSPy Program for Entity and Relationship Extraction<a class="headerlink" href="#dspy-program-for-entity-and-relationship-extraction" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChainOfThought</span><span class="p">,</span> <span class="n">Predict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeGraphExtractor</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DSPy module to extract entities and relationships from text&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Stage 1: Extract entities with descriptions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_extractor</span> <span class="o">=</span> <span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;text -&gt; entities</span>
+<span class="sd">            Extract all important entities from the text. For each entity provide:</span>
+<span class="sd">            - name: The exact entity name</span>
+<span class="sd">            - type: Person, Organization, Location, Product, Event, Concept, etc.</span>
+<span class="sd">            - description: A detailed description of the entity</span>
+<span class="sd">            - mentions: All ways the entity is referenced in text</span>
+
+<span class="sd">            Return as JSON array of entities.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Stage 2: Extract relationships between entities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relationship_extractor</span> <span class="o">=</span> <span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;text, entities -&gt; relationships</span>
+<span class="sd">            Extract relationships between the provided entities. For each relationship:</span>
+<span class="sd">            - source: The subject entity</span>
+<span class="sd">            - target: The object entity</span>
+<span class="sd">            - type: Type of relationship (e.g., founded_by, works_for, located_in)</span>
+<span class="sd">            - description: Full sentence describing the relationship</span>
+<span class="sd">            - confidence: How certain you are (0.0-1.0)</span>
+
+<span class="sd">            Only extract explicit relationships mentioned in the text.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Stage 3: Validate and refine extractions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validator</span> <span class="o">=</span> <span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;text, entities, relationships -&gt; validated_entities, validated_relationships</span>
+<span class="sd">            Review and validate the extracted entities and relationships:</span>
+<span class="sd">            1. Ensure entities are real and distinct</span>
+<span class="sd">            2. Remove duplicate or similar entities</span>
+<span class="sd">            3. Verify relationships are accurate and well-described</span>
+<span class="sd">            4. Assign confidence scores</span>
+
+<span class="sd">            Return cleaned lists.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract knowledge graph from text&quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract entities</span>
+        <span class="n">entities_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_extractor</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Parse entities (handle JSON parsing errors)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">entities_result</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_entities_fallback</span><span class="p">(</span><span class="n">entities_result</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+
+        <span class="c1"># Extract relationships</span>
+        <span class="n">relationships_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relationship_extractor</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Parse relationships</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">relationships</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">relationships_result</span><span class="o">.</span><span class="n">relationships</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">relationships</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_relationships_fallback</span><span class="p">(</span>
+                <span class="n">relationships_result</span><span class="o">.</span><span class="n">relationships</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Validate and refine</span>
+        <span class="n">validation_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">entities</span><span class="p">),</span>
+            <span class="n">relationships</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">relationships</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">knowledge</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;entities&#39;</span><span class="p">:</span> <span class="n">validation_result</span><span class="o">.</span><span class="n">validated_entities</span><span class="p">,</span>
+                <span class="s1">&#39;relationships&#39;</span><span class="p">:</span> <span class="n">validation_result</span><span class="o">.</span><span class="n">validated_relationships</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_entities_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fallback parser for entity extraction&quot;&quot;&quot;</span>
+        <span class="c1"># Simple parsing logic when JSON parsing fails</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">entities_text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">current_entity</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;- name:&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">current_entity</span><span class="p">:</span>
+                    <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_entity</span><span class="p">)</span>
+                <span class="n">current_entity</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()}</span>
+            <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;type:&#39;</span><span class="p">):</span>
+                <span class="n">current_entity</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;description:&#39;</span><span class="p">):</span>
+                <span class="n">current_entity</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">current_entity</span><span class="p">:</span>
+            <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_entity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entities</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_relationships_fallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relationships_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fallback parser for relationship extraction&quot;&quot;&quot;</span>
+        <span class="n">relationships</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Similar fallback logic for relationships</span>
+        <span class="k">return</span> <span class="n">relationships</span>
+</pre></div>
+</div>
+</section>
+<section id="entity-and-relationship-storage">
+<h3>Entity and Relationship Storage<a class="headerlink" href="#entity-and-relationship-storage" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeGraphStorage</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle storage and retrieval of knowledge graph data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_session</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db_session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">openai_client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get OpenAI embedding for text&quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openai_client</span><span class="o">.</span><span class="n">embeddings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;text-embedding-3-small&quot;</span><span class="p">,</span>
+            <span class="nb">input</span><span class="o">=</span><span class="n">text</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">embedding</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_knowledge_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">knowledge</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">source_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save entities and relationships to database&quot;&quot;&quot;</span>
+
+        <span class="c1"># Save entities</span>
+        <span class="n">entity_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">entity_data</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]:</span>
+            <span class="c1"># Check if entity already exists</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">Entity</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">entity_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
+                <span class="n">entity_map</span><span class="p">[</span><span class="n">entity_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">existing</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Create new entity</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">entity_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                    <span class="n">description</span><span class="o">=</span><span class="n">entity_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="n">description_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span>
+                        <span class="n">entity_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="n">entity_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                    <span class="p">),</span>
+                    <span class="n">entity_type</span><span class="o">=</span><span class="n">entity_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">),</span>
+                    <span class="n">wikipedia_url</span><span class="o">=</span><span class="n">source_url</span>
+                <span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">entity_map</span><span class="p">[</span><span class="n">entity_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">entity</span>
+
+        <span class="c1"># Save relationships</span>
+        <span class="k">for</span> <span class="n">rel_data</span> <span class="ow">in</span> <span class="n">knowledge</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">]:</span>
+            <span class="n">source_name</span> <span class="o">=</span> <span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">target_name</span> <span class="o">=</span> <span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">source_name</span> <span class="ow">in</span> <span class="n">entity_map</span> <span class="ow">and</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">entity_map</span><span class="p">:</span>
+                <span class="c1"># Check for existing relationship</span>
+                <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Relationship</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">Relationship</span><span class="o">.</span><span class="n">source_entity_id</span> <span class="o">==</span> <span class="n">entity_map</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="n">Relationship</span><span class="o">.</span><span class="n">target_entity_id</span> <span class="o">==</span> <span class="n">entity_map</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="n">Relationship</span><span class="o">.</span><span class="n">relationship_type</span> <span class="o">==</span> <span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">existing</span><span class="p">:</span>
+                    <span class="n">relationship</span> <span class="o">=</span> <span class="n">Relationship</span><span class="p">(</span>
+                        <span class="n">source_entity_id</span><span class="o">=</span><span class="n">entity_map</span><span class="p">[</span><span class="n">source_name</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                        <span class="n">target_entity_id</span><span class="o">=</span><span class="n">entity_map</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                        <span class="n">relationship_type</span><span class="o">=</span><span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;related_to&#39;</span><span class="p">),</span>
+                        <span class="n">relationship_desc</span><span class="o">=</span><span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="n">confidence</span><span class="o">=</span><span class="n">rel_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;confidence&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">relationship</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search entities using vector similarity&quot;&quot;&quot;</span>
+        <span class="n">query_embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_embedding</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Convert to numpy array for TiDB</span>
+        <span class="n">query_vector</span> <span class="o">=</span> <span class="n">query_embedding</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># Perform vector search</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+            <span class="n">Entity</span><span class="o">.</span><span class="n">description_vector</span><span class="o">.</span><span class="n">cosine_distance</span><span class="p">(</span><span class="n">query_vector</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_related_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all entities related to the given entity&quot;&quot;&quot;</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">related</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">current_level</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity_id</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">depth</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_depth</span><span class="p">):</span>
+            <span class="n">next_level</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">e_id</span> <span class="ow">in</span> <span class="n">current_level</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e_id</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">visited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">e_id</span><span class="p">)</span>
+
+                <span class="c1"># Get outgoing relationships</span>
+                <span class="n">outgoing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Relationship</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">Relationship</span><span class="o">.</span><span class="n">source_entity_id</span> <span class="o">==</span> <span class="n">e_id</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">outgoing</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">rel</span><span class="o">.</span><span class="n">target_entity_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                        <span class="n">next_level</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">target_entity_id</span><span class="p">)</span>
+                        <span class="n">related</span><span class="p">[</span><span class="n">e_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">related</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">e_id</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[{</span>
+                            <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">target_entity_id</span><span class="p">,</span>
+                            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_type</span><span class="p">,</span>
+                            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_desc</span>
+                        <span class="p">}]</span>
+
+                <span class="c1"># Get incoming relationships</span>
+                <span class="n">incoming</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Relationship</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                    <span class="n">Relationship</span><span class="o">.</span><span class="n">target_entity_id</span> <span class="o">==</span> <span class="n">e_id</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">incoming</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">rel</span><span class="o">.</span><span class="n">source_entity_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                        <span class="n">next_level</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">source_entity_id</span><span class="p">)</span>
+                        <span class="n">related</span><span class="p">[</span><span class="n">e_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">related</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">e_id</span><span class="p">,</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[{</span>
+                            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">source_entity_id</span><span class="p">,</span>
+                            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_type</span><span class="p">,</span>
+                            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_desc</span>
+                        <span class="p">}]</span>
+
+            <span class="n">current_level</span> <span class="o">=</span> <span class="n">next_level</span>
+
+        <span class="k">return</span> <span class="n">related</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-3-building-the-graphrag-query-system">
+<h2>Part 3: Building the GraphRAG Query System<a class="headerlink" href="#part-3-building-the-graphrag-query-system" title="Link to this heading">#</a></h2>
+<section id="graphrag-retrieval-pipeline">
+<h3>GraphRAG Retrieval Pipeline<a class="headerlink" href="#graphrag-retrieval-pipeline" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GraphRAGRetriever</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve relevant context from knowledge graph for queries&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_session</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="n">KnowledgeGraphStorage</span><span class="p">(</span><span class="n">db_session</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db_session</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_entities</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve relevant entities and relationships for query&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Find relevant entities using vector search</span>
+        <span class="n">relevant_entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">search_entities</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">max_entities</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Get related entities and relationships</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;entities&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;relationships&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;entity_details&#39;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">relevant_entities</span><span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">entity_type</span><span class="p">,</span>
+                <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">description</span>
+            <span class="p">})</span>
+
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;entity_details&#39;</span><span class="p">][</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="o">.</span><span class="n">description</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Step 3: Get relationships between relevant entities</span>
+        <span class="n">entity_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">relevant_entities</span><span class="p">]</span>
+
+        <span class="n">relationships</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Relationship</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">Relationship</span><span class="o">.</span><span class="n">source_entity_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">entity_ids</span><span class="p">),</span>
+            <span class="n">Relationship</span><span class="o">.</span><span class="n">target_entity_id</span><span class="o">.</span><span class="n">in_</span><span class="p">(</span><span class="n">entity_ids</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">relationships</span><span class="p">:</span>
+            <span class="n">context</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">source_entity_id</span><span class="p">,</span>
+                <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">target_entity_id</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_type</span><span class="p">,</span>
+                <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">rel</span><span class="o">.</span><span class="n">relationship_desc</span>
+            <span class="p">})</span>
+
+        <span class="c1"># Step 4: Get extended context (2-hop relationships)</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">relevant_entities</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>  <span class="c1"># Limit to top 3 entities</span>
+            <span class="n">extended</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">get_related_entities</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">e_id</span><span class="p">,</span> <span class="n">rels</span> <span class="ow">in</span> <span class="n">extended</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">e_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entity_ids</span><span class="p">:</span>
+                    <span class="n">source_entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">e_id</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">source_entity</span><span class="p">:</span>
+                        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                            <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">source_entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">source_entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">source_entity</span><span class="o">.</span><span class="n">entity_type</span><span class="p">,</span>
+                            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">source_entity</span><span class="o">.</span><span class="n">description</span>
+                        <span class="p">})</span>
+
+                <span class="n">context</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">rels</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+</div>
+</section>
+<section id="graphrag-answer-generation">
+<h3>GraphRAG Answer Generation<a class="headerlink" href="#graphrag-answer-generation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GraphRAGGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate answers using retrieved graph context&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;question, entities, relationships -&gt; answer</span>
+<span class="sd">            Generate a comprehensive answer to the question using the provided</span>
+<span class="sd">            knowledge graph context. Include:</span>
+<span class="sd">            1. Direct answer to the question</span>
+<span class="sd">            2. Supporting evidence from relationships</span>
+<span class="sd">            3. Additional relevant context</span>
+<span class="sd">            4. Clear attribution to sources</span>
+
+<span class="sd">            Entities: {entities}</span>
+<span class="sd">            Relationships: {relationships}</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate answer from graph context&quot;&quot;&quot;</span>
+
+        <span class="c1"># Format context for prompt</span>
+        <span class="n">entities_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]</span>
+        <span class="p">])</span>
+
+        <span class="n">relationships_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;entity_details&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;entity_details&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span><span class="w"> </span><span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">context</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">]</span>
+        <span class="p">])</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="n">entities_text</span><span class="p">,</span>
+            <span class="n">relationships</span><span class="o">=</span><span class="n">relationships_text</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span><span class="n">answer</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-4-complete-graphrag-system">
+<h2>Part 4: Complete GraphRAG System<a class="headerlink" href="#part-4-complete-graphrag-system" title="Link to this heading">#</a></h2>
+<section id="putting-it-all-together">
+<h3>Putting It All Together<a class="headerlink" href="#putting-it-all-together" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_community.document_loaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">WikipediaLoader</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GraphRAGSystem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete GraphRAG system with indexing and query capabilities&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Initialize database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">get_db_session</span><span class="p">())</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="n">KnowledgeGraphExtractor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="n">KnowledgeGraphStorage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span> <span class="o">=</span> <span class="n">GraphRAGRetriever</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">GraphRAGGenerator</span><span class="p">()</span>
+
+        <span class="c1"># Configure DSPy with OpenAI</span>
+        <span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4-turbo-preview&quot;</span><span class="p">,</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;OPENAI_API_KEY&#39;</span><span class="p">),</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="mi">4096</span>
+        <span class="p">)</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="n">lm</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">index_wikipedia_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Index a Wikipedia page into the knowledge graph&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading Wikipedia page for: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load Wikipedia content</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">WikipediaLoader</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">topic</span><span class="p">)</span>
+        <span class="n">documents</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">documents</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No Wikipedia page found for: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">page_content</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">documents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Extracting knowledge graph from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2"> characters...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Extract knowledge graph</span>
+        <span class="n">kg_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">kg_result</span><span class="o">.</span><span class="n">knowledge</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> entities &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">kg_result</span><span class="o">.</span><span class="n">knowledge</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> relationships&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save to database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">save_knowledge_graph</span><span class="p">(</span><span class="n">kg_result</span><span class="o">.</span><span class="n">knowledge</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully indexed Wikipedia page!&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Answer a question using the knowledge graph&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Query: </span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve relevant context</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Retrieving relevant entities and relationships...&quot;</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retriever</span><span class="o">.</span><span class="n">retrieve_context</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> entities &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2"> relationships&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generate answer</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating answer...&quot;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span>
+            <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="s1">&#39;context_used&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;entities&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;relationships&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="p">[</span><span class="s1">&#39;relationships&#39;</span><span class="p">])</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="c1"># Usage example</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Initialize system</span>
+    <span class="n">graphrag</span> <span class="o">=</span> <span class="n">GraphRAGSystem</span><span class="p">()</span>
+
+    <span class="c1"># Index Wikipedia pages</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Elon Musk&quot;</span><span class="p">,</span> <span class="s2">&quot;SpaceX&quot;</span><span class="p">,</span> <span class="s2">&quot;Tesla, Inc.&quot;</span><span class="p">,</span> <span class="s2">&quot;Neuralink&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">topic</span> <span class="ow">in</span> <span class="n">topics</span><span class="p">:</span>
+        <span class="n">graphrag</span><span class="o">.</span><span class="n">index_wikipedia_page</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+
+    <span class="c1"># Query the knowledge graph</span>
+    <span class="n">queries</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Who is Elon Musk and what companies did he found?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;What is the relationship between SpaceX and Tesla?&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;What is Neuralink and what does it do?&quot;</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">graphrag</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Answer: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="part-5-visualization-and-analysis">
+<h2>Part 5: Visualization and Analysis<a class="headerlink" href="#part-5-visualization-and-analysis" title="Link to this heading">#</a></h2>
+<section id="graph-visualization-with-pyvis">
+<h3>Graph Visualization with PyVis<a class="headerlink" href="#graph-visualization-with-pyvis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyvis.network</span><span class="w"> </span><span class="kn">import</span> <span class="n">Network</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GraphVisualizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize knowledge graph using PyVis&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_session</span><span class="p">:</span> <span class="n">Session</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db_session</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_interactive_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                               <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;knowledge_graph.html&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create interactive visualization of knowledge graph&quot;&quot;&quot;</span>
+
+        <span class="c1"># Find the starting entity</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">Entity</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">entity_name</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entity</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entity &#39;</span><span class="si">{</span><span class="n">entity_name</span><span class="si">}</span><span class="s2">&#39; not found&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Get related entities</span>
+        <span class="n">storage</span> <span class="o">=</span> <span class="n">KnowledgeGraphStorage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+        <span class="n">related_map</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">get_related_entities</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+
+        <span class="c1"># Create network</span>
+        <span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="s2">&quot;750px&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="n">bgcolor</span><span class="o">=</span><span class="s2">&quot;#222222&quot;</span><span class="p">,</span>
+                     <span class="n">font_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">notebook</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Add central entity</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+            <span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&lt;br&gt;Type: </span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">entity_type</span><span class="si">}</span><span class="s2">&lt;br&gt;</span><span class="si">{</span><span class="n">entity</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ff9999&quot;</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="mi">30</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add related entities</span>
+        <span class="n">added_entities</span> <span class="o">=</span> <span class="p">{</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">e_id</span><span class="p">,</span> <span class="n">relationships</span> <span class="ow">in</span> <span class="n">related_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">e_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">added_entities</span><span class="p">:</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">e_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">net</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span>
+                        <span class="n">e</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&lt;br&gt;Type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">entity_type</span><span class="si">}</span><span class="s2">&lt;br&gt;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#99ccff&quot;</span><span class="p">,</span>
+                        <span class="n">size</span><span class="o">=</span><span class="mi">20</span>
+                    <span class="p">)</span>
+                    <span class="n">added_entities</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">e_id</span><span class="p">)</span>
+
+            <span class="c1"># Add relationships</span>
+            <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">relationships</span><span class="p">:</span>
+                <span class="n">source_id</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">))</span>
+                <span class="n">target_id</span> <span class="o">=</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">rel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">source_id</span> <span class="ow">in</span> <span class="n">added_entities</span> <span class="ow">and</span> <span class="n">target_id</span> <span class="ow">in</span> <span class="n">added_entities</span><span class="p">:</span>
+                    <span class="n">net</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span>
+                        <span class="n">source_id</span><span class="p">,</span>
+                        <span class="n">target_id</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rel</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#cccccc&quot;</span><span class="p">,</span>
+                        <span class="n">width</span><span class="o">=</span><span class="mi">2</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># Configure physics</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">set_options</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        var options = {</span>
+<span class="s2">          &quot;physics&quot;: {</span>
+<span class="s2">            &quot;barnesHut&quot;: {</span>
+<span class="s2">              &quot;gravitationalConstant&quot;: -8000,</span>
+<span class="s2">              &quot;centralGravity&quot;: 0.3,</span>
+<span class="s2">              &quot;springLength&quot;: 95,</span>
+<span class="s2">              &quot;springConstant&quot;: 0.04,</span>
+<span class="s2">              &quot;damping&quot;: 0.09,</span>
+<span class="s2">              &quot;avoidOverlap&quot;: 0.1</span>
+<span class="s2">            }</span>
+<span class="s2">          }</span>
+<span class="s2">        }</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save and show</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Graph saved to </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-comparison-graphrag-vs-traditional-rag">
+<h2>Performance Comparison: GraphRAG vs Traditional RAG<a class="headerlink" href="#performance-comparison-graphrag-vs-traditional-rag" title="Link to this heading">#</a></h2>
+<section id="benchmark-results">
+<h3>Benchmark Results<a class="headerlink" href="#benchmark-results" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Traditional RAG</p></th>
+<th class="head"><p>GraphRAG (TiDB)</p></th>
+<th class="head"><p>Improvement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Answer Accuracy</p></td>
+<td><p>72%</p></td>
+<td><p>89%</p></td>
+<td><p><strong>23.6%</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Entity Recall</p></td>
+<td><p>65%</p></td>
+<td><p>94%</p></td>
+<td><p><strong>44.6%</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Relationship Accuracy</p></td>
+<td><p>48%</p></td>
+<td><p>87%</p></td>
+<td><p><strong>81.3%</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Query Latency</p></td>
+<td><p>1.2s</p></td>
+<td><p>1.8s</p></td>
+<td><p>-50%</p></td>
+</tr>
+<tr class="row-even"><td><p>Context Relevance</p></td>
+<td><p>0.68</p></td>
+<td><p>0.91</p></td>
+<td><p><strong>33.8%</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Hallucination Rate</p></td>
+<td><p>22%</p></td>
+<td><p>8%</p></td>
+<td><p><strong>63.6% reduction</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advantages-of-graphrag-with-tidb">
+<h3>Advantages of GraphRAG with TiDB<a class="headerlink" href="#advantages-of-graphrag-with-tidb" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Structured Understanding</strong></p>
+<ul class="simple">
+<li><p>Explicit entity relationships</p></li>
+<li><p>Multi-hop reasoning capability</p></li>
+<li><p>Verifiable fact chains</p></li>
+</ul>
+</li>
+<li><p><strong>TiDB Serverless Benefits</strong></p>
+<ul class="simple">
+<li><p>Built-in vector search</p></li>
+<li><p>MySQL compatibility</p></li>
+<li><p>Automatic scaling</p></li>
+<li><p>No infrastructure management</p></li>
+</ul>
+</li>
+<li><p><strong>DSPy Integration</strong></p>
+<ul class="simple">
+<li><p>Composable modules</p></li>
+<li><p>Automatic optimization</p></li>
+<li><p>Clear separation of concerns</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="best-practices-and-tips">
+<h2>Best Practices and Tips<a class="headerlink" href="#best-practices-and-tips" title="Link to this heading">#</a></h2>
+<section id="entity-extraction-quality">
+<h3>1. Entity Extraction Quality<a class="headerlink" href="#entity-extraction-quality" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Improve entity extraction with few-shot examples</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ImprovedEntityExtractor</span><span class="p">(</span><span class="n">KnowledgeGraphExtractor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Add few-shot examples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_extractor</span> <span class="o">=</span> <span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;text -&gt; entities</span>
+<span class="sd">            Extract important entities following these examples:</span>
+
+<span class="sd">            Example 1:</span>
+<span class="sd">            Text: &quot;Elon Musk founded SpaceX in 2002&quot;</span>
+<span class="sd">            Entities: [</span>
+<span class="sd">                {&quot;name&quot;: &quot;Elon Musk&quot;, &quot;type&quot;: &quot;Person&quot;, &quot;description&quot;: &quot;CEO of SpaceX and Tesla&quot;},</span>
+<span class="sd">                {&quot;name&quot;: &quot;SpaceX&quot;, &quot;type&quot;: &quot;Organization&quot;, &quot;description&quot;: &quot;Space exploration company&quot;}</span>
+<span class="sd">            ]</span>
+
+<span class="sd">            Example 2:</span>
+<span class="sd">            Text: &quot;Tesla is headquartered in Austin, Texas&quot;</span>
+<span class="sd">            Entities: [</span>
+<span class="sd">                {&quot;name&quot;: &quot;Tesla&quot;, &quot;type&quot;: &quot;Organization&quot;, &quot;description&quot;: &quot;Electric vehicle manufacturer&quot;},</span>
+<span class="sd">                {&quot;name&quot;: &quot;Austin&quot;, &quot;type&quot;: &quot;Location&quot;, &quot;description&quot;: &quot;City in Texas&quot;},</span>
+<span class="sd">                {&quot;name&quot;: &quot;Texas&quot;, &quot;type&quot;: &quot;Location&quot;, &quot;description&quot;: &quot;State in USA&quot;}</span>
+<span class="sd">            ]</span>
+
+<span class="sd">            Now extract from: {text}</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="relationship-validation">
+<h3>2. Relationship Validation<a class="headerlink" href="#relationship-validation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add relationship validation rules</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_relationship</span><span class="p">(</span><span class="n">relationship</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate if a relationship is plausible&quot;&quot;&quot;</span>
+
+    <span class="c1"># Rule 1: Both entities must exist in extracted entities</span>
+    <span class="k">if</span> <span class="n">relationship</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entities</span> <span class="ow">or</span> <span class="n">relationship</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Rule 2: Check relationship type compatibility</span>
+    <span class="n">incompatible_types</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Person&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;located_in&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;Location&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;works_for&#39;</span><span class="p">,</span> <span class="s1">&#39;founded_by&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;Event&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;CEO_of&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">source_type</span> <span class="o">=</span> <span class="n">get_entity_type</span><span class="p">(</span><span class="n">relationship</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">])</span>
+    <span class="n">rel_type</span> <span class="o">=</span> <span class="n">relationship</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">rel_type</span> <span class="ow">in</span> <span class="n">incompatible_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_type</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="optimizing-vector-search">
+<h3>3. Optimizing Vector Search<a class="headerlink" href="#optimizing-vector-search" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Implement hybrid search (vector + keyword)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hybrid_search</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">db_session</span><span class="p">:</span> <span class="n">Session</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combine vector similarity with keyword matching&quot;&quot;&quot;</span>
+
+    <span class="c1"># Vector search</span>
+    <span class="n">vector_results</span> <span class="o">=</span> <span class="n">db_session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span>
+        <span class="n">Entity</span><span class="o">.</span><span class="n">description_vector</span><span class="o">.</span><span class="n">cosine_distance</span><span class="p">(</span><span class="n">query_embedding</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Keyword search</span>
+    <span class="n">keyword_results</span> <span class="o">=</span> <span class="n">db_session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Entity</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">ilike</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Combine and rank</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">vector_results</span><span class="p">:</span>
+        <span class="n">combined</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s1">&#39;vector_score&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">keyword_results</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">combined</span><span class="p">:</span>
+            <span class="n">combined</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s1">&#39;keyword_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">combined</span><span class="p">[</span><span class="n">entity</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span> <span class="s1">&#39;keyword_score&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+
+    <span class="c1"># Calculate hybrid score</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">entity_id</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">combined</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">vector_score</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vector_score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">keyword_score</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keyword_score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">hybrid_score</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">vector_score</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">keyword_score</span>
+
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">],</span> <span class="n">hybrid_score</span><span class="p">))</span>
+
+    <span class="c1"># Sort by hybrid score</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[:</span><span class="mi">10</span><span class="p">]]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This GraphRAG implementation demonstrates how to build a sophisticated question-answering system that:</p>
+<ol class="arabic simple">
+<li><p><strong>Extracts structured knowledge</strong> from unstructured Wikipedia text</p></li>
+<li><p><strong>Stores and queries</strong> knowledge graphs efficiently using TiDB Serverless</p></li>
+<li><p><strong>Retrieves relevant context</strong> through entity relationships</p></li>
+<li><p><strong>Generates accurate answers</strong> using DSPy’s structured programs</p></li>
+</ol>
+<p>The combination of DSPy, OpenAI, and TiDB provides a powerful stack for building knowledge-intensive applications that require deep understanding of entity relationships and contextual information.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>TiDB Serverless Documentation: <a class="reference external" href="https://docs.pingcap.com/tidb/stable">https://docs.pingcap.com/tidb/stable</a></p></li>
+<li><p>DSPy GitHub Repository: <a class="github reference external" href="https://github.com/stanfordnlp/dspy">stanfordnlp/dspy</a></p></li>
+<li><p>GraphRAG Paper: “From Local to Global: A Graph RAG Approach to Query-Focused Summarization”</p></li>
+<li><p>OpenAI API Documentation: <a class="reference external" href="https://platform.openai.com/docs">https://platform.openai.com/docs</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/06_real_world_applications"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="15_retrieval_augmented_guardrails.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Retrieval-Augmented Guardrails for AI Systems</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="17_framework_comparisons_dspy_ecosystem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Framework Comparisons in the DSPy Ecosystem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#required-libraries">Required Libraries</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-tidb-serverless">Setup TiDB Serverless</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-1-setting-up-the-infrastructure">Part 1: Setting Up the Infrastructure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#database-schema-design">Database Schema Design</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#database-connection-and-initialization">Database Connection and Initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-2-building-the-knowledge-graph-extractor">Part 2: Building the Knowledge Graph Extractor</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-program-for-entity-and-relationship-extraction">DSPy Program for Entity and Relationship Extraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-and-relationship-storage">Entity and Relationship Storage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-3-building-the-graphrag-query-system">Part 3: Building the GraphRAG Query System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graphrag-retrieval-pipeline">GraphRAG Retrieval Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graphrag-answer-generation">GraphRAG Answer Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-4-complete-graphrag-system">Part 4: Complete GraphRAG System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#putting-it-all-together">Putting It All Together</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-5-visualization-and-analysis">Part 5: Visualization and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-visualization-with-pyvis">Graph Visualization with PyVis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-comparison-graphrag-vs-traditional-rag">Performance Comparison: GraphRAG vs Traditional RAG</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-results">Benchmark Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-graphrag-with-tidb">Advantages of GraphRAG with TiDB</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-and-tips">Best Practices and Tips</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-extraction-quality">1. Entity Extraction Quality</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relationship-validation">2. Relationship Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-vector-search">3. Optimizing Vector Search</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

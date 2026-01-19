@@ -1,0 +1,1443 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Classification Tasks: Building Robust Text Categorization Systems &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/06_real_world_applications/03_classification_tasks';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Entity Extraction: Mining Structured Information from Text" href="04_entity_extraction.html" />
+    <link rel="prev" title="Multi-hop Search: Complex Reasoning Across Documents" href="02_multi_hop_search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/06_real_world_applications/03_classification_tasks.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Classification Tasks: Building Robust Text Categorization Systems</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-text-classification">Understanding Text Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-types">Classification Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-applications">Real-World Applications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-basic-classifiers">Building Basic Classifiers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-binary-classifier">Simple Binary Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-class-classifier">Multi-class Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-label-classifier">Multi-label Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-multi-label-becomes-extreme">When Multi-label Becomes Extreme</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-classification-techniques">Advanced Classification Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-classification">Hierarchical Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#few-shot-classification-with-examples">Few-shot Classification with Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-aware-classification">Confidence-aware Classification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-classification-applications">Real-World Classification Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-support-ticket-router">Customer Support Ticket Router</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-moderation-system">Content Moderation System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#product-review-sentiment-and-aspect-classifier">Product Review Sentiment and Aspect Classifier</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-classifiers">Optimizing Classifiers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-bootstrapfewshot-for-classification">Using BootstrapFewShot for Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knnfewshot-for-context-aware-classification">KNNFewShot for Context-aware Classification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-quality-and-balance">1. Data Quality and Balance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-class-imbalance">2. Handle Class Imbalance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-analysis-and-iteration">3. Error Analysis and Iteration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics">Evaluation Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprehensive-classification-evaluation">Comprehensive Classification Evaluation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges-and-solutions">Common Challenges and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-ambiguous-categories">Challenge 1: Ambiguous Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-concept-drift">Challenge 2: Concept Drift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-multi-label-complexity">Challenge 3: Multi-label Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-4-imbalanced-classes">Challenge 4: Imbalanced Classes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="classification-tasks-building-robust-text-categorization-systems">
+<h1>Classification Tasks: Building Robust Text Categorization Systems<a class="headerlink" href="#classification-tasks-building-robust-text-categorization-systems" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Text classification is one of the most common and practical applications of natural language processing. From spam detection to sentiment analysis, topic categorization to intent recognition, classification systems power countless real-world applications. DSPy provides powerful tools for building sophisticated classifiers that can handle the complexity and nuances of real-world text data.</p>
+</section>
+<section id="understanding-text-classification">
+<h2>Understanding Text Classification<a class="headerlink" href="#understanding-text-classification" title="Link to this heading">#</a></h2>
+<section id="classification-types">
+<h3>Classification Types<a class="headerlink" href="#classification-types" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Binary Classification</strong>: Two classes (spam/not spam, positive/negative)</p></li>
+<li><p><strong>Multi-class Classification</strong>: Multiple exclusive categories (news topics, product categories)</p></li>
+<li><p><strong>Multi-label Classification</strong>: Multiple non-exclusive categories (tags, topics)</p></li>
+<li><p><strong>Hierarchical Classification</strong>: Nested categories (product taxonomy)</p></li>
+</ol>
+</section>
+<section id="real-world-applications">
+<h3>Real-World Applications<a class="headerlink" href="#real-world-applications" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Content Moderation</strong>: Detecting inappropriate content</p></li>
+<li><p><strong>Customer Support</strong>: Routing tickets to appropriate departments</p></li>
+<li><p><strong>Market Analysis</strong>: Categorizing news and social media posts</p></li>
+<li><p><strong>Document Management</strong>: Organizing documents by type and topic</p></li>
+<li><p><strong>Intent Recognition</strong>: Understanding user goals in chatbots</p></li>
+</ul>
+</section>
+</section>
+<section id="building-basic-classifiers">
+<h2>Building Basic Classifiers<a class="headerlink" href="#building-basic-classifiers" title="Link to this heading">#</a></h2>
+<section id="simple-binary-classifier">
+<h3>Simple Binary Classifier<a class="headerlink" href="#simple-binary-classifier" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BinaryClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positive_class</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">,</span> <span class="n">negative_class</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positive_class</span> <span class="o">=</span> <span class="n">positive_class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">negative_class</span> <span class="o">=</span> <span class="n">negative_class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; classification, confidence&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Normalize classification</span>
+        <span class="n">classification</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">positive_class</span> <span class="ow">in</span> <span class="n">classification</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positive_class</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_class</span> <span class="ow">in</span> <span class="n">classification</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_class</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Fallback based on confidence</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">positive_class</span> <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_class</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">raw_prediction</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-class-classifier">
+<h3>Multi-class Classifier<a class="headerlink" href="#multi-class-classifier" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiClassClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="n">categories_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, categories[</span><span class="si">{</span><span class="n">categories_str</span><span class="si">}</span><span class="s2">] -&gt; classification, confidence, reasoning&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">))</span>
+
+        <span class="c1"># Ensure classification is in categories</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">classification</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">:</span>
+            <span class="c1"># Find closest match</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">classification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_closest_category</span><span class="p">(</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categories</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">reasoning</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_closest_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the closest matching category using simple string similarity.&quot;&quot;&quot;</span>
+        <span class="n">best_match</span> <span class="o">=</span> <span class="n">categories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cat</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">prediction</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">cat</span>  <span class="c1"># Exact substring match</span>
+            <span class="c1"># Simple similarity check</span>
+            <span class="n">common_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">cat</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">common_words</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_match</span> <span class="o">=</span> <span class="n">cat</span>
+
+        <span class="k">return</span> <span class="n">best_match</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-label-classifier">
+<h3>Multi-label Classifier<a class="headerlink" href="#multi-label-classifier" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiLabelClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">possible_labels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_labels</span> <span class="o">=</span> <span class="n">possible_labels</span>
+        <span class="n">labels_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">possible_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_labels</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, possible_labels[</span><span class="si">{</span><span class="n">labels_str</span><span class="si">}</span><span class="s2">] -&gt; labels, explanation&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_labels</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">possible_labels</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_labels</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Parse and filter labels</span>
+        <span class="n">predicted_labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">possible</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_labels</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">possible</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">label</span> <span class="ow">or</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">possible</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">possible</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">predicted_labels</span><span class="p">:</span>
+                        <span class="n">predicted_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">possible</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">predicted_labels</span><span class="p">,</span>
+            <span class="n">explanation</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">explanation</span><span class="p">,</span>
+            <span class="n">raw_output</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">labels</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="when-multi-label-becomes-extreme">
+<h3>When Multi-label Becomes Extreme<a class="headerlink" href="#when-multi-label-becomes-extreme" title="Link to this heading">#</a></h3>
+<p>When your label space grows from hundreds to thousands or millions of labels, you’re entering the domain of <strong>Extreme Multi-Label Classification (XML)</strong>. Standard multi-label approaches become infeasible due to:</p>
+<ul class="simple">
+<li><p><strong>Computational Complexity</strong>: O(|L|) per instance becomes prohibitive</p></li>
+<li><p><strong>Memory Constraints</strong>: Storing millions of label embeddings and classifiers</p></li>
+<li><p><strong>Data Sparsity</strong>: Most label pairs rarely co-occur</p></li>
+<li><p><strong>Inference Latency</strong>: Real-time requirements cannot be met</p></li>
+</ul>
+<p>For these extreme scenarios, DSPy provides specialized XML techniques that we explore in depth in <strong><a class="reference internal" href="#08-extreme-multilabel-classification.md"><span class="xref myst">Extreme Multi-Label Classification</span></a></strong>. These include:</p>
+<ul class="simple">
+<li><p>Efficient label indexing and similarity search</p></li>
+<li><p>Hierarchical label organization</p></li>
+<li><p>Zero-shot XML for handling new labels</p></li>
+<li><p>Specialized evaluation metrics (P&#64;k, nDCG&#64;k, PS&#64;k)</p></li>
+<li><p>Memory-efficient streaming processors</p></li>
+</ul>
+</section>
+</section>
+<section id="advanced-classification-techniques">
+<h2>Advanced Classification Techniques<a class="headerlink" href="#advanced-classification-techniques" title="Link to this heading">#</a></h2>
+<section id="hierarchical-classification">
+<h3>Hierarchical Classification<a class="headerlink" href="#hierarchical-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HierarchicalClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hierarchy</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Hierarchy format:</span>
+<span class="sd">        {</span>
+<span class="sd">            &quot;Technology&quot;: [&quot;AI/ML&quot;, &quot;Web Dev&quot;, &quot;Mobile&quot;],</span>
+<span class="sd">            &quot;Business&quot;: [&quot;Finance&quot;, &quot;Marketing&quot;, &quot;Management&quot;],</span>
+<span class="sd">            &quot;Science&quot;: [&quot;Physics&quot;, &quot;Chemistry&quot;, &quot;Biology&quot;]</span>
+<span class="sd">        }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hierarchy</span> <span class="o">=</span> <span class="n">hierarchy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_categories</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hierarchy</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Level 1: Root classifier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, root_categories[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_categories</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; root_category&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Level 2: Sub-category classifiers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub_classifiers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subs</span> <span class="ow">in</span> <span class="n">hierarchy</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">subs_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sub_classifiers</span><span class="p">[</span><span class="n">root</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;text, sub_categories[</span><span class="si">{</span><span class="n">subs_str</span><span class="si">}</span><span class="s2">] -&gt; sub_category&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># First level classification</span>
+        <span class="n">root_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_classifier</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">root_categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">root_category</span> <span class="o">=</span> <span class="n">root_result</span><span class="o">.</span><span class="n">root_category</span>
+        <span class="k">if</span> <span class="n">root_category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">:</span>
+            <span class="n">root_category</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_closest_root</span><span class="p">(</span><span class="n">root_result</span><span class="o">.</span><span class="n">root_category</span><span class="p">)</span>
+
+        <span class="c1"># Second level classification</span>
+        <span class="k">if</span> <span class="n">root_category</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_classifiers</span><span class="p">:</span>
+            <span class="n">sub_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_classifiers</span><span class="p">[</span><span class="n">root_category</span><span class="p">](</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                <span class="n">sub_categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">[</span><span class="n">root_category</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">sub_category</span> <span class="o">=</span> <span class="n">sub_result</span><span class="o">.</span><span class="n">sub_category</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sub_category</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">root_category</span><span class="o">=</span><span class="n">root_category</span><span class="p">,</span>
+            <span class="n">sub_category</span><span class="o">=</span><span class="n">sub_category</span><span class="p">,</span>
+            <span class="n">full_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">root_category</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">sub_category</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_closest_root</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
+        <span class="n">best_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_categories</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">root</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_categories</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">prediction</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">root</span>
+            <span class="c1"># Simple similarity</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_match</span> <span class="o">=</span> <span class="n">root</span>
+
+        <span class="k">return</span> <span class="n">best_match</span>
+</pre></div>
+</div>
+</section>
+<section id="few-shot-classification-with-examples">
+<h3>Few-shot Classification with Examples<a class="headerlink" href="#few-shot-classification-with-examples" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FewShotClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="n">categories_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify_with_examples</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, examples, categories[</span><span class="si">{</span><span class="n">categories_str</span><span class="si">}</span><span class="s2">] -&gt; classification, similar_examples, confidence&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">examples</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">examples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Format examples for the prompt</span>
+        <span class="n">examples_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;Example </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">\n</span><span class="s2">Category: </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ex</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">examples</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>  <span class="c1"># Limit examples</span>
+        <span class="p">])</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify_with_examples</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">examples</span><span class="o">=</span><span class="n">examples_text</span><span class="p">,</span>
+            <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="n">similar_examples</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">similar_examples</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="confidence-aware-classification">
+<h3>Confidence-aware Classification<a class="headerlink" href="#confidence-aware-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConfidenceClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">confidence_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, categories[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; classification, confidence, uncertainty_analysis&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_clarification</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text, uncertainty -&gt; clarification_question&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">confidence</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span>
+
+        <span class="c1"># Handle low confidence cases</span>
+        <span class="k">if</span> <span class="n">confidence</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span><span class="p">:</span>
+            <span class="n">clarification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_clarification</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+                <span class="n">uncertainty</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">uncertainty_analysis</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                <span class="n">classification</span><span class="o">=</span><span class="s2">&quot;UNCERTAIN&quot;</span><span class="p">,</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
+                <span class="n">clarification_needed</span><span class="o">=</span><span class="n">clarification</span><span class="o">.</span><span class="n">clarification_question</span><span class="p">,</span>
+                <span class="n">uncertainty_analysis</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">uncertainty_analysis</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">uncertainty_analysis</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">uncertainty_analysis</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="real-world-classification-applications">
+<h2>Real-World Classification Applications<a class="headerlink" href="#real-world-classification-applications" title="Link to this heading">#</a></h2>
+<section id="customer-support-ticket-router">
+<h3>Customer Support Ticket Router<a class="headerlink" href="#customer-support-ticket-router" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SupportTicketRouter</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Define departments and priorities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">departments</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Technical Support&quot;</span><span class="p">,</span> <span class="s2">&quot;Billing&quot;</span><span class="p">,</span> <span class="s2">&quot;Sales&quot;</span><span class="p">,</span> <span class="s2">&quot;Account Management&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Product Feedback&quot;</span><span class="p">,</span> <span class="s2">&quot;Bug Reports&quot;</span><span class="p">,</span> <span class="s2">&quot;Feature Requests&quot;</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">priorities</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Low&quot;</span><span class="p">,</span> <span class="s2">&quot;Medium&quot;</span><span class="p">,</span> <span class="s2">&quot;High&quot;</span><span class="p">,</span> <span class="s2">&quot;Critical&quot;</span><span class="p">,</span> <span class="s2">&quot;Urgent&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Classifiers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">department_classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ticket_text, departments[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">departments</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; department, reasoning&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority_classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ticket_text, priorities[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priorities</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; priority, urgency_factors&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_details</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;ticket_text -&gt; product, issue_type, customer_tier&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ticket_text</span><span class="p">):</span>
+        <span class="c1"># Extract basic details</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_details</span><span class="p">(</span><span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket_text</span><span class="p">)</span>
+
+        <span class="c1"># Classify department</span>
+        <span class="n">dept_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">department_classifier</span><span class="p">(</span>
+            <span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket_text</span><span class="p">,</span>
+            <span class="n">departments</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">departments</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Classify priority</span>
+        <span class="n">priority_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority_classifier</span><span class="p">(</span>
+            <span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket_text</span><span class="p">,</span>
+            <span class="n">priorities</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priorities</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">department</span><span class="o">=</span><span class="n">dept_result</span><span class="o">.</span><span class="n">department</span><span class="p">,</span>
+            <span class="n">priority</span><span class="o">=</span><span class="n">priority_result</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+            <span class="n">product</span><span class="o">=</span><span class="n">details</span><span class="o">.</span><span class="n">product</span><span class="p">,</span>
+            <span class="n">issue_type</span><span class="o">=</span><span class="n">details</span><span class="o">.</span><span class="n">issue_type</span><span class="p">,</span>
+            <span class="n">customer_tier</span><span class="o">=</span><span class="n">details</span><span class="o">.</span><span class="n">customer_tier</span><span class="p">,</span>
+            <span class="n">urgency_factors</span><span class="o">=</span><span class="n">priority_result</span><span class="o">.</span><span class="n">urgency_factors</span><span class="p">,</span>
+            <span class="n">department_reasoning</span><span class="o">=</span><span class="n">dept_result</span><span class="o">.</span><span class="n">reasoning</span>
+        <span class="p">)</span>
+
+<span class="c1"># Example usage</span>
+<span class="n">router</span> <span class="o">=</span> <span class="n">SupportTicketRouter</span><span class="p">()</span>
+<span class="n">ticket</span> <span class="o">=</span> <span class="s2">&quot;My premium account is charged twice this month and I can&#39;t access my reports&quot;</span>
+<span class="n">routing</span> <span class="o">=</span> <span class="n">router</span><span class="p">(</span><span class="n">ticket_text</span><span class="o">=</span><span class="n">ticket</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Department: </span><span class="si">{</span><span class="n">routing</span><span class="o">.</span><span class="n">department</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Billing</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Priority: </span><span class="si">{</span><span class="n">routing</span><span class="o">.</span><span class="n">priority</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>     <span class="c1"># High (premium customer)</span>
+</pre></div>
+</div>
+</section>
+<section id="content-moderation-system">
+<h3>Content Moderation System<a class="headerlink" href="#content-moderation-system" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ContentModerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Safe&quot;</span><span class="p">,</span> <span class="s2">&quot;Hate Speech&quot;</span><span class="p">,</span> <span class="s2">&quot;Spam&quot;</span><span class="p">,</span> <span class="s2">&quot;Inappropriate Content&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Misinformation&quot;</span><span class="p">,</span> <span class="s2">&quot;Harassment&quot;</span><span class="p">,</span> <span class="s2">&quot;Violence&quot;</span><span class="p">,</span> <span class="s2">&quot;Self-harm&quot;</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">moderate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;content, categories[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; category, severity, explanation&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_entities</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;content -&gt; mentioned_users, links, keywords&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;content, user_history, platform_context -&gt; contextual_factors&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">user_history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">platform_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Extract entities</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_entities</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="c1"># Check context if available</span>
+        <span class="k">if</span> <span class="n">user_history</span> <span class="ow">and</span> <span class="n">platform_context</span><span class="p">:</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_context</span><span class="p">(</span>
+                <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+                <span class="n">user_history</span><span class="o">=</span><span class="n">user_history</span><span class="p">,</span>
+                <span class="n">platform_context</span><span class="o">=</span><span class="n">platform_context</span>
+            <span class="p">)</span>
+            <span class="n">contextual_factors</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">contextual_factors</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">contextual_factors</span> <span class="o">=</span> <span class="s2">&quot;No additional context&quot;</span>
+
+        <span class="c1"># Moderate content</span>
+        <span class="n">moderation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moderate</span><span class="p">(</span>
+            <span class="n">content</span><span class="o">=</span><span class="n">content</span><span class="p">,</span>
+            <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Determine action based on category and severity</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_action</span><span class="p">(</span>
+            <span class="n">moderation</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">moderation</span><span class="o">.</span><span class="n">severity</span><span class="p">)</span> <span class="k">if</span> <span class="n">moderation</span><span class="o">.</span><span class="n">severity</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">category</span><span class="o">=</span><span class="n">moderation</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+            <span class="n">severity</span><span class="o">=</span><span class="n">moderation</span><span class="o">.</span><span class="n">severity</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span>
+            <span class="n">explanation</span><span class="o">=</span><span class="n">moderation</span><span class="o">.</span><span class="n">explanation</span><span class="p">,</span>
+            <span class="n">mentioned_users</span><span class="o">=</span><span class="n">entities</span><span class="o">.</span><span class="n">mentioned_users</span><span class="p">,</span>
+            <span class="n">links</span><span class="o">=</span><span class="n">entities</span><span class="o">.</span><span class="n">links</span><span class="p">,</span>
+            <span class="n">contextual_factors</span><span class="o">=</span><span class="n">contextual_factors</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">moderation</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">severity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine moderation action based on category and severity.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;Safe&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Allow&quot;</span>
+        <span class="k">elif</span> <span class="n">category</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Hate Speech&quot;</span><span class="p">,</span> <span class="s2">&quot;Violence&quot;</span><span class="p">,</span> <span class="s2">&quot;Self-harm&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s2">&quot;Remove&quot;</span>
+        <span class="k">elif</span> <span class="n">category</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Spam&quot;</span><span class="p">,</span> <span class="s2">&quot;Inappropriate Content&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s2">&quot;Remove&quot;</span> <span class="k">if</span> <span class="n">severity</span> <span class="o">&gt;</span> <span class="mf">0.7</span> <span class="k">else</span> <span class="s2">&quot;Flag&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Review&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="product-review-sentiment-and-aspect-classifier">
+<h3>Product Review Sentiment and Aspect Classifier<a class="headerlink" href="#product-review-sentiment-and-aspect-classifier" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ReviewAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sentiments</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Positive&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Mixed&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aspects</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Quality&quot;</span><span class="p">,</span> <span class="s2">&quot;Price&quot;</span><span class="p">,</span> <span class="s2">&quot;Service&quot;</span><span class="p">,</span> <span class="s2">&quot;Delivery&quot;</span><span class="p">,</span> <span class="s2">&quot;Features&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Usability&quot;</span><span class="p">,</span> <span class="s2">&quot;Design&quot;</span><span class="p">,</span> <span class="s2">&quot;Durability&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyze_sentiment</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;review, sentiments[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentiments</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; sentiment, sentiment_score&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_aspects</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;review, aspects[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; mentioned_aspects, aspect_sentiments&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">summarize_review</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;review, sentiment, aspects -&gt; summary, key_points&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">review_text</span><span class="p">):</span>
+        <span class="c1"># Analyze overall sentiment</span>
+        <span class="n">sentiment_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_sentiment</span><span class="p">(</span>
+            <span class="n">review</span><span class="o">=</span><span class="n">review_text</span><span class="p">,</span>
+            <span class="n">sentiments</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sentiments</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Extract aspects and their sentiments</span>
+        <span class="n">aspect_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_aspects</span><span class="p">(</span>
+            <span class="n">review</span><span class="o">=</span><span class="n">review_text</span><span class="p">,</span>
+            <span class="n">aspects</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aspects</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate summary</span>
+        <span class="n">summary_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summarize_review</span><span class="p">(</span>
+            <span class="n">review</span><span class="o">=</span><span class="n">review_text</span><span class="p">,</span>
+            <span class="n">sentiment</span><span class="o">=</span><span class="n">sentiment_result</span><span class="o">.</span><span class="n">sentiment</span><span class="p">,</span>
+            <span class="n">aspects</span><span class="o">=</span><span class="n">aspect_result</span><span class="o">.</span><span class="n">mentioned_aspects</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">overall_sentiment</span><span class="o">=</span><span class="n">sentiment_result</span><span class="o">.</span><span class="n">sentiment</span><span class="p">,</span>
+            <span class="n">sentiment_score</span><span class="o">=</span><span class="n">sentiment_result</span><span class="o">.</span><span class="n">sentiment_score</span><span class="p">,</span>
+            <span class="n">mentioned_aspects</span><span class="o">=</span><span class="n">aspect_result</span><span class="o">.</span><span class="n">mentioned_aspects</span><span class="p">,</span>
+            <span class="n">aspect_sentiments</span><span class="o">=</span><span class="n">aspect_result</span><span class="o">.</span><span class="n">aspect_sentiments</span><span class="p">,</span>
+            <span class="n">summary</span><span class="o">=</span><span class="n">summary_result</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span>
+            <span class="n">key_points</span><span class="o">=</span><span class="n">summary_result</span><span class="o">.</span><span class="n">key_points</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimizing-classifiers">
+<h2>Optimizing Classifiers<a class="headerlink" href="#optimizing-classifiers" title="Link to this heading">#</a></h2>
+<section id="using-bootstrapfewshot-for-classification">
+<h3>Using BootstrapFewShot for Classification<a class="headerlink" href="#using-bootstrapfewshot-for-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="n">categories_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, categories[</span><span class="si">{</span><span class="n">categories_str</span><span class="si">}</span><span class="s2">] -&gt; classification, confidence, reasoning&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">reasoning</span>
+        <span class="p">)</span>
+
+<span class="c1"># Training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;This product is amazing! Highly recommended.&quot;</span><span class="p">,</span>
+        <span class="n">classification</span><span class="o">=</span><span class="s2">&quot;Positive&quot;</span><span class="p">,</span>
+        <span class="n">confidence</span><span class="o">=</span><span class="mf">0.9</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Terrible customer service. Would not buy again.&quot;</span><span class="p">,</span>
+        <span class="n">classification</span><span class="o">=</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span>
+        <span class="n">confidence</span><span class="o">=</span><span class="mf">0.85</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># Evaluation metric</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">classification_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">classification</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">classification</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">confidence_match</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">confidence</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.2</span>
+    <span class="k">return</span> <span class="n">correct</span> <span class="ow">and</span> <span class="n">confidence_match</span>
+
+<span class="c1"># Optimize</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">classification_metric</span><span class="p">,</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+<span class="n">optimized_classifier</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">OptimizedClassifier</span><span class="p">([</span><span class="s2">&quot;Positive&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">]),</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="knnfewshot-for-context-aware-classification">
+<h3>KNNFewShot for Context-aware Classification<a class="headerlink" href="#knnfewshot-for-context-aware-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ContextAwareClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, similar_examples, categories[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; classification&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">similar_examples</span><span class="p">):</span>
+        <span class="c1"># Format similar examples</span>
+        <span class="n">examples_text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+            <span class="sa">f</span><span class="s2">&quot;Similar: </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">ex</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">similar_examples</span>
+        <span class="p">])</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">similar_examples</span><span class="o">=</span><span class="n">examples_text</span><span class="p">,</span>
+            <span class="n">categories</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">classification</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="n">similar_examples_used</span><span class="o">=</span><span class="n">similar_examples</span>
+        <span class="p">)</span>
+
+<span class="c1"># Use KNNFewShot to find similar examples during compilation</span>
+<span class="n">knn_optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">context_classifier</span> <span class="o">=</span> <span class="n">knn_optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">ContextAwareClassifier</span><span class="p">([</span><span class="s2">&quot;Tech&quot;</span><span class="p">,</span> <span class="s2">&quot;Sports&quot;</span><span class="p">,</span> <span class="s2">&quot;Politics&quot;</span><span class="p">,</span> <span class="s2">&quot;Entertainment&quot;</span><span class="p">]),</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">classification_trainset</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="data-quality-and-balance">
+<h3>1. Data Quality and Balance<a class="headerlink" href="#data-quality-and-balance" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prepare_balanced_dataset</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">categories</span><span class="p">,</span> <span class="n">samples_per_category</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a balanced dataset for training.&quot;&quot;&quot;</span>
+    <span class="n">balanced</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">category_counts</span> <span class="o">=</span> <span class="p">{</span><span class="n">cat</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
+        <span class="n">cat</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">category</span>
+        <span class="k">if</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">category_counts</span> <span class="ow">and</span> <span class="n">category_counts</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">samples_per_category</span><span class="p">:</span>
+            <span class="n">balanced</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">category_counts</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">balanced</span>
+</pre></div>
+</div>
+</section>
+<section id="handle-class-imbalance">
+<h3>2. Handle Class Imbalance<a class="headerlink" href="#handle-class-imbalance" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BalancedClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">,</span> <span class="n">class_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="n">categories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_weights</span> <span class="o">=</span> <span class="n">class_weights</span> <span class="ow">or</span> <span class="p">{</span><span class="n">cat</span><span class="p">:</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">categories</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">adjust_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">confidence</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adjust confidence based on class weights.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">prediction</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_weights</span><span class="p">:</span>
+            <span class="n">adjusted_conf</span> <span class="o">=</span> <span class="n">confidence</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_weights</span><span class="p">[</span><span class="n">prediction</span><span class="p">]</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">adjusted_conf</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">confidence</span>
+</pre></div>
+</div>
+</section>
+<section id="error-analysis-and-iteration">
+<h3>3. Error Analysis and Iteration<a class="headerlink" href="#error-analysis-and-iteration" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_errors</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze classification errors to improve the system.&quot;&quot;&quot;</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">testset</span><span class="p">:</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prediction</span><span class="o">.</span><span class="n">classification</span> <span class="o">!=</span> <span class="n">example</span><span class="o">.</span><span class="n">category</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                <span class="s2">&quot;predicted&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+                <span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">example</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">confidence</span>
+            <span class="p">})</span>
+
+    <span class="c1"># Analyze error patterns</span>
+    <span class="k">return</span> <span class="n">analyze_error_patterns</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="evaluation-metrics">
+<h2>Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading">#</a></h2>
+<section id="comprehensive-classification-evaluation">
+<h3>Comprehensive Classification Evaluation<a class="headerlink" href="#comprehensive-classification-evaluation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_comprehensive</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate classifier with multiple metrics.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">testset</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Basic accuracy</span>
+        <span class="n">is_correct</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">classification</span> <span class="o">==</span> <span class="n">example</span><span class="o">.</span><span class="n">category</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">is_correct</span><span class="p">)</span>
+
+        <span class="c1"># Confidence calibration</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">confidence</span><span class="p">))</span>
+
+        <span class="c1"># Per-category metrics</span>
+        <span class="n">results</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;category_</span><span class="si">{</span><span class="n">example</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">is_correct</span><span class="p">)</span>
+
+    <span class="c1"># Calculate metrics</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;overall_accuracy&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]),</span>
+        <span class="s2">&quot;average_confidence&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Add per-category accuracy</span>
+    <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="n">classifier</span><span class="o">.</span><span class="n">categories</span><span class="p">:</span>
+        <span class="n">cat_results</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;category_</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="n">cat_results</span><span class="p">:</span>
+            <span class="n">metrics</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">_accuracy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cat_results</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cat_results</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">metrics</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-challenges-and-solutions">
+<h2>Common Challenges and Solutions<a class="headerlink" href="#common-challenges-and-solutions" title="Link to this heading">#</a></h2>
+<section id="challenge-1-ambiguous-categories">
+<h3>Challenge 1: Ambiguous Categories<a class="headerlink" href="#challenge-1-ambiguous-categories" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>: Use confidence thresholds and ask for clarification.</p>
+</section>
+<section id="challenge-2-concept-drift">
+<h3>Challenge 2: Concept Drift<a class="headerlink" href="#challenge-2-concept-drift" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>: Implement continuous learning with new data.</p>
+</section>
+<section id="challenge-3-multi-label-complexity">
+<h3>Challenge 3: Multi-label Complexity<a class="headerlink" href="#challenge-3-multi-label-complexity" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>: Use threshold-based multi-label classification.</p>
+</section>
+<section id="challenge-4-imbalanced-classes">
+<h3>Challenge 4: Imbalanced Classes<a class="headerlink" href="#challenge-4-imbalanced-classes" title="Link to this heading">#</a></h3>
+<p><strong>Solution</strong>: Use weighted loss functions and resampling.</p>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>DSPy enables flexible</strong> and powerful text classification systems</p></li>
+<li><p><strong>Different architectures</strong> suit different classification needs</p></li>
+<li><p><strong>Optimization significantly improves</strong> classification performance</p></li>
+<li><p><strong>Real-world applications</strong> require handling of edge cases and uncertainty</p></li>
+<li><p><strong>Evaluation must be comprehensive</strong> and task-specific</p></li>
+<li><p><strong>Continuous improvement</strong> is key to maintaining performance</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore <strong>Entity Extraction</strong>, demonstrating how to build systems that can identify and extract structured information from unstructured text.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/06_real_world_applications"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_multi_hop_search.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Multi-hop Search: Complex Reasoning Across Documents</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_entity_extraction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Entity Extraction: Mining Structured Information from Text</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-text-classification">Understanding Text Classification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-types">Classification Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-applications">Real-World Applications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-basic-classifiers">Building Basic Classifiers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-binary-classifier">Simple Binary Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-class-classifier">Multi-class Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-label-classifier">Multi-label Classifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-multi-label-becomes-extreme">When Multi-label Becomes Extreme</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-classification-techniques">Advanced Classification Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hierarchical-classification">Hierarchical Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#few-shot-classification-with-examples">Few-shot Classification with Examples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-aware-classification">Confidence-aware Classification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-classification-applications">Real-World Classification Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-support-ticket-router">Customer Support Ticket Router</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-moderation-system">Content Moderation System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#product-review-sentiment-and-aspect-classifier">Product Review Sentiment and Aspect Classifier</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-classifiers">Optimizing Classifiers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-bootstrapfewshot-for-classification">Using BootstrapFewShot for Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#knnfewshot-for-context-aware-classification">KNNFewShot for Context-aware Classification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-quality-and-balance">1. Data Quality and Balance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-class-imbalance">2. Handle Class Imbalance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#error-analysis-and-iteration">3. Error Analysis and Iteration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics">Evaluation Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprehensive-classification-evaluation">Comprehensive Classification Evaluation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges-and-solutions">Common Challenges and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-ambiguous-categories">Challenge 1: Ambiguous Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-concept-drift">Challenge 2: Concept Drift</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-multi-label-complexity">Challenge 3: Multi-label Complexity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-4-imbalanced-classes">Challenge 4: Imbalanced Classes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

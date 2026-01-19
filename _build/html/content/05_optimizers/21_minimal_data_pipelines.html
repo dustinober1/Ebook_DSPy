@@ -1,0 +1,1497 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Minimal Data Training Pipelines &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/21_minimal_data_pipelines';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="GEPA: Genetic-Pareto Optimization" href="22_gepa_genetic_pareto_optimization.html" />
+    <link rel="prev" title="Prompts as Auto-Optimized Hyperparameters" href="20_prompts_as_hyperparameters.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/21_minimal_data_pipelines.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Minimal Data Training Pipelines</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimal-data-training-architecture">The Minimal Data Training Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-design-principles">Pipeline Design Principles</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-comprehensive-minimal-data-pipeline">Building a Comprehensive Minimal Data Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-pipeline-architecture">Base Pipeline Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-pipeline-configurations">Domain-Specific Pipeline Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-for-text-classification">Pipeline for Text Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-for-information-retrieval">Pipeline for Information Retrieval</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-pipeline-features">Advanced Pipeline Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-learning-integration">Continuous Learning Integration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-monitoring-and-analytics">Pipeline Monitoring and Analytics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-for-pipeline-design">Best Practices for Pipeline Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-simple-iterate-complex">1. Start Simple, Iterate Complex</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understand-your-data">2. Understand Your Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-strategies-wisely">3. Choose Strategies Wisely</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-rigorously">4. Validate Rigorously</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plan-for-continuous-learning">5. Plan for Continuous Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="minimal-data-training-pipelines">
+<h1>Minimal Data Training Pipelines<a class="headerlink" href="#minimal-data-training-pipelines" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In many real-world scenarios, we face the challenge of training sophisticated models with severely limited labeled data. Whether it’s 10 examples for a new task, a handful of annotations for a specialized domain, or minimal feedback for a new application, we need robust training pipelines that can extract maximum learning signal from minimal data.</p>
+<p>DSPy provides a comprehensive framework for building minimal data training pipelines that combine multiple optimization strategies, intelligent data augmentation, and sophisticated validation techniques. This section explores how to design, implement, and deploy these pipelines effectively.</p>
+</section>
+<section id="the-minimal-data-training-architecture">
+<h2>The Minimal Data Training Architecture<a class="headerlink" href="#the-minimal-data-training-architecture" title="Link to this heading">#</a></h2>
+<section id="core-components">
+<h3>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Minimal Data Pipeline
+├── Data Analysis &amp; Understanding
+├── Strategic Data Augmentation
+├── Multi-Strategy Optimization
+├── Robust Validation
+├── Confidence Estimation
+└── Continuous Learning
+</pre></div>
+</div>
+</section>
+<section id="pipeline-design-principles">
+<h3>Pipeline Design Principles<a class="headerlink" href="#pipeline-design-principles" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Data Efficiency</strong>: Extract maximum value from each example</p></li>
+<li><p><strong>Strategy Diversity</strong>: Combine multiple complementary approaches</p></li>
+<li><p><strong>Robust Validation</strong>: Prevent overfitting with limited data</p></li>
+<li><p><strong>Confidence Awareness</strong>: Know when to trust model predictions</p></li>
+<li><p><strong>Adaptability</strong>: Learn from new data and feedback</p></li>
+</ol>
+</section>
+</section>
+<section id="building-a-comprehensive-minimal-data-pipeline">
+<h2>Building a Comprehensive Minimal Data Pipeline<a class="headerlink" href="#building-a-comprehensive-minimal-data-pipeline" title="Link to this heading">#</a></h2>
+<section id="base-pipeline-architecture">
+<h3>Base Pipeline Architecture<a class="headerlink" href="#base-pipeline-architecture" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DataAugmentationType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Types of data augmentation strategies&quot;&quot;&quot;</span>
+    <span class="n">PARAPHRASE</span> <span class="o">=</span> <span class="s2">&quot;paraphrase&quot;</span>
+    <span class="n">COUNTERFACTUAL</span> <span class="o">=</span> <span class="s2">&quot;counterfactual&quot;</span>
+    <span class="n">TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;template&quot;</span>
+    <span class="n">SEMANTIC</span> <span class="o">=</span> <span class="s2">&quot;semantic&quot;</span>
+    <span class="n">SYNTACTIC</span> <span class="o">=</span> <span class="s2">&quot;syntactic&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OptimizationStrategy</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimization strategies for minimal data&quot;&quot;&quot;</span>
+    <span class="n">PROMPT_OPTIMIZATION</span> <span class="o">=</span> <span class="s2">&quot;prompt_optimization&quot;</span>
+    <span class="n">META_LEARNING</span> <span class="o">=</span> <span class="s2">&quot;meta_learning&quot;</span>
+    <span class="n">ACTIVE_LEARNING</span> <span class="o">=</span> <span class="s2">&quot;active_learning&quot;</span>
+    <span class="n">SELF_SUPERVISED</span> <span class="o">=</span> <span class="s2">&quot;self_supervised&quot;</span>
+    <span class="n">HYBRID</span> <span class="o">=</span> <span class="s2">&quot;hybrid&quot;</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PipelineConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for minimal data training pipeline&quot;&quot;&quot;</span>
+    <span class="n">num_examples</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">task_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">augmentation_strategies</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataAugmentationType</span><span class="p">]</span>
+    <span class="n">optimization_strategies</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OptimizationStrategy</span><span class="p">]</span>
+    <span class="n">validation_method</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">confidence_threshold</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">continuous_learning</span><span class="p">:</span> <span class="nb">bool</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MinimalDataTrainingPipeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive pipeline for training with minimal data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">PipelineConfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_components</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_tracker</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                        <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">],</span>
+                        <span class="n">evaluation_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute complete minimal data training pipeline&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Executing pipeline for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">task_type</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span><span class="si">}</span><span class="s2"> examples&quot;</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;pipeline_config&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+            <span class="s1">&#39;execution_timestamp&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+            <span class="s1">&#39;stages_completed&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;final_model&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;performance_metrics&#39;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Stage 1: Data Analysis and Understanding</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 1: Data Analysis ===&quot;</span><span class="p">)</span>
+        <span class="n">data_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_training_data</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;data_analysis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_analysis</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;data_analysis&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Stage 2: Strategic Data Augmentation</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 2: Data Augmentation ===&quot;</span><span class="p">)</span>
+        <span class="n">augmented_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strategic_augmentation</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">data_analysis</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;augmentation_stats&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;original_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">),</span>
+            <span class="s1">&#39;augmented_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">augmented_data</span><span class="p">),</span>
+            <span class="s1">&#39;augmentation_ratio&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">augmented_data</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;data_augmentation&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Stage 3: Multi-Strategy Optimization</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 3: Multi-Strategy Optimization ===&quot;</span><span class="p">)</span>
+        <span class="n">optimization_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multi_strategy_optimization</span><span class="p">(</span>
+            <span class="n">base_program</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">augmented_data</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;optimization_results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimization_results</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;multi_strategy_optimization&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Stage 4: Robust Validation and Selection</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 4: Model Selection ===&quot;</span><span class="p">)</span>
+        <span class="n">final_model</span><span class="p">,</span> <span class="n">validation_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_robust_validation_and_selection</span><span class="p">(</span>
+            <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;models&#39;</span><span class="p">],</span> <span class="n">examples</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;final_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_model</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;validation_results&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">validation_results</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;model_selection&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Stage 5: Confidence Estimation Integration</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 5: Confidence Estimation ===&quot;</span><span class="p">)</span>
+        <span class="n">confident_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_confidence_estimation</span><span class="p">(</span><span class="n">final_model</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;confident_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">confident_model</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;confidence_estimation&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Stage 6: Performance Evaluation</span>
+        <span class="k">if</span> <span class="n">evaluation_fn</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Stage 6: Performance Evaluation ===&quot;</span><span class="p">)</span>
+            <span class="n">performance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_comprehensive_evaluation</span><span class="p">(</span>
+                <span class="n">confident_model</span><span class="p">,</span> <span class="n">evaluation_fn</span>
+            <span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;performance_metrics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">performance</span>
+            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;performance_evaluation&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Record pipeline execution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">results</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_training_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Comprehensive analysis of minimal training data&quot;&quot;&quot;</span>
+
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;example_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">),</span>
+            <span class="s1">&#39;input_patterns&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;output_patterns&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;complexity_distribution&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;domain_features&#39;</span><span class="p">:</span> <span class="nb">set</span><span class="p">(),</span>
+            <span class="s1">&#39;data_quality&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;potential_biases&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;augmentation_opportunities&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Analyze each example</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+            <span class="c1"># Input analysis</span>
+            <span class="n">input_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_input_structure</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">input_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;input_patterns&#39;</span><span class="p">]:</span>
+                    <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;input_patterns&#39;</span><span class="p">][</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;input_patterns&#39;</span><span class="p">][</span><span class="n">pattern</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+
+            <span class="c1"># Output analysis</span>
+            <span class="n">output_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_output_structure</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">output_analysis</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;output_patterns&#39;</span><span class="p">]:</span>
+                    <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;output_patterns&#39;</span><span class="p">][</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;output_patterns&#39;</span><span class="p">][</span><span class="n">pattern</span><span class="p">]</span> <span class="o">+=</span> <span class="n">count</span>
+
+            <span class="c1"># Complexity assessment</span>
+            <span class="n">complexity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assess_example_complexity</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">complexity</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;complexity_distribution&#39;</span><span class="p">]:</span>
+                <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;complexity_distribution&#39;</span><span class="p">][</span><span class="n">complexity</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;complexity_distribution&#39;</span><span class="p">][</span><span class="n">complexity</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Domain feature extraction</span>
+            <span class="n">domain_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_domain_features</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;domain_features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">domain_features</span><span class="p">)</span>
+
+        <span class="c1"># Data quality assessment</span>
+        <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;data_quality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assess_data_quality</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+
+        <span class="c1"># Identify augmentation opportunities</span>
+        <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;augmentation_opportunities&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identify_augmentation_opportunities</span><span class="p">(</span>
+            <span class="n">analysis</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">analysis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_strategic_augmentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">],</span>
+                                <span class="n">analysis</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Strategically augment training data based on analysis&quot;&quot;&quot;</span>
+
+        <span class="n">augmented</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">augmentation_log</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">augmentation_strategies</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying </span><span class="si">{</span><span class="n">strategy</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> augmentation...&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">PARAPHRASE</span><span class="p">:</span>
+                <span class="c1"># Generate paraphrases for each example</span>
+                <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
+                    <span class="n">paraphrases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_paraphrases</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">para</span> <span class="ow">in</span> <span class="n">paraphrases</span><span class="p">:</span>
+                        <span class="n">augmented</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
+                    <span class="n">augmentation_log</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;paraphrase&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;original_example&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="p">),</span>
+                        <span class="s1">&#39;generated_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">paraphrases</span><span class="p">)</span>
+                    <span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">COUNTERFACTUAL</span><span class="p">:</span>
+                <span class="c1"># Generate counterfactual examples</span>
+                <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_generate_counterfactual</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+                        <span class="n">counterfactuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_counterfactuals</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">cf</span> <span class="ow">in</span> <span class="n">counterfactuals</span><span class="p">:</span>
+                            <span class="n">augmented</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cf</span><span class="p">)</span>
+                        <span class="n">augmentation_log</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;counterfactual&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;original_example&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="p">),</span>
+                            <span class="s1">&#39;generated_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">counterfactuals</span><span class="p">)</span>
+                        <span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">TEMPLATE</span><span class="p">:</span>
+                <span class="c1"># Extract and apply templates</span>
+                <span class="n">templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_templates_from_examples</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
+                    <span class="n">template_examples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_template_variations</span><span class="p">(</span>
+                        <span class="n">template</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span>
+                    <span class="p">)</span>
+                    <span class="n">augmented</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">template_examples</span><span class="p">)</span>
+                    <span class="n">augmentation_log</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;template&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="n">template</span><span class="p">,</span>
+                        <span class="s1">&#39;generated_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">template_examples</span><span class="p">)</span>
+                    <span class="p">})</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">SEMANTIC</span><span class="p">:</span>
+                <span class="c1"># Semantic variations</span>
+                <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
+                    <span class="n">semantic_variations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_semantic_variations</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+                    <span class="n">augmented</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">semantic_variations</span><span class="p">)</span>
+                    <span class="n">augmentation_log</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;semantic&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;original_example&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="p">),</span>
+                        <span class="s1">&#39;generated_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">semantic_variations</span><span class="p">)</span>
+                    <span class="p">})</span>
+
+        <span class="c1"># Quality control of augmented data</span>
+        <span class="n">filtered_augmented</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quality_filter_augmentations</span><span class="p">(</span>
+            <span class="n">augmented</span><span class="p">,</span> <span class="n">examples</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipeline_components</span><span class="p">[</span><span class="s1">&#39;augmentation_log&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">augmentation_log</span>
+
+        <span class="k">return</span> <span class="n">filtered_augmented</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_multi_strategy_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                                   <span class="n">original_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">],</span>
+                                   <span class="n">augmented_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply multiple optimization strategies&quot;&quot;&quot;</span>
+
+        <span class="n">optimization_results</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;models&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;strategy_performance&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;best_strategy&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;ensemble_candidates&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">strategy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">optimization_strategies</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Applying </span><span class="si">{</span><span class="n">strategy</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> optimization...&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">PROMPT_OPTIMIZATION</span><span class="p">:</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_pipeline</span><span class="p">(</span>
+                    <span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span><span class="p">,</span> <span class="n">augmented_examples</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">META_LEARNING</span><span class="p">:</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_learning_pipeline</span><span class="p">(</span>
+                    <span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">ACTIVE_LEARNING</span><span class="p">:</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_learning_pipeline</span><span class="p">(</span>
+                    <span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">SELF_SUPERVISED</span><span class="p">:</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_self_supervised_pipeline</span><span class="p">(</span>
+                    <span class="n">base_program</span><span class="p">,</span> <span class="n">augmented_examples</span>
+                <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">strategy</span> <span class="o">==</span> <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">HYBRID</span><span class="p">:</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hybrid_optimization_pipeline</span><span class="p">(</span>
+                    <span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span><span class="p">,</span> <span class="n">augmented_examples</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Evaluate strategy performance</span>
+            <span class="n">performance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_strategy_performance</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span> <span class="n">original_examples</span>
+            <span class="p">)</span>
+
+            <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;models&#39;</span><span class="p">][</span><span class="n">strategy</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>
+            <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;strategy_performance&#39;</span><span class="p">][</span><span class="n">strategy</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">performance</span>
+
+        <span class="c1"># Identify best performing strategy</span>
+        <span class="n">best_strategy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;strategy_performance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;mean_score&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;best_strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_strategy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Identify ensemble candidates (strategies with complementary strengths)</span>
+        <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;ensemble_candidates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identify_ensemble_candidates</span><span class="p">(</span>
+            <span class="n">optimization_results</span><span class="p">[</span><span class="s1">&#39;strategy_performance&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimization_results</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prompt_optimization_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                    <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                                    <span class="n">original_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">],</span>
+                                    <span class="n">augmented_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Complete prompt optimization pipeline&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Generate diverse prompt candidates</span>
+        <span class="n">prompt_candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_diverse_prompts</span><span class="p">(</span>
+            <span class="n">original_examples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">task_type</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Step 2: Evaluate each prompt</span>
+        <span class="n">evaluated_prompts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">prompt_candidates</span><span class="p">:</span>
+            <span class="c1"># Apply prompt to program</span>
+            <span class="n">prompt_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_prompt_to_program</span><span class="p">(</span><span class="n">base_program</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate using cross-validation</span>
+            <span class="n">cv_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cross_validate_minimal_data</span><span class="p">(</span>
+                <span class="n">prompt_program</span><span class="p">,</span> <span class="n">original_examples</span>
+            <span class="p">)</span>
+
+            <span class="n">evaluated_prompts</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;prompt&#39;</span><span class="p">:</span> <span class="n">prompt</span><span class="p">,</span>
+                <span class="s1">&#39;cv_score&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cv_scores</span><span class="p">),</span>
+                <span class="s1">&#39;cv_std&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">cv_scores</span><span class="p">),</span>
+                <span class="s1">&#39;program&#39;</span><span class="p">:</span> <span class="n">prompt_program</span>
+            <span class="p">})</span>
+
+        <span class="c1"># Step 3: Select best prompts</span>
+        <span class="n">best_prompts</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">evaluated_prompts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;cv_score&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># Step 4: Create prompt ensemble</span>
+        <span class="n">ensemble_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_prompt_ensemble</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;program&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">best_prompts</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Step 5: Fine-tune with augmented data</span>
+        <span class="n">final_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fine_tune_with_augmented_data</span><span class="p">(</span>
+            <span class="n">ensemble_program</span><span class="p">,</span> <span class="n">augmented_examples</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">final_program</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_meta_learning_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                              <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Meta-learning pipeline for minimal data&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Identify related tasks</span>
+        <span class="n">related_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discover_related_tasks</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">task_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">domain</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Step 2: Create meta-learner</span>
+        <span class="n">meta_learner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_meta_learner</span><span class="p">(</span><span class="n">base_program</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Meta-training on related tasks</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">related_tasks</span><span class="p">:</span>
+            <span class="n">task_examples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_task_examples</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+            <span class="n">meta_learner</span><span class="o">.</span><span class="n">meta_train</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">task_examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Rapid adaptation to target task</span>
+        <span class="n">adapted_model</span> <span class="o">=</span> <span class="n">meta_learner</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span>
+            <span class="n">target_task</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">task_type</span><span class="p">,</span>
+            <span class="n">support_set</span><span class="o">=</span><span class="n">examples</span><span class="p">,</span>
+            <span class="n">adaptation_steps</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">adapted_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_active_learning_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                                <span class="n">examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Active learning pipeline for efficient data usage&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Initialize with current examples</span>
+        <span class="n">active_learner</span> <span class="o">=</span> <span class="n">ActiveLearningWrapper</span><span class="p">(</span><span class="n">base_program</span><span class="p">)</span>
+        <span class="n">active_learner</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Generate synthetic queries for active selection</span>
+        <span class="n">synthetic_pool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_synthetic_queries</span><span class="p">(</span><span class="n">examples</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Iterative active learning</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>  <span class="c1"># Limited iterations due to minimal data</span>
+            <span class="c1"># Select most informative examples</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="n">active_learner</span><span class="o">.</span><span class="n">select_informative</span><span class="p">(</span>
+                <span class="n">synthetic_pool</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Simulate annotations (in practice, this would be human input)</span>
+            <span class="n">annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simulate_annotations</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+
+            <span class="c1"># Update model</span>
+            <span class="n">active_learner</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">annotations</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">active_learner</span><span class="o">.</span><span class="n">get_current_model</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_self_supervised_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                                <span class="n">augmented_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Self-supervised learning pipeline&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Create self-supervised tasks</span>
+        <span class="n">self_supervised_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_self_supervised_tasks</span><span class="p">(</span><span class="n">augmented_examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Pre-train on self-supervised tasks</span>
+        <span class="n">pretrained_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pretrain_self_supervised</span><span class="p">(</span>
+            <span class="n">base_program</span><span class="p">,</span> <span class="n">self_supervised_tasks</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Step 3: Fine-tune on original examples</span>
+        <span class="n">fine_tuned_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fine_tune_with_minimal_data</span><span class="p">(</span>
+            <span class="n">pretrained_model</span><span class="p">,</span> <span class="n">augmented_examples</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>  <span class="c1"># Use original 10</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fine_tuned_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_hybrid_optimization_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                    <span class="n">base_program</span><span class="p">:</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+                                    <span class="n">original_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">],</span>
+                                    <span class="n">augmented_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine multiple optimization strategies&quot;&quot;&quot;</span>
+
+        <span class="n">hybrid_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Apply prompt optimization</span>
+        <span class="n">prompt_optimized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_pipeline</span><span class="p">(</span>
+            <span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span><span class="p">,</span> <span class="n">augmented_examples</span>
+        <span class="p">)</span>
+        <span class="n">hybrid_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;prompt_optimization&#39;</span><span class="p">,</span> <span class="n">prompt_optimized</span><span class="p">))</span>
+
+        <span class="c1"># Apply meta-learning</span>
+        <span class="n">meta_learned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_learning_pipeline</span><span class="p">(</span><span class="n">base_program</span><span class="p">,</span> <span class="n">original_examples</span><span class="p">)</span>
+        <span class="n">hybrid_results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;meta_learning&#39;</span><span class="p">,</span> <span class="n">meta_learned</span><span class="p">))</span>
+
+        <span class="c1"># Create weighted ensemble</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_strategy_weights</span><span class="p">(</span><span class="n">hybrid_results</span><span class="p">,</span> <span class="n">original_examples</span><span class="p">)</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_weighted_ensemble</span><span class="p">(</span><span class="n">hybrid_results</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ensemble</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="domain-specific-pipeline-configurations">
+<h2>Domain-Specific Pipeline Configurations<a class="headerlink" href="#domain-specific-pipeline-configurations" title="Link to this heading">#</a></h2>
+<section id="pipeline-for-text-classification">
+<h3>Pipeline for Text Classification<a class="headerlink" href="#pipeline-for-text-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_classification_pipeline</span><span class="p">(</span><span class="n">num_examples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pipeline optimized for text classification&quot;&quot;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">PipelineConfig</span><span class="p">(</span>
+        <span class="n">num_examples</span><span class="o">=</span><span class="n">num_examples</span><span class="p">,</span>
+        <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+        <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+        <span class="n">augmentation_strategies</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">PARAPHRASE</span><span class="p">,</span>
+            <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">TEMPLATE</span><span class="p">,</span>
+            <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">COUNTERFACTUAL</span>
+        <span class="p">],</span>
+        <span class="n">optimization_strategies</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">PROMPT_OPTIMIZATION</span><span class="p">,</span>
+            <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">META_LEARNING</span>
+        <span class="p">],</span>
+        <span class="n">validation_method</span><span class="o">=</span><span class="s2">&quot;stratified_cv&quot;</span><span class="p">,</span>
+        <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">continuous_learning</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MinimalDataTrainingPipeline</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Example usage</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_sentiment_classifier_with_10_examples</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train sentiment classifier with only 10 examples&quot;&quot;&quot;</span>
+
+    <span class="c1"># 10 labeled sentiment examples</span>
+    <span class="n">examples</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;This product exceeded my expectations!&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span><span class="p">),</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Terrible service, would not recommend.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span><span class="p">),</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;It&#39;s okay, nothing special.&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;neutral&quot;</span><span class="p">),</span>
+        <span class="c1"># ... 7 more examples</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Create pipeline</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">create_classification_pipeline</span><span class="p">(</span><span class="n">num_examples</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;product_reviews&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create base classifier</span>
+    <span class="n">base_classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; sentiment&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Define evaluation function</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_classifier</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+        <span class="n">test_cases</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;Amazing quality!&quot;</span><span class="p">,</span> <span class="s2">&quot;positive&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;Worst purchase ever.&quot;</span><span class="p">,</span> <span class="s2">&quot;negative&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;It&#39;s fine.&quot;</span><span class="p">,</span> <span class="s2">&quot;neutral&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">true_label</span> <span class="ow">in</span> <span class="n">test_cases</span><span class="p">:</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pred</span><span class="o">.</span><span class="n">sentiment</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">true_label</span><span class="p">:</span>
+                <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_cases</span><span class="p">)</span>
+
+    <span class="c1"># Execute pipeline</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">execute_pipeline</span><span class="p">(</span>
+        <span class="n">base_program</span><span class="o">=</span><span class="n">base_classifier</span><span class="p">,</span>
+        <span class="n">examples</span><span class="o">=</span><span class="n">examples</span><span class="p">,</span>
+        <span class="n">evaluation_fn</span><span class="o">=</span><span class="n">evaluate_classifier</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;confident_model&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="pipeline-for-information-retrieval">
+<h3>Pipeline for Information Retrieval<a class="headerlink" href="#pipeline-for-information-retrieval" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_ir_pipeline</span><span class="p">(</span><span class="n">num_examples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pipeline optimized for information retrieval&quot;&quot;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">PipelineConfig</span><span class="p">(</span>
+        <span class="n">num_examples</span><span class="o">=</span><span class="n">num_examples</span><span class="p">,</span>
+        <span class="n">task_type</span><span class="o">=</span><span class="s2">&quot;information_retrieval&quot;</span><span class="p">,</span>
+        <span class="n">domain</span><span class="o">=</span><span class="n">domain</span><span class="p">,</span>
+        <span class="n">augmentation_strategies</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">PARAPHRASE</span><span class="p">,</span>
+            <span class="n">DataAugmentationType</span><span class="o">.</span><span class="n">SEMANTIC</span>
+        <span class="p">],</span>
+        <span class="n">optimization_strategies</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">SELF_SUPERVISED</span><span class="p">,</span>
+            <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">ACTIVE_LEARNING</span><span class="p">,</span>
+            <span class="n">OptimizationStrategy</span><span class="o">.</span><span class="n">HYBRID</span>
+        <span class="p">],</span>
+        <span class="n">validation_method</span><span class="o">=</span><span class="s2">&quot;leave_one_out&quot;</span><span class="p">,</span>
+        <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">continuous_learning</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MinimalDataTrainingPipeline</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Example usage</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_ir_system_with_minimal_judgments</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train IR system with minimal relevance judgments&quot;&quot;&quot;</span>
+
+    <span class="c1"># 10 query-document relevance judgments</span>
+    <span class="n">judgments</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="s2">&quot;machine learning tutorials&quot;</span><span class="p">,</span>
+            <span class="n">document</span><span class="o">=</span><span class="s2">&quot;Complete guide to ML for beginners&quot;</span><span class="p">,</span>
+            <span class="n">relevance</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">),</span>
+        <span class="c1"># ... 9 more judgments</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Create IR pipeline</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">create_ir_pipeline</span><span class="p">(</span><span class="n">num_examples</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;educational_content&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create base IR model</span>
+    <span class="n">base_ir</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query, document -&gt; relevance_score&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Execute pipeline</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">execute_pipeline</span><span class="p">(</span>
+        <span class="n">base_program</span><span class="o">=</span><span class="n">base_ir</span><span class="p">,</span>
+        <span class="n">examples</span><span class="o">=</span><span class="n">judgments</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;confident_model&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-pipeline-features">
+<h2>Advanced Pipeline Features<a class="headerlink" href="#advanced-pipeline-features" title="Link to this heading">#</a></h2>
+<section id="continuous-learning-integration">
+<h3>Continuous Learning Integration<a class="headerlink" href="#continuous-learning-integration" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ContinuousLearningWrapper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for continuous learning with minimal data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_model</span><span class="p">,</span> <span class="n">pipeline_config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">initial_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">pipeline_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback_buffer</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_with_feedback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update model with new feedback&quot;&quot;&quot;</span>
+
+        <span class="c1"># Add to feedback buffer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback_buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">feedback_examples</span><span class="p">)</span>
+
+        <span class="c1"># Periodic retraining</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feedback_buffer</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>  <span class="c1"># Retrain every 5 new examples</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Retraining with new feedback...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Combine original and feedback data</span>
+            <span class="n">all_examples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_examples</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">feedback_buffer</span>
+
+            <span class="c1"># Create temporary pipeline for retraining</span>
+            <span class="n">temp_pipeline</span> <span class="o">=</span> <span class="n">MinimalDataTrainingPipeline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">retrain_results</span> <span class="o">=</span> <span class="n">temp_pipeline</span><span class="o">.</span><span class="n">execute_pipeline</span><span class="p">(</span>
+                <span class="n">base_program</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(),</span>
+                <span class="n">examples</span><span class="o">=</span><span class="n">all_examples</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Update model</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">retrain_results</span><span class="p">[</span><span class="s1">&#39;confident_model&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Clear feedback buffer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feedback_buffer</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_with_confidence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make prediction with confidence estimation&quot;&quot;&quot;</span>
+
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Add confidence based on feedback history</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">recent_performance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:])</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">recent_performance</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">confidence_threshold</span>
+
+        <span class="c1"># Add confidence to prediction</span>
+        <span class="n">prediction</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="n">confidence</span>
+
+        <span class="k">return</span> <span class="n">prediction</span>
+</pre></div>
+</div>
+</section>
+<section id="pipeline-monitoring-and-analytics">
+<h3>Pipeline Monitoring and Analytics<a class="headerlink" href="#pipeline-monitoring-and-analytics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PipelineMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Monitor and analyze pipeline performance&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_log</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alerts</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">monitor_pipeline_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline_results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Monitor pipeline execution and generate insights&quot;&quot;&quot;</span>
+
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">pipeline_results</span><span class="p">[</span><span class="s1">&#39;execution_timestamp&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;pipeline_config&#39;</span><span class="p">:</span> <span class="n">pipeline_results</span><span class="p">[</span><span class="s1">&#39;pipeline_config&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;stages_completed&#39;</span><span class="p">:</span> <span class="n">pipeline_results</span><span class="p">[</span><span class="s1">&#39;stages_completed&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;data_augmentation_ratio&#39;</span><span class="p">:</span> <span class="n">pipeline_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;augmentation_stats&#39;</span><span class="p">,</span> <span class="p">{}</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;augmentation_ratio&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="s1">&#39;optimization_strategies_used&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="n">pipeline_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optimization_results&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;models&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="s1">&#39;performance_metrics&#39;</span><span class="p">:</span> <span class="n">pipeline_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;performance_metrics&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_log</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+        <span class="c1"># Generate insights and alerts</span>
+        <span class="n">insights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_insights</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">insights</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Pipeline Insights ===&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">insight</span> <span class="ow">in</span> <span class="n">insights</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">insight</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check for alerts</span>
+        <span class="n">alerts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_alerts</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">alerts</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">alerts</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  Alerts:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">alert</span> <span class="ow">in</span> <span class="n">alerts</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">alert</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">insights</span><span class="p">,</span> <span class="n">alerts</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_insights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate insights from pipeline metrics&quot;&quot;&quot;</span>
+
+        <span class="n">insights</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Augmentation insights</span>
+        <span class="k">if</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;data_augmentation_ratio&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;High augmentation ratio (</span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;data_augmentation_ratio&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">) &quot;</span>
+                <span class="s2">&quot;may introduce noise&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Strategy insights</span>
+        <span class="k">if</span> <span class="s1">&#39;hybrid&#39;</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;optimization_strategies_used&#39;</span><span class="p">]:</span>
+            <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;Hybrid optimization selected - combining multiple strategies &quot;</span>
+                <span class="s2">&quot;for robust performance&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Performance insights</span>
+        <span class="n">perf</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;performance_metrics&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">perf</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">perf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mean_score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
+                <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Excellent performance achieved!&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">perf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mean_score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.6</span><span class="p">:</span>
+                <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="s2">&quot;Low performance detected - consider collecting more data &quot;</span>
+                    <span class="s2">&quot;or trying different strategies&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">insights</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_alerts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check for issues requiring attention&quot;&quot;&quot;</span>
+
+        <span class="n">alerts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Data quality alerts</span>
+        <span class="k">if</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;data_augmentation_ratio&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">alerts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: Very high augmentation ratio - verify data quality&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Performance alerts</span>
+        <span class="n">perf</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;performance_metrics&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">perf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;std_score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.2</span><span class="p">:</span>
+            <span class="n">alerts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;Warning: High performance variance - model may be unstable&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">alerts</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices-for-pipeline-design">
+<h2>Best Practices for Pipeline Design<a class="headerlink" href="#best-practices-for-pipeline-design" title="Link to this heading">#</a></h2>
+<section id="start-simple-iterate-complex">
+<h3>1. Start Simple, Iterate Complex<a class="headerlink" href="#start-simple-iterate-complex" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Begin with basic prompt optimization</p></li>
+<li><p>Add complexity only if needed</p></li>
+<li><p>Always validate improvements</p></li>
+</ul>
+</section>
+<section id="understand-your-data">
+<h3>2. Understand Your Data<a class="headerlink" href="#understand-your-data" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Analyze patterns in minimal examples</p></li>
+<li><p>Identify domain-specific features</p></li>
+<li><p>Detect potential biases early</p></li>
+</ul>
+</section>
+<section id="choose-strategies-wisely">
+<h3>3. Choose Strategies Wisely<a class="headerlink" href="#choose-strategies-wisely" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Match strategies to task characteristics</p></li>
+<li><p>Consider computational constraints</p></li>
+<li><p>Prioritize based on expected impact</p></li>
+</ul>
+</section>
+<section id="validate-rigorously">
+<h3>4. Validate Rigorously<a class="headerlink" href="#validate-rigorously" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use appropriate cross-validation for minimal data</p></li>
+<li><p>Monitor for overfitting</p></li>
+<li><p>Include confidence estimation</p></li>
+</ul>
+</section>
+<section id="plan-for-continuous-learning">
+<h3>5. Plan for Continuous Learning<a class="headerlink" href="#plan-for-continuous-learning" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Design for feedback incorporation</p></li>
+<li><p>Monitor performance over time</p></li>
+<li><p>Schedule periodic retraining</p></li>
+</ul>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Holistic Approach</strong>: Minimal data training requires comprehensive pipelines</p></li>
+<li><p><strong>Strategy Combination</strong>: Multiple strategies outperform single approaches</p></li>
+<li><p><strong>Data Quality</strong>: Augmentation must maintain high quality standards</p></li>
+<li><p><strong>Robust Validation</strong>: Essential when working with limited data</p></li>
+<li><p><strong>Continuous Improvement</strong>: Learning should continue after initial training</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>This section covered comprehensive pipelines for minimal data training. These concepts integrate with:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#../06-real-world-applications/11-extreme-few-shot-learning.md"><span class="xref myst">Extreme Few-Shot Learning</span></a> for specific techniques</p></li>
+<li><p><a class="reference internal" href="#20-prompts-as-hyperparameters.md"><span class="xref myst">Prompt Hyperparameter Optimization</span></a> for optimization details</p></li>
+<li><p><a class="reference internal" href="#02-bootstrapfewshot.md"><span class="xref myst">BootstrapFewShot</span></a> for foundational optimization methods</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="20_prompts_as_hyperparameters.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Prompts as Auto-Optimized Hyperparameters</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="22_gepa_genetic_pareto_optimization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">GEPA: Genetic-Pareto Optimization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-minimal-data-training-architecture">The Minimal Data Training Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-design-principles">Pipeline Design Principles</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-comprehensive-minimal-data-pipeline">Building a Comprehensive Minimal Data Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#base-pipeline-architecture">Base Pipeline Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-pipeline-configurations">Domain-Specific Pipeline Configurations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-for-text-classification">Pipeline for Text Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-for-information-retrieval">Pipeline for Information Retrieval</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-pipeline-features">Advanced Pipeline Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-learning-integration">Continuous Learning Integration</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-monitoring-and-analytics">Pipeline Monitoring and Analytics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-for-pipeline-design">Best Practices for Pipeline Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-simple-iterate-complex">1. Start Simple, Iterate Complex</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understand-your-data">2. Understand Your Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-strategies-wisely">3. Choose Strategies Wisely</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-rigorously">4. Validate Rigorously</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plan-for-continuous-learning">5. Plan for Continuous Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

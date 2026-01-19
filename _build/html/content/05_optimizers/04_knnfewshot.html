@@ -1,0 +1,1328 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>KNNFewShot: Similarity-Based Example Selection &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/04_knnfewshot';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fine-Tuning Small Language Models in DSPy" href="05_finetuning.html" />
+    <link rel="prev" title="MIPRO: Multi-step Instruction and Demonstration Optimization" href="03_mipro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/04_knnfewshot.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>KNNFewShot: Similarity-Based Example Selection</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-knnfewshot-works">How KNNFewShot Works</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-concept">Core Concept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-advantages">Key Advantages</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-usage">Basic Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-configuration">Advanced Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-similarity-metrics">Custom Similarity Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#field-specific-similarity">Field-Specific Similarity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knnfewshot-parameters">KNNFewShot Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-parameters">Core Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-parameters">Advanced Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-different-data-types">Working with Different Data Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-classification">Text Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-modal-data">Multi-Modal Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-embeddings">Caching Embeddings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-processing">Batch Processing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-functions">Similarity Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-based-similarity">Text-Based Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantic-similarity">Semantic Similarity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-appropriate-k-value">1. Choose Appropriate k Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clean-and-normalize-data">2. Clean and Normalize Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-data-imbalance">3. Handle Data Imbalance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitor-similarity-quality">4. Monitor Similarity Quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-1-poor-similarity-metric">Pitfall 1: Poor Similarity Metric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-2-large-context-window">Pitfall 2: Large Context Window</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-3-overfitting-to-training-data">Pitfall 3: Overfitting to Training Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="knnfewshot-similarity-based-example-selection">
+<h1>KNNFewShot: Similarity-Based Example Selection<a class="headerlink" href="#knnfewshot-similarity-based-example-selection" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>KNNFewShot is a DSPy optimizer that uses K-Nearest Neighbors algorithm to select the most relevant examples for each query. Unlike other optimizers that generate or optimize examples globally, KNNFewShot dynamically selects context-specific examples based on similarity to the current input.</p>
+</section>
+<section id="how-knnfewshot-works">
+<h2>How KNNFewShot Works<a class="headerlink" href="#how-knnfewshot-works" title="Link to this heading">#</a></h2>
+<section id="core-concept">
+<h3>Core Concept<a class="headerlink" href="#core-concept" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Embed Training Examples</strong>: Convert all training examples to vector representations</p></li>
+<li><p><strong>Query Embedding</strong>: Embed the new query/question</p></li>
+<li><p><strong>Similarity Search</strong>: Find K most similar training examples</p></li>
+<li><p><strong>Dynamic Selection</strong>: Use these examples as few-shot demonstrations</p></li>
+</ol>
+</section>
+<section id="key-advantages">
+<h3>Key Advantages<a class="headerlink" href="#key-advantages" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Context-aware</strong>: Different examples for different queries</p></li>
+<li><p><strong>Scalable</strong>: Efficient even with large training sets</p></li>
+<li><p><strong>Interpretable</strong>: Easy to understand why examples were selected</p></li>
+<li><p><strong>Adaptable</strong>: Works with any similarity metric</p></li>
+</ul>
+</section>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">#</a></h2>
+<section id="simple-example">
+<h3>Simple Example<a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNNFewShot</span>
+
+<span class="c1"># 1. Define your program</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QAProgram</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question, context -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># 2. Prepare training data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is the capital of France?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Paris&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;geography&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;Who wrote Romeo and Juliet?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;William Shakespeare&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;literature&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... many more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># 3. Create KNNFewShot optimizer</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Use 3 nearest neighbors</span>
+
+<span class="c1"># 4. Compile the program</span>
+<span class="n">compiled_qa</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">QAProgram</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+
+<span class="c1"># 5. Use with dynamic example selection</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compiled_qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is the capital of Germany?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+
+<span class="c1"># The 3 most similar geography questions were automatically included!</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-configuration">
+<h2>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading">#</a></h2>
+<section id="custom-similarity-metrics">
+<h3>Custom Similarity Metrics<a class="headerlink" href="#custom-similarity-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sentence_transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Custom embedding model</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">custom_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate similarity using embeddings.&quot;&quot;&quot;</span>
+    <span class="n">query_emb</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">example_emb</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+
+    <span class="c1"># Cosine similarity</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">query_emb</span><span class="p">,</span> <span class="n">example_emb</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">query_emb</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">example_emb</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">similarity</span>
+
+<span class="c1"># Use with custom similarity</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">similarity_fn</span><span class="o">=</span><span class="n">custom_similarity</span><span class="p">,</span>
+    <span class="n">vectorizer</span><span class="o">=</span><span class="n">encoder</span><span class="o">.</span><span class="n">encode</span>  <span class="c1"># Direct embedding function</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="field-specific-similarity">
+<h3>Field-Specific Similarity<a class="headerlink" href="#field-specific-similarity" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">field_weighted_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate similarity with field weights.&quot;&quot;&quot;</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;question&#39;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+        <span class="s1">&#39;topic&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+        <span class="s1">&#39;difficulty&#39;</span><span class="p">:</span> <span class="mf">0.1</span>
+    <span class="p">}</span>
+
+    <span class="n">similarities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">weights</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+            <span class="n">sim</span> <span class="o">=</span> <span class="n">text_similarity</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">field</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">field</span><span class="p">))</span>
+            <span class="n">similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">sim</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span>
+
+<span class="c1"># Example with custom fields</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">WeightedExample</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">answer</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">difficulty</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">question</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">answer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">difficulty</span> <span class="o">=</span> <span class="n">difficulty</span>
+
+<span class="n">weighted_trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">WeightedExample</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is photosynthesis?&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Process by which plants convert sunlight to energy&quot;</span><span class="p">,</span>
+        <span class="n">topic</span><span class="o">=</span><span class="s2">&quot;biology&quot;</span><span class="p">,</span>
+        <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">similarity_fn</span><span class="o">=</span><span class="n">field_weighted_similarity</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="knnfewshot-parameters">
+<h2>KNNFewShot Parameters<a class="headerlink" href="#knnfewshot-parameters" title="Link to this heading">#</a></h2>
+<section id="core-parameters">
+<h3>Core Parameters<a class="headerlink" href="#core-parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k</span></code></p></td>
+<td><p>int</p></td>
+<td><p>3</p></td>
+<td><p>Number of neighbors to retrieve</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">vectorizer</span></code></p></td>
+<td><p>Callable</p></td>
+<td><p>None</p></td>
+<td><p>Function to convert examples to vectors</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">similarity_fn</span></code></p></td>
+<td><p>Callable</p></td>
+<td><p>None</p></td>
+<td><p>Custom similarity function</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">embedding_model</span></code></p></td>
+<td><p>str</p></td>
+<td><p>“text-embedding-ada-002”</p></td>
+<td><p>OpenAI embedding model</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advanced-parameters">
+<h3>Advanced Parameters<a class="headerlink" href="#advanced-parameters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">vectorizer</span><span class="o">=</span><span class="n">my_vectorizer</span><span class="p">,</span>
+    <span class="n">similarity_fn</span><span class="o">=</span><span class="n">my_similarity</span><span class="p">,</span>
+    <span class="n">embedding_model</span><span class="o">=</span><span class="s2">&quot;text-embedding-3-large&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>          <span class="c1"># Maximum tokens for context</span>
+    <span class="n">include_metadata</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>    <span class="c1"># Include similarity scores</span>
+    <span class="n">cache_embeddings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>    <span class="c1"># Cache embeddings for speed</span>
+    <span class="n">diversity_boost</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>      <span class="c1"># Encourage diverse selections</span>
+    <span class="n">exclude_self</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>        <span class="c1"># Exclude exact matches</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span>           <span class="c1"># Batch size for embedding</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="working-with-different-data-types">
+<h2>Working with Different Data Types<a class="headerlink" href="#working-with-different-data-types" title="Link to this heading">#</a></h2>
+<section id="text-classification">
+<h3>Text Classification<a class="headerlink" href="#text-classification" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TextClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categories</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;text, similar_examples[</span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span><span class="si">}</span><span class="s2">] -&gt; category&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># Training data with categories</span>
+<span class="n">classification_trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;I love this product!&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;positive&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;This is terrible quality.&quot;</span><span class="p">,</span>
+        <span class="n">category</span><span class="o">=</span><span class="s2">&quot;negative&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># KNNFewShot for classification</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">vectorizer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span>  <span class="c1"># Use text field for similarity</span>
+<span class="p">)</span>
+
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">TextClassifier</span><span class="p">([</span><span class="s2">&quot;positive&quot;</span><span class="p">,</span> <span class="s2">&quot;negative&quot;</span><span class="p">,</span> <span class="s2">&quot;neutral&quot;</span><span class="p">]),</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">classification_trainset</span>
+<span class="p">)</span>
+
+<span class="c1"># Dynamic examples based on text similarity</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;This works great!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>  <span class="c1"># Likely &quot;positive&quot; due to similar examples</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-modal-data">
+<h3>Multi-Modal Data<a class="headerlink" href="#multi-modal-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultimodalRetriever</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;query, image_description, similar_examples -&gt; response&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">image_description</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">image_description</span><span class="o">=</span><span class="n">image_description</span>
+        <span class="p">)</span>
+
+<span class="c1"># Multi-modal training data</span>
+<span class="n">multimodal_trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">query</span><span class="o">=</span><span class="s2">&quot;What color is the car?&quot;</span><span class="p">,</span>
+        <span class="n">image_description</span><span class="o">=</span><span class="s2">&quot;A red sports car driving on a highway&quot;</span><span class="p">,</span>
+        <span class="n">response</span><span class="o">=</span><span class="s2">&quot;The car is red&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">multimodal_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combined text and image similarity.&quot;&quot;&quot;</span>
+    <span class="n">text_sim</span> <span class="o">=</span> <span class="n">text_similarity</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">image_sim</span> <span class="o">=</span> <span class="n">text_similarity</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">image_description</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">image_description</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">text_sim</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">image_sim</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">similarity_fn</span><span class="o">=</span><span class="n">multimodal_similarity</span>
+<span class="p">)</span>
+
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">MultimodalRetriever</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">multimodal_trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-optimization">
+<h2>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">#</a></h2>
+<section id="caching-embeddings">
+<h3>Caching Embeddings<a class="headerlink" href="#caching-embeddings" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CachedKNNFewShot</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="s2">&quot;./embeddings&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_or_create_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get cached embedding or create new one.&quot;&quot;&quot;</span>
+        <span class="n">example_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="p">)))</span>
+        <span class="n">cache_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">example_id</span><span class="si">}</span><span class="s2">.pkl&quot;</span>
+
+        <span class="k">if</span> <span class="n">cache_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">embedding</span> <span class="o">=</span> <span class="n">create_embedding</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">embedding</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">embedding</span>
+
+<span class="c1"># Use cached version</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">CachedKNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="batch-processing">
+<h3>Batch Processing<a class="headerlink" href="#batch-processing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BatchKNNFewShot</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embeddings</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pre-compute all embeddings.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span> <span class="o">=</span> <span class="n">trainset</span>
+
+        <span class="c1"># Process in batches</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">):</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="n">trainset</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">]</span>
+            <span class="n">batch_embeddings</span> <span class="o">=</span> <span class="n">embed_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+            <span class="n">embeddings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">batch_embeddings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find k nearest neighbors efficiently.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embeddings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must call fit() first&quot;</span><span class="p">)</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="n">query_emb</span> <span class="o">=</span> <span class="n">embed_single</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Vectorized similarity computation</span>
+        <span class="n">similarities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">query_emb</span><span class="p">)</span>
+        <span class="n">top_k_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">similarities</span><span class="p">)[</span><span class="o">-</span><span class="n">k</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trainset</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_k_indices</span><span class="p">]</span>
+
+<span class="c1"># Efficient for large datasets</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BatchKNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="similarity-functions">
+<h2>Similarity Functions<a class="headerlink" href="#similarity-functions" title="Link to this heading">#</a></h2>
+<section id="text-based-similarity">
+<h3>Text-Based Similarity<a class="headerlink" href="#text-based-similarity" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics.pairwise</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine_similarity</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tfidf_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TF-IDF based similarity.&quot;&quot;&quot;</span>
+    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">])</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">jaccard_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Jaccard similarity on word sets.&quot;&quot;&quot;</span>
+    <span class="n">q_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">e_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="n">intersection</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_words</span> <span class="o">&amp;</span> <span class="n">e_words</span><span class="p">)</span>
+    <span class="n">union</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_words</span> <span class="o">|</span> <span class="n">e_words</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">intersection</span> <span class="o">/</span> <span class="n">union</span> <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fuzzy_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fuzzy matching with edit distance.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">difflib</span><span class="w"> </span><span class="kn">import</span> <span class="n">SequenceMatcher</span>
+    <span class="k">return</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="semantic-similarity">
+<h3>Semantic Similarity<a class="headerlink" href="#semantic-similarity" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">semantic_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deep semantic similarity using embeddings.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+
+    <span class="n">embeddings</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">])</span>
+    <span class="n">query_emb</span><span class="p">,</span> <span class="n">example_emb</span> <span class="o">=</span> <span class="n">embeddings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">embeddings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Cosine similarity</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">query_emb</span><span class="p">,</span> <span class="n">example_emb</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">query_emb</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">example_emb</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">domain_specific_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Similarity with domain-specific weighting.&quot;&quot;&quot;</span>
+    <span class="c1"># Domain keywords</span>
+    <span class="n">domain_keywords</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;medical&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;patient&#39;</span><span class="p">,</span> <span class="s1">&#39;diagnosis&#39;</span><span class="p">,</span> <span class="s1">&#39;treatment&#39;</span><span class="p">,</span> <span class="s1">&#39;symptom&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;legal&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;contract&#39;</span><span class="p">,</span> <span class="s1">&#39;law&#39;</span><span class="p">,</span> <span class="s1">&#39;court&#39;</span><span class="p">,</span> <span class="s1">&#39;legal&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;financial&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;investment&#39;</span><span class="p">,</span> <span class="s1">&#39;return&#39;</span><span class="p">,</span> <span class="s1">&#39;risk&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio&#39;</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Check domain overlap</span>
+    <span class="n">query_domains</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">domain</span><span class="p">,</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">domain_keywords</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                       <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">))</span>
+    <span class="n">example_domains</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">domain</span><span class="p">,</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">domain_keywords</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">example</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">))</span>
+
+    <span class="c1"># Domain similarity bonus</span>
+    <span class="n">domain_bonus</span> <span class="o">=</span> <span class="n">query_domains</span> <span class="o">*</span> <span class="n">example_domains</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+    <span class="c1"># Combine with semantic similarity</span>
+    <span class="n">base_sim</span> <span class="o">=</span> <span class="n">semantic_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">base_sim</span> <span class="o">+</span> <span class="n">domain_bonus</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="choose-appropriate-k-value">
+<h3>1. Choose Appropriate k Value<a class="headerlink" href="#choose-appropriate-k-value" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">find_optimal_k</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">k_values</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the best k value through validation.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span>
+
+    <span class="n">best_k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best_k</span><span class="p">,</span> <span class="n">results</span>
+
+<span class="n">best_k</span><span class="p">,</span> <span class="n">all_scores</span> <span class="o">=</span> <span class="n">find_optimal_k</span><span class="p">(</span><span class="n">my_program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best k: </span><span class="si">{</span><span class="n">best_k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All scores: </span><span class="si">{</span><span class="n">all_scores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clean-and-normalize-data">
+<h3>2. Clean and Normalize Data<a class="headerlink" href="#clean-and-normalize-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">clean_example</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean and normalize example text.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;question&#39;</span><span class="p">):</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">question</span> <span class="o">=</span> <span class="n">normalize_text</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">):</span>
+        <span class="n">example</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">normalize_text</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">example</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize text for better similarity matching.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="c1"># Convert to lowercase</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c1"># Remove extra whitespace</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="c1"># Remove special characters</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="n">clean_trainset</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_example</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span> <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">raw_trainset</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="handle-data-imbalance">
+<h3>3. Handle Data Imbalance<a class="headerlink" href="#handle-data-imbalance" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BalancedKNNFewShot</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">balance_by</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance_by</span> <span class="o">=</span> <span class="n">balance_by</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_balanced_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find neighbors with balanced categories.&quot;&quot;&quot;</span>
+        <span class="c1"># Group by category</span>
+        <span class="n">by_category</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">trainset</span><span class="p">:</span>
+            <span class="n">cat</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance_by</span><span class="p">,</span> <span class="s1">&#39;unknown&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">by_category</span><span class="p">:</span>
+                <span class="n">by_category</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">by_category</span><span class="p">[</span><span class="n">cat</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="c1"># Select neighbors from different categories</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">categories</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">by_category</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">category</span> <span class="o">=</span> <span class="n">categories</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">)]</span>
+            <span class="n">category_examples</span> <span class="o">=</span> <span class="n">by_category</span><span class="p">[</span><span class="n">category</span><span class="p">]</span>
+
+            <span class="c1"># Find best in this category</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">category_examples</span><span class="p">,</span>
+                      <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ex</span><span class="p">:</span> <span class="n">similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">ex</span><span class="p">))</span>
+            <span class="n">neighbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">neighbors</span>
+</pre></div>
+</div>
+</section>
+<section id="monitor-similarity-quality">
+<h3>4. Monitor Similarity Quality<a class="headerlink" href="#monitor-similarity-quality" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_similarity_distribution</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze similarity score distribution.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+    <span class="c1"># Sample pairs</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">sample_size</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainset</span><span class="p">)))</span>
+    <span class="n">similarities</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">))):</span>
+            <span class="n">sim</span> <span class="o">=</span> <span class="n">semantic_similarity</span><span class="p">(</span><span class="n">pairs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">pairs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+            <span class="n">similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+    <span class="c1"># Statistics</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean similarity: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Std similarity: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Median similarity: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot distribution</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">similarities</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Similarity Score Distribution&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Similarity Score&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Use before training</span>
+<span class="n">analyze_similarity_distribution</span><span class="p">(</span><span class="n">trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-pitfalls-and-solutions">
+<h2>Common Pitfalls and Solutions<a class="headerlink" href="#common-pitfalls-and-solutions" title="Link to this heading">#</a></h2>
+<section id="pitfall-1-poor-similarity-metric">
+<h3>Pitfall 1: Poor Similarity Metric<a class="headerlink" href="#pitfall-1-poor-similarity-metric" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Using raw text similarity for semantic tasks</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">similarity_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="c1"># Solution: Use semantic similarity</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span>
+    <span class="n">similarity_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">semantic_similarity</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pitfall-2-large-context-window">
+<h3>Pitfall 2: Large Context Window<a class="headerlink" href="#pitfall-2-large-context-window" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Too many examples exceed context limit</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># May exceed token limit</span>
+
+<span class="c1"># Solution: Dynamic k based on content</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dynamic_k</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Choose k based on content length.&quot;&quot;&quot;</span>
+    <span class="n">avg_length</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">))</span> <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+    <span class="n">max_tokens</span> <span class="o">=</span> <span class="mi">4000</span>  <span class="c1"># Leave room for query</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_tokens</span> <span class="o">//</span> <span class="p">(</span><span class="n">avg_length</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">k</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">KNNFewShot</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">dynamic_k</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pitfall-3-overfitting-to-training-data">
+<h3>Pitfall 3: Overfitting to Training Data<a class="headerlink" href="#pitfall-3-overfitting-to-training-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Always selecting exact matches</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">overfitting_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+<span class="c1"># Solution: Include some diversity</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">diverse_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+    <span class="n">base_sim</span> <span class="o">=</span> <span class="n">semantic_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span>
+
+    <span class="c1"># Penalty for exact matches</span>
+    <span class="k">if</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">base_sim</span> <span class="o">*=</span> <span class="mf">0.9</span>
+
+    <span class="k">return</span> <span class="n">base_sim</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>KNNFewShot provides context-aware example selection</p></li>
+<li><p>It’s efficient and scalable for large datasets</p></li>
+<li><p>Custom similarity functions can dramatically improve performance</p></li>
+<li><p>Proper data cleaning and normalization is essential</p></li>
+<li><p>Monitor similarity distributions to understand your data</p></li>
+<li><p>Balance between similarity and diversity for best results</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore fine-tuning, which adapts small language models for specific tasks within DSPy.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_mipro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MIPRO: Multi-step Instruction and Demonstration Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_finetuning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Fine-Tuning Small Language Models in DSPy</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-knnfewshot-works">How KNNFewShot Works</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-concept">Core Concept</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-advantages">Key Advantages</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-usage">Basic Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-configuration">Advanced Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-similarity-metrics">Custom Similarity Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#field-specific-similarity">Field-Specific Similarity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knnfewshot-parameters">KNNFewShot Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-parameters">Core Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-parameters">Advanced Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-different-data-types">Working with Different Data Types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-classification">Text Classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-modal-data">Multi-Modal Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-embeddings">Caching Embeddings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-processing">Batch Processing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-functions">Similarity Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-based-similarity">Text-Based Similarity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantic-similarity">Semantic Similarity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-appropriate-k-value">1. Choose Appropriate k Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clean-and-normalize-data">2. Clean and Normalize Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-data-imbalance">3. Handle Data Imbalance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitor-similarity-quality">4. Monitor Similarity Quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-1-poor-similarity-metric">Pitfall 1: Poor Similarity Metric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-2-large-context-window">Pitfall 2: Large Context Window</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-3-overfitting-to-training-data">Pitfall 3: Overfitting to Training Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

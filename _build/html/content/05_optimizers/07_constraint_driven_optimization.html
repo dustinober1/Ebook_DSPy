@@ -1,0 +1,1495 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Constraint-Driven Optimization &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/07_constraint_driven_optimization';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 5 Exercises: Optimizers &amp; Compilation" href="07_exercises.html" />
+    <link rel="prev" title="Choosing Optimizers: Decision Guide and Trade-offs" href="06_choosing_optimizers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/07_constraint_driven_optimization.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Constraint-Driven Optimization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-constraint-driven-optimization">Introduction to Constraint-Driven Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traditional-vs-constraint-driven-optimization">Traditional vs Constraint-Driven Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-concepts">Core Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-aware-metrics">1. Constraint-Aware Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hard-vs-soft-constraints">2. Hard vs Soft Constraints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#progressive-constraint-enforcement">3. Progressive Constraint Enforcement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-strategies">Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-guided-example-selection">1. Constraint-Guided Example Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">2. Multi-Objective Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-weighted-loss">3. Constraint-Weighted Loss</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-techniques">Advanced Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-aware-prompt-optimization">1. Constraint-Aware Prompt Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-constraint-adjustment">2. Dynamic Constraint Adjustment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-transfer-learning">3. Constraint Transfer Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-applications">Practical Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rag-system-optimization">1. RAG System Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation-with-constraints">2. Code Generation with Constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-analysis">Monitoring and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-violation-analysis">1. Constraint Violation Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-progress-tracking">2. Optimization Progress Tracking</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="constraint-driven-optimization">
+<h1>Constraint-Driven Optimization<a class="headerlink" href="#constraint-driven-optimization" title="Link to this heading">#</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Previous Section</strong>: <a class="reference internal" href="#./06-choosing-optimizers.md"><span class="xref myst">Choosing Optimizers</span></a> - Understanding optimizer selection</p></li>
+<li><p><strong>Chapter 3</strong>: Assertions Module - Familiarity with assertion concepts</p></li>
+<li><p><strong>Required Knowledge</strong>: Optimization theory, constraint satisfaction</p></li>
+<li><p><strong>Difficulty Level</strong>: Advanced</p></li>
+<li><p><strong>Estimated Reading Time</strong>: 50 minutes</p></li>
+</ul>
+</section>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this section, you will:</p>
+<ul class="simple">
+<li><p>Understand how to optimize DSPy programs with constraints</p></li>
+<li><p>Master the integration of assertions with optimization algorithms</p></li>
+<li><p>Learn to design constraint-aware optimization objectives</p></li>
+<li><p>Build robust systems that maintain quality during optimization</p></li>
+<li><p>Apply advanced techniques for constraint handling in large-scale systems</p></li>
+</ul>
+</section>
+<section id="introduction-to-constraint-driven-optimization">
+<h2>Introduction to Constraint-Driven Optimization<a class="headerlink" href="#introduction-to-constraint-driven-optimization" title="Link to this heading">#</a></h2>
+<p>Constraint-driven optimization extends DSPy’s optimization framework to incorporate runtime constraints and validation directly into the optimization process. This ensures that optimized programs not only perform better on metrics but also satisfy critical requirements for correctness, format, and quality.</p>
+<section id="traditional-vs-constraint-driven-optimization">
+<h3>Traditional vs Constraint-Driven Optimization<a class="headerlink" href="#traditional-vs-constraint-driven-optimization" title="Link to this heading">#</a></h3>
+<p><strong>Traditional Optimization:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Only optimizes for metric performance</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">answer_f1_score</span><span class="p">)</span>
+<span class="n">optimized_program</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">student_program</span><span class="p">,</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+<span class="p">)</span>
+<span class="c1"># May sacrifice quality for metric gains</span>
+</pre></div>
+</div>
+<p><strong>Constraint-Driven Optimization:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optimizes while maintaining constraints</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">constrained_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+    <span class="c1"># First check constraints</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_format</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.0</span>  <span class="c1"># Penalize constraint violations</span>
+
+    <span class="c1"># Then calculate metric</span>
+    <span class="k">return</span> <span class="n">answer_f1_score</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">constrained_metric</span><span class="p">,</span>
+    <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+<span class="n">optimized_program</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">program_with_assertions</span><span class="p">,</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+<span class="p">)</span>
+<span class="c1"># Optimizes within constraint boundaries</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="core-concepts">
+<h2>Core Concepts<a class="headerlink" href="#core-concepts" title="Link to this heading">#</a></h2>
+<section id="constraint-aware-metrics">
+<h3>1. Constraint-Aware Metrics<a class="headerlink" href="#constraint-aware-metrics" title="Link to this heading">#</a></h3>
+<p>Design metrics that incorporate constraint satisfaction:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">constraint_aware_metric</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metric that balances performance with constraint satisfaction.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Base performance score</span>
+    <span class="n">base_score</span> <span class="o">=</span> <span class="n">accuracy</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+    <span class="c1"># Constraint satisfaction weights</span>
+    <span class="n">format_weight</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="n">quality_weight</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">accuracy_weight</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+    <span class="c1"># Check constraints</span>
+    <span class="n">format_score</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">validate_format</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">quality_score</span> <span class="o">=</span> <span class="n">calculate_quality_score</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="n">total_score</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">accuracy_weight</span> <span class="o">*</span> <span class="n">base_score</span> <span class="o">+</span>
+        <span class="n">format_weight</span> <span class="o">*</span> <span class="n">format_score</span> <span class="o">+</span>
+        <span class="n">quality_weight</span> <span class="o">*</span> <span class="n">quality_score</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">total_score</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_quality_score</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate overall quality score.&quot;&quot;&quot;</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># Length requirements</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">output</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">-=</span> <span class="mf">0.2</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">output</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">-=</span> <span class="mf">0.1</span>
+
+    <span class="c1"># Structure requirements</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;sections&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">sections</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">-=</span> <span class="mf">0.2</span>
+
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="hard-vs-soft-constraints">
+<h3>2. Hard vs Soft Constraints<a class="headerlink" href="#hard-vs-soft-constraints" title="Link to this heading">#</a></h3>
+<p>Differentiate between critical requirements and preferences:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizationConstraints</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Define constraint types and their handling.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hard_constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_syntax</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_required_fields</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_output_type</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">soft_constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_length</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_style</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate_completeness</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_hard_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check critical constraints that must pass.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hard_constraints</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">constraint</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Failed: </span><span class="si">{</span><span class="n">constraint</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error in </span><span class="si">{</span><span class="n">constraint</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_soft_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check preference constraints.&quot;&quot;&quot;</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">soft_constraints</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">constraint</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+                <span class="n">score</span> <span class="o">*=</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="k">else</span> <span class="mf">1.0</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">*=</span> <span class="mf">0.9</span>  <span class="c1"># Small penalty for errors</span>
+        <span class="k">return</span> <span class="n">score</span>
+</pre></div>
+</div>
+</section>
+<section id="progressive-constraint-enforcement">
+<h3>3. Progressive Constraint Enforcement<a class="headerlink" href="#progressive-constraint-enforcement" title="Link to this heading">#</a></h3>
+<p>Gradually enforce stricter constraints during optimization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ProgressiveOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer with progressively stricter constraints.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_optimizer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">base_optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_levels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[],</span>  <span class="c1"># Level 0: No constraints</span>
+            <span class="p">[</span><span class="n">validate_format</span><span class="p">],</span>  <span class="c1"># Level 1: Basic format</span>
+            <span class="p">[</span><span class="n">validate_format</span><span class="p">,</span> <span class="n">validate_length</span><span class="p">],</span>  <span class="c1"># Level 2: Format + length</span>
+            <span class="p">[</span><span class="n">validate_format</span><span class="p">,</span> <span class="n">validate_length</span><span class="p">,</span> <span class="n">validate_quality</span><span class="p">]</span>  <span class="c1"># Level 3: All</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_with_progression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile with progressively stricter constraints.&quot;&quot;&quot;</span>
+
+        <span class="n">best_program</span> <span class="o">=</span> <span class="n">program</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">constraints</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_levels</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimization level </span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">constraints</span><span class="p">)</span><span class="si">}</span><span class="s2"> constraints&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create level-specific metric</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">level_metric</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="p">):</span>
+                <span class="c1"># Check current level constraints</span>
+                <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="n">constraints</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">constraint</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="mf">0.0</span>
+
+                <span class="c1"># Evaluate on validation set</span>
+                <span class="k">return</span> <span class="n">evaluate_with_constraints</span><span class="p">(</span><span class="n">best_program</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+            <span class="c1"># Compile at this level</span>
+            <span class="n">current_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+                <span class="n">best_program</span><span class="p">,</span>
+                <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+                <span class="n">metric</span><span class="o">=</span><span class="n">level_metric</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Evaluate</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="n">evaluate_with_constraints</span><span class="p">(</span><span class="n">current_program</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_program</span> <span class="o">=</span> <span class="n">current_program</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Improvement: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  No improvement, keeping previous best&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_program</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimization-strategies">
+<h2>Optimization Strategies<a class="headerlink" href="#optimization-strategies" title="Link to this heading">#</a></h2>
+<section id="constraint-guided-example-selection">
+<h3>1. Constraint-Guided Example Selection<a class="headerlink" href="#constraint-guided-example-selection" title="Link to this heading">#</a></h3>
+<p>Select training examples based on constraint satisfaction:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConstraintGuidedOptimizer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer that selects examples based on constraints.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint_validator</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_validator</span> <span class="o">=</span> <span class="n">constraint_validator</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_bootstrapped_demos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate examples that satisfy constraints.&quot;&quot;&quot;</span>
+        <span class="n">valid_examples</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Filter training examples</span>
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">trainset</span><span class="p">:</span>
+            <span class="c1"># Generate prediction</span>
+            <span class="n">pred</span> <span class="o">=</span> <span class="n">program</span><span class="p">(</span><span class="o">**</span><span class="n">example</span><span class="o">.</span><span class="n">inputs</span><span class="p">())</span>
+
+            <span class="c1"># Check constraints</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraint_validator</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+                <span class="n">valid_examples</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
+
+        <span class="c1"># Select diverse valid examples</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_diverse_examples</span><span class="p">(</span><span class="n">valid_examples</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_diverse_examples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">max_examples</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select diverse examples from valid ones.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">max_examples</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">examples</span>
+
+        <span class="c1"># Simple diversity: use different output lengths</span>
+        <span class="n">examples</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">))</span>
+
+        <span class="c1"># Select evenly spaced examples</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span> <span class="o">//</span> <span class="n">max_examples</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[</span><span class="n">examples</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">step</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_examples</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="n">selected</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-objective-optimization">
+<h3>2. Multi-Objective Optimization<a class="headerlink" href="#multi-objective-optimization" title="Link to this heading">#</a></h3>
+<p>Optimize for multiple objectives simultaneously:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiObjectiveOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize for multiple objectives with constraints.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectives</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="n">objectives</span>  <span class="c1"># List of (name, weight, metric_func)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_program</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate program on all objectives.&quot;&quot;&quot;</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">metric_func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">testset</span><span class="p">:</span>
+                <span class="n">pred</span> <span class="o">=</span> <span class="n">program</span><span class="p">(</span><span class="o">**</span><span class="n">example</span><span class="o">.</span><span class="n">inputs</span><span class="p">())</span>
+                <span class="n">score</span> <span class="o">+=</span> <span class="n">metric_func</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">testset</span><span class="p">)</span>
+
+        <span class="c1"># Calculate weighted sum</span>
+        <span class="n">total_score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="n">weight</span> <span class="o">*</span> <span class="n">scores</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_score</span><span class="p">,</span> <span class="n">scores</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Multi-objective optimization loop.&quot;&quot;&quot;</span>
+        <span class="n">best_program</span> <span class="o">=</span> <span class="n">program</span>
+        <span class="n">best_score</span><span class="p">,</span> <span class="n">best_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_program</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+            <span class="c1"># Create variation</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_variation</span><span class="p">(</span><span class="n">best_program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate</span>
+            <span class="n">score</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_program</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+            <span class="c1"># Track best</span>
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_program</span> <span class="o">=</span> <span class="n">candidate</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_scores</span> <span class="o">=</span> <span class="n">scores</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: New best score </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">s</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_program</span>
+</pre></div>
+</div>
+</section>
+<section id="constraint-weighted-loss">
+<h3>3. Constraint-Weighted Loss<a class="headerlink" href="#constraint-weighted-loss" title="Link to this heading">#</a></h3>
+<p>Incorporate constraints directly into optimization loss:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">constraint_weighted_loss</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loss function that includes constraint penalties.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Base task loss</span>
+    <span class="n">task_loss</span> <span class="o">=</span> <span class="n">task_specific_loss</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+    <span class="c1"># Constraint penalties</span>
+    <span class="n">constraint_penalties</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Format constraint</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_format</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
+        <span class="n">constraint_penalties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">constraint_penalties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c1"># Quality constraint</span>
+    <span class="n">quality_score</span> <span class="o">=</span> <span class="n">calculate_quality</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="n">constraint_penalties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">quality_score</span><span class="p">)</span>
+
+    <span class="c1"># Length constraint</span>
+    <span class="n">length_violation</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="n">target_length</span><span class="p">)</span> <span class="o">/</span> <span class="n">target_length</span>
+    <span class="n">constraint_penalties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">length_violation</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="n">constraint_loss</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">constraint_penalties</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">constraint_penalties</span><span class="p">)</span>
+
+    <span class="c1"># Total loss with constraint weight</span>
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="n">task_loss</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">constraint_loss</span>
+
+    <span class="k">return</span> <span class="n">total_loss</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-techniques">
+<h2>Advanced Techniques<a class="headerlink" href="#advanced-techniques" title="Link to this heading">#</a></h2>
+<section id="constraint-aware-prompt-optimization">
+<h3>1. Constraint-Aware Prompt Optimization<a class="headerlink" href="#constraint-aware-prompt-optimization" title="Link to this heading">#</a></h3>
+<p>Optimize prompts while maintaining constraints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConstraintAwarePromptOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize prompts with constraint awareness.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_optimizer</span><span class="p">,</span> <span class="n">constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_optimizer</span> <span class="o">=</span> <span class="n">base_optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="n">constraints</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">initial_prompt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find optimal prompt under constraints.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">initial_prompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">initial_prompt</span> <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">instructions</span>
+
+        <span class="n">best_prompt</span> <span class="o">=</span> <span class="n">initial_prompt</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_prompt</span><span class="p">(</span><span class="n">initial_prompt</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">trainset</span><span class="p">)</span>
+
+        <span class="c1"># Generate prompt variations</span>
+        <span class="n">variations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_prompt_variations</span><span class="p">(</span><span class="n">initial_prompt</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">variation</span> <span class="ow">in</span> <span class="n">variations</span><span class="p">:</span>
+            <span class="c1"># Check if variation satisfies constraints</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_satisfies_constraints</span><span class="p">(</span><span class="n">variation</span><span class="p">):</span>
+                <span class="c1"># Evaluate</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_prompt</span><span class="p">(</span><span class="n">variation</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">trainset</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                    <span class="n">best_prompt</span> <span class="o">=</span> <span class="n">variation</span>
+                    <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+
+        <span class="k">return</span> <span class="n">best_prompt</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prompt_satisfies_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if prompt meets constraints.&quot;&quot;&quot;</span>
+        <span class="c1"># Length constraint</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Must include constraint instructions</span>
+        <span class="n">required_phrases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="s1">&#39;ensure&#39;</span><span class="p">,</span> <span class="s1">&#39;must&#39;</span><span class="p">,</span> <span class="s1">&#39;required&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">phrase</span> <span class="ow">in</span> <span class="n">prompt</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">required_phrases</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_prompt_variations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_prompt</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate prompt variations while preserving constraints.&quot;&quot;&quot;</span>
+        <span class="n">variations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Add constraint emphasis</span>
+        <span class="n">variation1</span> <span class="o">=</span> <span class="n">base_prompt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Constraints: Ensure all outputs are valid JSON.&quot;</span>
+        <span class="n">variations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variation1</span><span class="p">)</span>
+
+        <span class="c1"># Add example format</span>
+        <span class="n">variation2</span> <span class="o">=</span> <span class="n">base_prompt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Example output format:</span><span class="se">\n</span><span class="s2">{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\&quot;</span><span class="s2">field</span><span class="se">\&quot;</span><span class="s2">: </span><span class="se">\&quot;</span><span class="s2">value</span><span class="se">\&quot;\n</span><span class="s2">}&quot;</span>
+        <span class="n">variations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variation2</span><span class="p">)</span>
+
+        <span class="c1"># Add validation reminder</span>
+        <span class="n">variation3</span> <span class="o">=</span> <span class="n">base_prompt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Remember to double-check your output for correctness.&quot;</span>
+        <span class="n">variations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variation3</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">variations</span>
+</pre></div>
+</div>
+</section>
+<section id="dynamic-constraint-adjustment">
+<h3>2. Dynamic Constraint Adjustment<a class="headerlink" href="#dynamic-constraint-adjustment" title="Link to this heading">#</a></h3>
+<p>Adjust constraints based on optimization progress:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DynamicConstraintOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer that adjusts constraints during training.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_constraints</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="n">initial_constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">adjust_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimization_metrics</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adjust constraints based on optimization performance.&quot;&quot;&quot;</span>
+
+        <span class="c1"># If constraint violations are high, relax constraints</span>
+        <span class="k">if</span> <span class="n">optimization_metrics</span><span class="p">[</span><span class="s1">&#39;violation_rate&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relax_constraints</span><span class="p">()</span>
+
+        <span class="c1"># If performance is good, tighten constraints</span>
+        <span class="k">elif</span> <span class="n">optimization_metrics</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.9</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tighten_constraints</span><span class="p">()</span>
+
+        <span class="c1"># Record adjustment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">relax_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make constraints less strict.&quot;&quot;&quot;</span>
+        <span class="c1"># Increase length limits</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;min_length&#39;</span> <span class="ow">in</span> <span class="n">constraint</span><span class="p">:</span>
+                <span class="n">constraint</span><span class="p">[</span><span class="s1">&#39;min_length&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.8</span>
+            <span class="k">if</span> <span class="s1">&#39;max_length&#39;</span> <span class="ow">in</span> <span class="n">constraint</span><span class="p">:</span>
+                <span class="n">constraint</span><span class="p">[</span><span class="s1">&#39;max_length&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">1.2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">tighten_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make constraints more strict.&quot;&quot;&quot;</span>
+        <span class="c1"># Decrease tolerance</span>
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;tolerance&#39;</span> <span class="ow">in</span> <span class="n">constraint</span><span class="p">:</span>
+                <span class="n">constraint</span><span class="p">[</span><span class="s1">&#39;tolerance&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+</section>
+<section id="constraint-transfer-learning">
+<h3>3. Constraint Transfer Learning<a class="headerlink" href="#constraint-transfer-learning" title="Link to this heading">#</a></h3>
+<p>Transfer constraints between related tasks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConstraintTransfer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transfer constraints between similar tasks.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_patterns</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">learn_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_name</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Learn common constraint patterns from examples.&quot;&quot;&quot;</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;format_patterns&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_format_patterns</span><span class="p">(</span><span class="n">examples</span><span class="p">),</span>
+            <span class="s1">&#39;length_patterns&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_length_patterns</span><span class="p">(</span><span class="n">examples</span><span class="p">),</span>
+            <span class="s1">&#39;structure_patterns&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_structure_patterns</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraint_patterns</span><span class="p">[</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">patterns</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">transfer_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_task</span><span class="p">,</span> <span class="n">target_task</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transfer constraints from source to target task.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">source_task</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraint_patterns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">source_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraint_patterns</span><span class="p">[</span><span class="n">source_task</span><span class="p">]</span>
+        <span class="n">transferred_constraints</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Adapt format constraints</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">source_patterns</span><span class="p">[</span><span class="s1">&#39;format_patterns&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_applicable</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+                <span class="n">adapted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapt_constraint</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">target_task</span><span class="p">)</span>
+                <span class="n">transferred_constraints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">adapted</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transferred_constraints</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_applicable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if constraint pattern applies to new task.&quot;&quot;&quot;</span>
+        <span class="c1"># Simple heuristic: check if pattern appears in some examples</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">ex</span> <span class="ow">in</span> <span class="n">examples</span> <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">matches</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">examples</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-applications">
+<h2>Practical Applications<a class="headerlink" href="#practical-applications" title="Link to this heading">#</a></h2>
+<section id="rag-system-optimization">
+<h3>1. RAG System Optimization<a class="headerlink" href="#rag-system-optimization" title="Link to this heading">#</a></h3>
+<p>Optimize retrieval-augmented generation with constraints:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConstrainedRAGOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize RAG systems with quality constraints.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rag_program</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rag_program</span> <span class="o">=</span> <span class="n">rag_program</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_with_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize RAG while maintaining answer quality.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Define constraints</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;min_evidence&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># Must cite at least 2 sources</span>
+            <span class="s1">&#39;max_hallucination&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># &lt;10% hallucinated content</span>
+            <span class="s1">&#39;min_confidence&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>  <span class="c1"># Confidence threshold</span>
+            <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">500</span>  <span class="c1"># Answer length limit</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Constraint-aware metric</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">rag_metric</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="c1"># Base accuracy</span>
+            <span class="n">accuracy</span> <span class="o">=</span> <span class="n">calculate_f1</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+
+            <span class="c1"># Constraint satisfaction</span>
+            <span class="n">constraint_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="c1"># Check citations</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;citations&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">citations</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">constraints</span><span class="p">[</span><span class="s1">&#39;min_evidence&#39;</span><span class="p">]:</span>
+                <span class="n">constraint_score</span> <span class="o">+=</span> <span class="mf">0.25</span>
+
+            <span class="c1"># Check confidence</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;confidence&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pred</span><span class="o">.</span><span class="n">confidence</span> <span class="o">&gt;=</span> <span class="n">constraints</span><span class="p">[</span><span class="s1">&#39;min_confidence&#39;</span><span class="p">]:</span>
+                <span class="n">constraint_score</span> <span class="o">+=</span> <span class="mf">0.25</span>
+
+            <span class="c1"># Check length</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">constraints</span><span class="p">[</span><span class="s1">&#39;max_length&#39;</span><span class="p">]:</span>
+                <span class="n">constraint_score</span> <span class="o">+=</span> <span class="mf">0.25</span>
+
+            <span class="c1"># Check hallucination (using external model)</span>
+            <span class="n">hallucination_score</span> <span class="o">=</span> <span class="n">check_hallucination</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hallucination_score</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">constraints</span><span class="p">[</span><span class="s1">&#39;max_hallucination&#39;</span><span class="p">]):</span>
+                <span class="n">constraint_score</span> <span class="o">+=</span> <span class="mf">0.25</span>
+
+            <span class="c1"># Combine scores</span>
+            <span class="k">return</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">accuracy</span> <span class="o">+</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">constraint_score</span>
+
+        <span class="c1"># Optimize</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">rag_metric</span><span class="p">,</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">5</span>
+        <span class="p">)</span>
+
+        <span class="n">optimized_program</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rag_program</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized_program</span>
+</pre></div>
+</div>
+</section>
+<section id="code-generation-with-constraints">
+<h3>2. Code Generation with Constraints<a class="headerlink" href="#code-generation-with-constraints" title="Link to this heading">#</a></h3>
+<p>Optimize code generation while maintaining correctness:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CodeConstraintOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize code generation with correctness constraints.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code_generator</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">code_generator</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_with_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">test_cases</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize while ensuring code passes tests.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">code_metric</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="c1"># Check if code is syntactically valid</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">compile</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
+                <span class="n">syntax_score</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">0.0</span>  <span class="c1"># Zero score for syntax errors</span>
+
+            <span class="c1"># Run test cases</span>
+            <span class="n">test_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">passed</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_cases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="p">[]))</span>
+
+            <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">test_cases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">problem</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">exec_globals</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">exec</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">exec_globals</span><span class="p">)</span>
+
+                    <span class="c1"># Check if solution function exists</span>
+                    <span class="k">if</span> <span class="s1">&#39;solution&#39;</span> <span class="ow">in</span> <span class="n">exec_globals</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="n">exec_globals</span><span class="p">[</span><span class="s1">&#39;solution&#39;</span><span class="p">](</span><span class="o">*</span><span class="n">test</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;expected&#39;</span><span class="p">]:</span>
+                            <span class="n">passed</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>  <span class="c1"># Test failed</span>
+
+            <span class="n">test_score</span> <span class="o">=</span> <span class="n">passed</span> <span class="o">/</span> <span class="n">total</span> <span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+            <span class="c1"># Combine with style score</span>
+            <span class="n">style_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_code_style</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+
+            <span class="c1"># Weighted combination</span>
+            <span class="k">return</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">test_score</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">syntax_score</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">style_score</span>
+
+        <span class="c1"># Optimize</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">MIPROv2</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">code_metric</span><span class="p">,</span>
+            <span class="n">num_candidates</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+
+        <span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring-and-analysis">
+<h2>Monitoring and Analysis<a class="headerlink" href="#monitoring-and-analysis" title="Link to this heading">#</a></h2>
+<section id="constraint-violation-analysis">
+<h3>1. Constraint Violation Analysis<a class="headerlink" href="#constraint-violation-analysis" title="Link to this heading">#</a></h3>
+<p>Track and analyze constraint violations during optimization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ConstraintAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze constraint violations in optimization.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">violations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;violation_rates&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;common_violations&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;optimization_progress&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_violation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint_name</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record a constraint violation.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">violations</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;constraint&#39;</span><span class="p">:</span> <span class="n">constraint_name</span><span class="p">,</span>
+            <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="n">details</span><span class="p">,</span>
+            <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_violations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze patterns in violations.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+        <span class="c1"># Count violations by constraint</span>
+        <span class="n">violation_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+            <span class="n">v</span><span class="p">[</span><span class="s1">&#39;constraint&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">violations</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculate rates</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">violations</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">constraint</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">violation_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;violation_rates&#39;</span><span class="p">][</span><span class="n">constraint</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span> <span class="o">/</span> <span class="n">total</span>
+
+        <span class="c1"># Most common violations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;common_violations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">violation_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate violation analysis report.&quot;&quot;&quot;</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="s2">&quot;Constraint Violation Analysis</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Violation rates</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;Violation Rates:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">constraint</span><span class="p">,</span> <span class="n">rate</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;violation_rates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">constraint</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Common violations</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Most Common Violations:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">constraint</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;common_violations&#39;</span><span class="p">]:</span>
+            <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">constraint</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> occurrences</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Recommendations</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Recommendations:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">top_violation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;common_violations&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;violation_rates&#39;</span><span class="p">][</span><span class="n">top_violation</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.3</span><span class="p">:</span>
+            <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  - Consider relaxing </span><span class="si">{</span><span class="n">top_violation</span><span class="si">}</span><span class="s2"> constraint</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  - Improve training examples for </span><span class="si">{</span><span class="n">top_violation</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">report</span>
+</pre></div>
+</div>
+</section>
+<section id="optimization-progress-tracking">
+<h3>2. Optimization Progress Tracking<a class="headerlink" href="#optimization-progress-tracking" title="Link to this heading">#</a></h3>
+<p>Track optimization progress with constraint awareness:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizationTracker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Track optimization progress with metrics.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_epoch</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a new optimization epoch.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_epoch</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;epoch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_epoch</span><span class="p">,</span>
+            <span class="s1">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;constraints&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;improvements&#39;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record optimization metrics.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;metrics&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constraint_stats</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record constraint statistics.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;constraints&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">constraint_stats</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_improvement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">improvement_type</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record an improvement.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;improvements&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">improvement_type</span><span class="p">,</span>
+            <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="n">details</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot optimization progress.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+        <span class="n">epochs</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;epoch&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">]</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;metrics&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">]</span>
+        <span class="n">violations</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;constraints&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;violation_rate&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">epochs</span><span class="p">]</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+        <span class="c1"># Score progression</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Optimization Score&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Optimization Progress&#39;</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Violation rate</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">violations</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Constraint Violation Rate&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Violation Rate&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Constraint Satisfaction&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Constraint-driven optimization provides:</p>
+<ul class="simple">
+<li><p><strong>Balanced optimization</strong> that considers both metrics and constraints</p></li>
+<li><p><strong>Flexible constraint handling</strong> with hard and soft requirements</p></li>
+<li><p><strong>Progressive optimization</strong> with gradually stricter requirements</p></li>
+<li><p><strong>Multi-objective support</strong> for complex optimization scenarios</p></li>
+<li><p><strong>Monitoring and analysis</strong> tools for understanding optimization behavior</p></li>
+</ul>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Design constraint-aware metrics</strong> that balance performance and requirements</p></li>
+<li><p><strong>Use progressive enforcement</strong> to guide optimization effectively</p></li>
+<li><p><strong>Monitor violations</strong> to understand and address optimization challenges</p></li>
+<li><p><strong>Transfer constraints</strong> between related tasks to speed up optimization</p></li>
+<li><p><strong>Analyze results</strong> comprehensively with both metric and constraint perspectives</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#../07-advanced-topics/07-self-refining-pipelines.md"><span class="xref myst">Self-Refining Pipelines</span></a> - Advanced constraint patterns</p></li>
+<li><p><a class="reference internal" href="#../08-case-studies/06-assertion-driven-applications.md"><span class="xref myst">Assertion-Driven Applications</span></a> - Real implementations</p></li>
+<li><p><a class="reference internal" href="#../../examples/chapter05/"><span class="xref myst">Practical Examples</span></a> - See optimization in action</p></li>
+<li><p><a class="reference internal" href="#./07-exercises.md"><span class="xref myst">Exercises</span></a> - Practice constraint techniques</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Multi-objective_optimization">Multi-Objective Optimization</a> - Theoretical foundation</p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Constraint_satisfaction">Constraint Satisfaction</a> - Problem-solving paradigm</p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/1206.2944">Bayesian Optimization</a> - Advanced optimization techniques</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_choosing_optimizers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Choosing Optimizers: Decision Guide and Trade-offs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_exercises.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 5 Exercises: Optimizers &amp; Compilation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-constraint-driven-optimization">Introduction to Constraint-Driven Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#traditional-vs-constraint-driven-optimization">Traditional vs Constraint-Driven Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-concepts">Core Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-aware-metrics">1. Constraint-Aware Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hard-vs-soft-constraints">2. Hard vs Soft Constraints</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#progressive-constraint-enforcement">3. Progressive Constraint Enforcement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-strategies">Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-guided-example-selection">1. Constraint-Guided Example Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">2. Multi-Objective Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-weighted-loss">3. Constraint-Weighted Loss</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-techniques">Advanced Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-aware-prompt-optimization">1. Constraint-Aware Prompt Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-constraint-adjustment">2. Dynamic Constraint Adjustment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-transfer-learning">3. Constraint Transfer Learning</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-applications">Practical Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rag-system-optimization">1. RAG System Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation-with-constraints">2. Code Generation with Constraints</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-analysis">Monitoring and Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constraint-violation-analysis">1. Constraint Violation Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-progress-tracking">2. Optimization Progress Tracking</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

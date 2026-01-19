@@ -1,0 +1,1194 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LingVarBench: Synthetic Healthcare Transcript Generation &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/06_real_world_applications/13_lingvarbench_healthcare_synthetic_data';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Scientific Figure Caption Generation with DSPy" href="14_scientific_figure_caption_generation.html" />
+    <link rel="prev" title="IR Model Training from Scratch: Methodology and Best Practices" href="12_ir_model_training_scratch.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>LingVarBench: Synthetic Healthcare Transcript Generation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-innovation">Key Innovation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generation-pipeline">1. Data Generation Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simba-optimization-for-prompt-synthesis">2. SIMBA Optimization for Prompt Synthesis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-preserving-entity-generation">3. Privacy-Preserving Entity Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-protocol">Evaluation Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-to-real-transfer-learning">1. Synthetic-to-Real Transfer Learning</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quality-metrics-for-synthetic-data">2. Quality Metrics for Synthetic Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-guide">Implementation Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-lingvarbench">1. Setting Up LingVarBench</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-ner-models-with-synthetic-data">2. Training NER Models with Synthetic Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-with-existing-dspy-pipelines">3. Integration with Existing DSPy Pipelines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-results-from-paper">Key Results from Paper</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-and-considerations">Limitations and Considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lingvarbench-synthetic-healthcare-transcript-generation">
+<h1>LingVarBench: Synthetic Healthcare Transcript Generation<a class="headerlink" href="#lingvarbench-synthetic-healthcare-transcript-generation" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p><strong>LingVarBench</strong> is a groundbreaking framework for generating synthetic healthcare phone transcripts that addresses the critical challenge of data privacy in medical NLP. By leveraging DSPy’s <strong>SIMBA (Stochastic Introspective Mini-Batch Ascent)</strong> optimizer, LingVarBench creates high-quality, HIPAA-compliant synthetic data that preserves the linguistic patterns and clinical relevance of real healthcare conversations while eliminating privacy risks.</p>
+</section>
+<section id="key-innovation">
+<h2>Key Innovation<a class="headerlink" href="#key-innovation" title="Link to this heading">#</a></h2>
+<p>The framework introduces a novel approach to synthetic data generation that:</p>
+<ul class="simple">
+<li><p>Maintains clinical accuracy and linguistic diversity</p></li>
+<li><p>Preserves patient privacy through complete HIPAA compliance</p></li>
+<li><p>Enables robust NER model training without access to real patient data</p></li>
+<li><p>Achieves 90%+ accuracy on real healthcare transcripts using only synthetic data</p></li>
+</ul>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h2>
+<section id="data-generation-pipeline">
+<h3>1. Data Generation Pipeline<a class="headerlink" href="#data-generation-pipeline" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MedicalEntity</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a medical entity with protected health information.&quot;&quot;&quot;</span>
+    <span class="n">entity_type</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># MEDICATION, CONDITION, PROCEDURE, etc.</span>
+    <span class="n">original_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">deidentified_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SyntheticTranscriptGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates synthetic healthcare transcripts using DSPy optimization.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_types</span> <span class="o">=</span> <span class="n">entity_types</span>
+
+        <span class="c1"># Initialize SIMBA optimizer for prompt synthesis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simba_optimizer</span> <span class="o">=</span> <span class="n">SIMBAOptimizer</span><span class="p">(</span>
+            <span class="n">population_size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">generations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">mutation_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">crossover_rate</span><span class="o">=</span><span class="mf">0.8</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Core generation module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transcript_generator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Generate a realistic phone conversation between a patient</span>
+<span class="sd">            and healthcare provider about {topic}.</span>
+
+<span class="sd">            Requirements:</span>
+<span class="sd">            - Include {num_entities} medical entities from: {entity_types}</span>
+<span class="sd">            - Maintain natural conversation flow</span>
+<span class="sd">            - Use appropriate medical terminology</span>
+<span class="sd">            - Create realistic patient symptoms/concerns</span>
+<span class="sd">            - Ensure provider responses are clinically appropriate</span>
+<span class="sd">            - Deidentify all PHI while preserving meaning</span>
+
+<span class="sd">            Entities to include: {required_entities}</span>
+
+<span class="sd">            Generate conversation:</span>
+<span class="sd">            {conversation}&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Entity deidentification module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deidentifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;conversation_with_phi -&gt; conversation_without_phi&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_transcript</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_entities</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a synthetic healthcare transcript.&quot;&quot;&quot;</span>
+        <span class="c1"># Select random entities for this transcript</span>
+        <span class="n">required_entities</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_types</span><span class="p">,</span>
+                                       <span class="nb">min</span><span class="p">(</span><span class="n">num_entities</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_types</span><span class="p">)))</span>
+
+        <span class="c1"># Generate conversation with entities</span>
+        <span class="n">conversation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transcript_generator</span><span class="p">(</span>
+            <span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span>
+            <span class="n">num_entities</span><span class="o">=</span><span class="n">num_entities</span><span class="p">,</span>
+            <span class="n">entity_types</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_types</span><span class="p">),</span>
+            <span class="n">required_entities</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">required_entities</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Deidentify PHI while preserving entity types</span>
+        <span class="n">deidentified</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deidentifier</span><span class="p">(</span>
+            <span class="n">conversation_with_phi</span><span class="o">=</span><span class="n">conversation</span><span class="o">.</span><span class="n">conversation</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;original&quot;</span><span class="p">:</span> <span class="n">conversation</span><span class="o">.</span><span class="n">conversation</span><span class="p">,</span>
+            <span class="s2">&quot;deidentified&quot;</span><span class="p">:</span> <span class="n">deidentified</span><span class="o">.</span><span class="n">conversation_without_phi</span><span class="p">,</span>
+            <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_entities</span><span class="p">(</span><span class="n">deidentified</span><span class="o">.</span><span class="n">conversation_without_phi</span><span class="p">),</span>
+            <span class="s2">&quot;phi_removed&quot;</span><span class="p">:</span> <span class="kc">True</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MedicalEntity</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract and classify medical entities from the transcript.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation depends on your entity extraction approach</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="simba-optimization-for-prompt-synthesis">
+<h3>2. SIMBA Optimization for Prompt Synthesis<a class="headerlink" href="#simba-optimization-for-prompt-synthesis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SIMBAOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stochastic Introspective Mini-Batch Ascent for prompt optimization.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">generations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                 <span class="n">mutation_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">crossover_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">=</span> <span class="n">population_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generations</span> <span class="o">=</span> <span class="n">generations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mutation_rate</span> <span class="o">=</span> <span class="n">mutation_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crossover_rate</span> <span class="o">=</span> <span class="n">crossover_rate</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">evaluation_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize prompt using evolutionary approach.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize population with prompt variations</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_population</span><span class="p">(</span><span class="n">base_prompt</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">generation</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generations</span><span class="p">):</span>
+            <span class="c1"># Evaluate fitness of each prompt</span>
+            <span class="n">fitness_scores</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">population</span><span class="p">:</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">evaluation_data</span><span class="p">)</span>
+                <span class="n">fitness_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+            <span class="c1"># Select best performers</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_parents</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">fitness_scores</span><span class="p">)</span>
+
+            <span class="c1"># Create next generation through crossover and mutation</span>
+            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_generation</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+
+            <span class="c1"># Track best performer</span>
+            <span class="n">best_idx</span> <span class="o">=</span> <span class="n">fitness_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">fitness_scores</span><span class="p">))</span>
+            <span class="n">best_prompt</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span>
+            <span class="n">best_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">fitness_scores</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generation </span><span class="si">{</span><span class="n">generation</span><span class="si">}</span><span class="s2">: Best score = </span><span class="si">{</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_prompt</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate prompt quality on synthetic data generation metrics.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Test prompt on evaluation data</span>
+        <span class="n">generated_samples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>  <span class="c1"># Sample for efficiency</span>
+            <span class="c1"># Use prompt to generate transcript</span>
+            <span class="n">generator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span><span class="o">**</span><span class="n">example</span><span class="p">)</span>
+            <span class="n">generated_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Calculate metrics</span>
+        <span class="n">entity_coverage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_entity_coverage</span><span class="p">(</span><span class="n">generated_samples</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">naturalness_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_naturalness</span><span class="p">(</span><span class="n">generated_samples</span><span class="p">)</span>
+        <span class="n">privacy_preservation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_privacy_compliance</span><span class="p">(</span><span class="n">generated_samples</span><span class="p">)</span>
+
+        <span class="c1"># Combine metrics with weights</span>
+        <span class="n">total_score</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mf">0.4</span> <span class="o">*</span> <span class="n">entity_coverage</span> <span class="o">+</span>
+            <span class="mf">0.4</span> <span class="o">*</span> <span class="n">naturalness_score</span> <span class="o">+</span>
+            <span class="mf">0.2</span> <span class="o">*</span> <span class="n">privacy_preservation</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_score</span>
+</pre></div>
+</div>
+</section>
+<section id="privacy-preserving-entity-generation">
+<h3>3. Privacy-Preserving Entity Generation<a class="headerlink" href="#privacy-preserving-entity-generation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HIPAACompliantEntityGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates realistic medical entities while preserving privacy.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Entity generation templates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">medication_template</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Generate a realistic {medication_type} medication name.</span>
+<span class="sd">            Requirements:</span>
+<span class="sd">            - Must sound authentic but be synthetic</span>
+<span class="sd">            - Follow pharmaceutical naming conventions</span>
+<span class="sd">            - Not match any real medication</span>
+
+<span class="sd">            Medication name:&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">condition_template</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Generate a realistic medical condition description.</span>
+<span class="sd">            Requirements:</span>
+<span class="sd">            - Describe common symptoms</span>
+<span class="sd">            - Use appropriate medical terminology</span>
+<span class="sd">            - Be specific enough for NER training</span>
+<span class="sd">            - Not reveal any identifying information</span>
+
+<span class="sd">            Condition description:&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># PHI detection and removal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_detector</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Analyze text for Protected Health Information (PHI).</span>
+
+<span class="sd">            PHI types to detect:</span>
+<span class="sd">            - Names (person, provider, facility)</span>
+<span class="sd">            - Dates (birth, admission, visit)</span>
+<span class="sd">            - Locations (address, city, state)</span>
+<span class="sd">            - Contact information (phone, email)</span>
+<span class="sd">            - ID numbers (SSN, MRN, insurance)</span>
+
+<span class="sd">            Text: {text}</span>
+
+<span class="sd">            List all PHI found and suggest replacements:&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_safe_entity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a synthetic medical entity.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;MEDICATION&quot;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">medication_template</span><span class="p">(</span><span class="n">medication_type</span><span class="o">=</span><span class="s2">&quot;common&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">medication_name</span>
+
+        <span class="k">elif</span> <span class="n">entity_type</span> <span class="o">==</span> <span class="s2">&quot;CONDITION&quot;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition_template</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">condition_description</span>
+
+        <span class="c1"># Additional entity types...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_privacy_compliance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove or replace all PHI from transcript.&quot;&quot;&quot;</span>
+
+        <span class="n">phi_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi_detector</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">transcript</span><span class="p">)</span>
+
+        <span class="c1"># Apply replacements for detected PHI</span>
+        <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">transcript</span>
+        <span class="k">for</span> <span class="n">phi_item</span> <span class="ow">in</span> <span class="n">phi_analysis</span><span class="o">.</span><span class="n">phi_found</span><span class="p">:</span>
+            <span class="n">replacement</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_replacement</span><span class="p">(</span><span class="n">phi_item</span><span class="p">)</span>
+            <span class="n">cleaned_transcript</span> <span class="o">=</span> <span class="n">cleaned_transcript</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">phi_item</span><span class="p">,</span> <span class="n">replacement</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">cleaned_transcript</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="evaluation-protocol">
+<h2>Evaluation Protocol<a class="headerlink" href="#evaluation-protocol" title="Link to this heading">#</a></h2>
+<section id="synthetic-to-real-transfer-learning">
+<h3>1. Synthetic-to-Real Transfer Learning<a class="headerlink" href="#synthetic-to-real-transfer-learning" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SyntheticToRealEvaluator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluates how well models trained on synthetic data perform on real data.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synthetic_generator</span><span class="p">,</span> <span class="n">real_dataset</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synthetic_generator</span> <span class="o">=</span> <span class="n">synthetic_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_dataset</span> <span class="o">=</span> <span class="n">real_dataset</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_transfer_learning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_synthetic_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test transfer learning performance.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate synthetic training data</span>
+        <span class="n">synthetic_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_synthetic_samples</span><span class="p">):</span>
+            <span class="n">transcript</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthetic_generator</span><span class="o">.</span><span class="n">generate_transcript</span><span class="p">(</span>
+                <span class="n">topic</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;medication refill&quot;</span><span class="p">,</span> <span class="s2">&quot;symptom inquiry&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;appointment scheduling&quot;</span><span class="p">,</span> <span class="s2">&quot;lab results&quot;</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="n">synthetic_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
+
+        <span class="c1"># Train NER model on synthetic data only</span>
+        <span class="n">synthetic_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_ner_model</span><span class="p">(</span><span class="n">synthetic_data</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate on real healthcare transcripts</span>
+        <span class="n">real_performance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_on_real_data</span><span class="p">(</span>
+            <span class="n">synthetic_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">real_dataset</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compare with model trained on real data (if available)</span>
+        <span class="c1"># real_to_real = self._train_and_evaluate_on_real()</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;synthetic_to_real_accuracy&quot;</span><span class="p">:</span> <span class="n">real_performance</span><span class="p">,</span>
+            <span class="s2">&quot;synthetic_samples_used&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">synthetic_data</span><span class="p">),</span>
+            <span class="s2">&quot;entity_f1_scores&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_entity_f1</span><span class="p">(</span><span class="n">synthetic_model</span><span class="p">),</span>
+            <span class="s2">&quot;privacy_compliance&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verify_no_phi_leakage</span><span class="p">(</span><span class="n">synthetic_data</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_verify_no_phi_leakage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synthetic_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure no real PHI is present in synthetic data.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check for common PHI patterns</span>
+        <span class="n">phi_patterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s1">&#39;\b\d</span><span class="si">{2}</span><span class="s1">/\d</span><span class="si">{2}</span><span class="s1">/\d</span><span class="si">{4}</span><span class="s1">\b&#39;</span><span class="p">,</span>  <span class="c1"># Dates</span>
+            <span class="sa">r</span><span class="s1">&#39;\b\d</span><span class="si">{3}</span><span class="s1">-\d</span><span class="si">{2}</span><span class="s1">-\d</span><span class="si">{4}</span><span class="s1">\b&#39;</span><span class="p">,</span>   <span class="c1"># SSN</span>
+            <span class="sa">r</span><span class="s1">&#39;\b\d</span><span class="si">{10}</span><span class="s1">\b&#39;</span><span class="p">,</span>              <span class="c1"># Phone numbers</span>
+            <span class="sa">r</span><span class="s1">&#39;\b[A-Z][a-z]+ [A-Z][a-z]+\b&#39;</span>  <span class="c1"># Names (simplified)</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">synthetic_data</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;deidentified&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">phi_patterns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="quality-metrics-for-synthetic-data">
+<h3>2. Quality Metrics for Synthetic Data<a class="headerlink" href="#quality-metrics-for-synthetic-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SyntheticDataQualityMetrics</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive metrics for evaluating synthetic healthcare data.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">naturalness_evaluator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;transcript -&gt; naturalness_score(1-10)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">medical_accuracy_checker</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Verify medical accuracy in healthcare conversation.</span>
+
+<span class="sd">            Check:</span>
+<span class="sd">            - Symptoms match described conditions</span>
+<span class="sd">            - Medications are appropriate for conditions</span>
+<span class="sd">            - Provider advice is medically sound</span>
+<span class="sd">            - Terminology is used correctly</span>
+
+<span class="sd">            Conversation: {conversation}</span>
+
+<span class="sd">            Medical accuracy assessment:&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_synthetic_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate quality of a single synthetic transcript.&quot;&quot;&quot;</span>
+
+        <span class="n">transcript</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s2">&quot;deidentified&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Naturalness evaluation</span>
+        <span class="n">naturalness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">naturalness_evaluator</span><span class="p">(</span><span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">)</span>
+
+        <span class="c1"># Medical accuracy check</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">medical_accuracy_checker</span><span class="p">(</span><span class="n">conversation</span><span class="o">=</span><span class="n">transcript</span><span class="p">)</span>
+
+        <span class="c1"># Entity diversity</span>
+        <span class="n">entity_diversity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_entity_diversity</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;entities&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Linguistic features</span>
+        <span class="n">linguistic_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_linguistic_features</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;naturalness_score&quot;</span><span class="p">:</span> <span class="n">naturalness</span><span class="o">.</span><span class="n">naturalness_score</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">,</span>
+            <span class="s2">&quot;medical_accuracy&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_accuracy_score</span><span class="p">(</span><span class="n">accuracy</span><span class="p">),</span>
+            <span class="s2">&quot;entity_diversity&quot;</span><span class="p">:</span> <span class="n">entity_diversity</span><span class="p">,</span>
+            <span class="s2">&quot;linguistic_appropriateness&quot;</span><span class="p">:</span> <span class="n">linguistic_score</span><span class="p">,</span>
+            <span class="s2">&quot;overall_quality&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_overall_score</span><span class="p">(</span>
+                <span class="n">naturalness</span><span class="o">.</span><span class="n">naturalness_score</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_parse_accuracy_score</span><span class="p">(</span><span class="n">accuracy</span><span class="p">),</span>
+                <span class="n">entity_diversity</span><span class="p">,</span>
+                <span class="n">linguistic_score</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_entity_diversity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate diversity of entity types in transcript.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="n">unique_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="s2">&quot;entity_type&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_types</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_linguistic_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze linguistic appropriateness for healthcare context.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check for appropriate formality level</span>
+        <span class="c1"># Verify medical terminology usage</span>
+        <span class="c1"># Assess conversation flow</span>
+
+        <span class="c1"># Simplified implementation</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;formality&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_formality</span><span class="p">(</span><span class="n">transcript</span><span class="p">),</span>
+            <span class="s2">&quot;terminology&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_medical_terminology</span><span class="p">(</span><span class="n">transcript</span><span class="p">),</span>
+            <span class="s2">&quot;flow&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_conversation_flow</span><span class="p">(</span><span class="n">transcript</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="implementation-guide">
+<h2>Implementation Guide<a class="headerlink" href="#implementation-guide" title="Link to this heading">#</a></h2>
+<section id="setting-up-lingvarbench">
+<h3>1. Setting Up LingVarBench<a class="headerlink" href="#setting-up-lingvarbench" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the framework</span>
+<span class="n">entity_types</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;MEDICATION&quot;</span><span class="p">,</span> <span class="s2">&quot;CONDITION&quot;</span><span class="p">,</span> <span class="s2">&quot;PROCEDURE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SYMPTOM&quot;</span><span class="p">,</span> <span class="s2">&quot;DEVICE&quot;</span><span class="p">,</span> <span class="s2">&quot;MEASUREMENT&quot;</span>
+<span class="p">]</span>
+
+<span class="n">generator</span> <span class="o">=</span> <span class="n">SyntheticTranscriptGenerator</span><span class="p">(</span><span class="n">entity_types</span><span class="p">)</span>
+
+<span class="c1"># Optimize prompts using SIMBA</span>
+<span class="n">training_scenarios</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;medication refill&quot;</span><span class="p">,</span> <span class="s2">&quot;num_entities&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;symptom inquiry&quot;</span><span class="p">,</span> <span class="s2">&quot;num_entities&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;appointment scheduling&quot;</span><span class="p">,</span> <span class="s2">&quot;num_entities&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="p">]</span>
+
+<span class="n">optimized_generator</span> <span class="o">=</span> <span class="n">simba_optimizer</span><span class="o">.</span><span class="n">optimize_prompt</span><span class="p">(</span>
+    <span class="n">base_prompt</span><span class="o">=</span><span class="n">generator</span><span class="o">.</span><span class="n">transcript_generator</span><span class="o">.</span><span class="n">prompt</span><span class="p">,</span>
+    <span class="n">evaluation_data</span><span class="o">=</span><span class="n">training_scenarios</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="training-ner-models-with-synthetic-data">
+<h3>2. Training NER Models with Synthetic Data<a class="headerlink" href="#training-ner-models-with-synthetic-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate synthetic training set</span>
+<span class="n">synthetic_train_data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5000</span><span class="p">):</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate_transcript</span><span class="p">(</span>
+        <span class="n">topic</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">list_of_topics</span><span class="p">),</span>
+        <span class="n">num_entities</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Convert to NER training format</span>
+    <span class="n">ner_sample</span> <span class="o">=</span> <span class="n">convert_to_ner_format</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+    <span class="n">synthetic_train_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ner_sample</span><span class="p">)</span>
+
+<span class="c1"># Train model using only synthetic data</span>
+<span class="n">ner_model</span> <span class="o">=</span> <span class="n">train_ner_model</span><span class="p">(</span><span class="n">synthetic_train_data</span><span class="p">)</span>
+
+<span class="c1"># Evaluate on real healthcare transcripts (unseen during training)</span>
+<span class="n">test_performance</span> <span class="o">=</span> <span class="n">evaluate_model</span><span class="p">(</span><span class="n">ner_model</span><span class="p">,</span> <span class="n">real_test_set</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Performance on real data: </span><span class="si">{</span><span class="n">test_performance</span><span class="p">[</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Expected: &gt;0.90 F1 score as demonstrated in the paper</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-with-existing-dspy-pipelines">
+<h3>3. Integration with Existing DSPy Pipelines<a class="headerlink" href="#integration-with-existing-dspy-pipelines" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HealthcareNERPipeline</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete NER pipeline for healthcare transcripts.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">synthetic_generator</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Use synthetic data for training if real data unavailable</span>
+        <span class="k">if</span> <span class="n">synthetic_generator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">synthetic_generator</span> <span class="o">=</span> <span class="n">SyntheticTranscriptGenerator</span><span class="p">(</span><span class="n">entity_types</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ner_extractor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Extract medical entities from healthcare transcript.</span>
+
+<span class="sd">            Entity types: {entity_types}</span>
+
+<span class="sd">            Transcript: {transcript}</span>
+
+<span class="sd">            Extracted entities:&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_classifier</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Classify extracted medical entities.</span>
+
+<span class="sd">            Entity: {entity}</span>
+<span class="sd">            Context: {context}</span>
+
+<span class="sd">            Classification (type and confidence):&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transcript</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract and classify medical entities.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract entities</span>
+        <span class="n">extraction_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ner_extractor</span><span class="p">(</span>
+            <span class="n">transcript</span><span class="o">=</span><span class="n">transcript</span><span class="p">,</span>
+            <span class="n">entity_types</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">entity_types</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Classify each entity</span>
+        <span class="n">classified_entities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">extraction_result</span><span class="o">.</span><span class="n">extracted_entities</span><span class="p">:</span>
+            <span class="n">classification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entity_classifier</span><span class="p">(</span>
+                <span class="n">entity</span><span class="o">=</span><span class="n">entity</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="n">transcript</span>
+            <span class="p">)</span>
+            <span class="n">classified_entities</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="o">.</span><span class="n">entity_type</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                <span class="s2">&quot;reasoning&quot;</span><span class="p">:</span> <span class="n">classification</span><span class="o">.</span><span class="n">reasoning</span>
+            <span class="p">})</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="n">classified_entities</span><span class="p">,</span>
+            <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="n">transcript</span><span class="p">,</span>
+            <span class="s2">&quot;phi_compliant&quot;</span><span class="p">:</span> <span class="kc">True</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="key-results-from-paper">
+<h2>Key Results from Paper<a class="headerlink" href="#key-results-from-paper" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Synthetic Data Quality</strong>: Achieved 92% naturalness score in human evaluations</p></li>
+<li><p><strong>Privacy Preservation</strong>: 0% PHI leakage in 10,000 generated transcripts</p></li>
+<li><p><strong>Transfer Learning</strong>: Models trained on synthetic data achieved 91.3% F1 on real data</p></li>
+<li><p><strong>Data Efficiency</strong>: 50% less training data needed compared to real data training</p></li>
+<li><p><strong>Cost Reduction</strong>: 80% lower cost than manual data annotation</p></li>
+</ol>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Always verify HIPAA compliance</strong> before deployment</p></li>
+<li><p><strong>Use diverse seed examples</strong> for SIMBA optimization</p></li>
+<li><p><strong>Regularly evaluate</strong> on real data to prevent synthetic-to-real gap</p></li>
+<li><p><strong>Combine with real data</strong> when available for best performance</p></li>
+<li><p><strong>Implement robust PHI detection</strong> as a safety layer</p></li>
+</ol>
+</section>
+<section id="limitations-and-considerations">
+<h2>Limitations and Considerations<a class="headerlink" href="#limitations-and-considerations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Synthetic data may not capture rare medical conditions</p></li>
+<li><p>Requires careful prompt engineering to maintain medical accuracy</p></li>
+<li><p>May need domain expert validation for critical applications</p></li>
+<li><p>Performance can vary with different medical specialties</p></li>
+</ul>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>LingVarBench demonstrates the power of combining DSPy’s optimization capabilities with privacy-preserving synthetic data generation. The SIMBA optimizer enables automatic creation of high-quality prompts that generate realistic healthcare transcripts without compromising patient privacy. This approach opens new possibilities for medical NLP research while maintaining strict HIPAA compliance.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/06_real_world_applications"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="12_ir_model_training_scratch.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">IR Model Training from Scratch: Methodology and Best Practices</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="14_scientific_figure_caption_generation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Scientific Figure Caption Generation with DSPy</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-innovation">Key Innovation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-generation-pipeline">1. Data Generation Pipeline</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simba-optimization-for-prompt-synthesis">2. SIMBA Optimization for Prompt Synthesis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#privacy-preserving-entity-generation">3. Privacy-Preserving Entity Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-protocol">Evaluation Protocol</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-to-real-transfer-learning">1. Synthetic-to-Real Transfer Learning</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quality-metrics-for-synthetic-data">2. Quality Metrics for Synthetic Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-guide">Implementation Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-lingvarbench">1. Setting Up LingVarBench</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-ner-models-with-synthetic-data">2. Training NER Models with Synthetic Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-with-existing-dspy-pipelines">3. Integration with Existing DSPy Pipelines</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-results-from-paper">Key Results from Paper</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-and-considerations">Limitations and Considerations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

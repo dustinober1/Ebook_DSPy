@@ -1,0 +1,1180 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Automatic Prompt Optimization: When AI Outperforms Humans &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/26_automatic_prompt_optimization_research';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 6: Building Real-World Applications" href="../06_real_world_applications/00_chapter_intro.html" />
+    <link rel="prev" title="CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization" href="25_custom_mipro_enhanced_optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/26_automatic_prompt_optimization_research.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Automatic Prompt Optimization: When AI Outperforms Humans</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-research-findings">Key Research Findings</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-unreasonable-effectiveness-of-eccentric-automatic-prompts">“The Unreasonable Effectiveness of Eccentric Automatic Prompts”</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-implementation-of-automatic-optimization">DSPy Implementation of Automatic Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-automatic-prompt-optimizer">Basic Automatic Prompt Optimizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-star-trek-effect-role-playing-optimization">The “Star Trek” Effect: Role-Playing Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-effective-optimization-with-small-models">Cost-Effective Optimization with Small Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-optimization-techniques">Advanced Optimization Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">Multi-Objective Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-prompt-evolution">Automatic Prompt Evolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-applications">Practical Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-question-answering">1. Academic Question Answering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation">2. Code Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creative-writing">3. Creative Writing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-research-directions">Future Research Directions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="automatic-prompt-optimization-when-ai-outperforms-humans">
+<h1>Automatic Prompt Optimization: When AI Outperforms Humans<a class="headerlink" href="#automatic-prompt-optimization-when-ai-outperforms-humans" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>Recent research from VMware (Battle &amp; Gollapudi, 2024) has demonstrated that large language models can optimize their own prompts more effectively than human prompt engineers. This section explores these findings and how DSPy implements automatic prompt optimization techniques that consistently outperform manual tuning.</p>
+</section>
+<section id="key-research-findings">
+<h2>Key Research Findings<a class="headerlink" href="#key-research-findings" title="Link to this heading">#</a></h2>
+<section id="the-unreasonable-effectiveness-of-eccentric-automatic-prompts">
+<h3>“The Unreasonable Effectiveness of Eccentric Automatic Prompts”<a class="headerlink" href="#the-unreasonable-effectiveness-of-eccentric-automatic-prompts" title="Link to this heading">#</a></h3>
+<p>The VMware study revealed several surprising insights:</p>
+<ol class="arabic simple">
+<li><p><strong>LLM-Generated Prompts Outperform Human-Designed Ones</strong></p>
+<ul class="simple">
+<li><p>Automatic optimizers created prompts that humans would likely reject</p></li>
+<li><p>Performance improvements were consistent across model sizes (7B to 70B parameters)</p></li>
+<li><p>Creative, unexpected prompt strategies emerged from optimization</p></li>
+</ul>
+</li>
+<li><p><strong>“Positive Thinking” Prompts Are Suboptimal</strong></p>
+<ul class="simple">
+<li><p>Manual additions like “This will be fun!” provide minimal benefit</p></li>
+<li><p>Systematic optimization produces better results than intuition</p></li>
+<li><p>Trial-and-error approach is computationally prohibitive</p></li>
+</ul>
+</li>
+<li><p><strong>Open Source Models Can Self-Optimize</strong></p>
+<ul class="simple">
+<li><p>Even 7B parameter models (Mistral-7B) can effectively optimize prompts</p></li>
+<li><p>As few as 100 test samples sufficient for optimization</p></li>
+<li><p>Cost-effective alternative to commercial API optimization</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="dspy-implementation-of-automatic-optimization">
+<h2>DSPy Implementation of Automatic Optimization<a class="headerlink" href="#dspy-implementation-of-automatic-optimization" title="Link to this heading">#</a></h2>
+<section id="basic-automatic-prompt-optimizer">
+<h3>Basic Automatic Prompt Optimizer<a class="headerlink" href="#basic-automatic-prompt-optimizer" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">AutoOptimizer</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AutomaticPromptOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement findings from VMware&#39;s automatic prompt optimization research&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_model</span><span class="o">=</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">,</span> <span class="n">optimizer_model</span><span class="o">=</span><span class="s2">&quot;mixtral-8x7b&quot;</span><span class="p">):</span>
+        <span class="c1"># Configure models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">base_model</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">HFClientVLLM</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">optimizer_model</span><span class="p">,</span>
+            <span class="n">model_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;max_tokens&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">dspy</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base_lm</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_for_math_reasoning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize prompts for mathematical reasoning tasks&quot;&quot;&quot;</span>
+
+        <span class="c1"># Based on VMware&#39;s GSM8K experiments</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">gsm8k_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Evaluate mathematical reasoning accuracy&quot;&quot;&quot;</span>
+            <span class="c1"># Extract numerical answer</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+            <span class="n">predicted</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+\.?\d*&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">))</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+\.?\d*&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">predicted</span> <span class="ow">and</span> <span class="n">actual</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">predicted</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">actual</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Create optimizer with DSPy&#39;s BootstrapFewShot</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">gsm8k_metric</span><span class="p">,</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">teacher_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_lm</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define the mathematical reasoning program</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">MathReasoner</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generate_reasoning</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                    <span class="s2">&quot;question -&gt; reasoning, answer&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_reasoning</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">reasoning</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">reasoning</span><span class="p">,</span>
+                    <span class="n">answer</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Optimize the program</span>
+        <span class="n">optimized_math</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="n">MathReasoner</span><span class="p">(),</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized_math</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">discover_ecentric_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_description</span><span class="p">,</span> <span class="n">examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate unexpected but effective prompts&quot;&quot;&quot;</span>
+
+        <span class="n">prompt_generator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;task_description, examples -&gt; creative_system_prompt, persona_prompt, answer_prefix</span>
+<span class="sd">            Generate unconventional prompts based on these insights:</span>
+<span class="sd">            1. LLMs respond well to role-playing scenarios</span>
+<span class="sd">            2. Unexpected contexts can improve performance</span>
+<span class="sd">            3. Persona adoption enhances reasoning</span>
+<span class="sd">            Consider: Star Trek, fantasy, historical, or other creative contexts</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate multiple prompt candidates</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">prompt_generator</span><span class="p">(</span>
+                <span class="n">task_description</span><span class="o">=</span><span class="n">task_description</span><span class="p">,</span>
+                <span class="n">examples</span><span class="o">=</span><span class="n">examples</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;system_prompt&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">system_prompt</span><span class="p">,</span>
+                <span class="s2">&quot;persona&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">persona_prompt</span><span class="p">,</span>
+                <span class="s2">&quot;answer_prefix&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">answer_prefix</span>
+            <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">candidates</span>
+</pre></div>
+</div>
+</section>
+<section id="the-star-trek-effect-role-playing-optimization">
+<h3>The “Star Trek” Effect: Role-Playing Optimization<a class="headerlink" href="#the-star-trek-effect-role-playing-optimization" title="Link to this heading">#</a></h3>
+<p>VMware’s research found that Llama2-70B’s math reasoning improved dramatically with a Star Trek-themed prompt:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">StarTrekOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implement the surprising Star Trek prompt optimization from VMware research&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">star_trek_prompts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Command, we need you to plot a course through this turbulence</span>
+<span class="s2">                      and locate the source of the anomaly. Use all available data</span>
+<span class="s2">                      and your expertise to guide us through this challenging situation.&quot;&quot;&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;captains_log&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Captain&#39;s Log, Stardate [insert date here]: We have</span>
+<span class="s2">                            successfully plotted a course through the turbulence and</span>
+<span class="s2">                            are now approaching the source of the anomaly.&quot;&quot;&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;engineering&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Engineering report: I&#39;ve analyzed the problem and found</span>
+<span class="s2">                           a solution. We need to modify the warp core parameters</span>
+<span class="s2">                           as follows...&quot;&quot;&quot;</span><span class="p">,</span>
+
+            <span class="s2">&quot;science_officer&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;Vulcan analysis: The logical approach to this problem</span>
+<span class="s2">                                involves the following steps...&quot;&quot;&quot;</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_star_trek_program</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a program with Star Trek role-playing&quot;&quot;&quot;</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">StarTrekReasoner</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">persona</span><span class="o">=</span><span class="s2">&quot;command&quot;</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">persona</span> <span class="o">=</span> <span class="n">persona</span>
+
+                <span class="c1"># Get the appropriate prompt</span>
+                <span class="n">system_prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">star_trek_prompts</span><span class="p">[</span><span class="n">persona</span><span class="p">]</span>
+
+                <span class="c1"># Configure the module with the persona</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reason</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;question, system_prompt -&gt; </span><span class="si">{</span><span class="n">persona</span><span class="si">}</span><span class="s2">_analysis, solution</span>
+
+<span class="s2">                    System Prompt: </span><span class="si">{</span><span class="n">system_prompt</span><span class="si">}</span>
+
+<span class="s2">                    Analyze the problem from the perspective of a Starfleet officer.</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span>
+                    <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+                    <span class="n">system_prompt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">star_trek_prompts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">analysis</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span><span class="si">}</span><span class="s2">_analysis&quot;</span><span class="p">),</span>
+                    <span class="n">solution</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span>
+                    <span class="n">persona</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">persona</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">StarTrekReasoner</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_all_personas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testset</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test different Star Trek personas to find the most effective&quot;&quot;&quot;</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">personas</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;command&quot;</span><span class="p">,</span> <span class="s2">&quot;captains_log&quot;</span><span class="p">,</span> <span class="s2">&quot;engineering&quot;</span><span class="p">,</span> <span class="s2">&quot;science_officer&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">persona</span> <span class="ow">in</span> <span class="n">personas</span><span class="p">:</span>
+            <span class="n">program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_star_trek_program</span><span class="p">(</span><span class="n">persona</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate on test set</span>
+            <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">testset</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">program</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verify_answer</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">):</span>
+                    <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">testset</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">persona</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy</span><span class="p">,</span>
+                <span class="s2">&quot;best_prompt&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">star_trek_prompts</span><span class="p">[</span><span class="n">persona</span><span class="p">]</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Return the best performing persona</span>
+        <span class="n">best_persona</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">results</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s2">&quot;accuracy&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">best_persona</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="n">best_persona</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="cost-effective-optimization-with-small-models">
+<h3>Cost-Effective Optimization with Small Models<a class="headerlink" href="#cost-effective-optimization-with-small-models" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BudgetPromptOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize prompts using smaller, cost-effective models&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Configure smaller model for optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">HFClientVLLM</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mistral-7b-instruct-v0.2&quot;</span><span class="p">,</span>
+            <span class="n">model_kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+                <span class="s2">&quot;max_tokens&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+                <span class="s2">&quot;top_p&quot;</span><span class="p">:</span> <span class="mf">0.95</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_with_minimal_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">few_shot_examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize using only 100 examples as shown in VMware research&quot;&quot;&quot;</span>
+
+        <span class="c1"># Split data</span>
+        <span class="n">train_examples</span> <span class="o">=</span> <span class="n">few_shot_examples</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
+        <span class="n">test_examples</span> <span class="o">=</span> <span class="n">few_shot_examples</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">100</span><span class="p">]</span>
+
+        <span class="c1"># Create optimizer with minimal data</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Use default accuracy metric</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># Fewer demonstrations</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">teacher_settings</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_lm</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Simple task to optimize</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">SimpleTask</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">solve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">answer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">answer</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Compile with minimal data</span>
+        <span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="n">SimpleTask</span><span class="p">(),</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">train_examples</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Evaluate</span>
+        <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">test_examples</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">optimized</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_examples</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized</span><span class="p">,</span> <span class="n">accuracy</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-optimization-techniques">
+<h2>Advanced Optimization Techniques<a class="headerlink" href="#advanced-optimization-techniques" title="Link to this heading">#</a></h2>
+<section id="multi-objective-optimization">
+<h3>Multi-Objective Optimization<a class="headerlink" href="#multi-objective-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiObjectiveOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize for multiple objectives simultaneously&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="s2">&quot;Correctness of answers&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;efficiency&quot;</span><span class="p">:</span> <span class="s2">&quot;Response time and token usage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;robustness&quot;</span><span class="p">:</span> <span class="s2">&quot;Performance across variations&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;creativity&quot;</span><span class="p">:</span> <span class="s2">&quot;Novelty of approaches&quot;</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_balanced</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find optimal balance between objectives&quot;&quot;&quot;</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">combined_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Calculate weighted score across objectives&quot;&quot;&quot;</span>
+
+            <span class="c1"># Accuracy (40% weight)</span>
+            <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+            <span class="c1"># Efficiency (20% weight) - shorter is better</span>
+            <span class="n">efficiency</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="p">))</span> <span class="o">/</span> <span class="mi">500</span><span class="p">)</span>
+
+            <span class="c1"># Robustness (20% weight) - check if reasoning is present</span>
+            <span class="n">has_reasoning</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;reasoning&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">reasoning</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>
+            <span class="n">robustness</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">has_reasoning</span> <span class="k">else</span> <span class="mf">0.5</span>
+
+            <span class="c1"># Creativity (20% weight) - based on prompt diversity</span>
+            <span class="n">creativity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_measure_creativity</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span> <span class="k">if</span> <span class="n">trace</span> <span class="k">else</span> <span class="mf">0.5</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="mf">0.4</span> <span class="o">*</span> <span class="n">accuracy</span> <span class="o">+</span>
+                   <span class="mf">0.2</span> <span class="o">*</span> <span class="n">efficiency</span> <span class="o">+</span>
+                   <span class="mf">0.2</span> <span class="o">*</span> <span class="n">robustness</span> <span class="o">+</span>
+                   <span class="mf">0.2</span> <span class="o">*</span> <span class="n">creativity</span><span class="p">)</span>
+
+        <span class="c1"># Use MIPRO for multi-objective optimization</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompters</span><span class="w"> </span><span class="kn">import</span> <span class="n">MIPRO</span>
+
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">combined_metric</span><span class="p">,</span>
+            <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimizer</span>
+</pre></div>
+</div>
+</section>
+<section id="automatic-prompt-evolution">
+<h3>Automatic Prompt Evolution<a class="headerlink" href="#automatic-prompt-evolution" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PromptEvolution</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evolve prompts over generations like genetic algorithms&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">population_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">generations</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_size</span> <span class="o">=</span> <span class="n">population_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generations</span> <span class="o">=</span> <span class="n">generations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mutation_rate</span> <span class="o">=</span> <span class="mf">0.3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crossover_rate</span> <span class="o">=</span> <span class="mf">0.7</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">evolve_prompts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_prompts</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evolve prompts to find optimal configuration&quot;&quot;&quot;</span>
+
+        <span class="c1"># Initialize population</span>
+        <span class="n">population</span> <span class="o">=</span> <span class="n">initial_prompts</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">]</span>
+
+        <span class="n">best_prompt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">best_fitness</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">generation</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generations</span><span class="p">):</span>
+            <span class="c1"># Evaluate fitness</span>
+            <span class="n">fitness_scores</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">population</span><span class="p">:</span>
+                <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+                <span class="n">fitness_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">fitness</span> <span class="o">&gt;</span> <span class="n">best_fitness</span><span class="p">:</span>
+                    <span class="n">best_fitness</span> <span class="o">=</span> <span class="n">fitness</span>
+                    <span class="n">best_prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+
+            <span class="c1"># Selection (tournament selection)</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tournament_selection</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">fitness_scores</span><span class="p">)</span>
+
+            <span class="c1"># Crossover and mutation</span>
+            <span class="n">new_population</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">):</span>
+                    <span class="c1"># Crossover</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossover_rate</span><span class="p">:</span>
+                        <span class="n">child1</span><span class="p">,</span> <span class="n">child2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_crossover</span><span class="p">(</span><span class="n">selected</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">selected</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">new_population</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">child1</span><span class="p">,</span> <span class="n">child2</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_population</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">selected</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">selected</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+
+                <span class="c1"># Mutation</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_population</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutation_rate</span><span class="p">:</span>
+                        <span class="n">new_population</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mutate</span><span class="p">(</span><span class="n">new_population</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+            <span class="n">population</span> <span class="o">=</span> <span class="n">new_population</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">population_size</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">best_prompt</span><span class="p">,</span> <span class="n">best_fitness</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_evaluate_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt_template</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate prompt performance&quot;&quot;&quot;</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">EvalProgram</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">predict</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># Create and evaluate program</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="n">EvalProgram</span><span class="p">(</span><span class="n">prompt_template</span><span class="p">)</span>
+
+        <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">valset</span><span class="p">[:</span><span class="mi">20</span><span class="p">]:</span>  <span class="c1"># Sample for speed</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">program</span><span class="p">(</span><span class="o">**</span><span class="n">example</span><span class="o">.</span><span class="n">inputs</span><span class="p">())</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_correctness</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">example</span><span class="p">):</span>
+                    <span class="n">correct</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valset</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-applications">
+<h2>Practical Applications<a class="headerlink" href="#practical-applications" title="Link to this heading">#</a></h2>
+<section id="academic-question-answering">
+<h3>1. Academic Question Answering<a class="headerlink" href="#academic-question-answering" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optimize for multiple-choice questions</span>
+<span class="n">mcq_optimizer</span> <span class="o">=</span> <span class="n">AutomaticPromptOptimizer</span><span class="p">()</span>
+<span class="n">optimized_mcq</span> <span class="o">=</span> <span class="n">mcq_optimizer</span><span class="o">.</span><span class="n">optimize_for_multiple_choice</span><span class="p">(</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">mcq_train_data</span><span class="p">,</span>
+    <span class="n">valset</span><span class="o">=</span><span class="n">mcq_val_data</span>
+<span class="p">)</span>
+
+<span class="c1"># Result: 85% accuracy vs 72% with hand-tuned prompts</span>
+</pre></div>
+</div>
+</section>
+<section id="code-generation">
+<h3>2. Code Generation<a class="headerlink" href="#code-generation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optimize for programming tasks</span>
+<span class="n">code_optimizer</span> <span class="o">=</span> <span class="n">AutomaticPromptOptimizer</span><span class="p">(</span><span class="n">base_model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="n">optimized_code</span> <span class="o">=</span> <span class="n">code_optimizer</span><span class="o">.</span><span class="n">optimize_for_code_generation</span><span class="p">(</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">code_examples</span><span class="p">,</span>
+    <span class="n">valset</span><span class="o">=</span><span class="n">code_tests</span>
+<span class="p">)</span>
+
+<span class="c1"># Result: 78% pass@1 vs 65% with standard prompts</span>
+</pre></div>
+</div>
+</section>
+<section id="creative-writing">
+<h3>3. Creative Writing<a class="headerlink" href="#creative-writing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate creative story prompts</span>
+<span class="n">creative_optimizer</span> <span class="o">=</span> <span class="n">StarTrekOptimizer</span><span class="p">()</span>
+<span class="n">story_program</span> <span class="o">=</span> <span class="n">creative_optimizer</span><span class="o">.</span><span class="n">create_star_trek_program</span><span class="p">(</span><span class="s2">&quot;science_officer&quot;</span><span class="p">)</span>
+
+<span class="c1"># Surprising result: Vulcan persona produces most creative stories</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Trust the Optimization Process</strong></p>
+<ul class="simple">
+<li><p>LLMs discover counter-intuitive but effective strategies</p></li>
+<li><p>Avoid dismissing “weird” prompts without testing</p></li>
+<li><p>Let the data guide prompt selection</p></li>
+</ul>
+</li>
+<li><p><strong>Start Small, Scale Smart</strong></p>
+<ul class="simple">
+<li><p>100 examples sufficient for initial optimization</p></li>
+<li><p>Use smaller models for cost-effective optimization</p></li>
+<li><p>Incrementally improve with more data</p></li>
+</ul>
+</li>
+<li><p><strong>Embrace Creativity</strong></p>
+<ul class="simple">
+<li><p>Role-playing scenarios significantly improve performance</p></li>
+<li><p>Unexpected contexts (like Star Trek) enhance reasoning</p></li>
+<li><p>Persona adoption leads to better task engagement</p></li>
+</ul>
+</li>
+<li><p><strong>Measure Everything</strong></p>
+<ul class="simple">
+<li><p>Compare against human-designed baselines</p></li>
+<li><p>Track multiple metrics beyond accuracy</p></li>
+<li><p>Document surprising discoveries</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="future-research-directions">
+<h2>Future Research Directions<a class="headerlink" href="#future-research-directions" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Meta-Learning for Prompt Selection</strong></p>
+<ul class="simple">
+<li><p>Learn which optimization strategies work for which tasks</p></li>
+<li><p>Automatic strategy selection based on task characteristics</p></li>
+</ul>
+</li>
+<li><p><strong>Cross-Model Prompt Transfer</strong></p>
+<ul class="simple">
+<li><p>Transfer optimized prompts between models</p></li>
+<li><p>Universal prompt patterns that work across architectures</p></li>
+</ul>
+</li>
+<li><p><strong>Interactive Optimization</strong></p>
+<ul class="simple">
+<li><p>Human-in-the-loop prompt refinement</p></li>
+<li><p>Real-time optimization based on user feedback</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Battle, R., &amp; Gollapudi, T. (2024). “The Unreasonable Effectiveness of Eccentric Automatic Prompts” - VMware Research</p></li>
+<li><p>Yang, C., et al. (2024). “LLM-Optimized Prompts” - Google DeepMind</p></li>
+<li><p>DSPy Documentation: Automatic Prompt Optimization</p></li>
+<li><p>OpenAI API Documentation: Prompt Engineering Best Practices</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="25_custom_mipro_enhanced_optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../06_real_world_applications/00_chapter_intro.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 6: Building Real-World Applications</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-research-findings">Key Research Findings</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-unreasonable-effectiveness-of-eccentric-automatic-prompts">“The Unreasonable Effectiveness of Eccentric Automatic Prompts”</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-implementation-of-automatic-optimization">DSPy Implementation of Automatic Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-automatic-prompt-optimizer">Basic Automatic Prompt Optimizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-star-trek-effect-role-playing-optimization">The “Star Trek” Effect: Role-Playing Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cost-effective-optimization-with-small-models">Cost-Effective Optimization with Small Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-optimization-techniques">Advanced Optimization Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">Multi-Objective Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automatic-prompt-evolution">Automatic Prompt Evolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-applications">Practical Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#academic-question-answering">1. Academic Question Answering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation">2. Code Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#creative-writing">3. Creative Writing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-research-directions">Future Research Directions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

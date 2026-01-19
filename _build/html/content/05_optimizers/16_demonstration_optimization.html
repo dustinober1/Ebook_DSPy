@@ -1,0 +1,1839 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Demonstration Optimization Strategies &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/16_demonstration_optimization';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Multi-stage Program Architectures" href="17_multistage_architectures.html" />
+    <link rel="prev" title="Instruction Tuning Frameworks" href="15_instruction_tuning_frameworks.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/16_demonstration_optimization.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Demonstration Optimization Strategies</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-foundations">Theoretical Foundations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-demonstrations-matter">Why Demonstrations Matter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-framework">Mathematical Framework</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-effectiveness-factors">Demonstration Effectiveness Factors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-selection-algorithms">Demonstration Selection Algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-based-selection">1. Similarity-based Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diversity-aware-selection">2. Diversity-aware Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-based-selection">3. Coverage-based Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-based-selection">4. Learning-based Selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-generation">Demonstration Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bootstrap-generation">1. Bootstrap Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-generation">2. Synthetic Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-based-utility">1. Performance-based Utility</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-theoretic-utility">2. Information-theoretic Utility</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-utility">3. Coverage Utility</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diversity-metrics">Diversity Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lexical-diversity">1. Lexical Diversity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structural-diversity">2. Structural Diversity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-in-multi-stage-programs">Optimization in Multi-stage Programs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stage-specific-demonstration-strategies">Stage-specific Demonstration Strategies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-considerations">Practical Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#context-window-management">Context Window Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-demonstration-updating">Dynamic Demonstration Updating</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-quality-guidelines">1. Demonstration Quality Guidelines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selection-strategy-tips">2. Selection Strategy Tips</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls">3. Common Pitfalls</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="demonstration-optimization-strategies">
+<h1>Demonstration Optimization Strategies<a class="headerlink" href="#demonstration-optimization-strategies" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this section, you will be able to:</p>
+<ul class="simple">
+<li><p>Understand the role of demonstrations in language model prompting</p></li>
+<li><p>Implement various demonstration selection algorithms</p></li>
+<li><p>Design utility functions for evaluating demonstration effectiveness</p></li>
+<li><p>Apply diversity metrics for optimal demonstration sets</p></li>
+<li><p>Integrate demonstration optimization in multi-stage programs</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Demonstrations (few-shot examples) are a critical component of prompt engineering, providing concrete examples that guide language models toward desired behavior. However, the selection and optimization of demonstrations is far from trivial - the quality, diversity, and ordering of examples can dramatically affect model performance.</p>
+<p>In multi-stage programs, demonstration optimization becomes even more complex as we must consider:</p>
+<ul class="simple">
+<li><p>Stage-specific demonstration needs</p></li>
+<li><p>Cross-stage demonstration dependencies</p></li>
+<li><p>Limited context window constraints</p></li>
+<li><p>Computational efficiency requirements</p></li>
+</ul>
+<p>This section explores comprehensive strategies for optimizing demonstrations in DSPy programs.</p>
+</section>
+<section id="theoretical-foundations">
+<h2>Theoretical Foundations<a class="headerlink" href="#theoretical-foundations" title="Link to this heading">#</a></h2>
+<section id="why-demonstrations-matter">
+<h3>Why Demonstrations Matter<a class="headerlink" href="#why-demonstrations-matter" title="Link to this heading">#</a></h3>
+<p>Demonstrations serve multiple purposes:</p>
+<ol class="arabic simple">
+<li><p><strong>Task Clarification</strong>: Show what the task actually requires</p></li>
+<li><p><strong>Format Specification</strong>: Demonstrate expected input/output format</p></li>
+<li><p><strong>Pattern Recognition</strong>: Reveal underlying patterns in the task</p></li>
+<li><p><strong>Constraint Illustration</strong>: Show how to handle edge cases</p></li>
+<li><p><strong>Quality Benchmark</strong>: Set standards for response quality</p></li>
+</ol>
+</section>
+<section id="mathematical-framework">
+<h3>Mathematical Framework<a class="headerlink" href="#mathematical-framework" title="Link to this heading">#</a></h3>
+<p>Given a demonstration set D = {d₁, d₂, …, d_k} where each demonstration d_i = (x_i, y_i), the objective is to select or generate demonstrations that maximize expected performance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">D</span><span class="o">*</span> <span class="o">=</span> <span class="n">argmax_</span><span class="p">{</span><span class="o">|</span><span class="n">D</span><span class="o">|=</span><span class="n">k</span><span class="p">}</span> <span class="n">E_</span><span class="p">{(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="o">~</span><span class="n">D_test</span><span class="p">}[</span><span class="n">f</span><span class="p">(</span><span class="n">M</span><span class="p">(</span><span class="n">Prompt</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">x</span><span class="p">)),</span> <span class="n">y</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p>I = instruction</p></li>
+<li><p>Prompt(I, D, x) = formatted prompt with instruction, demonstrations, and input</p></li>
+<li><p>M = language model</p></li>
+<li><p>f = evaluation metric</p></li>
+</ul>
+</section>
+<section id="demonstration-effectiveness-factors">
+<h3>Demonstration Effectiveness Factors<a class="headerlink" href="#demonstration-effectiveness-factors" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Relevance</strong>: Similarity to target inputs</p></li>
+<li><p><strong>Diversity</strong>: Coverage of different patterns and cases</p></li>
+<li><p><strong>Quality</strong>: Correctness and clarity of examples</p></li>
+<li><p><strong>Difficulty</strong>: Appropriate complexity level</p></li>
+<li><p><strong>Consistency</strong>: Alignment with instruction</p></li>
+</ol>
+</section>
+</section>
+<section id="demonstration-selection-algorithms">
+<h2>Demonstration Selection Algorithms<a class="headerlink" href="#demonstration-selection-algorithms" title="Link to this heading">#</a></h2>
+<section id="similarity-based-selection">
+<h3>1. Similarity-based Selection<a class="headerlink" href="#similarity-based-selection" title="Link to this heading">#</a></h3>
+<p>Select demonstrations most similar to the input.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SimilarityBasedSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select demonstrations based on input similarity.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">similarity_metric</span><span class="o">=</span><span class="s2">&quot;cosine&quot;</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="s2">&quot;sentence-transformer&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">similarity_metric</span> <span class="o">=</span> <span class="n">similarity_metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="n">encoder</span><span class="p">)</span> <span class="k">if</span> <span class="n">encoder</span> <span class="o">==</span> <span class="s2">&quot;sentence-transformer&quot;</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select top-k most similar demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">:</span>
+            <span class="c1"># Encode all candidates</span>
+            <span class="n">query_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">candidate_embs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">candidates</span><span class="p">)</span>
+
+            <span class="c1"># Compute similarities</span>
+            <span class="n">similarities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">candidate_embs</span><span class="p">,</span> <span class="n">query_emb</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Use simple text similarity</span>
+            <span class="n">similarities</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_text_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span>
+            <span class="p">]</span>
+
+        <span class="c1"># Get top-k indices</span>
+        <span class="n">top_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">similarities</span><span class="p">)[</span><span class="o">-</span><span class="n">k</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_indices</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_text_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text1</span><span class="p">,</span> <span class="n">text2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple text similarity using TF-IDF.&quot;&quot;&quot;</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">TfidfVectorizer</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics.pairwise</span><span class="w"> </span><span class="kn">import</span> <span class="n">cosine_similarity</span>
+
+        <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="n">text1</span><span class="p">,</span> <span class="n">text2</span><span class="p">])</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="n">text1</span><span class="p">,</span> <span class="n">text2</span><span class="p">])</span>
+        <span class="n">similarity</span> <span class="o">=</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">similarity</span>
+</pre></div>
+</div>
+</section>
+<section id="diversity-aware-selection">
+<h3>2. Diversity-aware Selection<a class="headerlink" href="#diversity-aware-selection" title="Link to this heading">#</a></h3>
+<p>Select diverse demonstrations that cover different aspects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DiversityAwareSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select demonstrations maximizing diversity.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diversity_weight</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diversity_weight</span> <span class="o">=</span> <span class="n">diversity_weight</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select diverse set of demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Greedy selection maximizing diversity</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span> <span class="ow">and</span> <span class="n">remaining</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">selected</span><span class="p">:</span>
+                <span class="c1"># Select first randomly or by quality</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">remaining</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quality_score</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Select candidate maximizing diversity-weighted score</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_best_for_diversity</span><span class="p">(</span><span class="n">selected</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
+
+            <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+            <span class="n">remaining</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_select_best_for_diversity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected</span><span class="p">,</span> <span class="n">candidates</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select best candidate for diversity.&quot;&quot;&quot;</span>
+
+        <span class="n">best_score</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="n">best_candidate</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="c1"># Compute diversity score</span>
+            <span class="n">diversity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_diversity</span><span class="p">(</span><span class="n">selected</span> <span class="o">+</span> <span class="p">[</span><span class="n">candidate</span><span class="p">])</span>
+
+            <span class="c1"># Combine with quality</span>
+            <span class="n">quality</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quality_score</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">diversity_weight</span> <span class="o">*</span> <span class="n">diversity</span> <span class="o">+</span>
+                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">diversity_weight</span><span class="p">)</span> <span class="o">*</span> <span class="n">quality</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_candidate</span> <span class="o">=</span> <span class="n">candidate</span>
+
+        <span class="k">return</span> <span class="n">best_candidate</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_diversity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute diversity of demonstration set.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="c1"># Compute pairwise similarities</span>
+        <span class="n">similarities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)):</span>
+                <span class="n">sim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_similarity</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">demonstrations</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">similarities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+
+        <span class="c1"># Diversity = 1 - average similarity</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">similarities</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_quality_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Score demonstration quality.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Factors to consider:</span>
+        <span class="c1"># - Correctness</span>
+        <span class="c1"># - Clarity</span>
+        <span class="c1"># - Completeness</span>
+        <span class="c1"># - Relevance</span>
+
+        <span class="c1"># Implementation depends on specific requirements</span>
+        <span class="k">return</span> <span class="mf">1.0</span>  <span class="c1"># Placeholder</span>
+</pre></div>
+</div>
+</section>
+<section id="coverage-based-selection">
+<h3>3. Coverage-based Selection<a class="headerlink" href="#coverage-based-selection" title="Link to this heading">#</a></h3>
+<p>Ensure demonstrations cover different categories or patterns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CoverageBasedSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Select demonstrations ensuring coverage of patterns.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_extractor</span> <span class="o">=</span> <span class="n">pattern_extractor</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_pattern_extractor</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select demonstrations covering diverse patterns.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract patterns from all candidates</span>
+        <span class="n">all_patterns</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">demo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">candidates</span><span class="p">):</span>
+            <span class="n">patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_extractor</span><span class="p">(</span><span class="n">demo</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pattern</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_patterns</span><span class="p">:</span>
+                    <span class="n">all_patterns</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_patterns</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">covered_patterns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Greedy selection maximizing pattern coverage</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">best_candidate</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">best_new_patterns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">demo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">candidates</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Find patterns this candidate covers</span>
+                <span class="n">demo_patterns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_extractor</span><span class="p">(</span><span class="n">demo</span><span class="p">))</span>
+                <span class="n">new_patterns</span> <span class="o">=</span> <span class="n">demo_patterns</span> <span class="o">-</span> <span class="n">covered_patterns</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_patterns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">best_new_patterns</span><span class="p">):</span>
+                    <span class="n">best_candidate</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">best_new_patterns</span> <span class="o">=</span> <span class="n">new_patterns</span>
+
+            <span class="k">if</span> <span class="n">best_candidate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_candidate</span><span class="p">)</span>
+                <span class="n">covered_patterns</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">best_new_patterns</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># No new patterns, select randomly</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">remaining</span><span class="p">:</span>
+                    <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">remaining</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_pattern_extractor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract basic patterns from demonstration.&quot;&quot;&quot;</span>
+
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Length pattern</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">demonstration</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;short&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;medium&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;long&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Format pattern</span>
+        <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">demonstration</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]:</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;question&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">demonstration</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">demonstration</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;complex_sentence&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Content pattern</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">demonstration</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;why&#39;</span><span class="p">,</span> <span class="s1">&#39;how&#39;</span><span class="p">,</span> <span class="s1">&#39;when&#39;</span><span class="p">,</span> <span class="s1">&#39;where&#39;</span><span class="p">]):</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;wh_question&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="s1">&#39;enumerate&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">]):</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;listing_task&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">patterns</span>
+</pre></div>
+</div>
+</section>
+<section id="learning-based-selection">
+<h3>4. Learning-based Selection<a class="headerlink" href="#learning-based-selection" title="Link to this heading">#</a></h3>
+<p>Learn selection policy from training data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LearnedSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Learn demonstration selection policy from data.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_architecture</span><span class="o">=</span><span class="s2">&quot;transformer&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_selection_model</span><span class="p">(</span><span class="n">model_architecture</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_trained</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train selection model on demonstration effectiveness data.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Prepare training data</span>
+        <span class="c1"># Each example: (query, candidates, labels, performance_scores)</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_training_data</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+        <span class="c1"># Train model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="c1"># Validate</span>
+        <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_training_data</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+        <span class="n">val_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_trained</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">val_score</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select demonstrations using learned policy.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_trained</span><span class="p">:</span>
+            <span class="c1"># Fallback to similarity-based selection</span>
+            <span class="n">selector</span> <span class="o">=</span> <span class="n">SimilarityBasedSelector</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="c1"># Score each candidate</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_features</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">([</span><span class="n">features</span><span class="p">])[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+
+        <span class="c1"># Select top-k</span>
+        <span class="n">top_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores</span><span class="p">)[</span><span class="o">-</span><span class="n">k</span><span class="p">:][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">candidates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">top_indices</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_selection_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">architecture</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build model architecture.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">architecture</span> <span class="o">==</span> <span class="s2">&quot;transformer&quot;</span><span class="p">:</span>
+            <span class="c1"># Simple transformer model for demonstration selection</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">build_transformer_classifier</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">architecture</span> <span class="o">==</span> <span class="s2">&quot;gradient_boosting&quot;</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">GradientBoostingClassifier</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">candidate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract features for selection model.&quot;&quot;&quot;</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_similarity</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidate</span><span class="p">),</span>
+            <span class="s1">&#39;query_length&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+            <span class="s1">&#39;candidate_length&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>
+            <span class="s1">&#39;complexity_score&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_complexity</span><span class="p">(</span><span class="n">candidate</span><span class="p">),</span>
+            <span class="s1">&#39;topic_match&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_topic_match</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">candidate</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="demonstration-generation">
+<h2>Demonstration Generation<a class="headerlink" href="#demonstration-generation" title="Link to this heading">#</a></h2>
+<section id="bootstrap-generation">
+<h3>1. Bootstrap Generation<a class="headerlink" href="#bootstrap-generation" title="Link to this heading">#</a></h3>
+<p>Generate demonstrations from the model itself.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BootstrapDemonstrationGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate demonstrations using bootstrapping.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">confidence_threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="o">=</span> <span class="n">confidence_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generated_demos</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_demonstrations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">,</span> <span class="n">seed_examples</span><span class="p">,</span> <span class="n">num_new</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate new demonstrations from model.&quot;&quot;&quot;</span>
+
+        <span class="n">demonstrations</span> <span class="o">=</span> <span class="n">seed_examples</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_new</span><span class="p">:</span>
+            <span class="c1"># Sample from existing demonstrations</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)</span>
+
+            <span class="c1"># Generate new example based on seed</span>
+            <span class="n">new_demo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_variation</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">instruction</span><span class="p">)</span>
+
+            <span class="c1"># Validate quality</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_demonstration</span><span class="p">(</span><span class="n">new_demo</span><span class="p">):</span>
+                <span class="n">demonstrations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_demo</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generated_demos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_demo</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">demonstrations</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_variation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed_demo</span><span class="p">,</span> <span class="n">instruction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate variation of existing demonstration.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Prompt model to create variation</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Instruction: </span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span>
+
+<span class="s2">        Example:</span>
+<span class="s2">        Input: </span><span class="si">{</span><span class="n">seed_demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">        Output: </span><span class="si">{</span><span class="n">seed_demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">        Create a similar but different example following the same pattern:</span>
+<span class="s2">        Input:</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="n">new_input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_input_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="c1"># Generate output for new input</span>
+        <span class="n">full_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Instruction: </span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span>
+
+<span class="s2">        Input: </span><span class="si">{</span><span class="n">new_input</span><span class="si">}</span>
+<span class="s2">        Output:</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+
+        <span class="n">new_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">full_prompt</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">new_input</span><span class="p">,</span>
+            <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="n">new_output</span><span class="p">,</span>
+            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;generated&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;parent&#39;</span><span class="p">:</span> <span class="n">seed_demo</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_demonstration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate quality of generated demonstration.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check confidence</span>
+        <span class="n">confidence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_confidence</span><span class="p">(</span><span class="n">demonstration</span><span class="p">)</span>
+
+        <span class="c1"># Check consistency with pattern</span>
+        <span class="n">consistency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_consistency</span><span class="p">(</span><span class="n">demonstration</span><span class="p">)</span>
+
+        <span class="c1"># Check uniqueness</span>
+        <span class="n">uniqueness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_uniqueness</span><span class="p">(</span><span class="n">demonstration</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">confidence</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence_threshold</span> <span class="ow">and</span>
+            <span class="n">consistency</span> <span class="o">&gt;</span> <span class="mf">0.8</span> <span class="ow">and</span>
+            <span class="n">uniqueness</span> <span class="o">&gt;</span> <span class="mf">0.7</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="synthetic-generation">
+<h3>2. Synthetic Generation<a class="headerlink" href="#synthetic-generation" title="Link to this heading">#</a></h3>
+<p>Create demonstrations from structured templates.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SyntheticDemonstrationGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate synthetic demonstrations from templates.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">templates</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templates</span> <span class="o">=</span> <span class="n">templates</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_templates</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_attribute_values</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_demonstrations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">,</span> <span class="n">num_demos</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate synthetic demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="n">demonstrations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_demos</span><span class="p">):</span>
+            <span class="c1"># Sample template</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">templates</span><span class="p">)</span>
+
+            <span class="c1"># Sample attribute values</span>
+            <span class="n">attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_attributes</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;attributes&#39;</span><span class="p">])</span>
+
+            <span class="c1"># Fill template</span>
+            <span class="n">demo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill_template</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+
+            <span class="n">demonstrations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">demo</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">demonstrations</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fill_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">attributes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill template with sampled attributes.&quot;&quot;&quot;</span>
+
+        <span class="n">input_text</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;input_template&#39;</span><span class="p">]</span>
+        <span class="n">output_text</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;output_template&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Replace placeholders</span>
+        <span class="k">for</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">attr_value</span> <span class="ow">in</span> <span class="n">attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">input_text</span> <span class="o">=</span> <span class="n">input_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr_value</span><span class="p">))</span>
+            <span class="n">output_text</span> <span class="o">=</span> <span class="n">output_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="n">attr_name</span><span class="si">}</span><span class="se">}}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr_value</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">input_text</span><span class="p">,</span>
+            <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="n">output_text</span><span class="p">,</span>
+            <span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="n">template</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="n">attributes</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default demonstration templates.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;math_addition&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;input_template&#39;</span><span class="p">:</span> <span class="s1">&#39;What is </span><span class="si">{num1}</span><span class="s1"> + </span><span class="si">{num2}</span><span class="s1">?&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;output_template&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{num1}</span><span class="s1"> + </span><span class="si">{num2}</span><span class="s1"> = </span><span class="si">{sum}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;num1&#39;</span><span class="p">,</span> <span class="s1">&#39;num2&#39;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;text_classification&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;input_template&#39;</span><span class="p">:</span> <span class="s1">&#39;Classify the sentiment: &quot;</span><span class="si">{text}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;output_template&#39;</span><span class="p">:</span> <span class="s1">&#39;Sentiment: </span><span class="si">{sentiment}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;attributes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;sentiment&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading">#</a></h2>
+<section id="performance-based-utility">
+<h3>1. Performance-based Utility<a class="headerlink" href="#performance-based-utility" title="Link to this heading">#</a></h3>
+<p>Evaluate demonstrations by their impact on model performance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PerformanceUtility</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility based on demonstration performance impact.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">evaluation_metric</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluation_metric</span> <span class="o">=</span> <span class="n">evaluation_metric</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_utility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration_set</span><span class="p">,</span> <span class="n">validation_examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute utility score for demonstration set.&quot;&quot;&quot;</span>
+
+        <span class="n">total_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">validation_examples</span><span class="p">:</span>
+            <span class="c1"># Create prompt with demonstrations</span>
+            <span class="n">prompt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_prompt</span><span class="p">(</span><span class="n">demonstration_set</span><span class="p">,</span> <span class="n">example</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+
+            <span class="c1"># Generate response</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+
+            <span class="c1"># Score response</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluation_metric</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">example</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+            <span class="n">total_score</span> <span class="o">+=</span> <span class="n">score</span>
+            <span class="n">total_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">total_score</span> <span class="o">/</span> <span class="n">total_count</span> <span class="k">if</span> <span class="n">total_count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">marginal_utility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_set</span><span class="p">,</span> <span class="n">new_demo</span><span class="p">,</span> <span class="n">validation_examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute marginal utility of adding new demonstration.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Utility without new demo</span>
+        <span class="n">base_utility</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_utility</span><span class="p">(</span><span class="n">base_set</span><span class="p">,</span> <span class="n">validation_examples</span><span class="p">)</span>
+
+        <span class="c1"># Utility with new demo</span>
+        <span class="n">extended_set</span> <span class="o">=</span> <span class="n">base_set</span> <span class="o">+</span> <span class="p">[</span><span class="n">new_demo</span><span class="p">]</span>
+        <span class="n">extended_utility</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_utility</span><span class="p">(</span><span class="n">extended_set</span><span class="p">,</span> <span class="n">validation_examples</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">extended_utility</span> <span class="o">-</span> <span class="n">base_utility</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format prompt with demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">demo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">):</span>
+            <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Example </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Output: </span><span class="si">{</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+        <span class="n">prompt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="se">\n</span><span class="s2">Output:&quot;</span>
+
+        <span class="k">return</span> <span class="n">prompt</span>
+</pre></div>
+</div>
+</section>
+<section id="information-theoretic-utility">
+<h3>2. Information-theoretic Utility<a class="headerlink" href="#information-theoretic-utility" title="Link to this heading">#</a></h3>
+<p>Measure information content of demonstrations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">InformationUtility</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility based on information theory metrics.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="mi">50000</span>  <span class="c1"># Approximate vocabulary size</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration_set</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entropy of demonstration set.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Collect all tokens</span>
+        <span class="n">all_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstration_set</span><span class="p">:</span>
+            <span class="n">all_tokens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]))</span>
+            <span class="n">all_tokens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]))</span>
+
+        <span class="c1"># Compute token frequencies</span>
+        <span class="n">token_counts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">all_tokens</span><span class="p">:</span>
+            <span class="n">token_counts</span><span class="p">[</span><span class="n">token</span><span class="p">]</span> <span class="o">=</span> <span class="n">token_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Compute entropy</span>
+        <span class="n">total_tokens</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span>
+        <span class="n">entropy</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">token_counts</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">prob</span> <span class="o">=</span> <span class="n">count</span> <span class="o">/</span> <span class="n">total_tokens</span>
+            <span class="n">entropy</span> <span class="o">-=</span> <span class="n">prob</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">prob</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">entropy</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_mutual_information</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demo1</span><span class="p">,</span> <span class="n">demo2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mutual information between two demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get tokens</span>
+        <span class="n">tokens1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo1</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">demo1</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]))</span>
+        <span class="n">tokens2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo2</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">demo2</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]))</span>
+
+        <span class="c1"># Compute intersection</span>
+        <span class="n">intersection</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens1</span> <span class="o">&amp;</span> <span class="n">tokens2</span><span class="p">)</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens1</span> <span class="o">|</span> <span class="n">tokens2</span><span class="p">)</span>
+
+        <span class="c1"># Jaccard similarity as MI approximation</span>
+        <span class="n">mi</span> <span class="o">=</span> <span class="n">intersection</span> <span class="o">/</span> <span class="n">union</span> <span class="k">if</span> <span class="n">union</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">mi</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">information_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_set</span><span class="p">,</span> <span class="n">new_demo</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute information gain from adding demonstration.&quot;&quot;&quot;</span>
+
+        <span class="n">base_entropy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entropy</span><span class="p">(</span><span class="n">base_set</span><span class="p">)</span>
+        <span class="n">new_entropy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entropy</span><span class="p">(</span><span class="n">base_set</span> <span class="o">+</span> <span class="p">[</span><span class="n">new_demo</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">new_entropy</span> <span class="o">-</span> <span class="n">base_entropy</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple tokenization.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="coverage-utility">
+<h3>3. Coverage Utility<a class="headerlink" href="#coverage-utility" title="Link to this heading">#</a></h3>
+<p>Measure how well demonstrations cover the input space.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CoverageUtility</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility based on input space coverage.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span> <span class="o">=</span> <span class="n">feature_extractor</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_feature_extractor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coverage_grid</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_coverage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration_set</span><span class="p">,</span> <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute coverage of demonstration set.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract features</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstration_set</span><span class="p">:</span>
+            <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]))</span>
+
+        <span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="c1"># Normalize features</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">(</span><span class="n">features</span> <span class="o">-</span> <span class="n">features</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">features</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Create grid</span>
+        <span class="n">min_vals</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">max_vals</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Count covered grid cells</span>
+        <span class="n">grid_cells</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">features</span><span class="p">:</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_discretize_feature</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">min_vals</span><span class="p">,</span> <span class="n">max_vals</span><span class="p">,</span> <span class="n">grid_resolution</span><span class="p">)</span>
+            <span class="n">grid_cells</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+
+        <span class="c1"># Coverage = covered cells / total cells</span>
+        <span class="n">total_cells</span> <span class="o">=</span> <span class="n">grid_resolution</span> <span class="o">**</span> <span class="n">features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">coverage</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_cells</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_cells</span>
+
+        <span class="k">return</span> <span class="n">coverage</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">coverage_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstration_set</span><span class="p">,</span> <span class="n">query_point</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute coverage density around query point.&quot;&quot;&quot;</span>
+
+        <span class="n">query_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">query_point</span><span class="p">)</span>
+        <span class="n">query_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">query_features</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">demo_features</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstration_set</span><span class="p">:</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_extractor</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+            <span class="n">demo_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+        <span class="n">demo_features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">demo_features</span><span class="p">)</span>
+
+        <span class="c1"># Compute distances</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">demo_features</span> <span class="o">-</span> <span class="n">query_features</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Density = 1 / average distance</span>
+        <span class="n">avg_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+        <span class="n">density</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">avg_distance</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">density</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_discretize_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">min_vals</span><span class="p">,</span> <span class="n">max_vals</span><span class="p">,</span> <span class="n">resolution</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discretize continuous feature to grid cell.&quot;&quot;&quot;</span>
+
+        <span class="n">normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">feature</span> <span class="o">-</span> <span class="n">min_vals</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_vals</span> <span class="o">-</span> <span class="n">min_vals</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+        <span class="n">cell_indices</span> <span class="o">=</span> <span class="p">(</span><span class="n">normalized</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">cell_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">cell_indices</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">resolution</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cell_indices</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_feature_extractor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default feature extraction for text.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Simple features</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()),</span>  <span class="c1"># Length</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">),</span>  <span class="c1"># Number of questions</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">),</span>  <span class="c1"># Number of commas</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isupper</span><span class="p">()),</span>  <span class="c1"># Capital letters</span>
+            <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())),</span>  <span class="c1"># Unique words</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">features</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="diversity-metrics">
+<h2>Diversity Metrics<a class="headerlink" href="#diversity-metrics" title="Link to this heading">#</a></h2>
+<section id="lexical-diversity">
+<h3>1. Lexical Diversity<a class="headerlink" href="#lexical-diversity" title="Link to this heading">#</a></h3>
+<p>Measure vocabulary diversity across demonstrations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LexicalDiversity</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Measure lexical diversity of demonstrations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_type_token_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute type-token ratio (TTR).&quot;&quot;&quot;</span>
+
+        <span class="n">all_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">:</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+            <span class="n">all_tokens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+        <span class="n">num_types</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">))</span>
+        <span class="n">num_tokens</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">num_types</span> <span class="o">/</span> <span class="n">num_tokens</span> <span class="k">if</span> <span class="n">num_tokens</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_mattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute Moving Average Type-Token Ratio (MATTR).&quot;&quot;&quot;</span>
+
+        <span class="n">all_tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">:</span>
+            <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+            <span class="n">all_tokens</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">window_size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_type_token_ratio</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)</span>
+
+        <span class="n">ttrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span> <span class="o">-</span> <span class="n">window_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">all_tokens</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">]</span>
+            <span class="n">ttr</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">window</span><span class="p">))</span> <span class="o">/</span> <span class="n">window_size</span>
+            <span class="n">ttrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ttr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ttrs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_vocab_overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demo1</span><span class="p">,</span> <span class="n">demo2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute vocabulary overlap between two demonstrations.&quot;&quot;&quot;</span>
+
+        <span class="n">tokens1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo1</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">demo1</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]))</span>
+        <span class="n">tokens2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tokenize</span><span class="p">(</span><span class="n">demo2</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">demo2</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">tokens2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">intersection</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens1</span> <span class="o">&amp;</span> <span class="n">tokens2</span><span class="p">)</span>
+        <span class="n">union</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens1</span> <span class="o">|</span> <span class="n">tokens2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">intersection</span> <span class="o">/</span> <span class="n">union</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tokenize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple tokenization.&quot;&quot;&quot;</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\w+&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">tokens</span>
+</pre></div>
+</div>
+</section>
+<section id="structural-diversity">
+<h3>2. Structural Diversity<a class="headerlink" href="#structural-diversity" title="Link to this heading">#</a></h3>
+<p>Measure diversity in demonstration structure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">StructuralDiversity</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Measure structural diversity of demonstrations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_pattern_diversity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute diversity of structural patterns.&quot;&quot;&quot;</span>
+
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_pattern</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+            <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+        <span class="n">unique_patterns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">patterns</span><span class="p">))</span>
+        <span class="n">total_patterns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">unique_patterns</span> <span class="o">/</span> <span class="n">total_patterns</span> <span class="k">if</span> <span class="n">total_patterns</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_length_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze length distribution diversity.&quot;&quot;&quot;</span>
+
+        <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">]</span>
+
+        <span class="c1"># Compute coefficient of variation</span>
+        <span class="n">mean_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+        <span class="n">std_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">lengths</span><span class="p">)</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">std_length</span> <span class="o">/</span> <span class="n">mean_length</span> <span class="k">if</span> <span class="n">mean_length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">cv</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_complexity_diversity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute diversity in complexity scores.&quot;&quot;&quot;</span>
+
+        <span class="n">complexities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">:</span>
+            <span class="n">complexity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_complexity</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span>
+            <span class="n">complexities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">complexity</span><span class="p">)</span>
+
+        <span class="c1"># Range of complexities</span>
+        <span class="n">complexity_range</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">complexities</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">complexities</span><span class="p">)</span>
+        <span class="n">max_possible_range</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Normalized range</span>
+
+        <span class="k">return</span> <span class="n">complexity_range</span> <span class="o">/</span> <span class="n">max_possible_range</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract structural pattern from text.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Simplified pattern extraction</span>
+        <span class="n">pattern</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Check for question marks</span>
+        <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;question&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check for lists</span>
+        <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">or</span> <span class="s1">&#39;;&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">):</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check for quotes</span>
+        <span class="k">if</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">in</span> <span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&#39;&quot;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;quotation&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check for numbers</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">):</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;numeric&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_complexity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute text complexity score.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Simple complexity metrics</span>
+        <span class="n">avg_word_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()])</span>
+        <span class="n">sentence_count</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;!&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+        <span class="n">avg_sentence_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">sentence_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Combine metrics</span>
+        <span class="n">complexity</span> <span class="o">=</span> <span class="p">(</span><span class="n">avg_word_length</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">+</span> <span class="n">avg_sentence_length</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">complexity</span> <span class="o">/</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Normalize to [0, 1]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimization-in-multi-stage-programs">
+<h2>Optimization in Multi-stage Programs<a class="headerlink" href="#optimization-in-multi-stage-programs" title="Link to this heading">#</a></h2>
+<section id="stage-specific-demonstration-strategies">
+<h3>Stage-specific Demonstration Strategies<a class="headerlink" href="#stage-specific-demonstration-strategies" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiStageDemonstrationOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize demonstrations for multi-stage programs.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage_configs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage_configs</span> <span class="o">=</span> <span class="n">stage_configs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selectors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utilities</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Initialize selectors for each stage</span>
+        <span class="k">for</span> <span class="n">stage_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">stage_configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">selectors</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_selector</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;selection_strategy&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">utilities</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_utility</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;utility_function&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_demonstrations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pipeline</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="p">,</span>
+        <span class="n">demo_budget</span><span class="o">=</span><span class="mi">50</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize demonstrations across all stages.&quot;&quot;&quot;</span>
+
+        <span class="n">optimized_demos</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Analyze stage dependencies</span>
+        <span class="n">dependencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_analyze_dependencies</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span>
+
+        <span class="c1"># Optimize in dependency order</span>
+        <span class="k">for</span> <span class="n">stage_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topological_sort</span><span class="p">(</span><span class="n">dependencies</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizing demonstrations for stage: </span><span class="si">{</span><span class="n">stage_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Get stage-specific training data</span>
+            <span class="n">stage_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_stage_data</span><span class="p">(</span>
+                <span class="n">stage_name</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">trainset</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Allocate budget for this stage</span>
+            <span class="n">stage_budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allocate_budget</span><span class="p">(</span>
+                <span class="n">stage_name</span><span class="p">,</span> <span class="n">demo_budget</span><span class="p">,</span> <span class="n">dependencies</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Optimize demonstrations</span>
+            <span class="n">best_demos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimize_stage_demonstrations</span><span class="p">(</span>
+                <span class="n">stage_name</span><span class="p">,</span>
+                <span class="n">stage_data</span><span class="p">,</span>
+                <span class="n">stage_budget</span>
+            <span class="p">)</span>
+
+            <span class="n">optimized_demos</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">best_demos</span>
+
+            <span class="c1"># Update pipeline with new demonstrations</span>
+            <span class="n">pipeline</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span><span class="o">.</span><span class="n">set_demonstrations</span><span class="p">(</span><span class="n">best_demos</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized_demos</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_optimize_stage_demonstrations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">stage_name</span><span class="p">,</span>
+        <span class="n">stage_data</span><span class="p">,</span>
+        <span class="n">budget</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize demonstrations for a specific stage.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get candidate demonstrations</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_candidate_demonstrations</span><span class="p">(</span><span class="n">stage_data</span><span class="p">)</span>
+
+        <span class="n">best_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Greedy selection with utility evaluation</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidates</span><span class="p">))):</span>
+            <span class="n">best_candidate</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">best_candidate_score</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">best_set</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Evaluate utility</span>
+                <span class="n">test_set</span> <span class="o">=</span> <span class="n">best_set</span> <span class="o">+</span> <span class="p">[</span><span class="n">candidate</span><span class="p">]</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utilities</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span><span class="o">.</span><span class="n">compute_utility</span><span class="p">(</span>
+                    <span class="n">test_set</span><span class="p">,</span> <span class="n">stage_data</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_candidate_score</span><span class="p">:</span>
+                    <span class="n">best_candidate_score</span> <span class="o">=</span> <span class="n">score</span>
+                    <span class="n">best_candidate</span> <span class="o">=</span> <span class="n">candidate</span>
+
+            <span class="k">if</span> <span class="n">best_candidate</span><span class="p">:</span>
+                <span class="n">best_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_candidate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_set</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_analyze_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze dependencies between stages.&quot;&quot;&quot;</span>
+
+        <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">stage_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pipeline</span><span class="o">.</span><span class="n">stages</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">stage_name</span> <span class="ow">in</span> <span class="n">stage_names</span><span class="p">:</span>
+            <span class="n">dependencies</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Check if stage uses outputs from other stages</span>
+            <span class="n">stage_module</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">stage_module</span><span class="p">,</span> <span class="s1">&#39;dependencies&#39;</span><span class="p">):</span>
+                <span class="n">dependencies</span><span class="p">[</span><span class="n">stage_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">stage_module</span><span class="o">.</span><span class="n">dependencies</span>
+
+        <span class="k">return</span> <span class="n">dependencies</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="practical-considerations">
+<h2>Practical Considerations<a class="headerlink" href="#practical-considerations" title="Link to this heading">#</a></h2>
+<section id="context-window-management">
+<h3>Context Window Management<a class="headerlink" href="#context-window-management" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ContextWindowManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage demonstration selection within context limits.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">reserve_tokens</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reserve_tokens</span> <span class="o">=</span> <span class="n">reserve_tokens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_tokens</span> <span class="o">=</span> <span class="n">max_tokens</span> <span class="o">-</span> <span class="n">reserve_tokens</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_within_limit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">demonstrations</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">,</span>
+        <span class="n">token_estimator</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select demonstrations that fit within context limit.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">token_estimator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">token_estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_token_estimator</span>
+
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">used_tokens</span> <span class="o">=</span> <span class="n">token_estimator</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Sort by some quality metric (e.g., diversity)</span>
+        <span class="n">sorted_demos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sort_by_quality</span><span class="p">(</span><span class="n">demonstrations</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">sorted_demos</span><span class="p">:</span>
+            <span class="n">demo_tokens</span> <span class="o">=</span> <span class="n">token_estimator</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Input: </span><span class="si">{</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">Output: </span><span class="si">{</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">used_tokens</span> <span class="o">+</span> <span class="n">demo_tokens</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_tokens</span><span class="p">:</span>
+                <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">demo</span><span class="p">)</span>
+                <span class="n">used_tokens</span> <span class="o">+=</span> <span class="n">demo_tokens</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">selected</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_token_estimator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple token estimation.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1.3</span>  <span class="c1"># Rough estimate</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sort_by_quality</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demonstrations</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sort demonstrations by quality.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Simple quality score based on length and complexity</span>
+        <span class="n">scored</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">demonstrations</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">demo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+            <span class="n">scored</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">demo</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+
+        <span class="n">scored</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">demo</span> <span class="k">for</span> <span class="n">demo</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">scored</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="dynamic-demonstration-updating">
+<h3>Dynamic Demonstration Updating<a class="headerlink" href="#dynamic-demonstration-updating" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DynamicDemonstrationUpdater</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dynamically update demonstrations based on performance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update_threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_threshold</span> <span class="o">=</span> <span class="n">update_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">window_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_demonstrations</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recent_performance</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if demonstrations should be updated.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">recent_performance</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Compute performance trend</span>
+        <span class="n">recent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+        <span class="n">baseline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_history</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span>
+
+        <span class="n">avg_recent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">recent</span><span class="p">)</span>
+        <span class="n">avg_baseline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">baseline</span><span class="p">)</span>
+
+        <span class="c1"># Update if performance drop exceeds threshold</span>
+        <span class="n">performance_drop</span> <span class="o">=</span> <span class="n">avg_baseline</span> <span class="o">-</span> <span class="n">avg_recent</span>
+        <span class="k">return</span> <span class="n">performance_drop</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_threshold</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_demonstrations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">instruction</span><span class="p">,</span>
+        <span class="n">examples</span><span class="p">,</span>
+        <span class="n">selector</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update demonstration set.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Use recent examples as candidates</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">examples</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">:]</span>  <span class="c1"># Last 50 examples</span>
+
+        <span class="c1"># Select new demonstrations</span>
+        <span class="n">new_demos</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">instruction</span><span class="p">,</span>
+            <span class="n">candidates</span><span class="o">=</span><span class="n">candidates</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="mi">5</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_demonstrations</span> <span class="o">=</span> <span class="n">new_demos</span>
+        <span class="k">return</span> <span class="n">new_demos</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="demonstration-quality-guidelines">
+<h3>1. Demonstration Quality Guidelines<a class="headerlink" href="#demonstration-quality-guidelines" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Accuracy</strong>: Ensure demonstrations are correct</p></li>
+<li><p><strong>Clarity</strong>: Make examples easy to understand</p></li>
+<li><p><strong>Relevance</strong>: Choose examples similar to target inputs</p></li>
+<li><p><strong>Diversity</strong>: Cover different patterns and edge cases</p></li>
+<li><p><strong>Consistency</strong>: Align with instruction and task requirements</p></li>
+</ul>
+</section>
+<section id="selection-strategy-tips">
+<h3>2. Selection Strategy Tips<a class="headerlink" href="#selection-strategy-tips" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use similarity-based selection for homogeneous tasks</p></li>
+<li><p>Employ diversity-aware selection for varied inputs</p></li>
+<li><p>Apply coverage-based selection for pattern-rich tasks</p></li>
+<li><p>Consider learning-based selection for complex scenarios</p></li>
+</ul>
+</section>
+<section id="common-pitfalls">
+<h3>3. Common Pitfalls<a class="headerlink" href="#common-pitfalls" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Overfitting</strong>: Too similar demonstrations limit generalization</p></li>
+<li><p><strong>Context Overflow</strong>: Exceeding model context limits</p></li>
+<li><p><strong>Poor Quality</strong>: Incorrect examples harm performance</p></li>
+<li><p><strong>Imbalance</strong>: Over-representation of certain patterns</p></li>
+</ul>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Demonstration optimization strategies provide systematic approaches to selecting and improving few-shot examples in language model programs. Key takeaways:</p>
+<ol class="arabic simple">
+<li><p><strong>Multiple Selection Algorithms</strong>: Similarity, diversity, coverage, and learning-based approaches</p></li>
+<li><p><strong>Generation Techniques</strong>: Bootstrap and synthetic generation for creating demonstrations</p></li>
+<li><p><strong>Utility Functions</strong>: Performance, information-theoretic, and coverage-based utilities</p></li>
+<li><p><strong>Diversity Metrics</strong>: Lexical and structural diversity measurements</p></li>
+<li><p><strong>Multi-stage Optimization</strong>: Stage-specific strategies and dependency management</p></li>
+</ol>
+<p>The next section will explore multi-stage program architectures, building on the optimization strategies discussed here to create comprehensive solutions.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="15_instruction_tuning_frameworks.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Instruction Tuning Frameworks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="17_multistage_architectures.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Multi-stage Program Architectures</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theoretical-foundations">Theoretical Foundations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-demonstrations-matter">Why Demonstrations Matter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mathematical-framework">Mathematical Framework</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-effectiveness-factors">Demonstration Effectiveness Factors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-selection-algorithms">Demonstration Selection Algorithms</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similarity-based-selection">1. Similarity-based Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diversity-aware-selection">2. Diversity-aware Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-based-selection">3. Coverage-based Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-based-selection">4. Learning-based Selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-generation">Demonstration Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bootstrap-generation">1. Bootstrap Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-generation">2. Synthetic Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-functions">Utility Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-based-utility">1. Performance-based Utility</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-theoretic-utility">2. Information-theoretic Utility</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-utility">3. Coverage Utility</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diversity-metrics">Diversity Metrics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lexical-diversity">1. Lexical Diversity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structural-diversity">2. Structural Diversity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-in-multi-stage-programs">Optimization in Multi-stage Programs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stage-specific-demonstration-strategies">Stage-specific Demonstration Strategies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-considerations">Practical Considerations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#context-window-management">Context Window Management</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-demonstration-updating">Dynamic Demonstration Updating</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-quality-guidelines">1. Demonstration Quality Guidelines</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selection-strategy-tips">2. Selection Strategy Tips</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls">3. Common Pitfalls</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

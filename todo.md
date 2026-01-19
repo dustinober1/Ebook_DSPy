@@ -168,9 +168,9 @@
 
 ---
 
-### Task 2.1: Install Jupyter Book
+### Task 2.1: Install Jupyter Book ✅ COMPLETE
 
-- [ ] **2.1.1** Update `requirements.txt` to add Jupyter Book and dependencies:
+- [x] **2.1.1** Update `requirements.txt` to add Jupyter Book and dependencies:
   - Open `requirements.txt`
   - Add the following lines under a new section:
     ```
@@ -181,28 +181,28 @@
     myst-nb>=0.17.0
     ```
 
-- [ ] **2.1.2** Install the dependencies:
+- [x] **2.1.2** Install the dependencies:
   ```bash
   pip install -r requirements.txt
   ```
 
-- [ ] **2.1.3** Initialize Jupyter Book structure:
+- [x] **2.1.3** Initialize Jupyter Book structure:
   ```bash
   jupyter-book create .
   ```
   - **Note:** This will create `_config.yml` and `_toc.yml` in the root directory
   - If files already exist, it may ask to overwrite - review before confirming
 
-- [ ] **2.1.4** Verify Jupyter Book was installed correctly:
+- [x] **2.1.4** Verify Jupyter Book was installed correctly:
   ```bash
   jupyter-book --version
   ```
 
 ---
 
-### Task 2.2: Configure Table of Contents (`_toc.yml`)
+### Task 2.2: Configure Table of Contents (`_toc.yml`) ✅ COMPLETE
 
-- [ ] **2.2.1** Open `_toc.yml` and configure for your content structure:
+- [x] **2.2.1** Open `_toc.yml` and configure for your content structure:
   - Delete the auto-generated example content
   - Create the following structure:
     ```yaml
@@ -267,16 +267,16 @@
           - file: content/09_appendices/00_appendix_intro
     ```
 
-- [ ] **2.2.2** Complete the `_toc.yml` with ALL section files:
+- [x] **2.2.2** Complete the `_toc.yml` with ALL section files:
   - Go through each chapter directory in `content/`
   - Add every `.md` file to the appropriate sections
   - Validate file paths match actual filenames
 
 ---
 
-### Task 2.3: Configure Build (`_config.yml`)
+### Task 2.3: Configure Build (`_config.yml`) ✅ COMPLETE
 
-- [ ] **2.3.1** Open `_config.yml` and set basic metadata:
+- [x] **2.3.1** Open `_config.yml` and set basic metadata:
   ```yaml
   title: "DSPy: The Complete Guide"
   author: Dustin Ober
@@ -284,7 +284,7 @@
   logo: content/images/logo.png  # Add a logo image if available
   ```
 
-- [ ] **2.3.2** Configure the repository settings:
+- [x] **2.3.2** Configure the repository settings:
   ```yaml
   repository:
     url: https://github.com/dustinober/Ebook_DSPy
@@ -292,7 +292,7 @@
     branch: main
   ```
 
-- [ ] **2.3.3** Enable the Launch Button for Google Colab integration:
+- [x] **2.3.3** Enable the Launch Button for Google Colab integration:
   ```yaml
   launch_buttons:
     notebook_interface: "classic"
@@ -301,7 +301,7 @@
     thebe: false
   ```
 
-- [ ] **2.3.4** Configure notebook execution settings:
+- [x] **2.3.4** Configure notebook execution settings:
   ```yaml
   execute:
     execute_notebooks: "off"  # Start with "off", change to "auto" after fixing code
@@ -311,7 +311,7 @@
   - **Note:** Start with `"off"` to build docs without running code
   - Change to `"auto"` or `"cache"` once all code examples are verified
 
-- [ ] **2.3.5** Configure Sphinx extensions:
+- [x] **2.3.5** Configure Sphinx extensions:
   ```yaml
   sphinx:
     extra_extensions:
@@ -322,14 +322,14 @@
         use_fullscreen_button: true
   ```
 
-- [ ] **2.3.6** Test the Jupyter Book build:
+- [x] **2.3.6** Test the Jupyter Book build:
   ```bash
   jupyter-book build .
   ```
   - Fix any errors that appear
   - Check the output in `_build/html/`
 
-- [ ] **2.3.7** Preview the built site locally:
+- [x] **2.3.7** Preview the built site locally:
   ```bash
   cd _build/html && python -m http.server 8000
   ```
@@ -340,12 +340,12 @@
 
 ### Task 2.4: Setup GitHub Actions (CI/CD)
 
-- [ ] **2.4.1** Create the GitHub workflows directory:
+- [x] **2.4.1** Create the GitHub workflows directory:
   ```bash
   mkdir -p .github/workflows
   ```
 
-- [ ] **2.4.2** Create the deployment workflow file `.github/workflows/deploy.yml`:
+- [x] **2.4.2** Create the deployment workflow file `.github/workflows/deploy.yml`:
   ```yaml
   name: Deploy Jupyter Book to GitHub Pages
   
@@ -405,22 +405,24 @@
           uses: actions/deploy-pages@v4
   ```
 
-- [ ] **2.4.3** Enable GitHub Pages in repository settings:
+- [x] **2.4.3** Enable GitHub Pages in repository settings:
   - Go to repository Settings → Pages
   - Set Source to "GitHub Actions"
   - Save the settings
+  - **Note:** `gh` CLI confirmed deployment success, so this is likely configured.
 
-- [ ] **2.4.4** Test the workflow by pushing to main:
+- [x] **2.4.4** Test the workflow by pushing to main:
   ```bash
   git add .github/workflows/deploy.yml
   git commit -m "Add GitHub Pages deployment workflow"
   git push origin main
   ```
 
-- [ ] **2.4.5** Verify the deployment:
+- [x] **2.4.5** Verify the deployment:
   - Go to the repository's Actions tab
   - Wait for the workflow to complete
   - Check the deployed site URL
+  - **Result:** Workflow run 21151515861 completed successfully.
 
 ---
 

@@ -1,0 +1,1688 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Declarative Language Model Compilation Techniques &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/07_advanced_topics/08_declarative_compilation';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 8: Case Studies" href="../08_case_studies/00_introduction.html" />
+    <link rel="prev" title="Self-Refining Pipelines" href="07_self_refining_pipelines.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 7: Advanced Topics</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/07_advanced_topics/08_declarative_compilation.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Declarative Language Model Compilation Techniques</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-declarative-compilation">Introduction to Declarative Compilation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-compilation-paradigm">The Compilation Paradigm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-principles">Key Principles</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dspy-compilation-pipeline">The DSPy Compilation Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specification-analysis">1. Specification Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#strategy-selection">2. Strategy Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#program-synthesis">3. Program Synthesis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-compilation-techniques">Advanced Compilation Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-compilation">1. Meta-Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-compilation">2. Domain-Specific Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#incremental-compilation">3. Incremental Compilation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-optimization-strategies">Compilation Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-driven-compilation">1. Performance-Driven Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adaptive-compilation">2. Adaptive Compilation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="declarative-language-model-compilation-techniques">
+<h1>Declarative Language Model Compilation Techniques<a class="headerlink" href="#declarative-language-model-compilation-techniques" title="Link to this heading">#</a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Previous Section</strong>: <a class="reference internal" href="#./07-self-refining-pipelines.md"><span class="xref myst">Self-Refining Pipelines</span></a> - Understanding of pipeline architectures</p></li>
+<li><p><strong>Chapter 5</strong>: Optimizers - Familiarity with DSPy compilation concepts</p></li>
+<li><p><strong>Required Knowledge</strong>: Compiler design, program transformation, optimization theory</p></li>
+<li><p><strong>Difficulty Level</strong>: Expert</p></li>
+<li><p><strong>Estimated Reading Time</strong>: 70 minutes</p></li>
+</ul>
+</section>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this section, you will:</p>
+<ul class="simple">
+<li><p>Master the theory of declarative language model compilation</p></li>
+<li><p>Understand how DSPy transforms high-level specifications into optimized programs</p></li>
+<li><p>Implement custom compilation passes and optimizations</p></li>
+<li><p>Build sophisticated meta-compilation systems</p></li>
+<li><p>Design domain-specific compilation strategies</p></li>
+</ul>
+</section>
+<section id="introduction-to-declarative-compilation">
+<h2>Introduction to Declarative Compilation<a class="headerlink" href="#introduction-to-declarative-compilation" title="Link to this heading">#</a></h2>
+<p>Declarative language model compilation is the process of automatically transforming high-level task specifications into optimized language model programs. As introduced in the foundational DSPy paper, this approach treats language model programs as <em>declarative specifications</em> that can be systematically improved through compilation.</p>
+<section id="the-compilation-paradigm">
+<h3>The Compilation Paradigm<a class="headerlink" href="#the-compilation-paradigm" title="Link to this heading">#</a></h3>
+<p><strong>Traditional Programming:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Manual Prompt Engineering → Trial and Error → Static Program
+</pre></div>
+</div>
+<p><strong>Declarative Compilation:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>High-Level Specification → Automated Compilation → Optimized Program
+                ↓
+          Continuous Improvement
+</pre></div>
+</div>
+</section>
+<section id="key-principles">
+<h3>Key Principles<a class="headerlink" href="#key-principles" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Specification Over Implementation</strong>: Focus on <em>what</em> to do, not <em>how</em> to do it</p></li>
+<li><p><strong>Automated Optimization</strong>: The compiler finds the best implementation strategy</p></li>
+<li><p><strong>Systematic Improvement</strong>: Compilation is a principled, repeatable process</p></li>
+<li><p><strong>Separation of Concerns</strong>: Business logic separated from performance optimization</p></li>
+</ol>
+</section>
+</section>
+<section id="the-dspy-compilation-pipeline">
+<h2>The DSPy Compilation Pipeline<a class="headerlink" href="#the-dspy-compilation-pipeline" title="Link to this heading">#</a></h2>
+<section id="specification-analysis">
+<h3>1. Specification Analysis<a class="headerlink" href="#specification-analysis" title="Link to this heading">#</a></h3>
+<p>The first phase analyzes the declarative specification to understand requirements:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SpecificationAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyzes DSPy specifications for compilation guidance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement_extractors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;input_types&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_input_types</span><span class="p">,</span>
+            <span class="s1">&#39;output_constraints&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_output_constraints</span><span class="p">,</span>
+            <span class="s1">&#39;reasoning_complexity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">assess_reasoning_complexity</span><span class="p">,</span>
+            <span class="s1">&#39;domain_knowledge&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">identify_domain_requirements</span><span class="p">,</span>
+            <span class="s1">&#39;performance_targets&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_performance_targets</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Comprehensive specification analysis.&quot;&quot;&quot;</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">aspect</span><span class="p">,</span> <span class="n">extractor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">requirement_extractors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">analysis</span><span class="p">[</span><span class="n">aspect</span><span class="p">]</span> <span class="o">=</span> <span class="n">extractor</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_compilation_guidance</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_input_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract and categorize input types.&quot;&quot;&quot;</span>
+        <span class="n">input_analysis</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">input_field</span><span class="p">:</span>
+                <span class="c1"># Analyze field characteristics</span>
+                <span class="n">field_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">infer_field_type</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                <span class="n">complexity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assess_field_complexity</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                <span class="n">constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_field_constraints</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+
+                <span class="n">input_analysis</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">field_type</span><span class="p">,</span>
+                    <span class="s1">&#39;complexity&#39;</span><span class="p">:</span> <span class="n">complexity</span><span class="p">,</span>
+                    <span class="s1">&#39;constraints&#39;</span><span class="p">:</span> <span class="n">constraints</span><span class="p">,</span>
+                    <span class="s1">&#39;processing_strategy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">recommend_processing_strategy</span><span class="p">(</span>
+                        <span class="n">field_type</span><span class="p">,</span> <span class="n">complexity</span>
+                    <span class="p">)</span>
+                <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">input_analysis</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">assess_reasoning_complexity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Assess the reasoning complexity required.&quot;&quot;&quot;</span>
+        <span class="n">complexity_factors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;multi_step_reasoning&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;knowledge_integration&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;constraint_satisfaction&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;creative_generation&#39;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Analyze instructions</span>
+        <span class="n">instructions</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="s1">&#39;instructions&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check for reasoning patterns</span>
+        <span class="n">reasoning_patterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\bstep.*by.*step\b&#39;</span><span class="p">,</span> <span class="s1">&#39;multi_step_reasoning&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\bthink.*carefully\b&#39;</span><span class="p">,</span> <span class="s1">&#39;multi_step_reasoning&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\bconsider.*multiple\b&#39;</span><span class="p">,</span> <span class="s1">&#39;knowledge_integration&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\bconstraints?\b&#39;</span><span class="p">,</span> <span class="s1">&#39;constraint_satisfaction&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\bcreative|innovative\b&#39;</span><span class="p">,</span> <span class="s1">&#39;creative_generation&#39;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+        <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">factor</span> <span class="ow">in</span> <span class="n">reasoning_patterns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">instructions</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
+                <span class="n">complexity_factors</span><span class="p">[</span><span class="n">factor</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Analyze field relationships</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">signature</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Complex I/O mapping</span>
+            <span class="n">complexity_factors</span><span class="p">[</span><span class="s1">&#39;constraint_satisfaction&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Calculate overall complexity</span>
+        <span class="n">total_complexity</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">complexity_factors</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;factors&#39;</span><span class="p">:</span> <span class="n">complexity_factors</span><span class="p">,</span>
+            <span class="s1">&#39;total_score&#39;</span><span class="p">:</span> <span class="n">total_complexity</span><span class="p">,</span>
+            <span class="s1">&#39;recommended_approach&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_reasoning_approach</span><span class="p">(</span><span class="n">complexity_factors</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_compilation_guidance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate compilation guidance from analysis.&quot;&quot;&quot;</span>
+        <span class="n">guidance</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;module_selection&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">recommend_modules</span><span class="p">(</span><span class="n">analysis</span><span class="p">),</span>
+            <span class="s1">&#39;optimization_priorities&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">prioritize_optimizations</span><span class="p">(</span><span class="n">analysis</span><span class="p">),</span>
+            <span class="s1">&#39;resource_allocation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">allocate_resources</span><span class="p">(</span><span class="n">analysis</span><span class="p">),</span>
+            <span class="s1">&#39;validation_requirements&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">specify_validation</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">guidance</span>
+
+<span class="c1"># Example: Analyze a complex QA specification</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComplexQASignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Answer complex questions requiring multi-step reasoning.&quot;&quot;&quot;</span>
+    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Background information and documents&quot;</span><span class="p">)</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Question requiring analysis&quot;</span><span class="p">)</span>
+    <span class="n">constraints</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Answer constraints and requirements&quot;</span><span class="p">)</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Detailed answer with reasoning&quot;</span><span class="p">)</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Confidence in answer&quot;</span><span class="p">)</span>
+    <span class="n">sources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Supporting sources&quot;</span><span class="p">)</span>
+
+<span class="n">analyzer</span> <span class="o">=</span> <span class="n">SpecificationAnalyzer</span><span class="p">()</span>
+<span class="n">analysis</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">ComplexQASignature</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="strategy-selection">
+<h3>2. Strategy Selection<a class="headerlink" href="#strategy-selection" title="Link to this heading">#</a></h3>
+<p>Based on analysis, the compiler selects optimal strategies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CompilationStrategySelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Selects optimal compilation strategies based on analysis.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;reasoning&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;simple&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;predict&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;chain_of_thought&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">},</span>
+                <span class="s1">&#39;moderate&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;predict&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s1">&#39;chain_of_thought&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
+                <span class="s1">&#39;complex&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;predict&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;chain_of_thought&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;react&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;optimization&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;performance_focused&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;copro&#39;</span><span class="p">,</span> <span class="s1">&#39;mipro&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;data_efficient&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;bootstrap_fewshot&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;cost_constrained&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;bootstrap_fewshot&#39;</span><span class="p">,</span> <span class="s1">&#39;copro_with_budget&#39;</span><span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;validation&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;critical&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;assertions&#39;</span><span class="p">,</span> <span class="s1">&#39;typed_predictor&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;standard&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;basic_validation&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;experimental&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;lightweight_validation&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select optimal module configuration.&quot;&quot;&quot;</span>
+        <span class="n">reasoning_complexity</span> <span class="o">=</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;reasoning_complexity&#39;</span><span class="p">][</span><span class="s1">&#39;total_score&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Select reasoning approach</span>
+        <span class="k">if</span> <span class="n">reasoning_complexity</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">reasoning_strategy</span> <span class="o">=</span> <span class="s1">&#39;simple&#39;</span>
+        <span class="k">elif</span> <span class="n">reasoning_complexity</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">reasoning_strategy</span> <span class="o">=</span> <span class="s1">&#39;moderate&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">reasoning_strategy</span> <span class="o">=</span> <span class="s1">&#39;complex&#39;</span>
+
+        <span class="n">module_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;reasoning&#39;</span><span class="p">][</span><span class="n">reasoning_strategy</span><span class="p">]</span>
+
+        <span class="c1"># Build module composition</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">module_type</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">module_weights</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">weight</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_module</span><span class="p">(</span><span class="n">module_type</span><span class="p">,</span> <span class="n">analysis</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">modules</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_optimizer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select optimization strategy.&quot;&quot;&quot;</span>
+        <span class="c1"># Consider data availability</span>
+        <span class="n">dataset_size</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dataset_size&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">performance_target</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;performance_targets&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">budget_constraints</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;budget_constraints&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="k">if</span> <span class="n">budget_constraints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;strict&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;optimization&#39;</span><span class="p">][</span><span class="s1">&#39;cost_constrained&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dataset_size</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;optimization&#39;</span><span class="p">][</span><span class="s1">&#39;data_efficient&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">performance_target</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maximize&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;optimization&#39;</span><span class="p">][</span><span class="s1">&#39;performance_focused&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;bootstrap_fewshot&#39;</span><span class="p">]</span>  <span class="c1"># Default</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_validation_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select validation approach.&quot;&quot;&quot;</span>
+        <span class="n">criticality</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;criticality&#39;</span><span class="p">,</span> <span class="s1">&#39;standard&#39;</span><span class="p">)</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;domain_knowledge&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;general&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">criticality</span> <span class="o">==</span> <span class="s1">&#39;critical&#39;</span> <span class="ow">or</span> <span class="n">domain</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;medical&#39;</span><span class="p">,</span> <span class="s1">&#39;legal&#39;</span><span class="p">,</span> <span class="s1">&#39;financial&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">][</span><span class="s1">&#39;critical&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">domain</span> <span class="o">==</span> <span class="s1">&#39;experimental&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">][</span><span class="s1">&#39;experimental&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_matrix</span><span class="p">[</span><span class="s1">&#39;validation&#39;</span><span class="p">][</span><span class="s1">&#39;standard&#39;</span><span class="p">]</span>
+
+<span class="c1"># Usage</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">CompilationStrategySelector</span><span class="p">()</span>
+<span class="n">strategy</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select_modules</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+<span class="n">optimizer_strategy</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select_optimizer</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+<span class="n">validation_strategy</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select_validation_strategy</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="program-synthesis">
+<h3>3. Program Synthesis<a class="headerlink" href="#program-synthesis" title="Link to this heading">#</a></h3>
+<p>Synthesize the initial program from strategies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DeclarativeProgramSynthesizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Synthesizes DSPy programs from declarative specifications.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span> <span class="o">=</span> <span class="n">ModuleFactory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">composition_patterns</span> <span class="o">=</span> <span class="n">CompositionPatterns</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">synthesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategies</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Synthesize a complete DSPy program.&quot;&quot;&quot;</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">()</span>
+
+        <span class="c1"># Synthesize core processing modules</span>
+        <span class="n">core_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthesize_core_modules</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategies</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add validation modules</span>
+        <span class="n">validation_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthesize_validation_modules</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategies</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compose the program</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compose_program</span><span class="p">(</span>
+            <span class="n">core_modules</span><span class="p">,</span> <span class="n">validation_modules</span><span class="p">,</span> <span class="n">analysis</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Configure learning parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configure_learning</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">analysis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">program</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">synthesize_core_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategies</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Synthesize core processing modules.&quot;&quot;&quot;</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Main processing module</span>
+        <span class="k">if</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;reasoning&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;complex&#39;</span><span class="p">:</span>
+            <span class="n">main_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span><span class="o">.</span><span class="n">create_chain_of_thought</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">strategies</span><span class="p">[</span><span class="s1">&#39;reasoning&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;multi_step&#39;</span><span class="p">:</span>
+            <span class="n">main_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span><span class="o">.</span><span class="n">create_multi_step_pipeline</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">main_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+
+        <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="n">main_module</span><span class="p">))</span>
+
+        <span class="c1"># Pre-processing if needed</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;input_types&#39;</span><span class="p">][</span><span class="s1">&#39;requires_preprocessing&#39;</span><span class="p">]:</span>
+            <span class="n">preprocessor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span><span class="o">.</span><span class="n">create_preprocessor</span><span class="p">(</span>
+                <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;input_types&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">modules</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;preprocess&#39;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">))</span>
+
+        <span class="c1"># Post-processing if needed</span>
+        <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;output_constraints&#39;</span><span class="p">][</span><span class="s1">&#39;requires_postprocessing&#39;</span><span class="p">]:</span>
+            <span class="n">postprocessor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">module_factory</span><span class="o">.</span><span class="n">create_postprocessor</span><span class="p">(</span>
+                <span class="n">analysis</span><span class="p">[</span><span class="s1">&#39;output_constraints&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;postprocess&#39;</span><span class="p">,</span> <span class="n">postprocessor</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">modules</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compose_program</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">core_modules</span><span class="p">,</span> <span class="n">validation_modules</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compose modules into a coherent program.&quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">SynthesizedProgram</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+                <span class="c1"># Add core modules</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">core_modules</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+
+                <span class="c1"># Add validation modules</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">validation_modules</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="c1"># Execute processing pipeline</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+                <span class="c1"># Pre-processing</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;preprocess&#39;</span><span class="p">):</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+
+                <span class="c1"># Main processing</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;main&#39;</span><span class="p">):</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Simple forward pass</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
+
+                <span class="c1"># Post-processing</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;postprocess&#39;</span><span class="p">):</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocess</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+
+                <span class="c1"># Validation</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;validate&#39;</span><span class="p">):</span>
+                    <span class="n">validated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">validated</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+                        <span class="c1"># Handle validation failure</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_validation_failure</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">validated</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">SynthesizedProgram</span><span class="p">()</span>
+
+<span class="c1"># Usage</span>
+<span class="n">synthesizer</span> <span class="o">=</span> <span class="n">DeclarativeProgramSynthesizer</span><span class="p">()</span>
+<span class="n">program</span> <span class="o">=</span> <span class="n">synthesizer</span><span class="o">.</span><span class="n">synthesize</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">ComplexQASignature</span><span class="p">,</span>
+    <span class="n">analysis</span><span class="o">=</span><span class="n">analysis</span><span class="p">,</span>
+    <span class="n">strategies</span><span class="o">=</span><span class="n">strategy</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-compilation-techniques">
+<h2>Advanced Compilation Techniques<a class="headerlink" href="#advanced-compilation-techniques" title="Link to this heading">#</a></h2>
+<section id="meta-compilation">
+<h3>1. Meta-Compilation<a class="headerlink" href="#meta-compilation" title="Link to this heading">#</a></h3>
+<p>Compilation that learns to compile better:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MetaCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A compiler that improves its compilation strategies over time.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compilation_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_recognition</span> <span class="o">=</span> <span class="n">PatternRecognition</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_with_learning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">previous_compilations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile while learning from experience.&quot;&quot;&quot;</span>
+        <span class="c1"># Analyze current specification</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_specification</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Recognize similar patterns</span>
+        <span class="n">similar_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_recognition</span><span class="o">.</span><span class="n">find_similar</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">previous_compilations</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Select strategy based on learned patterns</span>
+        <span class="n">strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_adaptive_strategy</span><span class="p">(</span><span class="n">analysis</span><span class="p">,</span> <span class="n">similar_patterns</span><span class="p">)</span>
+
+        <span class="c1"># Compile program</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthesize_program</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategy</span><span class="p">)</span>
+
+        <span class="c1"># Optimize with learned optimizer</span>
+        <span class="n">optimized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize_with_learning</span><span class="p">(</span>
+            <span class="n">program</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategy</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Record compilation for learning</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">record_compilation</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">optimized</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">learn_from_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">test_results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Learn from compilation results.&quot;&quot;&quot;</span>
+        <span class="c1"># Update strategy performance</span>
+        <span class="n">strategy_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_strategy_key</span><span class="p">(</span><span class="n">program</span><span class="o">.</span><span class="n">compilation_strategy</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">strategy_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span><span class="p">[</span><span class="n">strategy_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">performance_metrics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;efficiency&#39;</span><span class="p">:</span> <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;efficiency&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;robustness&#39;</span><span class="p">:</span> <span class="n">test_results</span><span class="p">[</span><span class="s1">&#39;robustness&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;compilation_time&#39;</span><span class="p">:</span> <span class="n">program</span><span class="o">.</span><span class="n">compilation_time</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span><span class="p">[</span><span class="n">strategy_key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">performance_metrics</span><span class="p">)</span>
+
+        <span class="c1"># Update pattern recognition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_recognition</span><span class="o">.</span><span class="n">update_patterns</span><span class="p">(</span>
+            <span class="n">program</span><span class="o">.</span><span class="n">signature</span><span class="p">,</span>
+            <span class="n">program</span><span class="o">.</span><span class="n">compilation_strategy</span><span class="p">,</span>
+            <span class="n">performance_metrics</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_adaptive_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis</span><span class="p">,</span> <span class="n">similar_patterns</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select strategy based on learned patterns.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">similar_patterns</span><span class="p">:</span>
+            <span class="c1"># Default strategy selection</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_default_strategy</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+
+        <span class="c1"># Analyze similar patterns&#39; performance</span>
+        <span class="n">pattern_performances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">similar_patterns</span><span class="p">:</span>
+            <span class="n">strategy_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_strategy_key</span><span class="p">(</span><span class="n">pattern</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">strategy_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span><span class="p">:</span>
+                <span class="n">performances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy_performance</span><span class="p">[</span><span class="n">strategy_key</span><span class="p">]</span>
+                <span class="n">avg_performance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span>
+                    <span class="n">p</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">+</span>
+                    <span class="n">p</span><span class="p">[</span><span class="s1">&#39;efficiency&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.3</span> <span class="o">+</span>
+                    <span class="n">p</span><span class="p">[</span><span class="s1">&#39;robustness&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.2</span>
+                    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">performances</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>  <span class="c1"># Recent performance</span>
+                <span class="p">])</span>
+                <span class="n">pattern_performances</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s1">&#39;strategy&#39;</span><span class="p">:</span> <span class="n">pattern</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;performance&#39;</span><span class="p">:</span> <span class="n">avg_performance</span><span class="p">,</span>
+                    <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="n">pattern</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">]</span>
+                <span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">pattern_performances</span><span class="p">:</span>
+            <span class="c1"># Weight by similarity and performance</span>
+            <span class="n">best_pattern</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="n">pattern_performances</span><span class="p">,</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;performance&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">best_pattern</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_default_strategy</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+
+<span class="c1"># Usage</span>
+<span class="n">meta_compiler</span> <span class="o">=</span> <span class="n">MetaCompiler</span><span class="p">()</span>
+
+<span class="c1"># Compile with learning</span>
+<span class="n">program</span> <span class="o">=</span> <span class="n">meta_compiler</span><span class="o">.</span><span class="n">compile_with_learning</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">ComplexQASignature</span><span class="p">,</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+    <span class="n">previous_compilations</span><span class="o">=</span><span class="n">previous_programs</span>
+<span class="p">)</span>
+
+<span class="c1"># Test and learn</span>
+<span class="n">test_results</span> <span class="o">=</span> <span class="n">evaluate_program</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">test_data</span><span class="p">)</span>
+<span class="n">meta_compiler</span><span class="o">.</span><span class="n">learn_from_results</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">test_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="domain-specific-compilation">
+<h3>2. Domain-Specific Compilation<a class="headerlink" href="#domain-specific-compilation" title="Link to this heading">#</a></h3>
+<p>Specialized compilation for specific domains:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DomainSpecificCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compiler specialized for specific domains.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">domain_knowledge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_domain_knowledge</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compilation_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_domain_patterns</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_domain_knowledge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load domain-specific knowledge.&quot;&quot;&quot;</span>
+        <span class="n">knowledge_bases</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;medical&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;critical_constraints&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;safety_first&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;evidence_required&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;disclaimer_needed&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;specialized_modules&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;medical_verifier&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;symptom_extractor&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;diagnosis_validator&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;validation_strategies&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;fact_checking&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;cross_reference&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;expert_review_simulation&#39;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;legal&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;critical_constraints&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;jurisdiction_specific&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;precedent_required&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;liability_clarification&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;specialized_modules&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;legal_researcher&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;case_law_finder&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;compliance_checker&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;validation_strategies&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;statute_verification&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;precedent_matching&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;risk_assessment&#39;</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;financial&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;critical_constraints&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;regulatory_compliance&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;disclaimer_required&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;risk_disclosure&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;specialized_modules&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;market_analyzer&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;risk_calculator&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;compliance_auditor&#39;</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;validation_strategies&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s1">&#39;regulatory_check&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;calculation_verification&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;risk_validation&#39;</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">knowledge_bases</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_for_domain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile with domain-specific optimizations.&quot;&quot;&quot;</span>
+        <span class="c1"># Start with base compilation</span>
+        <span class="n">base_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_base_program</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">)</span>
+
+        <span class="c1"># Add domain-specific modules</span>
+        <span class="n">domain_enhanced</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_domain_modules</span><span class="p">(</span>
+            <span class="n">base_program</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Apply domain-specific constraints</span>
+        <span class="n">constrained_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_domain_constraints</span><span class="p">(</span>
+            <span class="n">domain_enhanced</span><span class="p">,</span> <span class="n">signature</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add domain-specific validation</span>
+        <span class="n">validated_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_domain_validation</span><span class="p">(</span>
+            <span class="n">constrained_program</span><span class="p">,</span> <span class="n">signature</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">validated_program</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_domain_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">analysis</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add domain-specific processing modules.&quot;&quot;&quot;</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">DomainEnhancedProgram</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_program</span><span class="p">,</span> <span class="n">domain_knowledge</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_program</span> <span class="o">=</span> <span class="n">base_program</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">domain_knowledge</span> <span class="o">=</span> <span class="n">domain_knowledge</span>
+
+                <span class="c1"># Add domain-specific modules</span>
+                <span class="k">for</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">domain_knowledge</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;specialized_modules&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+                    <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_domain_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;domain_</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="c1"># Pre-domain processing</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;domain_verifier&#39;</span><span class="p">):</span>
+                    <span class="n">verification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_verifier</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">verification</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+                        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;domain_issues&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">verification</span><span class="o">.</span><span class="n">issues</span>
+
+                <span class="c1"># Base processing</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_program</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+                <span class="c1"># Post-domain processing</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;domain_enhancer&#39;</span><span class="p">):</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_enhancer</span><span class="p">(</span><span class="o">**</span><span class="n">result</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">DomainEnhancedProgram</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_knowledge</span><span class="p">)</span>
+
+<span class="c1"># Example: Medical domain compilation</span>
+<span class="n">medical_compiler</span> <span class="o">=</span> <span class="n">DomainSpecificCompiler</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="s1">&#39;medical&#39;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MedicalDiagnosisSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Medical diagnosis with safety constraints.&quot;&quot;&quot;</span>
+    <span class="n">symptoms</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Patient symptoms&quot;</span><span class="p">)</span>
+    <span class="n">history</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Medical history&quot;</span><span class="p">)</span>
+    <span class="n">diagnosis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Probable diagnosis&quot;</span><span class="p">)</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Confidence level&quot;</span><span class="p">)</span>
+    <span class="n">urgency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Urgency level&quot;</span><span class="p">)</span>
+    <span class="n">disclaimer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Medical disclaimer&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compile with medical domain specialization</span>
+<span class="n">medical_program</span> <span class="o">=</span> <span class="n">medical_compiler</span><span class="o">.</span><span class="n">compile_for_domain</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">MedicalDiagnosisSignature</span><span class="p">,</span>
+    <span class="n">analysis</span><span class="o">=</span><span class="n">medical_analysis</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="incremental-compilation">
+<h3>3. Incremental Compilation<a class="headerlink" href="#incremental-compilation" title="Link to this heading">#</a></h3>
+<p>Compile programs incrementally for efficiency:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">IncrementalCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compiles programs incrementally, reusing previous work.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compilation_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependency_graph</span> <span class="o">=</span> <span class="n">DependencyGraph</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_detector</span> <span class="o">=</span> <span class="n">ChangeDetector</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_incremental</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">previous_program</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile incrementally, reusing unchanged components.&quot;&quot;&quot;</span>
+        <span class="c1"># Detect changes</span>
+        <span class="n">changes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">change_detector</span><span class="o">.</span><span class="n">detect_changes</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">previous_program</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">changes</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">previous_program</span><span class="p">:</span>
+            <span class="c1"># Full compilation needed</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_full</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Analyze impact</span>
+        <span class="n">impact_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_change_impact</span><span class="p">(</span>
+            <span class="n">changes</span><span class="p">,</span> <span class="n">previous_program</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Reconstruct affected modules</span>
+        <span class="n">reconstructed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconstruct_affected_modules</span><span class="p">(</span>
+            <span class="n">impact_analysis</span><span class="p">,</span> <span class="n">previous_program</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Re-optimize if necessary</span>
+        <span class="k">if</span> <span class="n">impact_analysis</span><span class="p">[</span><span class="s1">&#39;requires_reoptimization&#39;</span><span class="p">]:</span>
+            <span class="n">reconstructed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reoptimize</span><span class="p">(</span><span class="n">reconstructed</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reconstructed</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_change_impact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changes</span><span class="p">,</span> <span class="n">program</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze which modules are affected by changes.&quot;&quot;&quot;</span>
+        <span class="n">impact</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;affected_modules&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;recompilation_required&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;reoptimization_required&#39;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Build dependency graph if not exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_graph</span><span class="o">.</span><span class="n">has_graph</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dependency_graph</span><span class="o">.</span><span class="n">build_graph</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+
+        <span class="c1"># Trace dependencies</span>
+        <span class="k">for</span> <span class="n">change</span> <span class="ow">in</span> <span class="n">changes</span><span class="p">:</span>
+            <span class="c1"># Find directly affected modules</span>
+            <span class="n">affected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_graph</span><span class="o">.</span><span class="n">get_dependents</span><span class="p">(</span>
+                <span class="n">change</span><span class="p">[</span><span class="s1">&#39;component&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">affected</span><span class="p">)</span>
+
+            <span class="c1"># Check if optimization is affected</span>
+            <span class="k">if</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;affects_optimization&#39;</span><span class="p">]:</span>
+                <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;reoptimization_required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Remove duplicates</span>
+        <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">]))</span>
+        <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;recompilation_required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">impact</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reconstruct_affected_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">impact</span><span class="p">,</span> <span class="n">program</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reconstruct only the affected modules.&quot;&quot;&quot;</span>
+        <span class="c1"># Create new program structure</span>
+        <span class="n">new_program</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">program</span><span class="p">)()</span>  <span class="c1"># Same type, new instance</span>
+
+        <span class="c1"># Copy unaffected modules</span>
+        <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">program</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">attr_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                <span class="n">attr_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+
+                <span class="c1"># Check if this is a module and if it&#39;s affected</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">attr_value</span><span class="p">,</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">attr_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">]):</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">new_program</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">attr_value</span><span class="p">)</span>
+
+        <span class="c1"># Reconstruct affected modules</span>
+        <span class="k">for</span> <span class="n">module_name</span> <span class="ow">in</span> <span class="n">impact</span><span class="p">[</span><span class="s1">&#39;affected_modules&#39;</span><span class="p">]:</span>
+            <span class="c1"># Get module specification</span>
+            <span class="n">module_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module_specification</span><span class="p">(</span>
+                <span class="n">program</span><span class="p">,</span> <span class="n">module_name</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Reconstruct module</span>
+            <span class="n">new_module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconstruct_module</span><span class="p">(</span><span class="n">module_spec</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">new_program</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">new_module</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">new_program</span>
+
+<span class="c1"># Usage</span>
+<span class="n">incremental_compiler</span> <span class="o">=</span> <span class="n">IncrementalCompiler</span><span class="p">()</span>
+
+<span class="c1"># Initial compilation</span>
+<span class="n">initial_program</span> <span class="o">=</span> <span class="n">incremental_compiler</span><span class="o">.</span><span class="n">compile_full</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">ComplexQASignature</span><span class="p">,</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">initial_data</span>
+<span class="p">)</span>
+
+<span class="c1"># Later, with small changes</span>
+<span class="n">updated_signature</span> <span class="o">=</span> <span class="n">update_signature</span><span class="p">(</span><span class="n">ComplexQASignature</span><span class="p">)</span>
+<span class="n">updated_program</span> <span class="o">=</span> <span class="n">incremental_compiler</span><span class="o">.</span><span class="n">compile_incremental</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">updated_signature</span><span class="p">,</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">updated_data</span><span class="p">,</span>
+    <span class="n">previous_program</span><span class="o">=</span><span class="n">initial_program</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="compilation-optimization-strategies">
+<h2>Compilation Optimization Strategies<a class="headerlink" href="#compilation-optimization-strategies" title="Link to this heading">#</a></h2>
+<section id="performance-driven-compilation">
+<h3>1. Performance-Driven Compilation<a class="headerlink" href="#performance-driven-compilation" title="Link to this heading">#</a></h3>
+<p>Optimize for specific performance metrics:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PerformanceOptimizedCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compiler that optimizes for specific performance targets.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimization_targets</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="n">LatencyOptimizer</span><span class="p">(),</span>
+            <span class="s1">&#39;throughput&#39;</span><span class="p">:</span> <span class="n">ThroughputOptimizer</span><span class="p">(),</span>
+            <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="n">AccuracyOptimizer</span><span class="p">(),</span>
+            <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="n">CostOptimizer</span><span class="p">(),</span>
+            <span class="s1">&#39;quality&#39;</span><span class="p">:</span> <span class="n">QualityOptimizer</span><span class="p">()</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_for_performance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile for specific performance targets.&quot;&quot;&quot;</span>
+        <span class="c1"># Analyze trade-offs</span>
+        <span class="n">tradeoff_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_performance_tradeoffs</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">targets</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Select optimization strategies</span>
+        <span class="n">strategies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_optimization_strategies</span><span class="p">(</span>
+            <span class="n">targets</span><span class="p">,</span> <span class="n">tradeoff_analysis</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compile with optimizations</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_with_optimizations</span><span class="p">(</span>
+            <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">strategies</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Validate performance targets</span>
+        <span class="n">validated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_performance_targets</span><span class="p">(</span>
+            <span class="n">program</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">targets</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">validated</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_performance_tradeoffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze trade-offs between different performance metrics.&quot;&quot;&quot;</span>
+        <span class="n">tradeoffs</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Latency vs. Accuracy</span>
+        <span class="k">if</span> <span class="s1">&#39;latency&#39;</span> <span class="ow">in</span> <span class="n">targets</span> <span class="ow">and</span> <span class="s1">&#39;accuracy&#39;</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">tradeoffs</span><span class="p">[</span><span class="s1">&#39;latency_accuracy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;relationship&#39;</span><span class="p">:</span> <span class="s1">&#39;inverse&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;optimization_points&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span><span class="s1">&#39;latency_reduction&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;accuracy_loss&#39;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;latency_reduction&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;accuracy_loss&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;latency_reduction&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s1">&#39;accuracy_loss&#39;</span><span class="p">:</span> <span class="mf">0.10</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;recommended_strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;balanced&#39;</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Cost vs. Quality</span>
+        <span class="k">if</span> <span class="s1">&#39;cost&#39;</span> <span class="ow">in</span> <span class="n">targets</span> <span class="ow">and</span> <span class="s1">&#39;quality&#39;</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">tradeoffs</span><span class="p">[</span><span class="s1">&#39;cost_quality&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;relationship&#39;</span><span class="p">:</span> <span class="s1">&#39;direct&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;optimization_points&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span><span class="s1">&#39;cost_reduction&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;quality_loss&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;cost_reduction&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s1">&#39;quality_loss&#39;</span><span class="p">:</span> <span class="mf">0.10</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s1">&#39;cost_reduction&#39;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s1">&#39;quality_loss&#39;</span><span class="p">:</span> <span class="mf">0.20</span><span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;recommended_strategy&#39;</span><span class="p">:</span> <span class="s1">&#39;cost_sensitive&#39;</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">tradeoffs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_optimization_strategies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">tradeoffs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select optimal strategies based on targets and tradeoffs.&quot;&quot;&quot;</span>
+        <span class="n">strategies</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Prioritize targets</span>
+        <span class="n">prioritized_targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prioritize_targets</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">prioritized_targets</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimization_targets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">optimizer</span><span class="p">:</span>
+                <span class="n">target_strategies</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">get_strategies</span><span class="p">(</span><span class="n">tradeoffs</span><span class="p">)</span>
+                <span class="n">strategies</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">target_strategies</span><span class="p">)</span>
+
+        <span class="c1"># Resolve conflicts</span>
+        <span class="n">resolved_strategies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_strategy_conflicts</span><span class="p">(</span><span class="n">strategies</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">resolved_strategies</span>
+
+<span class="c1"># Example: Compile for low latency and high accuracy</span>
+<span class="n">compiler</span> <span class="o">=</span> <span class="n">PerformanceOptimizedCompiler</span><span class="p">()</span>
+
+<span class="n">performance_targets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;latency&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;unit&#39;</span><span class="p">:</span> <span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span><span class="p">},</span>
+    <span class="s1">&#39;cost&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;max_budget&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">optimized_program</span> <span class="o">=</span> <span class="n">compiler</span><span class="o">.</span><span class="n">compile_for_performance</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">ComplexQASignature</span><span class="p">,</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="n">performance_targets</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="adaptive-compilation">
+<h3>2. Adaptive Compilation<a class="headerlink" href="#adaptive-compilation" title="Link to this heading">#</a></h3>
+<p>Adapt compilation strategy based on runtime feedback:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AdaptiveCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compiler that adapts based on runtime performance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="o">=</span> <span class="n">PerformanceMonitor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_strategies</span> <span class="o">=</span> <span class="n">AdaptationStrategies</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_system</span> <span class="o">=</span> <span class="n">CompilationLearningSystem</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compile_with_adaptation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">initial_dataset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compile with continuous adaptation.&quot;&quot;&quot;</span>
+        <span class="c1"># Initial compilation</span>
+        <span class="n">program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compile_initial</span><span class="p">(</span><span class="n">signature</span><span class="p">,</span> <span class="n">initial_dataset</span><span class="p">)</span>
+
+        <span class="c1"># Setup monitoring</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">setup_monitoring</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+
+        <span class="c1"># Start adaptation loop</span>
+        <span class="n">adaptation_loop</span> <span class="o">=</span> <span class="n">AdaptationLoop</span><span class="p">(</span>
+            <span class="n">program</span><span class="o">=</span><span class="n">program</span><span class="p">,</span>
+            <span class="n">monitor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="p">,</span>
+            <span class="n">compiler</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">adaptation_interval</span><span class="o">=</span><span class="mi">100</span>  <span class="c1"># Adapt every 100 inferences</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">AdaptiveProgram</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">adaptation_loop</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">adapt_program</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">performance_feedback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adapt program based on performance feedback.&quot;&quot;&quot;</span>
+        <span class="c1"># Analyze performance issues</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_performance_issues</span><span class="p">(</span><span class="n">performance_feedback</span><span class="p">)</span>
+
+        <span class="c1"># Select adaptation strategies</span>
+        <span class="n">adaptations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_adaptations</span><span class="p">(</span><span class="n">issues</span><span class="p">,</span> <span class="n">program</span><span class="p">)</span>
+
+        <span class="c1"># Apply adaptations</span>
+        <span class="n">adapted_program</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_adaptations</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">adaptations</span><span class="p">)</span>
+
+        <span class="c1"># Validate adaptation</span>
+        <span class="n">validation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_adaptation</span><span class="p">(</span>
+            <span class="n">adapted_program</span><span class="p">,</span> <span class="n">adaptations</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_successful</span><span class="p">:</span>
+            <span class="c1"># Learn from adaptation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learning_system</span><span class="o">.</span><span class="n">record_adaptation</span><span class="p">(</span>
+                <span class="n">program</span><span class="p">,</span> <span class="n">adaptations</span><span class="p">,</span> <span class="n">performance_feedback</span><span class="p">,</span> <span class="n">validation</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">adapted_program</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Rollback or try alternative</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_failed_adaptation</span><span class="p">(</span>
+                <span class="n">program</span><span class="p">,</span> <span class="n">adaptations</span><span class="p">,</span> <span class="n">validation</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_performance_issues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze performance feedback to identify issues.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Check for accuracy degradation</span>
+        <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;accuracy_target&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;accuracy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;severity&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span> <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;accuracy_target&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.9</span> <span class="k">else</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;potential_causes&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">diagnose_accuracy_issues</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+            <span class="p">})</span>
+
+        <span class="c1"># Check for latency issues</span>
+        <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;avg_latency&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;latency_target&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;latency&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;severity&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span> <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;avg_latency&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;latency_target&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.5</span> <span class="k">else</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;potential_causes&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">diagnose_latency_issues</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+            <span class="p">})</span>
+
+        <span class="c1"># Check for cost overruns</span>
+        <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;avg_cost&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;cost_target&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;cost&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;severity&#39;</span><span class="p">:</span> <span class="s1">&#39;high&#39;</span> <span class="k">if</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;avg_cost&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">feedback</span><span class="p">[</span><span class="s1">&#39;cost_target&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1.5</span> <span class="k">else</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;potential_causes&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">diagnose_cost_issues</span><span class="p">(</span><span class="n">feedback</span><span class="p">)</span>
+            <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">issues</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AdaptiveProgram</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Program wrapper that enables runtime adaptation.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_program</span><span class="p">,</span> <span class="n">adaptation_loop</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_program</span> <span class="o">=</span> <span class="n">base_program</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_loop</span> <span class="o">=</span> <span class="n">adaptation_loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Check if adaptation is needed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_loop</span><span class="o">.</span><span class="n">should_adapt</span><span class="p">():</span>
+            <span class="n">adapted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_loop</span><span class="o">.</span><span class="n">adapt</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">adapted</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">base_program</span> <span class="o">=</span> <span class="n">adapted</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Execute with current program</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_program</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_adaptation_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get adaptation statistics.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;adaptations_performed&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_count</span><span class="p">,</span>
+            <span class="s1">&#39;performance_history&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_loop</span><span class="o">.</span><span class="n">get_performance_history</span><span class="p">(),</span>
+            <span class="s1">&#39;adaptation_effectiveness&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptation_loop</span><span class="o">.</span><span class="n">get_effectiveness_metrics</span><span class="p">()</span>
+        <span class="p">}</span>
+
+<span class="c1"># Usage</span>
+<span class="n">adaptive_compiler</span> <span class="o">=</span> <span class="n">AdaptiveCompiler</span><span class="p">()</span>
+
+<span class="c1"># Create adaptive program</span>
+<span class="n">adaptive_qa</span> <span class="o">=</span> <span class="n">adaptive_compiler</span><span class="o">.</span><span class="n">compile_with_adaptation</span><span class="p">(</span>
+    <span class="n">signature</span><span class="o">=</span><span class="n">ComplexQASignature</span><span class="p">,</span>
+    <span class="n">initial_dataset</span><span class="o">=</span><span class="n">train_data</span>
+<span class="p">)</span>
+
+<span class="c1"># Use with automatic adaptation</span>
+<span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">adaptive_qa</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+
+<span class="c1"># Check adaptation statistics</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">adaptive_qa</span><span class="o">.</span><span class="n">get_adaptation_stats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adaptations performed: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;adaptations_performed&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>Declarative language model compilation transforms high-level specifications into optimized programs through systematic processes:</p>
+<ul class="simple">
+<li><p><strong>Specification Analysis</strong>: Understand requirements and constraints</p></li>
+<li><p><strong>Strategy Selection</strong>: Choose optimal implementation approaches</p></li>
+<li><p><strong>Program Synthesis</strong>: Generate initial program structure</p></li>
+<li><p><strong>Meta-Compilation</strong>: Learn and improve compilation strategies</p></li>
+<li><p><strong>Domain Specialization</strong>: Optimize for specific domains</p></li>
+<li><p><strong>Incremental Updates</strong>: Efficiently recompile when specifications change</p></li>
+<li><p><strong>Performance Optimization</strong>: Target specific performance metrics</p></li>
+<li><p><strong>Runtime Adaptation</strong>: Continuously improve based on feedback</p></li>
+</ul>
+<section id="key-takeaways">
+<h3>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Think Declaratively</strong>: Focus on what, not how</p></li>
+<li><p><strong>Leverage Compilation</strong>: Let the system find optimal implementations</p></li>
+<li><p><strong>Specialize Strategically</strong>: Use domain knowledge for better results</p></li>
+<li><p><strong>Adapt Continuously</strong>: Improve programs based on runtime feedback</p></li>
+<li><p><strong>Measure Everything</strong>: Track performance to guide optimizations</p></li>
+</ol>
+</section>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#./09-meta-compilation.md"><span class="xref myst">Meta-Compilation Systems</span></a> - Advanced self-improving compilers</p></li>
+<li><p><a class="reference internal" href="#./10-dsl-compilation.md"><span class="xref myst">Domain-Specific Languages</span></a> - Create specialized DSLs</p></li>
+<li><p><a class="reference internal" href="#../06-real-world-applications/05-deployment-strategies.md"><span class="xref myst">Production Deployment</span></a> - Deploy compiled systems</p></li>
+<li><p><a class="reference internal" href="#./11-exercises.md"><span class="xref myst">Exercises</span></a> - Practice compilation techniques</p></li>
+</ul>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://arxiv.org/abs/2310.03714">DSPy Paper: Compiling Declarative Language Model Calls</a> - Foundational compilation concepts</p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Program_synthesis">Program Synthesis</a> - General synthesis techniques</p></li>
+<li><p><a class="reference external" href="https://martinfowler.com/books/dsl.html">Domain-Specific Languages</a> - DSL design principles</p></li>
+<li><p><a class="reference external" href="https://dl.acm.org/doi/10.1145/3360589">Adaptive Compilation</a> - Research on adaptive compilation</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/07_advanced_topics"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_self_refining_pipelines.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Self-Refining Pipelines</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../08_case_studies/00_introduction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 8: Case Studies</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-declarative-compilation">Introduction to Declarative Compilation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-compilation-paradigm">The Compilation Paradigm</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-principles">Key Principles</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dspy-compilation-pipeline">The DSPy Compilation Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specification-analysis">1. Specification Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#strategy-selection">2. Strategy Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#program-synthesis">3. Program Synthesis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-compilation-techniques">Advanced Compilation Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-compilation">1. Meta-Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#domain-specific-compilation">2. Domain-Specific Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#incremental-compilation">3. Incremental Compilation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-optimization-strategies">Compilation Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-driven-compilation">1. Performance-Driven Compilation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adaptive-compilation">2. Adaptive Compilation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further Reading</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

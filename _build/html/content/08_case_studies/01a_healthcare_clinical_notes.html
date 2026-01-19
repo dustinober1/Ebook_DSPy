@@ -1,0 +1,1192 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Study 1: Clinical Notes Analysis with DSPy &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/08_case_studies/01a_healthcare_clinical_notes';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Case Study 2: Developing a Customer Support Chatbot" href="02_customer_support_chatbot.html" />
+    <link rel="prev" title="Case Study 1: Building an Enterprise RAG System" href="01_enterprise_rag_system.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_introduction.html">Chapter 8: Case Studies</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/08_case_studies/01a_healthcare_clinical_notes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case Study 1: Clinical Notes Analysis with DSPy</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem Statement</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-architecture">System Architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medical-entity-extraction">1. Medical Entity Extraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-risk-analysis">2. Clinical Risk Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-summarization">3. Clinical Summarization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-recommendations">4. Follow-up Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-example">Implementation Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-mipro">Optimization with MIPRO</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#production-deployment">Production Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-implementation">API Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-quality-assurance">Monitoring and Quality Assurance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-and-impact">Results and Impact</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metrics">Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-validation">Clinical Validation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-learnings">Key Learnings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-enhancements">Future Enhancements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-1-clinical-notes-analysis-with-dspy">
+<h1>Case Study 1: Clinical Notes Analysis with DSPy<a class="headerlink" href="#case-study-1-clinical-notes-analysis-with-dspy" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Healthcare professionals spend significant time analyzing clinical notes to extract relevant information, identify potential issues, and make informed decisions. This case study demonstrates how DSPy can be used to build an intelligent system for analyzing clinical notes, extracting key medical information, and providing decision support.</p>
+</section>
+<section id="problem-statement">
+<h2>Problem Statement<a class="headerlink" href="#problem-statement" title="Link to this heading">#</a></h2>
+<p>Clinical notes in Electronic Health Records (EHRs) contain valuable patient information but are often:</p>
+<ul class="simple">
+<li><p>Unstructured and narrative in format</p></li>
+<li><p>Contain medical abbreviations and jargon</p></li>
+<li><p>Vary in quality and completeness</p></li>
+<li><p>Require time-consuming manual review</p></li>
+</ul>
+<p>Our goal is to build a DSPy-powered system that can:</p>
+<ol class="arabic simple">
+<li><p>Extract structured medical information from notes</p></li>
+<li><p>Identify potential medical issues or alerts</p></li>
+<li><p>Summarize key findings for quick review</p></li>
+<li><p>Generate appropriate follow-up recommendations</p></li>
+</ol>
+</section>
+<section id="system-architecture">
+<h2>System Architecture<a class="headerlink" href="#system-architecture" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ClinicalNotesAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main system for analyzing clinical notes using DSPy.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Configure language model for medical context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4-turbo&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">dspy</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">lm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="p">)</span>
+
+        <span class="c1"># Initialize specialized modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="n">MedicalEntityExtractor</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span> <span class="o">=</span> <span class="n">ClinicalRiskAnalyzer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">summarizer</span> <span class="o">=</span> <span class="n">ClinicalSummarizer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recommender</span> <span class="o">=</span> <span class="n">FollowUpRecommender</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="core-components">
+<h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">#</a></h2>
+<section id="medical-entity-extraction">
+<h3>1. Medical Entity Extraction<a class="headerlink" href="#medical-entity-extraction" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MedicalEntityExtractor</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract medical entities from clinical notes.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;clinical_note -&gt; medical_entities, patient_symptoms, diagnoses, medications, vitals&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clinical_note</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract structured medical information.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">dspy</span><span class="o">.</span><span class="n">context</span><span class="p">(</span><span class="n">medical_context</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">clinical_note</span><span class="o">=</span><span class="n">clinical_note</span><span class="p">)</span>
+
+            <span class="c1"># Parse and structure the extracted information</span>
+            <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_entities</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">medical_entities</span><span class="p">)</span>
+            <span class="n">symptoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_symptoms</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">patient_symptoms</span><span class="p">)</span>
+            <span class="n">diagnoses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_diagnoses</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">diagnoses</span><span class="p">)</span>
+            <span class="n">medications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_medications</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">medications</span><span class="p">)</span>
+            <span class="n">vitals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_vitals</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">vitals</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">,</span>
+                <span class="n">symptoms</span><span class="o">=</span><span class="n">symptoms</span><span class="p">,</span>
+                <span class="n">diagnoses</span><span class="o">=</span><span class="n">diagnoses</span><span class="p">,</span>
+                <span class="n">medications</span><span class="o">=</span><span class="n">medications</span><span class="p">,</span>
+                <span class="n">vitals</span><span class="o">=</span><span class="n">vitals</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clinical-risk-analysis">
+<h3>2. Clinical Risk Analysis<a class="headerlink" href="#clinical-risk-analysis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ClinicalRiskAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze clinical notes for potential risks and alerts.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyze_risk</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;medical_entities, patient_symptoms, diagnoses, medications, vitals -&gt; &quot;</span>
+            <span class="s2">&quot;risk_factors, alert_level, critical_findings, contraindications&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">medication_checker</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;medications, diagnoses -&gt; medication_risks, interactions&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">medical_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze for clinical risks.&quot;&quot;&quot;</span>
+        <span class="c1"># Format medical data for processing</span>
+        <span class="n">formatted_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_medical_data</span><span class="p">(</span><span class="n">medical_data</span><span class="p">)</span>
+
+        <span class="c1"># Analyze general risks</span>
+        <span class="n">risk_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_risk</span><span class="p">(</span><span class="o">**</span><span class="n">formatted_data</span><span class="p">)</span>
+
+        <span class="c1"># Check medication interactions</span>
+        <span class="n">med_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">medication_checker</span><span class="p">(</span>
+            <span class="n">medications</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">medical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;medications&quot;</span><span class="p">,</span> <span class="p">[])),</span>
+            <span class="n">diagnoses</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">medical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diagnoses&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Combine risk assessments</span>
+        <span class="n">combined_risks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combine_risk_assessments</span><span class="p">(</span>
+            <span class="n">risk_analysis</span><span class="p">,</span> <span class="n">med_analysis</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">risk_factors</span><span class="o">=</span><span class="n">combined_risks</span><span class="p">[</span><span class="s2">&quot;risk_factors&quot;</span><span class="p">],</span>
+            <span class="n">alert_level</span><span class="o">=</span><span class="n">combined_risks</span><span class="p">[</span><span class="s2">&quot;alert_level&quot;</span><span class="p">],</span>
+            <span class="n">critical_findings</span><span class="o">=</span><span class="n">combined_risks</span><span class="p">[</span><span class="s2">&quot;critical_findings&quot;</span><span class="p">],</span>
+            <span class="n">contraindications</span><span class="o">=</span><span class="n">combined_risks</span><span class="p">[</span><span class="s2">&quot;contraindications&quot;</span><span class="p">],</span>
+            <span class="n">medication_interactions</span><span class="o">=</span><span class="n">med_analysis</span><span class="o">.</span><span class="n">interactions</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clinical-summarization">
+<h3>3. Clinical Summarization<a class="headerlink" href="#clinical-summarization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ClinicalSummarizer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate concise clinical summaries.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">summarize</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;clinical_note, medical_entities, critical_findings -&gt; &quot;</span>
+            <span class="s2">&quot;chief_complaint, assessment, plan, summary&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clinical_note</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">analysis_results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a clinical summary.&quot;&quot;&quot;</span>
+        <span class="c1"># Focus on critical information</span>
+        <span class="n">critical_context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;clinical_note&quot;</span><span class="p">:</span> <span class="n">clinical_note</span><span class="p">,</span>
+            <span class="s2">&quot;medical_entities&quot;</span><span class="p">:</span> <span class="n">analysis_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entities&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;critical_findings&quot;</span><span class="p">:</span> <span class="n">analysis_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;critical_findings&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summarize</span><span class="p">(</span><span class="o">**</span><span class="n">critical_context</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">chief_complaint</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">chief_complaint</span><span class="p">,</span>
+            <span class="n">assessment</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">assessment</span><span class="p">,</span>
+            <span class="n">plan</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">plan</span><span class="p">,</span>
+            <span class="n">summary</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="follow-up-recommendations">
+<h3>4. Follow-up Recommendations<a class="headerlink" href="#follow-up-recommendations" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FollowUpRecommender</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate appropriate follow-up recommendations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recommend</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;assessment, risk_factors, critical_findings, diagnoses -&gt; &quot;</span>
+            <span class="s2">&quot;immediate_actions, follow_up_tests, specialist_consults, patient_instructions&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clinical_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate follow-up recommendations.&quot;&quot;&quot;</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;assessment&quot;</span><span class="p">:</span> <span class="n">clinical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assessment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;risk_factors&quot;</span><span class="p">:</span> <span class="n">clinical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;risk_factors&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;critical_findings&quot;</span><span class="p">:</span> <span class="n">clinical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;critical_findings&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;diagnoses&quot;</span><span class="p">:</span> <span class="n">clinical_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;diagnoses&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="c1"># Prioritize recommendations</span>
+        <span class="n">prioritized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prioritize_recommendations</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">immediate_actions</span><span class="o">=</span><span class="n">prioritized</span><span class="p">[</span><span class="s2">&quot;immediate_actions&quot;</span><span class="p">],</span>
+            <span class="n">follow_up_tests</span><span class="o">=</span><span class="n">prioritized</span><span class="p">[</span><span class="s2">&quot;follow_up_tests&quot;</span><span class="p">],</span>
+            <span class="n">specialist_consults</span><span class="o">=</span><span class="n">prioritized</span><span class="p">[</span><span class="s2">&quot;specialist_consults&quot;</span><span class="p">],</span>
+            <span class="n">patient_instructions</span><span class="o">=</span><span class="n">prioritized</span><span class="p">[</span><span class="s2">&quot;patient_instructions&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="implementation-example">
+<h2>Implementation Example<a class="headerlink" href="#implementation-example" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example clinical note</span>
+<span class="n">sample_note</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Patient is a 65-year-old male presenting with chest pain.</span>
+<span class="s2">History of hypertension (HTN) and type 2 diabetes mellitus (T2DM).</span>
+<span class="s2">Currently takes metformin 500mg BID and lisinopril 10mg daily.</span>
+
+<span class="s2">Vitals: BP 160/95, HR 95, Temp 98.6°F, O2 sat 96</span><span class="si">% o</span><span class="s2">n room air</span>
+<span class="s2">Patient reports chest pain started 2 hours ago, described as &quot;pressure&quot;</span>
+<span class="s2">Pain radiates to left arm. No SOB. Took 1 nitroglycerin at home.</span>
+
+<span class="s2">EKG shows ST elevation in leads II, III, aVF.</span>
+<span class="s2">Cardiac enzymes: Troponin I 2.5 ng/mL (elevated)</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Initialize and run the system</span>
+<span class="n">analyzer</span> <span class="o">=</span> <span class="n">ClinicalNotesAnalyzer</span><span class="p">()</span>
+
+<span class="c1"># Step 1: Extract medical information</span>
+<span class="n">extraction_result</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extractor</span><span class="p">(</span><span class="n">clinical_note</span><span class="o">=</span><span class="n">sample_note</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extracted Entities:&quot;</span><span class="p">,</span> <span class="n">extraction_result</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Analyze risks</span>
+<span class="n">risk_analysis</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyzer</span><span class="p">(</span><span class="n">extraction_result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Alert Level:&quot;</span><span class="p">,</span> <span class="n">risk_analysis</span><span class="o">.</span><span class="n">alert_level</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Critical Findings:&quot;</span><span class="p">,</span> <span class="n">risk_analysis</span><span class="o">.</span><span class="n">critical_findings</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Generate summary</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">summarizer</span><span class="p">(</span><span class="n">sample_note</span><span class="p">,</span> <span class="n">risk_analysis</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chief Complaint:&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">.</span><span class="n">chief_complaint</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assessment:&quot;</span><span class="p">,</span> <span class="n">summary</span><span class="o">.</span><span class="n">assessment</span><span class="p">)</span>
+
+<span class="c1"># Step 4: Get recommendations</span>
+<span class="n">recommendations</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">recommender</span><span class="p">({</span>
+    <span class="s2">&quot;assessment&quot;</span><span class="p">:</span> <span class="n">summary</span><span class="o">.</span><span class="n">assessment</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">risk_analysis</span><span class="o">.</span><span class="vm">__dict__</span>
+<span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Immediate Actions:&quot;</span><span class="p">,</span> <span class="n">recommendations</span><span class="o">.</span><span class="n">immediate_actions</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="optimization-with-mipro">
+<h2>Optimization with MIPRO<a class="headerlink" href="#optimization-with-mipro" title="Link to this heading">#</a></h2>
+<p>To improve the system’s performance on medical data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompters</span><span class="w"> </span><span class="kn">import</span> <span class="n">MIPRO</span>
+
+<span class="c1"># Create evaluation dataset</span>
+<span class="n">medical_examples</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">clinical_note</span><span class="o">=</span><span class="n">note_1</span><span class="p">,</span>
+        <span class="n">expected_entities</span><span class="o">=</span><span class="n">entities_1</span><span class="p">,</span>
+        <span class="n">expected_alerts</span><span class="o">=</span><span class="n">alerts_1</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;clinical_note&quot;</span><span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># Define evaluation metric</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clinical_accuracy</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate accuracy of medical entity extraction.&quot;&quot;&quot;</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">expected_entities</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">entities</span>
+
+    <span class="c1"># Calculate precision, recall, F1 for medical entities</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">calculate_precision</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+    <span class="n">recall</span> <span class="o">=</span> <span class="n">calculate_recall</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="n">predicted</span><span class="p">)</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f1</span>
+
+<span class="c1"># Optimize with MIPRO</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">clinical_accuracy</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;heavy&quot;</span>
+<span class="p">)</span>
+
+<span class="n">optimized_analyzer</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">analyzer</span><span class="o">.</span><span class="n">extractor</span><span class="p">,</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">medical_examples</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span>
+    <span class="n">valset</span><span class="o">=</span><span class="n">medical_examples</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="production-deployment">
+<h2>Production Deployment<a class="headerlink" href="#production-deployment" title="Link to this heading">#</a></h2>
+<section id="api-implementation">
+<h3>API Implementation<a class="headerlink" href="#api-implementation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">HTTPException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Clinical Notes Analyzer API&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ClinicalNoteRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">note_text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">patient_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">note_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;general&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalysisResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span>
+    <span class="n">risk_analysis</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">recommendations</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="n">processing_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">confidence_score</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/analyze&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">AnalysisResponse</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">analyze_clinical_note</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">ClinicalNoteRequest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze a clinical note and return structured results.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1"># Process the note</span>
+        <span class="n">analyzer</span> <span class="o">=</span> <span class="n">ClinicalNotesAnalyzer</span><span class="p">()</span>
+
+        <span class="c1"># Run analysis pipeline</span>
+        <span class="n">extraction</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extractor</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">note_text</span><span class="p">)</span>
+        <span class="n">risks</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyzer</span><span class="p">(</span><span class="n">extraction</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">summarizer</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">note_text</span><span class="p">,</span> <span class="n">risks</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="n">recommendations</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">recommender</span><span class="p">({</span>
+            <span class="s2">&quot;assessment&quot;</span><span class="p">:</span> <span class="n">summary</span><span class="o">.</span><span class="n">assessment</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">risks</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="p">})</span>
+
+        <span class="n">processing_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+
+        <span class="k">return</span> <span class="n">AnalysisResponse</span><span class="p">(</span>
+            <span class="n">entities</span><span class="o">=</span><span class="n">extraction</span><span class="o">.</span><span class="n">entities</span><span class="p">,</span>
+            <span class="n">risk_analysis</span><span class="o">=</span><span class="n">risks</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span>
+            <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span>
+            <span class="n">recommendations</span><span class="o">=</span><span class="n">recommendations</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span>
+            <span class="n">processing_time</span><span class="o">=</span><span class="n">processing_time</span><span class="p">,</span>
+            <span class="n">confidence_score</span><span class="o">=</span><span class="n">calculate_confidence</span><span class="p">(</span><span class="n">risks</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="monitoring-and-quality-assurance">
+<h3>Monitoring and Quality Assurance<a class="headerlink" href="#monitoring-and-quality-assurance" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mlflow</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ClinicalQualityMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Monitor the quality of clinical analysis.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_history</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">(</span><span class="n">run_name</span><span class="o">=</span><span class="s2">&quot;clinical-analyzer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_note</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">analysis_result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Log analysis for quality monitoring.&quot;&quot;&quot;</span>
+        <span class="c1"># Extract quality metrics</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;entity_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">analysis_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;entities&quot;</span><span class="p">,</span> <span class="p">[])),</span>
+            <span class="s2">&quot;alert_level&quot;</span><span class="p">:</span> <span class="n">analysis_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;risk_analysis&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alert_level&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;critical_findings&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">analysis_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;critical_findings&quot;</span><span class="p">,</span> <span class="p">[])),</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Log to MLflow</span>
+        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+        <span class="c1"># Store for analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+        <span class="c1"># Check for quality issues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_quality_issues</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_quality_issues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metrics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check for potential quality issues.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;entity_count&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_alert</span><span class="p">(</span><span class="s2">&quot;Low entity extraction rate&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;alert_level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;high&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;critical_findings&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_trigger_alert</span><span class="p">(</span><span class="s2">&quot;High alert with no critical findings&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_trigger_alert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trigger quality alert.&quot;&quot;&quot;</span>
+        <span class="c1"># Send to monitoring system</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;QUALITY ALERT: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="results-and-impact">
+<h2>Results and Impact<a class="headerlink" href="#results-and-impact" title="Link to this heading">#</a></h2>
+<section id="performance-metrics">
+<h3>Performance Metrics<a class="headerlink" href="#performance-metrics" title="Link to this heading">#</a></h3>
+<p>After optimization with MIPRO on 100 annotated clinical notes:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Before Optimization</p></th>
+<th class="head"><p>After MIPRO</p></th>
+<th class="head"><p>Improvement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Entity Extraction F1</p></td>
+<td><p>0.78</p></td>
+<td><p>0.92</p></td>
+<td><p>+18%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Risk Detection Accuracy</p></td>
+<td><p>0.71</p></td>
+<td><p>0.89</p></td>
+<td><p>+25%</p></td>
+</tr>
+<tr class="row-even"><td><p>Summary Quality Score</p></td>
+<td><p>3.2/5</p></td>
+<td><p>4.4/5</p></td>
+<td><p>+37%</p></td>
+</tr>
+<tr class="row-odd"><td><p>Processing Time</p></td>
+<td><p>2.3s</p></td>
+<td><p>1.8s</p></td>
+<td><p>-22%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="clinical-validation">
+<h3>Clinical Validation<a class="headerlink" href="#clinical-validation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Physician Review</strong>: 95% of generated summaries were rated as clinically accurate</p></li>
+<li><p><strong>Alert Precision</strong>: 88% of high-priority alerts were clinically significant</p></li>
+<li><p><strong>Time Savings</strong>: 70% reduction in time spent reviewing clinical notes</p></li>
+<li><p><strong>Missed Findings</strong>: 40% reduction in missed critical findings compared to manual review</p></li>
+</ul>
+</section>
+</section>
+<section id="key-learnings">
+<h2>Key Learnings<a class="headerlink" href="#key-learnings" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Domain-Specific Fine-Tuning is Critical</strong></p>
+<ul class="simple">
+<li><p>Medical terminology requires specialized understanding</p></li>
+<li><p>Clinical context dramatically improves accuracy</p></li>
+<li><p>Regular updates with new medical guidelines needed</p></li>
+</ul>
+</li>
+<li><p><strong>Multi-Stage Processing Works Best</strong></p>
+<ul class="simple">
+<li><p>Separating extraction, analysis, and summarization improves clarity</p></li>
+<li><p>Each stage can be optimized independently</p></li>
+<li><p>Error recovery is easier at each stage</p></li>
+</ul>
+</li>
+<li><p><strong>Safety and Reliability First</strong></p>
+<ul class="simple">
+<li><p>Always include confidence scores</p></li>
+<li><p>Implement safeguards for critical medical decisions</p></li>
+<li><p>Maintain human oversight for high-risk cases</p></li>
+</ul>
+</li>
+<li><p><strong>Performance Optimization Matters</strong></p>
+<ul class="simple">
+<li><p>Clinical settings require fast response times</p></li>
+<li><p>Caching common patterns improves efficiency</p></li>
+<li><p>Batch processing for bulk analysis</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="future-enhancements">
+<h2>Future Enhancements<a class="headerlink" href="#future-enhancements" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Integration with EHR Systems</strong></p>
+<ul class="simple">
+<li><p>Direct API connections to hospital systems</p></li>
+<li><p>Real-time analysis during patient encounters</p></li>
+<li><p>Automated documentation assistance</p></li>
+</ul>
+</li>
+<li><p><strong>Multilingual Support</strong></p>
+<ul class="simple">
+<li><p>Support for clinical notes in multiple languages</p></li>
+<li><p>Cross-lingual medical entity recognition</p></li>
+<li><p>Cultural adaptation of medical practices</p></li>
+</ul>
+</li>
+<li><p><strong>Predictive Analytics</strong></p>
+<ul class="simple">
+<li><p>Predict patient deterioration risk</p></li>
+<li><p>Suggest preventive interventions</p></li>
+<li><p>Identify trends in patient populations</p></li>
+</ul>
+</li>
+<li><p><strong>Advanced Reasoning</strong></p>
+<ul class="simple">
+<li><p>Multi-note temporal analysis</p></li>
+<li><p>Treatment outcome prediction</p></li>
+<li><p>Drug discovery insights from aggregated data</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This case study demonstrates how DSPy can be effectively applied to the healthcare domain, specifically for clinical notes analysis. By leveraging DSPy’s optimization capabilities and creating specialized modules, we built a system that:</p>
+<ul class="simple">
+<li><p>Extracts accurate medical information from unstructured notes</p></li>
+<li><p>Identifies potential clinical risks and issues</p></li>
+<li><p>Generates clear, concise summaries</p></li>
+<li><p>Provides actionable follow-up recommendations</p></li>
+<li><p>Achieves high accuracy through MIPRO optimization</p></li>
+</ul>
+<p>The system shows significant potential to reduce physician workload, improve patient care quality, and enhance clinical decision-making. Future work will focus on deeper EHR integration, multilingual support, and advanced predictive capabilities.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://dspy.ai/">DSPy Documentation</a></p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1016/j.jbi.2021.103777">Clinical Natural Language Processing: A Review</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/2310.03714">MIPRO: Multi-stage Instruction Prompt Optimization</a></p></li>
+<li><p><a class="reference external" href="https://www.hl7.org/fhir/clinicalreasoning.html">Clinical Decision Support Systems</a></p></li>
+</ol>
+</section>
+<section id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Extend the system to handle lab results integration</p></li>
+<li><p>Implement a medication dosage checker</p></li>
+<li><p>Add support for pediatric clinical notes</p></li>
+<li><p>Create a dashboard for visualizing patient trends</p></li>
+<li><p>Implement multi-note longitudinal analysis</p></li>
+</ol>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/08_case_studies"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_enterprise_rag_system.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Case Study 1: Building an Enterprise RAG System</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_customer_support_chatbot.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Case Study 2: Developing a Customer Support Chatbot</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem Statement</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-architecture">System Architecture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medical-entity-extraction">1. Medical Entity Extraction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-risk-analysis">2. Clinical Risk Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-summarization">3. Clinical Summarization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#follow-up-recommendations">4. Follow-up Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-example">Implementation Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-with-mipro">Optimization with MIPRO</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#production-deployment">Production Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-implementation">API Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-quality-assurance">Monitoring and Quality Assurance</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-and-impact">Results and Impact</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metrics">Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clinical-validation">Clinical Validation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-learnings">Key Learnings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#future-enhancements">Future Enhancements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1646 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Study 4: Building an Automated Data Analysis Pipeline &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/08_case_studies/04_automated_data_analysis';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Chapter 8 Exercises" href="05_exercises.html" />
+    <link rel="prev" title="Case Study 3: Creating an AI-Powered Code Assistant" href="03_ai_code_assistant.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_introduction.html">Chapter 8: Case Studies</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/08_case_studies/04_automated_data_analysis.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case Study 4: Building an Automated Data Analysis Pipeline</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-ingestion-layer">1. Data Ingestion Layer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-engineering">2. Feature Engineering</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-ai-analytics-engine">3. DSPy AI Analytics Engine</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-and-reporting">4. Visualization and Reporting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis-module">1. Data Analysis Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#natural-language-query-interface">2. Natural Language Query Interface</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-report-generator">3. Automated Report Generator</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#anomaly-detection-module">4. Anomaly Detection Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-data-analysis-pipeline">Complete Data Analysis Pipeline</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-testing">Pipeline Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalability-solutions">Scalability Solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#production-architecture">Production Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-alerting">Monitoring and Alerting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-monitoring">Performance Monitoring</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-4-building-an-automated-data-analysis-pipeline">
+<h1>Case Study 4: Building an Automated Data Analysis Pipeline<a class="headerlink" href="#case-study-4-building-an-automated-data-analysis-pipeline" title="Link to this heading">#</a></h1>
+<section id="problem-definition">
+<h2>Problem Definition<a class="headerlink" href="#problem-definition" title="Link to this heading">#</a></h2>
+<section id="business-challenge">
+<h3>Business Challenge<a class="headerlink" href="#business-challenge" title="Link to this heading">#</a></h3>
+<p>A financial services company needed to automate their data analysis and reporting processes to:</p>
+<ul class="simple">
+<li><p>Process millions of daily transactions</p></li>
+<li><p>Generate real-time insights and alerts</p></li>
+<li><p>Create automated reports for stakeholders</p></li>
+<li><p>Detect anomalies and fraud patterns</p></li>
+<li><p>Provide natural language querying capabilities</p></li>
+<li><p>Scale with growing data volumes</p></li>
+<li><p>Ensure compliance and auditability</p></li>
+</ul>
+</section>
+<section id="key-requirements">
+<h3>Key Requirements<a class="headerlink" href="#key-requirements" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Automated Processing</strong>: Handle data ingestion, cleaning, and analysis</p></li>
+<li><p><strong>Real-time Insights</strong>: Generate alerts for critical patterns</p></li>
+<li><p><strong>Natural Language Interface</strong>: Allow business users to query data naturally</p></li>
+<li><p><strong>Automated Reporting</strong>: Generate comprehensive reports automatically</p></li>
+<li><p><strong>Anomaly Detection</strong>: Identify unusual patterns and potential issues</p></li>
+<li><p><strong>Visualization</strong>: Create charts and visualizations automatically</p></li>
+<li><p><strong>Scalability</strong>: Process petabytes of data efficiently</p></li>
+<li><p><strong>Audit Trail</strong>: Track all analysis and decisions</p></li>
+</ol>
+</section>
+</section>
+<section id="system-design">
+<h2>System Design<a class="headerlink" href="#system-design" title="Link to this heading">#</a></h2>
+<section id="architecture-overview">
+<h3>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Data Sources  │    │   Data          │    │   Feature       │
+│   (Streams,     │───▶│   Ingestion     │───▶│   Engineering   │
+│    Files, DB)   │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Data Lake     │    │   Data Cleaning │    │   Statistical   │
+│   (Raw,        │    │   &amp; Validation  │    │   Analysis     │
+│    Processed)   │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────┬───────────┘                       │
+                     ▼                                   ▼
+           ┌─────────────────┐                 ┌─────────────────┐
+           │   DSPy AI       │                 │   ML Models     │
+           │   Analytics     │                 │   (Prediction,  │
+           │   Engine        │                 │    Clustering)  │
+           └─────────────────┘                 └─────────────────┘
+                     │                                   │
+                     └───────────┬───────────┬───────────┘
+                                 ▼           ▼
+                       ┌─────────────────┐ ┌─────────────────┐
+                       │   NL Query      │ │   Report        │
+                       │   Interface     │ │   Generator     │
+                       └─────────────────┘ └─────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="component-details">
+<h3>Component Details<a class="headerlink" href="#component-details" title="Link to this heading">#</a></h3>
+<section id="data-ingestion-layer">
+<h4>1. Data Ingestion Layer<a class="headerlink" href="#data-ingestion-layer" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Stream Processing</strong>: Real-time data from Kafka, Kinesis</p></li>
+<li><p><strong>Batch Processing</strong>: Scheduled jobs for large datasets</p></li>
+<li><p><strong>Format Support</strong>: CSV, JSON, Parquet, Avro, databases</p></li>
+<li><p><strong>Schema Evolution</strong>: Handle changing data structures</p></li>
+<li><p><strong>Data Validation</strong>: Quality checks and anomaly detection</p></li>
+</ul>
+</section>
+<section id="feature-engineering">
+<h4>2. Feature Engineering<a class="headerlink" href="#feature-engineering" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Automated Feature Extraction</strong>: Identify relevant features</p></li>
+<li><p><strong>Feature Store</strong>: Centralized feature management</p></li>
+<li><p><strong>Time Series Features</strong>: Temporal patterns and trends</p></li>
+<li><p><strong>Aggregation</strong>: Summarize data at different granularities</p></li>
+<li><p><strong>Enrichment</strong>: Add external data sources</p></li>
+</ul>
+</section>
+<section id="dspy-ai-analytics-engine">
+<h4>3. DSPy AI Analytics Engine<a class="headerlink" href="#dspy-ai-analytics-engine" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Natural Language Query</strong>: Convert questions to analysis</p></li>
+<li><p><strong>Insight Generation</strong>: Automatically discover patterns</p></li>
+<li><p><strong>Hypothesis Testing</strong>: Statistical validation</p></li>
+<li><p><strong>Causal Analysis</strong>: Identify cause-effect relationships</p></li>
+<li><p><strong>Recommendation Engine</strong>: Suggest actions based on data</p></li>
+</ul>
+</section>
+<section id="visualization-and-reporting">
+<h4>4. Visualization and Reporting<a class="headerlink" href="#visualization-and-reporting" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Auto-chart Selection</strong>: Choose appropriate visualizations</p></li>
+<li><p><strong>Interactive Dashboards</strong>: Dynamic data exploration</p></li>
+<li><p><strong>Report Templates</strong>: Standardized report formats</p></li>
+<li><p><strong>Alert System</strong>: Real-time notifications</p></li>
+<li><p><strong>Export Options</strong>: Multiple output formats</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="implementation-with-dspy">
+<h2>Implementation with DSPy<a class="headerlink" href="#implementation-with-dspy" title="Link to this heading">#</a></h2>
+<section id="core-dspy-components">
+<h3>Core DSPy Components<a class="headerlink" href="#core-dspy-components" title="Link to this heading">#</a></h3>
+<section id="data-analysis-module">
+<h4>1. Data Analysis Module<a class="headerlink" href="#data-analysis-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalysisType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Types of data analysis.&quot;&quot;&quot;</span>
+    <span class="n">DESCRIPTIVE</span> <span class="o">=</span> <span class="s2">&quot;descriptive&quot;</span>
+    <span class="n">DIAGNOSTIC</span> <span class="o">=</span> <span class="s2">&quot;diagnostic&quot;</span>
+    <span class="n">PREDICTIVE</span> <span class="o">=</span> <span class="s2">&quot;predictive&quot;</span>
+    <span class="n">PRESCRIPTIVE</span> <span class="o">=</span> <span class="s2">&quot;prescriptive&quot;</span>
+    <span class="n">CORRELATION</span> <span class="o">=</span> <span class="s2">&quot;correlation&quot;</span>
+    <span class="n">TREND</span> <span class="o">=</span> <span class="s2">&quot;trend&quot;</span>
+    <span class="n">ANOMALY</span> <span class="o">=</span> <span class="s2">&quot;anomaly&quot;</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalysisRequest</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Request for data analysis.&quot;&quot;&quot;</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">data_source</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">analysis_type</span><span class="p">:</span> <span class="n">AnalysisType</span>
+    <span class="n">time_range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">output_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;summary&quot;</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalysisResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Result of data analysis.&quot;&quot;&quot;</span>
+    <span class="n">insights</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">statistics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">visualizations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span>
+    <span class="n">recommendations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">data_summary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DataAnalysisSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for data analysis.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Natural language query about data&quot;</span><span class="p">)</span>
+    <span class="n">data_summary</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Summary of available data&quot;</span><span class="p">)</span>
+    <span class="n">analysis_type</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Type of analysis to perform&quot;</span><span class="p">)</span>
+    <span class="n">insights</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Key insights from the analysis&quot;</span><span class="p">)</span>
+    <span class="n">methodology</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Analysis methodology used&quot;</span><span class="p">)</span>
+    <span class="n">recommendations</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Actionable recommendations&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DataAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze data using natural language queries.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyze</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">DataAnalysisSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hypothesis_tester</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">HypothesisTestSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">insight_generator</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">InsightGenerationSignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">AnalysisRequest</span><span class="p">,</span>
+                <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnalysisResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform data analysis based on request.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Prepare data summary</span>
+        <span class="n">data_summary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_summarize_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Perform initial analysis</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">data_summary</span><span class="o">=</span><span class="n">data_summary</span><span class="p">,</span>
+            <span class="n">analysis_type</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">analysis_type</span><span class="o">.</span><span class="n">value</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate specific insights</span>
+        <span class="n">insights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_insights</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">analysis</span><span class="o">.</span><span class="n">methodology</span><span class="p">)</span>
+
+        <span class="c1"># Perform statistical tests</span>
+        <span class="n">statistics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perform_statistical_analysis</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">analysis_type</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate visualizations</span>
+        <span class="n">visualizations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_visualizations</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">analysis_type</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create recommendations</span>
+        <span class="n">recommendations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_recommendations</span><span class="p">(</span>
+            <span class="n">insights</span><span class="p">,</span> <span class="n">statistics</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">AnalysisResult</span><span class="p">(</span>
+            <span class="n">insights</span><span class="o">=</span><span class="n">insights</span><span class="p">,</span>
+            <span class="n">statistics</span><span class="o">=</span><span class="n">statistics</span><span class="p">,</span>
+            <span class="n">visualizations</span><span class="o">=</span><span class="n">visualizations</span><span class="p">,</span>
+            <span class="n">recommendations</span><span class="o">=</span><span class="n">recommendations</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_calculate_confidence</span><span class="p">(</span><span class="n">insights</span><span class="p">,</span> <span class="n">statistics</span><span class="p">),</span>
+            <span class="n">data_summary</span><span class="o">=</span><span class="n">data_summary</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_summarize_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a natural language summary of the data.&quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Dataset Overview:</span>
+<span class="s2">        - Rows: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span>
+<span class="s2">        - Columns: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">        - Date range: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;min&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;N/A&#39;</span><span class="si">}</span>
+
+<span class="s2">        Columns:</span>
+<span class="s2">        </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span><span class="si">}</span>
+
+<span class="s2">        Data types:</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">summary</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_insights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                          <span class="n">methodology</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate specific insights from the data.&quot;&quot;&quot;</span>
+        <span class="n">insights</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Generate insights using DSPy</span>
+        <span class="n">insight_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">insight_generator</span><span class="p">(</span>
+            <span class="n">data_summary</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_summarize_data</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+            <span class="n">methodology</span><span class="o">=</span><span class="n">methodology</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add statistical insights</span>
+        <span class="n">numeric_columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">numeric_columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">insights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> shows variation with std deviation of </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">insights</span> <span class="o">+</span> <span class="p">[</span><span class="n">insight_result</span><span class="o">.</span><span class="n">insight</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_perform_statistical_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                                     <span class="n">analysis_type</span><span class="p">:</span> <span class="n">AnalysisType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform statistical analysis based on type.&quot;&quot;&quot;</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="n">AnalysisType</span><span class="o">.</span><span class="n">DESCRIPTIVE</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptive_stats</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="n">AnalysisType</span><span class="o">.</span><span class="n">CORRELATION</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_correlation_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="n">AnalysisType</span><span class="o">.</span><span class="n">TREND</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trend_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="n">AnalysisType</span><span class="o">.</span><span class="n">ANOMALY</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_anomaly_detection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_descriptive_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate descriptive statistics.&quot;&quot;&quot;</span>
+        <span class="n">numeric_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;descriptive&quot;</span><span class="p">:</span> <span class="n">numeric_data</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="s2">&quot;missing_values&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="s2">&quot;data_types&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="natural-language-query-interface">
+<h4>2. Natural Language Query Interface<a class="headerlink" href="#natural-language-query-interface" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NLQueryTranslationSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for translating natural language to analysis.&quot;&quot;&quot;</span>
+    <span class="n">nl_query</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Natural language query&quot;</span><span class="p">)</span>
+    <span class="n">available_data</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Available data sources and columns&quot;</span><span class="p">)</span>
+    <span class="n">analysis_plan</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Plan for analysis&quot;</span><span class="p">)</span>
+    <span class="n">required_columns</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Columns needed for analysis&quot;</span><span class="p">)</span>
+    <span class="n">analysis_type</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Type of analysis required&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NLQueryInterface</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interface for natural language data queries.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">NLQueryTranslationSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">executor</span> <span class="o">=</span> <span class="n">DataAnalyzer</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_catalog</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process natural language query.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Translate query to analysis plan</span>
+        <span class="n">translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+            <span class="n">nl_query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">available_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_format_data_catalog</span><span class="p">(</span><span class="n">data_catalog</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Identify required data sources</span>
+        <span class="n">data_sources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identify_data_sources</span><span class="p">(</span>
+            <span class="n">translation</span><span class="o">.</span><span class="n">required_columns</span><span class="p">,</span>
+            <span class="n">data_catalog</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Load and combine data</span>
+        <span class="n">combined_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_data</span><span class="p">(</span><span class="n">data_sources</span><span class="p">)</span>
+
+        <span class="c1"># Execute analysis</span>
+        <span class="n">analysis_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executor</span><span class="p">(</span>
+            <span class="n">request</span><span class="o">=</span><span class="n">AnalysisRequest</span><span class="p">(</span>
+                <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_sources</span><span class="p">),</span>
+                <span class="n">analysis_type</span><span class="o">=</span><span class="n">AnalysisType</span><span class="p">(</span><span class="n">translation</span><span class="o">.</span><span class="n">analysis_type</span><span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">combined_data</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Format response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_response</span><span class="p">(</span>
+            <span class="n">query</span><span class="p">,</span> <span class="n">translation</span><span class="o">.</span><span class="n">analysis_plan</span><span class="p">,</span> <span class="n">analysis_result</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_data_catalog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalog</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format data catalog for the model.&quot;&quot;&quot;</span>
+        <span class="n">formatted</span> <span class="o">=</span> <span class="s2">&quot;Available Data Sources:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">catalog</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">formatted</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">formatted</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  Columns: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">])</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">formatted</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  Description: </span><span class="si">{</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;No description&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">formatted</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">plan</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="n">result</span><span class="p">:</span> <span class="n">AnalysisResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the analysis response.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;analysis_plan&quot;</span><span class="p">:</span> <span class="n">plan</span><span class="p">,</span>
+            <span class="s2">&quot;insights&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">insights</span><span class="p">,</span>
+            <span class="s2">&quot;statistics&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">statistics</span><span class="p">,</span>
+            <span class="s2">&quot;visualizations&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">visualizations</span><span class="p">,</span>
+            <span class="s2">&quot;recommendations&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">recommendations</span><span class="p">,</span>
+            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="s2">&quot;data_summary&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">data_summary</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="automated-report-generator">
+<h4>3. Automated Report Generator<a class="headerlink" href="#automated-report-generator" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ReportGenerationSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for generating automated reports.&quot;&quot;&quot;</span>
+    <span class="n">analysis_results</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Results from data analysis&quot;</span><span class="p">)</span>
+    <span class="n">report_type</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Type of report to generate&quot;</span><span class="p">)</span>
+    <span class="n">audience</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Target audience for report&quot;</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Generated report content&quot;</span><span class="p">)</span>
+    <span class="n">executive_summary</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Executive summary of findings&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ReportGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate automated reports from analysis results.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">ReportGenerationSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_report_templates</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis_results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnalysisResult</span><span class="p">],</span>
+                       <span class="n">report_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;executive&quot;</span><span class="p">,</span>
+                       <span class="n">audience</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;management&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a comprehensive report.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate main report</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+            <span class="n">analysis_results</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_format_results</span><span class="p">(</span><span class="n">analysis_results</span><span class="p">),</span>
+            <span class="n">report_type</span><span class="o">=</span><span class="n">report_type</span><span class="p">,</span>
+            <span class="n">audience</span><span class="o">=</span><span class="n">audience</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create report sections</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_sections</span><span class="p">(</span><span class="n">analysis_results</span><span class="p">,</span> <span class="n">report_type</span><span class="p">)</span>
+
+        <span class="c1"># Add visualizations</span>
+        <span class="n">visualizations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collect_visualizations</span><span class="p">(</span><span class="n">analysis_results</span><span class="p">)</span>
+
+        <span class="c1"># Generate KPIs</span>
+        <span class="n">kpis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_kpis</span><span class="p">(</span><span class="n">analysis_results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;report&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">report</span><span class="p">,</span>
+            <span class="s2">&quot;executive_summary&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">executive_summary</span><span class="p">,</span>
+            <span class="s2">&quot;sections&quot;</span><span class="p">:</span> <span class="n">sections</span><span class="p">,</span>
+            <span class="s2">&quot;visualizations&quot;</span><span class="p">:</span> <span class="n">visualizations</span><span class="p">,</span>
+            <span class="s2">&quot;kpis&quot;</span><span class="p">:</span> <span class="n">kpis</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;generated_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">report_type</span><span class="p">,</span>
+                <span class="s2">&quot;audience&quot;</span><span class="p">:</span> <span class="n">audience</span><span class="p">,</span>
+                <span class="s2">&quot;analyses&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">analysis_results</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_sections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnalysisResult</span><span class="p">],</span>
+                        <span class="n">report_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create report sections based on analysis results.&quot;&quot;&quot;</span>
+        <span class="n">sections</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Executive Summary</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Executive Summary&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_executive_summary</span><span class="p">(</span><span class="n">results</span><span class="p">),</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Key Findings</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Key Findings&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_consolidate_insights</span><span class="p">(</span><span class="n">results</span><span class="p">),</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Statistical Summary</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Statistical Analysis&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_statistics</span><span class="p">(</span><span class="n">results</span><span class="p">),</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Recommendations</span>
+        <span class="n">sections</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Recommendations&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_consolidate_recommendations</span><span class="p">(</span><span class="n">results</span><span class="p">),</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="mi">4</span>
+        <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">sections</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_kpis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AnalysisResult</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract key performance indicators from results.&quot;&quot;&quot;</span>
+        <span class="n">kpis</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="c1"># Extract KPIs from statistics</span>
+            <span class="k">if</span> <span class="s2">&quot;descriptive&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">statistics</span><span class="p">:</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;descriptive&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">desc</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;mean&quot;</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                        <span class="n">kpis</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s2">_avg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Add confidence scores</span>
+            <span class="k">if</span> <span class="s2">&quot;confidence&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">statistics</span><span class="p">:</span>
+                <span class="n">kpis</span><span class="p">[</span><span class="s2">&quot;analysis_confidence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">statistics</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">kpis</span>
+</pre></div>
+</div>
+</section>
+<section id="anomaly-detection-module">
+<h4>4. Anomaly Detection Module<a class="headerlink" href="#anomaly-detection-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AnomalyDetectionSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for anomaly detection.&quot;&quot;&quot;</span>
+    <span class="n">data_pattern</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Pattern description in data&quot;</span><span class="p">)</span>
+    <span class="n">metrics</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Statistical metrics&quot;</span><span class="p">)</span>
+    <span class="n">anomalies</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Detected anomalies&quot;</span><span class="p">)</span>
+    <span class="n">explanations</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Explanation of anomalies&quot;</span><span class="p">)</span>
+    <span class="n">severity</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Severity level (low, medium, high)&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AnomalyDetector</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect anomalies in data using statistical and AI methods.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">detect</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">AnomalyDetectionSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold_calculator</span> <span class="o">=</span> <span class="n">ThresholdCalculator</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">detect_anomalies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                        <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect anomalies in the dataset.&quot;&quot;&quot;</span>
+
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Statistical anomaly detection</span>
+        <span class="n">stat_anomalies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statistical_detection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">anomalies</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">stat_anomalies</span><span class="p">)</span>
+
+        <span class="c1"># Pattern-based detection</span>
+        <span class="n">pattern_anomalies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_detection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">anomalies</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pattern_anomalies</span><span class="p">)</span>
+
+        <span class="c1"># ML-based detection</span>
+        <span class="n">ml_anomalies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ml_detection</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">anomalies</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ml_anomalies</span><span class="p">)</span>
+
+        <span class="c1"># Categorize and prioritize</span>
+        <span class="n">prioritized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prioritize_anomalies</span><span class="p">(</span><span class="n">anomalies</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;anomalies&quot;</span><span class="p">:</span> <span class="n">prioritized</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_anomaly_summary</span><span class="p">(</span><span class="n">prioritized</span><span class="p">),</span>
+            <span class="s2">&quot;alerts&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_alerts</span><span class="p">(</span><span class="n">prioritized</span><span class="p">),</span>
+            <span class="s2">&quot;recommendations&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_anomaly_recommendations</span><span class="p">(</span><span class="n">prioritized</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_statistical_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Statistical methods for anomaly detection.&quot;&quot;&quot;</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">numeric_columns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">numeric_columns</span><span class="p">:</span>
+            <span class="c1"># Z-score method</span>
+            <span class="n">z_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+            <span class="n">outliers</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">z_scores</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">outliers</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">anomalies</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;statistical_outlier&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
+                    <span class="s2">&quot;z_score&quot;</span><span class="p">:</span> <span class="n">z_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">idx</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;get_loc&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;z_score&quot;</span>
+                <span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">anomalies</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pattern_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect anomalies using pattern recognition.&quot;&quot;&quot;</span>
+        <span class="c1"># Use DSPy to identify unusual patterns</span>
+        <span class="n">pattern_desc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_describe_patterns</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_pattern_metrics</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">detection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span>
+            <span class="n">data_pattern</span><span class="o">=</span><span class="n">pattern_desc</span><span class="p">,</span>
+            <span class="n">metrics</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Parse and format results</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_anomaly_response</span><span class="p">(</span>
+            <span class="n">detection</span><span class="o">.</span><span class="n">anomalies</span><span class="p">,</span>
+            <span class="n">detection</span><span class="o">.</span><span class="n">explanations</span><span class="p">,</span>
+            <span class="n">detection</span><span class="o">.</span><span class="n">severity</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">anomalies</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="complete-data-analysis-pipeline">
+<h3>Complete Data Analysis Pipeline<a class="headerlink" href="#complete-data-analysis-pipeline" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AutomatedDataPipeline</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete automated data analysis pipeline.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_interface</span> <span class="o">=</span> <span class="n">NLQueryInterface</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span> <span class="o">=</span> <span class="n">DataAnalyzer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report_generator</span> <span class="o">=</span> <span class="n">ReportGenerator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">anomaly_detector</span> <span class="o">=</span> <span class="n">AnomalyDetector</span><span class="p">()</span>
+
+        <span class="c1"># Data management</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_sources&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feature_store</span> <span class="o">=</span> <span class="n">FeatureStore</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;feature_store&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">AnalysisCache</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+
+        <span class="c1"># Scheduling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">PipelineScheduler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_manager</span> <span class="o">=</span> <span class="n">AlertManager</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;alerts&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigger</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the complete analysis pipeline.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Identify trigger type</span>
+        <span class="k">if</span> <span class="n">trigger</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;query&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_query_trigger</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">trigger</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;scheduled&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_scheduled_trigger</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">trigger</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;data_arrival&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_data_trigger</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">trigger</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;alert&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_alert_trigger</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_query_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigger</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle natural language query trigger.&quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">trigger</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Check cache first</span>
+        <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cached</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cached</span>
+
+        <span class="c1"># Process query</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_interface</span><span class="o">.</span><span class="n">process_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sources</span><span class="p">)</span>
+
+        <span class="c1"># Cache result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_scheduled_trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigger</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle scheduled analysis trigger.&quot;&quot;&quot;</span>
+        <span class="n">analysis_type</span> <span class="o">=</span> <span class="n">trigger</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;analysis_type&quot;</span><span class="p">,</span> <span class="s2">&quot;comprehensive&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Load relevant data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_scheduled_data</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+
+        <span class="c1"># Perform analysis</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="s2">&quot;comprehensive&quot;</span><span class="p">:</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_comprehensive_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">analysis_type</span> <span class="o">==</span> <span class="s2">&quot;anomaly&quot;</span><span class="p">:</span>
+            <span class="n">anomaly_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anomaly_detector</span><span class="o">.</span><span class="n">detect_anomalies</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anomaly_result</span><span class="p">)</span>
+
+        <span class="c1"># Generate report</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">report_generator</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_analysis_results</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Send notifications if needed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_notify</span><span class="p">(</span><span class="n">report</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alert_manager</span><span class="o">.</span><span class="n">send_report</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">report</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_comprehensive_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform comprehensive data analysis.&quot;&quot;&quot;</span>
+        <span class="n">analyses</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Descriptive analysis</span>
+        <span class="n">desc_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span><span class="p">(</span>
+            <span class="n">AnalysisRequest</span><span class="p">(</span>
+                <span class="n">query</span><span class="o">=</span><span class="s2">&quot;Provide comprehensive descriptive analysis&quot;</span><span class="p">,</span>
+                <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;scheduled&quot;</span><span class="p">,</span>
+                <span class="n">analysis_type</span><span class="o">=</span><span class="n">AnalysisType</span><span class="o">.</span><span class="n">DESCRIPTIVE</span>
+            <span class="p">),</span>
+            <span class="n">data</span>
+        <span class="p">)</span>
+        <span class="n">analyses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">desc_analysis</span><span class="p">)</span>
+
+        <span class="c1"># Trend analysis</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_time_series</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">trend_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span><span class="p">(</span>
+                <span class="n">AnalysisRequest</span><span class="p">(</span>
+                    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;Identify trends and patterns&quot;</span><span class="p">,</span>
+                    <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;scheduled&quot;</span><span class="p">,</span>
+                    <span class="n">analysis_type</span><span class="o">=</span><span class="n">AnalysisType</span><span class="o">.</span><span class="n">TREND</span>
+                <span class="p">),</span>
+                <span class="n">data</span>
+            <span class="p">)</span>
+            <span class="n">analyses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trend_analysis</span><span class="p">)</span>
+
+        <span class="c1"># Correlation analysis</span>
+        <span class="n">corr_analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span><span class="p">(</span>
+            <span class="n">AnalysisRequest</span><span class="p">(</span>
+                <span class="n">query</span><span class="o">=</span><span class="s2">&quot;Find correlations between variables&quot;</span><span class="p">,</span>
+                <span class="n">data_source</span><span class="o">=</span><span class="s2">&quot;scheduled&quot;</span><span class="p">,</span>
+                <span class="n">analysis_type</span><span class="o">=</span><span class="n">AnalysisType</span><span class="o">.</span><span class="n">CORRELATION</span>
+            <span class="p">),</span>
+            <span class="n">data</span>
+        <span class="p">)</span>
+        <span class="n">analyses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corr_analysis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">analyses</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize pipeline components using training data.&quot;&quot;&quot;</span>
+        <span class="c1"># Create training examples</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">training_data</span><span class="p">[:</span><span class="mi">100</span><span class="p">]:</span>  <span class="c1"># Limit for demo</span>
+            <span class="n">example</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+                <span class="n">query</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;query&quot;</span><span class="p">],</span>
+                <span class="n">data_summary</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;data_summary&quot;</span><span class="p">],</span>
+                <span class="n">expected_insights</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;expected_insights&quot;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">,</span> <span class="s2">&quot;data_summary&quot;</span><span class="p">)</span>
+            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="c1"># Optimize components</span>
+        <span class="n">optimized_analyzer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">examples</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span> <span class="o">=</span> <span class="n">optimized_analyzer</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<section id="pipeline-testing">
+<h3>Pipeline Testing<a class="headerlink" href="#pipeline-testing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TestDataPipeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test suite for automated data pipeline.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_query_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test natural language query processing.&quot;&quot;&quot;</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="n">AutomatedDataPipeline</span><span class="p">(</span><span class="n">test_config</span><span class="p">)</span>
+
+        <span class="n">trigger</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;query&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;What are the sales trends for the last quarter?&quot;</span>
+        <span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run_pipeline</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="s2">&quot;insights&quot;</span> <span class="ow">in</span> <span class="n">result</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;insights&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="s2">&quot;statistics&quot;</span> <span class="ow">in</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_anomaly_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test anomaly detection functionality.&quot;&quot;&quot;</span>
+        <span class="c1"># Create test data with anomalies</span>
+        <span class="n">normal_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="n">anomaly_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">normal_data</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">]])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">anomaly_data</span><span class="p">})</span>
+
+        <span class="n">detector</span> <span class="o">=</span> <span class="n">AnomalyDetector</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">detect_anomalies</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="s2">&quot;anomalies&quot;</span> <span class="ow">in</span> <span class="n">result</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;anomalies&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_report_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test automated report generation.&quot;&quot;&quot;</span>
+        <span class="c1"># Create mock analysis results</span>
+        <span class="n">mock_results</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">AnalysisResult</span><span class="p">(</span>
+                <span class="n">insights</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sales increased by 10%&quot;</span><span class="p">],</span>
+                <span class="n">statistics</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+                <span class="n">visualizations</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">recommendations</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Continue current strategy&quot;</span><span class="p">],</span>
+                <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                <span class="n">data_summary</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;rows&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">ReportGenerator</span><span class="p">()</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">mock_results</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="s2">&quot;report&quot;</span> <span class="ow">in</span> <span class="n">report</span>
+        <span class="k">assert</span> <span class="s2">&quot;executive_summary&quot;</span> <span class="ow">in</span> <span class="n">report</span>
+        <span class="k">assert</span> <span class="s2">&quot;sections&quot;</span> <span class="ow">in</span> <span class="n">report</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">report</span><span class="p">[</span><span class="s2">&quot;sections&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-optimization">
+<h2>Performance Optimization<a class="headerlink" href="#performance-optimization" title="Link to this heading">#</a></h2>
+<section id="scalability-solutions">
+<h3>Scalability Solutions<a class="headerlink" href="#scalability-solutions" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DataPipelineOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize data pipeline performance.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">performance_metrics</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_data_loading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize data loading strategies.&quot;&quot;&quot;</span>
+        <span class="n">optimizations</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Use chunking for large datasets</span>
+        <span class="k">if</span> <span class="n">data_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">:</span>  <span class="c1"># 1M rows</span>
+            <span class="n">optimizations</span><span class="p">[</span><span class="s2">&quot;chunk_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100000</span>
+            <span class="n">optimizations</span><span class="p">[</span><span class="s2">&quot;parallel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Use caching for frequently accessed data</span>
+        <span class="k">if</span> <span class="n">data_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;access_frequency&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">optimizations</span><span class="p">[</span><span class="s2">&quot;cache&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">optimizations</span><span class="p">[</span><span class="s2">&quot;cache_duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3600</span>
+
+        <span class="k">return</span> <span class="n">optimizations</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_analysis_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">analysis_requests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize analysis execution order.&quot;&quot;&quot;</span>
+        <span class="c1"># Group by data source to minimize loading</span>
+        <span class="n">grouped</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">analysis_requests</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">req</span><span class="p">[</span><span class="s2">&quot;data_source&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">source</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grouped</span><span class="p">:</span>
+                <span class="n">grouped</span><span class="p">[</span><span class="n">source</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">grouped</span><span class="p">[</span><span class="n">source</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+
+        <span class="c1"># Prioritize by business impact</span>
+        <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">requests</span> <span class="ow">in</span> <span class="n">grouped</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">requests</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;grouped_requests&quot;</span><span class="p">:</span> <span class="n">grouped</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h2>
+<section id="production-architecture">
+<h3>Production Architecture<a class="headerlink" href="#production-architecture" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Kubernetes deployment configuration</span>
+<span class="n">apiVersion</span><span class="p">:</span> <span class="n">apps</span><span class="o">/</span><span class="n">v1</span>
+<span class="n">kind</span><span class="p">:</span> <span class="n">Deployment</span>
+<span class="n">metadata</span><span class="p">:</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">data</span><span class="o">-</span><span class="n">analysis</span><span class="o">-</span><span class="n">pipeline</span>
+<span class="n">spec</span><span class="p">:</span>
+  <span class="n">replicas</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="n">selector</span><span class="p">:</span>
+    <span class="n">matchLabels</span><span class="p">:</span>
+      <span class="n">app</span><span class="p">:</span> <span class="n">data</span><span class="o">-</span><span class="n">analysis</span><span class="o">-</span><span class="n">pipeline</span>
+  <span class="n">template</span><span class="p">:</span>
+    <span class="n">metadata</span><span class="p">:</span>
+      <span class="n">labels</span><span class="p">:</span>
+        <span class="n">app</span><span class="p">:</span> <span class="n">data</span><span class="o">-</span><span class="n">analysis</span><span class="o">-</span><span class="n">pipeline</span>
+    <span class="n">spec</span><span class="p">:</span>
+      <span class="n">containers</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">pipeline</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">data</span><span class="o">-</span><span class="n">analysis</span><span class="p">:</span><span class="n">latest</span>
+        <span class="n">resources</span><span class="p">:</span>
+          <span class="n">requests</span><span class="p">:</span>
+            <span class="n">memory</span><span class="p">:</span> <span class="s2">&quot;2Gi&quot;</span>
+            <span class="n">cpu</span><span class="p">:</span> <span class="s2">&quot;1000m&quot;</span>
+          <span class="n">limits</span><span class="p">:</span>
+            <span class="n">memory</span><span class="p">:</span> <span class="s2">&quot;8Gi&quot;</span>
+            <span class="n">cpu</span><span class="p">:</span> <span class="s2">&quot;4000m&quot;</span>
+        <span class="n">env</span><span class="p">:</span>
+        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">REDIS_URL</span>
+          <span class="n">valueFrom</span><span class="p">:</span>
+            <span class="n">secretKeyRef</span><span class="p">:</span>
+              <span class="n">name</span><span class="p">:</span> <span class="n">pipeline</span><span class="o">-</span><span class="n">secrets</span>
+              <span class="n">key</span><span class="p">:</span> <span class="n">redis</span><span class="o">-</span><span class="n">url</span>
+        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">DATABASE_URL</span>
+          <span class="n">valueFrom</span><span class="p">:</span>
+            <span class="n">secretKeyRef</span><span class="p">:</span>
+              <span class="n">name</span><span class="p">:</span> <span class="n">pipeline</span><span class="o">-</span><span class="n">secrets</span>
+              <span class="n">key</span><span class="p">:</span> <span class="n">database</span><span class="o">-</span><span class="n">url</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring-and-alerting">
+<h2>Monitoring and Alerting<a class="headerlink" href="#monitoring-and-alerting" title="Link to this heading">#</a></h2>
+<section id="performance-monitoring">
+<h3>Performance Monitoring<a class="headerlink" href="#performance-monitoring" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PipelineMonitor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Monitor pipeline performance and health.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics_collector</span> <span class="o">=</span> <span class="n">MetricsCollector</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_thresholds</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;thresholds&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">monitor_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipeline</span><span class="p">:</span> <span class="n">AutomatedDataPipeline</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Monitor pipeline execution.&quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Execute pipeline</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;test_trigger&quot;</span><span class="p">])</span>
+
+            <span class="c1"># Collect metrics</span>
+            <span class="n">execution_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics_collector</span><span class="o">.</span><span class="n">record_execution_time</span><span class="p">(</span><span class="n">execution_time</span><span class="p">)</span>
+
+            <span class="c1"># Check thresholds</span>
+            <span class="k">if</span> <span class="n">execution_time</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alert_thresholds</span><span class="p">[</span><span class="s2">&quot;max_execution_time&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_send_alert</span><span class="p">(</span><span class="s2">&quot;Pipeline execution too slow&quot;</span><span class="p">,</span> <span class="n">execution_time</span><span class="p">)</span>
+
+            <span class="c1"># Validate results</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_results</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_send_alert</span><span class="p">(</span><span class="s2">&quot;Pipeline results validation failed&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics_collector</span><span class="o">.</span><span class="n">record_error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send_alert</span><span class="p">(</span><span class="s2">&quot;Pipeline execution failed&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="lessons-learned">
+<h2>Lessons Learned<a class="headerlink" href="#lessons-learned" title="Link to this heading">#</a></h2>
+<section id="success-factors">
+<h3>Success Factors<a class="headerlink" href="#success-factors" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Modular Design</strong>: Separate components for flexibility and maintenance</p></li>
+<li><p><strong>Caching Strategy</strong>: Intelligent caching improves performance significantly</p></li>
+<li><p><strong>Query Translation</strong>: Natural language interface increases accessibility</p></li>
+<li><p><strong>Automated Reporting</strong>: Reduces manual effort in report creation</p></li>
+<li><p><strong>Real-time Processing</strong>: Enables timely decision-making</p></li>
+</ol>
+</section>
+<section id="challenges-faced">
+<h3>Challenges Faced<a class="headerlink" href="#challenges-faced" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Data Quality</strong>: Handling incomplete or inconsistent data</p></li>
+<li><p><strong>Scalability</strong>: Processing growing data volumes efficiently</p></li>
+<li><p><strong>Complex Queries</strong>: Understanding nuanced business questions</p></li>
+<li><p><strong>Result Validation</strong>: Ensuring accuracy of AI-generated insights</p></li>
+<li><p><strong>Integration Complexity</strong>: Connecting with various data sources</p></li>
+</ol>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Start Simple</strong>: Begin with basic analytics and add complexity gradually</p></li>
+<li><p><strong>Validate Results</strong>: Always validate AI-generated insights</p></li>
+<li><p><strong>User Feedback</strong>: Collect and incorporate user feedback</p></li>
+<li><p><strong>Monitor Performance</strong>: Track execution times and accuracy</p></li>
+<li><p><strong>Plan for Scale</strong>: Design with growth in mind</p></li>
+</ol>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This automated data analysis pipeline demonstrates how DSPy can be used to create sophisticated AI-powered analytics systems that democratize data access and accelerate insight generation. The system combines natural language processing, statistical analysis, machine learning, and automated reporting into a cohesive platform.</p>
+<p>Key achievements:</p>
+<ul class="simple">
+<li><p>Reduced time-to-insight from days to minutes</p></li>
+<li><p>Enabled business users to query data naturally</p></li>
+<li><p>Automated 90% of routine reporting tasks</p></li>
+<li><p>Detected anomalies and opportunities automatically</p></li>
+<li><p>Scaled to process petabytes of data</p></li>
+<li><p>Improved data-driven decision-making across the organization</p></li>
+</ul>
+<p>The pipeline continues to learn and improve, becoming more accurate and efficient with each analysis. This represents the future of automated business intelligence and analytics.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/08_case_studies"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_ai_code_assistant.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Case Study 3: Creating an AI-Powered Code Assistant</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_exercises.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 8 Exercises</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-ingestion-layer">1. Data Ingestion Layer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-engineering">2. Feature Engineering</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dspy-ai-analytics-engine">3. DSPy AI Analytics Engine</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-and-reporting">4. Visualization and Reporting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis-module">1. Data Analysis Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#natural-language-query-interface">2. Natural Language Query Interface</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-report-generator">3. Automated Report Generator</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#anomaly-detection-module">4. Anomaly Detection Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-data-analysis-pipeline">Complete Data Analysis Pipeline</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-testing">Pipeline Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-optimization">Performance Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalability-solutions">Scalability Solutions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#production-architecture">Production Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-and-alerting">Monitoring and Alerting</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-monitoring">Performance Monitoring</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

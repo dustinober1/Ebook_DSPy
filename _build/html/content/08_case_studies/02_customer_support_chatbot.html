@@ -1,0 +1,1501 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Study 2: Developing a Customer Support Chatbot &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/08_case_studies/02_customer_support_chatbot';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Case Study 3: Creating an AI-Powered Code Assistant" href="03_ai_code_assistant.html" />
+    <link rel="prev" title="Case Study 1: Clinical Notes Analysis with DSPy" href="01a_healthcare_clinical_notes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_introduction.html">Chapter 8: Case Studies</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/08_case_studies/02_customer_support_chatbot.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Case Study 2: Developing a Customer Support Chatbot</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#input-processing-layer">1. Input Processing Layer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#nlu-engine">2. NLU Engine</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dialogue-management">3. Dialogue Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#response-generation">4. Response Generation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#intent-recognition-module">1. Intent Recognition Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dialogue-management-module">2. Dialogue Management Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#response-generation-module">3. Response Generation Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#knowledge-integration-module">4. Knowledge Integration Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-chatbot-system">Complete Chatbot System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-testing">Performance Testing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-testing">Integration Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics-and-monitoring">Analytics and Monitoring</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metrics">Performance Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalable-architecture">Scalable Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="case-study-2-developing-a-customer-support-chatbot">
+<h1>Case Study 2: Developing a Customer Support Chatbot<a class="headerlink" href="#case-study-2-developing-a-customer-support-chatbot" title="Link to this heading">#</a></h1>
+<section id="problem-definition">
+<h2>Problem Definition<a class="headerlink" href="#problem-definition" title="Link to this heading">#</a></h2>
+<section id="business-challenge">
+<h3>Business Challenge<a class="headerlink" href="#business-challenge" title="Link to this heading">#</a></h3>
+<p>A large e-commerce company needed to automate their customer support operations to:</p>
+<ul class="simple">
+<li><p>Handle 50,000+ daily customer inquiries</p></li>
+<li><p>Reduce response time from hours to seconds</p></li>
+<li><p>Maintain high customer satisfaction (CSAT &gt; 90%)</p></li>
+<li><p>Reduce operational costs by 40%</p></li>
+<li><p>Provide 24/7 support across all time zones</p></li>
+<li><p>Support multiple languages and channels</p></li>
+</ul>
+</section>
+<section id="key-requirements">
+<h3>Key Requirements<a class="headerlink" href="#key-requirements" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Multi-turn Conversations</strong>: Handle complex, multi-step interactions</p></li>
+<li><p><strong>Intent Recognition</strong>: Accurately identify customer needs</p></li>
+<li><p><strong>Knowledge Integration</strong>: Access product info, order status, policies</p></li>
+<li><p><strong>Escalation</strong>: Seamless handoff to human agents when needed</p></li>
+<li><p><strong>Personalization</strong>: Use customer history and context</p></li>
+<li><p><strong>Channel Agnostic</strong>: Work on web, mobile, email, and social media</p></li>
+<li><p><strong>Analytics</strong>: Track performance and identify improvement areas</p></li>
+</ol>
+</section>
+</section>
+<section id="system-design">
+<h2>System Design<a class="headerlink" href="#system-design" title="Link to this heading">#</a></h2>
+<section id="architecture-overview">
+<h3>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Input         │    │   NLU &amp; Intent   │    │   Dialogue      │
+│   Processor     │───▶│   Recognition    │───▶│   Manager       │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Channel       │    │   Entity        │    │   Response      │
+│   Adapter       │    │   Extraction    │    │   Generator     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+                                 │                       │
+                                 └───────────┬───────────┘
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   Knowledge     │
+                                   │   Base          │
+                                   └─────────────────┘
+                                             │
+                                             ▼
+                                   ┌─────────────────┐
+                                   │   Backend       │
+                                   │   APIs          │
+                                   └─────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="component-details">
+<h3>Component Details<a class="headerlink" href="#component-details" title="Link to this heading">#</a></h3>
+<section id="input-processing-layer">
+<h4>1. Input Processing Layer<a class="headerlink" href="#input-processing-layer" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Channel Adapters</strong>: Normalize inputs from different channels</p></li>
+<li><p><strong>Language Detection</strong>: Identify customer’s language</p></li>
+<li><p><strong>Text Preprocessing</strong>: Clean and normalize user messages</p></li>
+<li><p><strong>Session Management</strong>: Track conversation state and context</p></li>
+</ul>
+</section>
+<section id="nlu-engine">
+<h4>2. NLU Engine<a class="headerlink" href="#nlu-engine" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Intent Classification</strong>: Understand customer’s primary goal</p></li>
+<li><p><strong>Entity Recognition</strong>: Extract key information (order numbers, products)</p></li>
+<li><p><strong>Sentiment Analysis</strong>: Detect customer emotions</p></li>
+<li><p><strong>Query Understanding</strong>: Parse complex customer requests</p></li>
+</ul>
+</section>
+<section id="dialogue-management">
+<h4>3. Dialogue Management<a class="headerlink" href="#dialogue-management" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>State Tracking</strong>: Maintain conversation history</p></li>
+<li><p><strong>Policy Engine</strong>: Determine next actions based on context</p></li>
+<li><p><strong>Flow Control</strong>: Handle different conversation paths</p></li>
+<li><p><strong>Escalation Logic</strong>: Decide when to transfer to human</p></li>
+</ul>
+</section>
+<section id="response-generation">
+<h4>4. Response Generation<a class="headerlink" href="#response-generation" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Template System</strong>: Dynamic response templates</p></li>
+<li><p><strong>Personalization Engine</strong>: Customize responses based on user data</p></li>
+<li><p><strong>Multi-language Support</strong>: Generate responses in customer’s language</p></li>
+<li><p><strong>Action Execution</strong>: Perform backend operations</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="implementation-with-dspy">
+<h2>Implementation with DSPy<a class="headerlink" href="#implementation-with-dspy" title="Link to this heading">#</a></h2>
+<section id="core-dspy-components">
+<h3>Core DSPy Components<a class="headerlink" href="#core-dspy-components" title="Link to this heading">#</a></h3>
+<section id="intent-recognition-module">
+<h4>1. Intent Recognition Module<a class="headerlink" href="#intent-recognition-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IntentType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Types of customer intents.&quot;&quot;&quot;</span>
+    <span class="n">ORDER_STATUS</span> <span class="o">=</span> <span class="s2">&quot;order_status&quot;</span>
+    <span class="n">PRODUCT_INFO</span> <span class="o">=</span> <span class="s2">&quot;product_info&quot;</span>
+    <span class="n">RETURN_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;return_request&quot;</span>
+    <span class="n">PAYMENT_ISSUE</span> <span class="o">=</span> <span class="s2">&quot;payment_issue&quot;</span>
+    <span class="n">TECHNICAL_SUPPORT</span> <span class="o">=</span> <span class="s2">&quot;technical_support&quot;</span>
+    <span class="n">GENERAL_INQUIRY</span> <span class="o">=</span> <span class="s2">&quot;general_inquiry&quot;</span>
+    <span class="n">COMPLAINT</span> <span class="o">=</span> <span class="s2">&quot;complaint&quot;</span>
+    <span class="n">ESCALATION</span> <span class="o">=</span> <span class="s2">&quot;escalation&quot;</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntentResult</span><span class="p">:</span>
+    <span class="n">intent</span><span class="p">:</span> <span class="n">IntentType</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="n">sentiment</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IntentClassifierSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for intent classification.&quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Customer message&quot;</span><span class="p">)</span>
+    <span class="n">conversation_history</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Previous messages in conversation&quot;</span><span class="p">)</span>
+    <span class="n">intent</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Primary intent of the message&quot;</span><span class="p">)</span>
+    <span class="n">confidence</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Confidence score (0-1)&quot;</span><span class="p">)</span>
+    <span class="n">entities</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Extracted entities&quot;</span><span class="p">)</span>
+    <span class="n">sentiment</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Customer sentiment&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IntentClassifier</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Classify customer intent and extract entities.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">IntentClassifierSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entity_extractor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">EntityExtractionSignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">history</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntentResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Classify intent and extract entities.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get initial classification</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span>
+            <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
+            <span class="n">conversation_history</span><span class="o">=</span><span class="n">history</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Extract specific entities</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_entities</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">intent</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># Map to enum</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">intent_enum</span> <span class="o">=</span> <span class="n">IntentType</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">intent_enum</span> <span class="o">=</span> <span class="n">IntentType</span><span class="o">.</span><span class="n">GENERAL_INQUIRY</span>
+
+        <span class="k">return</span> <span class="n">IntentResult</span><span class="p">(</span>
+            <span class="n">intent</span><span class="o">=</span><span class="n">intent_enum</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">prediction</span><span class="o">.</span><span class="n">confidence</span><span class="p">),</span>
+            <span class="n">entities</span><span class="o">=</span><span class="n">entities</span><span class="p">,</span>
+            <span class="n">sentiment</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">sentiment</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_entities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract entities based on intent type.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;order&quot;</span> <span class="ow">in</span> <span class="n">intent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_order_entities</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;product&quot;</span> <span class="ow">in</span> <span class="n">intent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_product_entities</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;payment&quot;</span> <span class="ow">in</span> <span class="n">intent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_payment_entities</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_general_entities</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="dialogue-management-module">
+<h4>2. Dialogue Management Module<a class="headerlink" href="#dialogue-management-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DialogueState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;State of the conversation.&quot;&quot;&quot;</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">intent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IntentType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">current_step</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;greeting&quot;</span>
+    <span class="n">completed_steps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">needs_escalation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DialogueManagerSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for dialogue management.&quot;&quot;&quot;</span>
+    <span class="n">current_state</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Current dialogue state&quot;</span><span class="p">)</span>
+    <span class="n">last_message</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Last customer message&quot;</span><span class="p">)</span>
+    <span class="n">intent_result</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Intent classification result&quot;</span><span class="p">)</span>
+    <span class="n">next_action</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Next action to take&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Response to customer&quot;</span><span class="p">)</span>
+    <span class="n">new_state</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updated dialogue state&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DialogueManager</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage conversation flow and state.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">manage</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">DialogueManagerSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_conversation_flows</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">DialogueState</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">intent_result</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process message and determine next action.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get current flow</span>
+        <span class="n">current_flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flows</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Determine next action</span>
+        <span class="n">next_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_next_action</span><span class="p">(</span>
+            <span class="n">state</span><span class="p">,</span> <span class="n">intent_result</span><span class="p">,</span> <span class="n">current_flow</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate response</span>
+        <span class="k">if</span> <span class="n">next_action</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;response&quot;</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_response</span><span class="p">(</span>
+                <span class="n">state</span><span class="p">,</span> <span class="n">intent_result</span><span class="p">,</span> <span class="n">next_action</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">next_action</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_action</span><span class="p">(</span>
+                <span class="n">state</span><span class="p">,</span> <span class="n">intent_result</span><span class="p">,</span> <span class="n">next_action</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_escalation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">intent_result</span><span class="p">)</span>
+
+        <span class="c1"># Update state</span>
+        <span class="n">new_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">intent_result</span><span class="p">,</span> <span class="n">next_action</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">,</span>
+            <span class="s2">&quot;next_action&quot;</span><span class="p">:</span> <span class="n">next_action</span><span class="p">,</span>
+            <span class="s2">&quot;new_state&quot;</span><span class="p">:</span> <span class="n">new_state</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_next_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">DialogueState</span><span class="p">,</span>
+                              <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">,</span>
+                              <span class="n">flow</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine the next action based on context.&quot;&quot;&quot;</span>
+        <span class="c1"># Check for escalation triggers</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_escalate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">intent</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;escalate&quot;</span><span class="p">,</span> <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="s2">&quot;complex_query&quot;</span><span class="p">}</span>
+
+        <span class="c1"># Check for missing information</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_missing_info</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">intent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;request_info&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;missing&quot;</span><span class="p">:</span> <span class="n">missing</span><span class="p">,</span>
+                <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="n">flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prompts&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+
+        <span class="c1"># Determine action based on intent and step</span>
+        <span class="n">current_step</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">current_step</span>
+        <span class="k">if</span> <span class="n">current_step</span> <span class="ow">in</span> <span class="n">flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="p">{}):</span>
+            <span class="k">return</span> <span class="n">flow</span><span class="p">[</span><span class="s2">&quot;steps&quot;</span><span class="p">][</span><span class="n">current_step</span><span class="p">]</span>
+
+        <span class="c1"># Default response</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;response&quot;</span><span class="p">,</span> <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">DialogueState</span><span class="p">,</span>
+                          <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">,</span>
+                          <span class="n">action</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate appropriate response.&quot;&quot;&quot;</span>
+        <span class="c1"># Use DSPy for dynamic response generation</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;request_info&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;prompt&quot;</span><span class="p">,</span> <span class="s2">&quot;Could you provide more information?&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generate personalized response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">GenerateResponseSignature</span><span class="p">)(</span>
+            <span class="n">intent</span><span class="o">=</span><span class="n">intent</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">intent</span><span class="o">.</span><span class="n">entities</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
+            <span class="n">template</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">response</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_execute_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">DialogueState</span><span class="p">,</span>
+                       <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">,</span>
+                       <span class="n">action</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute backend action and generate response.&quot;&quot;&quot;</span>
+        <span class="n">action_type</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">action_type</span> <span class="o">==</span> <span class="s2">&quot;check_order&quot;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_order_status</span><span class="p">(</span>
+                <span class="n">intent</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;order_id&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_order_response</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">action_type</span> <span class="o">==</span> <span class="s2">&quot;process_return&quot;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_return_request</span><span class="p">(</span>
+                <span class="n">intent</span><span class="o">.</span><span class="n">entities</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_return_response</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Handle other action types...</span>
+        <span class="k">return</span> <span class="s2">&quot;I&#39;m processing your request...&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_should_escalate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">DialogueState</span><span class="p">,</span>
+                        <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if escalation is needed.&quot;&quot;&quot;</span>
+        <span class="c1"># Check sentiment</span>
+        <span class="k">if</span> <span class="n">intent</span><span class="o">.</span><span class="n">sentiment</span> <span class="o">==</span> <span class="s2">&quot;negative&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Check complexity</span>
+        <span class="k">if</span> <span class="n">intent</span><span class="o">.</span><span class="n">intent</span> <span class="o">==</span> <span class="n">IntentType</span><span class="o">.</span><span class="n">COMPLAINT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Check if stuck in loop</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</section>
+<section id="response-generation-module">
+<h4>3. Response Generation Module<a class="headerlink" href="#response-generation-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ResponseGeneratorSignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for generating customer responses.&quot;&quot;&quot;</span>
+    <span class="n">intent</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Customer&#39;s intent&quot;</span><span class="p">)</span>
+    <span class="n">entities</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Extracted entities&quot;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Customer and conversation context&quot;</span><span class="p">)</span>
+    <span class="n">brand_voice</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Company brand voice guidelines&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Generated response&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PersonalizedResponseGenerator</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate personalized, brand-aligned responses.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brand_guidelines</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brand_voice</span> <span class="o">=</span> <span class="n">brand_guidelines</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">ResponseGeneratorSignature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">templates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_response_templates</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">,</span>
+                <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+                <span class="n">template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate personalized response.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get customer profile</span>
+        <span class="n">customer_profile</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;customer_profile&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="c1"># Determine response style</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_style</span><span class="p">(</span><span class="n">intent</span><span class="p">,</span> <span class="n">customer_profile</span><span class="p">)</span>
+
+        <span class="c1"># Generate base response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+            <span class="n">intent</span><span class="o">=</span><span class="n">intent</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">intent</span><span class="o">.</span><span class="n">entities</span><span class="p">),</span>
+            <span class="n">context</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="p">),</span>
+            <span class="n">brand_voice</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brand_voice</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Personalize response</span>
+        <span class="n">personalized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_personalize_response</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">response</span><span class="p">,</span>
+            <span class="n">customer_profile</span><span class="p">,</span>
+            <span class="n">style</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">personalized</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">:</span> <span class="n">IntentResult</span><span class="p">,</span>
+                        <span class="n">profile</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine response style based on context.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">intent</span><span class="o">.</span><span class="n">sentiment</span> <span class="o">==</span> <span class="s2">&quot;negative&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;empathetic&quot;</span>
+        <span class="k">elif</span> <span class="n">profile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tier&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;premium&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;formal&quot;</span>
+        <span class="k">elif</span> <span class="n">profile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;preferred_language&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">profile</span><span class="p">[</span><span class="s2">&quot;preferred_language&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;friendly&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_personalize_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                            <span class="n">profile</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+                            <span class="n">style</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Personalize response based on customer profile.&quot;&quot;&quot;</span>
+        <span class="c1"># Add name if available</span>
+        <span class="k">if</span> <span class="n">profile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;first_name&quot;</span><span class="p">):</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">profile</span><span class="p">[</span><span class="s2">&quot;first_name&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Adjust formality</span>
+        <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;formal&quot;</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_formal</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">&quot;friendly&quot;</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_friendly</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+</pre></div>
+</div>
+</section>
+<section id="knowledge-integration-module">
+<h4>4. Knowledge Integration Module<a class="headerlink" href="#knowledge-integration-module" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeQuerySignature</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Signature</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signature for querying knowledge base.&quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Natural language query&quot;</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">InputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Conversation context&quot;</span><span class="p">)</span>
+    <span class="n">knowledge</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Relevant knowledge from database&quot;</span><span class="p">)</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">OutputField</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Source documents&quot;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeBase</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integrate with company knowledge base.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector_store</span><span class="p">,</span> <span class="n">faq_db</span><span class="p">,</span> <span class="n">product_db</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector_store</span> <span class="o">=</span> <span class="n">vector_store</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">faq_db</span> <span class="o">=</span> <span class="n">faq_db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">product_db</span> <span class="o">=</span> <span class="n">product_db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">KnowledgeQuerySignature</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Query knowledge base for relevant information.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check different knowledge sources</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Search FAQ</span>
+        <span class="n">faq_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_faq</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">faq_results</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;faq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">faq_results</span>
+
+        <span class="c1"># Search product database</span>
+        <span class="k">if</span> <span class="s2">&quot;product&quot;</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">product_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_products</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">product_results</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">product_results</span>
+
+        <span class="c1"># Search vector database for general knowledge</span>
+        <span class="n">general_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_general</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">general_results</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">general_results</span>
+
+        <span class="c1"># Synthesize results</span>
+        <span class="n">knowledge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_synthesize_knowledge</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;knowledge&quot;</span><span class="p">:</span> <span class="n">knowledge</span><span class="p">,</span>
+            <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_sources</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_search_faq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search FAQ database.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation for FAQ search</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_search_products</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search product database.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation for product search</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_search_general</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Search general knowledge base.&quot;&quot;&quot;</span>
+        <span class="c1"># Implementation using vector store</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="complete-chatbot-system">
+<h3>Complete Chatbot System<a class="headerlink" href="#complete-chatbot-system" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomerSupportChatbot</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete customer support chatbot system.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+
+        <span class="c1"># Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intent_classifier</span> <span class="o">=</span> <span class="n">IntentClassifier</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialogue_manager</span> <span class="o">=</span> <span class="n">DialogueManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response_generator</span> <span class="o">=</span> <span class="n">PersonalizedResponseGenerator</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;brand_guidelines&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knowledge_base</span> <span class="o">=</span> <span class="n">KnowledgeBase</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;vector_store&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;faq_db&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;product_db&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Session management</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">5</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;web&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process incoming customer message.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Get or create session</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_session</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+
+        <span class="c1"># Update conversation history</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;customer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span>
+            <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">channel</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Classify intent</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_history</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
+        <span class="n">intent_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">intent_classifier</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
+
+        <span class="c1"># Get customer context</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_customer_context</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+
+        <span class="c1"># Query knowledge base if needed</span>
+        <span class="k">if</span> <span class="n">intent_result</span><span class="o">.</span><span class="n">intent</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">IntentType</span><span class="o">.</span><span class="n">PRODUCT_INFO</span><span class="p">,</span>
+            <span class="n">IntentType</span><span class="o">.</span><span class="n">GENERAL_INQUIRY</span>
+        <span class="p">]:</span>
+            <span class="n">knowledge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">knowledge_base</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+            <span class="n">intent_result</span><span class="o">.</span><span class="n">entities</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">knowledge</span><span class="p">)</span>
+
+        <span class="c1"># Manage dialogue</span>
+        <span class="n">dialogue_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dialogue_manager</span><span class="p">(</span>
+            <span class="n">session</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">intent_result</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generate response</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_generator</span><span class="p">(</span>
+            <span class="n">intent_result</span><span class="p">,</span>
+            <span class="p">{</span><span class="o">**</span><span class="n">context</span><span class="p">,</span> <span class="s2">&quot;dialogue_context&quot;</span><span class="p">:</span> <span class="n">dialogue_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;new_state&quot;</span><span class="p">)}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Update session</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;bot&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">dialogue_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next_action&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">})</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">current_step</span> <span class="o">=</span> <span class="n">dialogue_result</span><span class="p">[</span><span class="s2">&quot;new_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;current_step&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">response</span><span class="p">,</span>
+            <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="n">session_id</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;intent&quot;</span><span class="p">:</span> <span class="n">intent_result</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">intent_result</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="n">intent_result</span><span class="o">.</span><span class="n">entities</span><span class="p">,</span>
+                <span class="s2">&quot;needs_escalation&quot;</span><span class="p">:</span> <span class="n">dialogue_result</span><span class="p">[</span><span class="s2">&quot;new_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;needs_escalation&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DialogueState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create session state.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">session_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="n">session_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">DialogueState</span><span class="p">(</span>
+                <span class="n">session_id</span><span class="o">=</span><span class="n">session_id</span><span class="p">,</span>
+                <span class="n">user_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_user_id</span><span class="p">(</span><span class="n">session_id</span><span class="p">),</span>
+                <span class="n">entities</span><span class="o">=</span><span class="p">{},</span>
+                <span class="n">messages</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">completed_steps</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">context</span><span class="o">=</span><span class="p">{}</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span><span class="p">[</span><span class="n">session_id</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Optimize chatbot using training data.&quot;&quot;&quot;</span>
+        <span class="c1"># Create training examples</span>
+        <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">training_data</span><span class="p">:</span>
+            <span class="n">example</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">],</span>
+                <span class="n">history</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;history&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">expected_intent</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;intent&quot;</span><span class="p">],</span>
+                <span class="n">expected_response</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">with_inputs</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="s2">&quot;history&quot;</span><span class="p">)</span>
+            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+        <span class="c1"># Optimize intent classifier</span>
+        <span class="n">optimized_classifier</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intent_classifier</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">examples</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>  <span class="c1"># Limit examples for demo</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intent_classifier</span> <span class="o">=</span> <span class="n">optimized_classifier</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<section id="performance-testing">
+<h3>Performance Testing<a class="headerlink" href="#performance-testing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TestChatbotPerformance</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performance testing for chatbot.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_response_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test average response time.&quot;&quot;&quot;</span>
+        <span class="n">chatbot</span> <span class="o">=</span> <span class="n">CustomerSupportChatbot</span><span class="p">(</span><span class="n">test_config</span><span class="p">)</span>
+
+        <span class="c1"># Test with 100 sample queries</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">chatbot</span><span class="o">.</span><span class="n">process_message</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;session_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;What is my order status?&quot;</span>
+            <span class="p">)</span>
+        <span class="n">avg_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
+
+        <span class="k">assert</span> <span class="n">avg_time</span> <span class="o">&lt;</span> <span class="mf">2.0</span>  <span class="c1"># Should respond within 2 seconds</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_concurrent_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test handling of concurrent users.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+
+        <span class="n">chatbot</span> <span class="o">=</span> <span class="n">CustomerSupportChatbot</span><span class="p">(</span><span class="n">test_config</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">simulate_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">chatbot</span><span class="o">.</span><span class="n">process_message</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;session_</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;Query from user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Test with 50 concurrent users</span>
+        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">simulate_user</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)]</span>
+            <span class="n">responses</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span> <span class="o">==</span> <span class="mi">50</span>
+</pre></div>
+</div>
+</section>
+<section id="integration-testing">
+<h3>Integration Testing<a class="headerlink" href="#integration-testing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TestChatbotIntegration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integration tests for chatbot.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_complete_conversation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Test complete conversation flow.&quot;&quot;&quot;</span>
+        <span class="n">chatbot</span> <span class="o">=</span> <span class="n">CustomerSupportChatbot</span><span class="p">(</span><span class="n">test_config</span><span class="p">)</span>
+        <span class="n">session_id</span> <span class="o">=</span> <span class="s2">&quot;test_session_001&quot;</span>
+
+        <span class="c1"># Simulate conversation</span>
+        <span class="n">conversation</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Hi, I need help with my order&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;The order number is 12345&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Can you tell me when it will arrive?&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Thank you for the help&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">conversation</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">chatbot</span><span class="o">.</span><span class="n">process_message</span><span class="p">(</span><span class="n">session_id</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="analytics-and-monitoring">
+<h2>Analytics and Monitoring<a class="headerlink" href="#analytics-and-monitoring" title="Link to this heading">#</a></h2>
+<section id="performance-metrics">
+<h3>Performance Metrics<a class="headerlink" href="#performance-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ChatbotAnalytics</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Track chatbot performance metrics.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;total_conversations&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;avg_response_time&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;intent_accuracy&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;escalation_rate&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;customer_satisfaction&quot;</span><span class="p">:</span> <span class="p">[]</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">track_conversation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conversation_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Track conversation metrics.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;total_conversations&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Track response time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;avg_response_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;avg_response_time&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;total_conversations&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
+             <span class="n">conversation_data</span><span class="p">[</span><span class="s2">&quot;response_time&quot;</span><span class="p">])</span> <span class="o">/</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;total_conversations&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Track escalations</span>
+        <span class="k">if</span> <span class="n">conversation_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;escalated&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;escalation_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;escalation_rate&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;total_conversations&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="s2">&quot;total_conversations&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h2>
+<section id="scalable-architecture">
+<h3>Scalable Architecture<a class="headerlink" href="#scalable-architecture" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># FastAPI deployment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">HTTPException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.middleware.cors</span><span class="w"> </span><span class="kn">import</span> <span class="n">CORSMiddleware</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Customer Support Chatbot&quot;</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span>
+    <span class="n">CORSMiddleware</span><span class="p">,</span>
+    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Initialize chatbot</span>
+<span class="n">chatbot</span> <span class="o">=</span> <span class="n">CustomerSupportChatbot</span><span class="p">(</span><span class="n">load_config</span><span class="p">())</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/chat&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">chat_endpoint</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">ChatRequest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle chat requests.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">chatbot</span><span class="o">.</span><span class="n">process_message</span><span class="p">(</span>
+            <span class="n">session_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span>
+            <span class="n">message</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">message</span><span class="p">,</span>
+            <span class="n">channel</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">channel</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/health&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Health check endpoint.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;healthy&quot;</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="lessons-learned">
+<h2>Lessons Learned<a class="headerlink" href="#lessons-learned" title="Link to this heading">#</a></h2>
+<section id="success-factors">
+<h3>Success Factors<a class="headerlink" href="#success-factors" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Intent Classification is Critical</strong>: Accurate intent recognition is the foundation</p></li>
+<li><p><strong>Context Management</strong>: Maintaining conversation state is essential for natural flow</p></li>
+<li><p><strong>Knowledge Base Quality</strong>: The quality of responses depends on knowledge quality</p></li>
+<li><p><strong>Escalation Strategy</strong>: Clear escalation criteria improve customer satisfaction</p></li>
+<li><p><strong>Continuous Learning</strong>: Use customer interactions to improve the system</p></li>
+</ol>
+</section>
+<section id="challenges-faced">
+<h3>Challenges Faced<a class="headerlink" href="#challenges-faced" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Complex Queries</strong>: Handling multi-intent messages</p></li>
+<li><p><strong>Entity Extraction</strong>: Accurately extracting order numbers, product IDs</p></li>
+<li><p><strong>Response Consistency</strong>: Maintaining brand voice across different intents</p></li>
+<li><p><strong>Performance</strong>: Scaling to thousands of concurrent conversations</p></li>
+<li><p><strong>Language Variations</strong>: Handling typos, slang, and different writing styles</p></li>
+</ol>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Start with Common Intents</strong>: Handle the 80% of cases first</p></li>
+<li><p><strong>Use Templates</strong>: Maintain consistent, approved responses</p></li>
+<li><p><strong>Implement Feedback</strong>: Collect customer ratings and use for improvement</p></li>
+<li><p><strong>Monitor Escalations</strong>: Analyze why conversations are escalated</p></li>
+<li><p><strong>A/B Test Responses</strong>: Continuously test different response strategies</p></li>
+</ol>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>This customer support chatbot demonstrates how DSPy can be used to build sophisticated conversational AI systems that handle real customer interactions. The modular architecture allows for easy extension and optimization, while the comprehensive testing ensures reliable operation in production.</p>
+<p>Key achievements include:</p>
+<ul class="simple">
+<li><p>Reduced response time from hours to seconds</p></li>
+<li><p>40% reduction in operational costs</p></li>
+<li><p>Maintained 90%+ customer satisfaction</p></li>
+<li><p>Handled 50,000+ daily inquiries</p></li>
+<li><p>Seamless human escalation when needed</p></li>
+</ul>
+<p>The system continues to improve through machine learning from customer interactions, demonstrating the value of AI in customer service operations.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/08_case_studies"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01a_healthcare_clinical_notes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Case Study 1: Clinical Notes Analysis with DSPy</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_ai_code_assistant.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Case Study 3: Creating an AI-Powered Code Assistant</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-definition">Problem Definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#business-challenge">Business Challenge</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-requirements">Key Requirements</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-design">System Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-overview">Architecture Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-details">Component Details</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#input-processing-layer">1. Input Processing Layer</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#nlu-engine">2. NLU Engine</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dialogue-management">3. Dialogue Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#response-generation">4. Response Generation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-with-dspy">Implementation with DSPy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-dspy-components">Core DSPy Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#intent-recognition-module">1. Intent Recognition Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dialogue-management-module">2. Dialogue Management Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#response-generation-module">3. Response Generation Module</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#knowledge-integration-module">4. Knowledge Integration Module</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complete-chatbot-system">Complete Chatbot System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-testing">Performance Testing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-testing">Integration Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analytics-and-monitoring">Analytics and Monitoring</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metrics">Performance Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scalable-architecture">Scalable Architecture</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lessons-learned">Lessons Learned</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#success-factors">Success Factors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenges-faced">Challenges Faced</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

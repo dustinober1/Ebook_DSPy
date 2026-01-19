@@ -1,0 +1,1482 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IR Model Training from Scratch: Methodology and Best Practices &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/06_real_world_applications/12_ir_model_training_scratch';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LingVarBench: Synthetic Healthcare Transcript Generation" href="13_lingvarbench_healthcare_synthetic_data.html" />
+    <link rel="prev" title="Extreme Few-Shot Learning: Training with 10 Gold Labels" href="11_extreme_few_shot_learning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/06_real_world_applications/12_ir_model_training_scratch.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>IR Model Training from Scratch: Methodology and Best Practices</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ir-model-components">Understanding IR Model Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-ir-architecture">Core IR Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-ir-models">Types of IR Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-ir-models-with-minimal-data">Training IR Models with Minimal Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-zero-to-ir-framework">The Zero-to-IR Framework</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-training-for-different-ir-tasks">Specialized Training for Different IR Tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-document-ranking-with-10-relevance-judgments">Task 1: Document Ranking with 10 Relevance Judgments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-passage-retrieval-for-qa-systems">Task 2: Passage Retrieval for QA Systems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-cross-lingual-ir-with-minimal-bilingual-data">Task 3: Cross-Lingual IR with Minimal Bilingual Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-training-techniques">Advanced Training Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-1-self-supervised-pre-training-for-ir">Technique 1: Self-Supervised Pre-training for IR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-2-active-learning-for-ir">Technique 2: Active Learning for IR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-3-multi-task-learning-for-ir">Technique 3: Multi-Task Learning for IR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-methodology">Evaluation Methodology</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ir-evaluation-with-minimal-test-data">IR Evaluation with Minimal Test Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-and-guidelines">Best Practices and Guidelines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-training-with-minimal-data">For Training with Minimal Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-production-deployment">For Production Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ir-model-training-from-scratch-methodology-and-best-practices">
+<h1>IR Model Training from Scratch: Methodology and Best Practices<a class="headerlink" href="#ir-model-training-from-scratch-methodology-and-best-practices" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Information Retrieval (IR) models are the backbone of search engines, recommendation systems, and question-answering systems. Traditional IR model training requires thousands of relevance judgments and significant computational resources. However, with DSPy’s innovative approach, we can train effective IR models from scratch using minimal data—sometimes with as few as 10 relevance judgments.</p>
+<p>This section provides a comprehensive methodology for training IR models from scratch, focusing on practical implementations, optimization strategies, and real-world applications.</p>
+</section>
+<section id="understanding-ir-model-components">
+<h2>Understanding IR Model Components<a class="headerlink" href="#understanding-ir-model-components" title="Link to this heading">#</a></h2>
+<section id="core-ir-architecture">
+<h3>Core IR Architecture<a class="headerlink" href="#core-ir-architecture" title="Link to this heading">#</a></h3>
+<p>An IR model typically consists of three main components:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Query → Encoder → Document Encoder → Matching → Ranking
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><strong>Query Encoder</strong>: Transforms user queries into vector representations</p></li>
+<li><p><strong>Document Encoder</strong>: Converts documents into comparable vector representations</p></li>
+<li><p><strong>Matching &amp; Ranking</strong>: Determines relevance and produces ranked results</p></li>
+</ol>
+</section>
+<section id="types-of-ir-models">
+<h3>Types of IR Models<a class="headerlink" href="#types-of-ir-models" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model Type</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Training Requirements</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Sparse Retrieval</strong> (BM25, TF-IDF)</p></td>
+<td><p>Keyword-based matching</p></td>
+<td><p>Minimal (statistical)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dense Retrieval</strong> (DPR, ColBERT)</p></td>
+<td><p>Semantic embedding matching</p></td>
+<td><p>Moderate (hundreds of pairs)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Hybrid Retrieval</strong></p></td>
+<td><p>Combines sparse and dense</p></td>
+<td><p>Moderate to high</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Neural Re-ranking</strong></p></td>
+<td><p>Cross-attention models</p></td>
+<td><p>High (thousands of pairs)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Learned Sparse</strong> (SPLADE)</p></td>
+<td><p>Learned term weighting</p></td>
+<td><p>Moderate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="training-ir-models-with-minimal-data">
+<h2>Training IR Models with Minimal Data<a class="headerlink" href="#training-ir-models-with-minimal-data" title="Link to this heading">#</a></h2>
+<section id="the-zero-to-ir-framework">
+<h3>The Zero-to-IR Framework<a class="headerlink" href="#the-zero-to-ir-framework" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IRTrainingConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for IR model training&quot;&quot;&quot;</span>
+    <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;sparse&#39;, &#39;dense&#39;, &#39;hybrid&#39;, &#39;reranker&#39;</span>
+    <span class="n">training_examples</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># Number of relevance judgments</span>
+    <span class="n">optimization_strategy</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;prompt&#39;, &#39;meta&#39;, &#39;hybrid&#39;</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Domain specialization</span>
+    <span class="n">base_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gpt-3.5-turbo&quot;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">IRModelTrainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trainer for IR models from scratch&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">IRTrainingConfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_from_scratch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                          <span class="n">relevance_judgments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train complete IR model from scratch&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span><span class="si">}</span><span class="s2"> IR model with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">relevance_judgments</span><span class="p">)</span><span class="si">}</span><span class="s2"> judgments&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Phase 1: Initialize components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_components</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+        <span class="c1"># Phase 2: Process training data</span>
+        <span class="n">processed_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_relevance_judgments</span><span class="p">(</span><span class="n">relevance_judgments</span><span class="p">)</span>
+
+        <span class="c1"># Phase 3: Train based on strategy</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">optimization_strategy</span> <span class="o">==</span> <span class="s1">&#39;prompt&#39;</span><span class="p">:</span>
+            <span class="n">trained_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_training</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">optimization_strategy</span> <span class="o">==</span> <span class="s1">&#39;meta&#39;</span><span class="p">:</span>
+            <span class="n">trained_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_learning_training</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># hybrid</span>
+            <span class="n">trained_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hybrid_training</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+
+        <span class="c1"># Phase 4: Post-processing and calibration</span>
+        <span class="n">final_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibrate_model</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">final_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize IR model components based on type&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;dense&#39;</span><span class="p">:</span>
+            <span class="c1"># Initialize dual encoder architecture</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;query_encoder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;query -&gt; query_embedding&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;document_encoder&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;document -&gt; document_embedding&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;similarity_calculator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;query_embedding, document_embedding -&gt; similarity_score&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;sparse&#39;</span><span class="p">:</span>
+            <span class="c1"># Initialize learned sparse retrieval</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;term_expander&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                <span class="s2">&quot;query -&gt; expanded_terms, weights&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;document_scorer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;query_terms, document -&gt; relevance_score&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;hybrid&#39;</span><span class="p">:</span>
+            <span class="c1"># Initialize both sparse and dense components</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;sparse_retriever&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_sparse_component</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;dense_retriever&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dense_component</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;fusion_module&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;sparse_scores, dense_scores -&gt; final_scores&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;reranker&#39;</span><span class="p">:</span>
+            <span class="c1"># Initialize neural re-ranker</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_components</span><span class="p">[</span><span class="s1">&#39;candidate_scorer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                <span class="s2">&quot;query, document -&gt; relevance_score, reasoning&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_sparse_component</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create sparse retrieval component&quot;&quot;&quot;</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">SparseRetriever</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_processor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                    <span class="s2">&quot;query -&gt; processed_terms, weights&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">document_matcher</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="s2">&quot;query_terms, document -&gt; match_score&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+                <span class="c1"># Process query</span>
+                <span class="n">processed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_processor</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+
+                <span class="c1"># Score documents</span>
+                <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document_matcher</span><span class="p">(</span>
+                        <span class="n">query_terms</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">processed_terms</span><span class="p">,</span>
+                        <span class="n">document</span><span class="o">=</span><span class="n">doc</span>
+                    <span class="p">)</span>
+                    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">match_score</span><span class="p">))</span>
+
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span>
+                    <span class="n">processed_terms</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">processed_terms</span><span class="p">,</span>
+                    <span class="n">weights</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">weights</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">SparseRetriever</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_dense_component</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create dense retrieval component&quot;&quot;&quot;</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">DenseRetriever</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="s2">&quot;query, domain_context -&gt; query_vector&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">document_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="s2">&quot;document, domain_context -&gt; document_vector&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">domain_context</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="c1"># Encode query</span>
+                <span class="n">q_encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_encoder</span><span class="p">(</span>
+                    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+                    <span class="n">domain_context</span><span class="o">=</span><span class="n">domain_context</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Encode documents</span>
+                <span class="n">doc_encodings</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+                    <span class="n">d_encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document_encoder</span><span class="p">(</span>
+                        <span class="n">document</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
+                        <span class="n">domain_context</span><span class="o">=</span><span class="n">domain_context</span>
+                    <span class="p">)</span>
+                    <span class="n">doc_encodings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d_encoding</span><span class="o">.</span><span class="n">document_vector</span><span class="p">)</span>
+
+                <span class="c1"># Calculate similarities</span>
+                <span class="n">similarities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_similarities</span><span class="p">(</span>
+                    <span class="n">q_encoding</span><span class="o">.</span><span class="n">query_vector</span><span class="p">,</span>
+                    <span class="n">doc_encodings</span>
+                <span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">similarities</span><span class="o">=</span><span class="n">similarities</span><span class="p">,</span>
+                    <span class="n">query_vector</span><span class="o">=</span><span class="n">q_encoding</span><span class="o">.</span><span class="n">query_vector</span><span class="p">,</span>
+                    <span class="n">document_vectors</span><span class="o">=</span><span class="n">doc_encodings</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">DenseRetriever</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prompt_optimization_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processed_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train IR model using prompt optimization&quot;&quot;&quot;</span>
+
+        <span class="c1"># Create base IR model</span>
+        <span class="n">base_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_base_ir_model</span><span class="p">()</span>
+
+        <span class="c1"># Generate prompt variations</span>
+        <span class="n">prompt_variations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_ir_prompt_variations</span><span class="p">()</span>
+
+        <span class="c1"># Evaluate each variation</span>
+        <span class="n">best_prompt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">for</span> <span class="n">prompt</span> <span class="ow">in</span> <span class="n">prompt_variations</span><span class="p">:</span>
+            <span class="c1"># Apply prompt to model</span>
+            <span class="n">temp_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_prompt_to_ir_model</span><span class="p">(</span><span class="n">base_model</span><span class="p">,</span> <span class="n">prompt</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate with limited data</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_ir_model</span><span class="p">(</span><span class="n">temp_model</span><span class="p">,</span> <span class="n">processed_data</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                <span class="n">best_score</span> <span class="o">=</span> <span class="n">score</span>
+                <span class="n">best_prompt</span> <span class="o">=</span> <span class="n">prompt</span>
+
+        <span class="c1"># Train final model with best prompt</span>
+        <span class="n">final_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_prompt_to_ir_model</span><span class="p">(</span><span class="n">base_model</span><span class="p">,</span> <span class="n">best_prompt</span><span class="p">)</span>
+        <span class="n">optimized_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fine_tune_with_limited_data</span><span class="p">(</span>
+            <span class="n">final_model</span><span class="p">,</span> <span class="n">processed_data</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">optimized_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_meta_learning_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processed_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train IR model using meta-learning&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Identify meta-tasks</span>
+        <span class="n">meta_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identify_meta_ir_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Learn from meta-tasks</span>
+        <span class="n">meta_knowledge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_learn_from_meta_tasks</span><span class="p">(</span><span class="n">meta_tasks</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Adapt to target task</span>
+        <span class="n">adapted_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adapt_to_target_task</span><span class="p">(</span>
+            <span class="n">meta_knowledge</span><span class="p">,</span> <span class="n">processed_data</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">adapted_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_hybrid_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processed_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine multiple training strategies&quot;&quot;&quot;</span>
+
+        <span class="c1"># Train multiple models</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Prompt-based model</span>
+        <span class="n">models</span><span class="p">[</span><span class="s1">&#39;prompt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_optimization_training</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+
+        <span class="c1"># Meta-learning model</span>
+        <span class="n">models</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_learning_training</span><span class="p">(</span><span class="n">processed_data</span><span class="p">)</span>
+
+        <span class="c1"># Ensemble the models</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_ensemble</span><span class="p">(</span><span class="n">models</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ensemble</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="specialized-training-for-different-ir-tasks">
+<h2>Specialized Training for Different IR Tasks<a class="headerlink" href="#specialized-training-for-different-ir-tasks" title="Link to this heading">#</a></h2>
+<section id="task-1-document-ranking-with-10-relevance-judgments">
+<h3>Task 1: Document Ranking with 10 Relevance Judgments<a class="headerlink" href="#task-1-document-ranking-with-10-relevance-judgments" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_document_ranker_with_10_judgments</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train document ranking model with only 10 relevance judgments&quot;&quot;&quot;</span>
+
+    <span class="c1"># Example: 10 relevance judgments for web search</span>
+    <span class="n">judgments</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="s1">&#39;machine learning tutorials&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;documents&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;doc1&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Complete guide to machine learning for beginners&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;doc2&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Advanced deep learning techniques&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;doc3&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Python machine learning libraries comparison&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;doc4&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;History of artificial intelligence&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;doc5&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="s1">&#39;Machine learning in healthcare applications&#39;</span><span class="p">,</span> <span class="s1">&#39;relevance&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="c1"># ... 9 more query-document judgments</span>
+    <span class="p">]</span>
+
+    <span class="c1"># Configure for minimal data training</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">IRTrainingConfig</span><span class="p">(</span>
+        <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;dense&#39;</span><span class="p">,</span>
+        <span class="n">training_examples</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">optimization_strategy</span><span class="o">=</span><span class="s1">&#39;hybrid&#39;</span><span class="p">,</span>
+        <span class="n">domain</span><span class="o">=</span><span class="s1">&#39;web_search&#39;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Create document collection</span>
+    <span class="n">all_documents</span> <span class="o">=</span> <span class="n">extract_all_documents</span><span class="p">(</span><span class="n">judgments</span><span class="p">)</span>
+
+    <span class="c1"># Initialize trainer</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">IRModelTrainer</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># Train from scratch</span>
+    <span class="n">ranking_model</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train_from_scratch</span><span class="p">(</span>
+        <span class="n">documents</span><span class="o">=</span><span class="n">all_documents</span><span class="p">,</span>
+        <span class="n">relevance_judgments</span><span class="o">=</span><span class="n">judgments</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ranking_model</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_ranking_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_queries</span><span class="p">,</span> <span class="n">document_collection</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the trained ranking model&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">test_queries</span><span class="p">:</span>
+        <span class="c1"># Get rankings</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">document_collection</span><span class="p">)</span>
+
+        <span class="c1"># Sort documents by score</span>
+        <span class="n">ranked_docs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">(</span><span class="n">document_collection</span><span class="p">,</span> <span class="n">results</span><span class="o">.</span><span class="n">scores</span><span class="p">),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ranked Documents:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranked_docs</span><span class="p">[:</span><span class="mi">5</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">. Score: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">doc</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="task-2-passage-retrieval-for-qa-systems">
+<h3>Task 2: Passage Retrieval for QA Systems<a class="headerlink" href="#task-2-passage-retrieval-for-qa-systems" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PassageRetrieverTrainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specialized trainer for passage retrieval in QA systems&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">passage_encoder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_encoder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reranker</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_passage_retriever_with_10_examples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                                <span class="n">passages</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                                <span class="n">qa_pairs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train passage retriever with 10 QA pairs&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Create training data from QA pairs</span>
+        <span class="n">training_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">qa</span> <span class="ow">in</span> <span class="n">qa_pairs</span><span class="p">:</span>
+            <span class="c1"># Find relevant passages (simulated here)</span>
+            <span class="n">relevant_passages</span> <span class="o">=</span> <span class="n">find_relevant_passages</span><span class="p">(</span>
+                <span class="n">qa</span><span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">],</span> <span class="n">passages</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">3</span>
+            <span class="p">)</span>
+            <span class="n">training_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">qa</span><span class="p">[</span><span class="s1">&#39;question&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;relevant_passages&#39;</span><span class="p">:</span> <span class="n">relevant_passages</span><span class="p">,</span>
+                <span class="s1">&#39;answer&#39;</span><span class="p">:</span> <span class="n">qa</span><span class="p">[</span><span class="s1">&#39;answer&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+
+        <span class="c1"># Step 2: Initialize passage retrieval components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_passage_components</span><span class="p">()</span>
+
+        <span class="c1"># Step 3: Train with minimal data</span>
+        <span class="n">trained_retriever</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_with_minimal_data</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Add answer-aware re-ranking</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reranker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_answer_aware_reranker</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_complete_retriever</span><span class="p">(</span><span class="n">trained_retriever</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_train_with_minimal_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train using minimal data strategies&quot;&quot;&quot;</span>
+
+        <span class="c1"># Create synthetic examples through data augmentation</span>
+        <span class="n">augmented_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_augment_qa_training_data</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+        <span class="c1"># Use prompt optimization for passage encoding</span>
+        <span class="n">prompt_optimizer</span> <span class="o">=</span> <span class="n">PromptOptimizer</span><span class="p">()</span>
+        <span class="n">best_prompts</span> <span class="o">=</span> <span class="n">prompt_optimizer</span><span class="o">.</span><span class="n">optimize_for_passage_retrieval</span><span class="p">(</span>
+            <span class="n">augmented_data</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create trained retriever</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">TrainedPassageRetriever</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompts</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">query_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="n">prompts</span><span class="p">[</span><span class="s1">&#39;query_encoding&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">passage_scorer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">prompts</span><span class="p">[</span><span class="s1">&#39;passage_scoring&#39;</span><span class="p">])</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="n">passages</span><span class="p">):</span>
+                <span class="c1"># Encode question with context</span>
+                <span class="n">encoded_q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_encoder</span><span class="p">(</span>
+                    <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+                    <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Find passages that answer this question&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Score passages</span>
+                <span class="n">scored_passages</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">passage</span> <span class="ow">in</span> <span class="n">passages</span><span class="p">:</span>
+                    <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passage_scorer</span><span class="p">(</span>
+                        <span class="n">question</span><span class="o">=</span><span class="n">encoded_q</span><span class="o">.</span><span class="n">reasoning</span><span class="p">,</span>
+                        <span class="n">passage</span><span class="o">=</span><span class="n">passage</span>
+                    <span class="p">)</span>
+                    <span class="n">scored_passages</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;passage&#39;</span><span class="p">:</span> <span class="n">passage</span><span class="p">,</span>
+                        <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">score</span><span class="o">.</span><span class="n">score</span><span class="p">),</span>
+                        <span class="s1">&#39;reasoning&#39;</span><span class="p">:</span> <span class="n">score</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reasoning&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="p">})</span>
+
+                <span class="c1"># Sort by score</span>
+                <span class="n">scored_passages</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                    <span class="n">ranked_passages</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;passage&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">scored_passages</span><span class="p">],</span>
+                    <span class="n">scores</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">scored_passages</span><span class="p">],</span>
+                    <span class="n">reasoning</span><span class="o">=</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;reasoning&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">scored_passages</span><span class="p">]</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TrainedPassageRetriever</span><span class="p">(</span><span class="n">best_prompts</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="task-3-cross-lingual-ir-with-minimal-bilingual-data">
+<h3>Task 3: Cross-Lingual IR with Minimal Bilingual Data<a class="headerlink" href="#task-3-cross-lingual-ir-with-minimal-bilingual-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CrossLingualIRTrainer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train cross-lingual IR models with minimal bilingual data&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_lang</span> <span class="o">=</span> <span class="n">source_lang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_lang</span> <span class="o">=</span> <span class="n">target_lang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translation_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_with_10_bilingual_examples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                       <span class="n">source_docs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                       <span class="n">target_docs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                       <span class="n">parallel_examples</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train cross-lingual IR with 10 parallel examples&quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Learn cross-lingual representations</span>
+        <span class="n">multilingual_encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_learn_cross_lingual_encoding</span><span class="p">(</span><span class="n">parallel_examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Train query translation model</span>
+        <span class="n">query_translator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_query_translation</span><span class="p">(</span><span class="n">parallel_examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Train cross-lingual similarity</span>
+        <span class="n">similarity_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_cross_lingual_similarity</span><span class="p">(</span><span class="n">parallel_examples</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Create complete cross-lingual IR system</span>
+        <span class="n">clir_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_clir_system</span><span class="p">(</span>
+            <span class="n">multilingual_encoder</span><span class="p">,</span>
+            <span class="n">query_translator</span><span class="p">,</span>
+            <span class="n">similarity_model</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">clir_system</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_learn_cross_lingual_encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parallel_examples</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Learn shared space for multiple languages&quot;&quot;&quot;</span>
+
+        <span class="c1"># Use parallel examples to learn mapping between languages</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">CrossLingualEncoder</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+                <span class="c1"># Learn to map both languages to shared space</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">source_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;text, language=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_lang</span><span class="si">}</span><span class="s2">&#39; -&gt; embedding&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;text, language=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">target_lang</span><span class="si">}</span><span class="s2">&#39; -&gt; embedding&quot;</span>
+                <span class="p">)</span>
+                <span class="c1"># Alignment layer</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">align_embeddings</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                    <span class="s2">&quot;source_emb, target_emb -&gt; aligned_source, aligned_target&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_lang</span><span class="p">:</span>
+                    <span class="n">encoded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_encoder</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">encoded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_encoder</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">language</span><span class="o">=</span><span class="n">language</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">encoded</span><span class="o">.</span><span class="n">embedding</span>
+
+        <span class="c1"># Train using 10 parallel examples</span>
+        <span class="n">encoder</span> <span class="o">=</span> <span class="n">CrossLingualEncoder</span><span class="p">()</span>
+        <span class="n">trained_encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_encoder_with_examples</span><span class="p">(</span>
+            <span class="n">encoder</span><span class="p">,</span> <span class="n">parallel_examples</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">trained_encoder</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-training-techniques">
+<h2>Advanced Training Techniques<a class="headerlink" href="#advanced-training-techniques" title="Link to this heading">#</a></h2>
+<section id="technique-1-self-supervised-pre-training-for-ir">
+<h3>Technique 1: Self-Supervised Pre-training for IR<a class="headerlink" href="#technique-1-self-supervised-pre-training-for-ir" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">self_supervised_ir_pretraining</span><span class="p">(</span><span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pre-train IR components without any labels&quot;&quot;&quot;</span>
+
+    <span class="c1"># Step 1: Create synthetic training tasks</span>
+    <span class="n">synthetic_tasks</span> <span class="o">=</span> <span class="n">create_ir_pretraining_tasks</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Pre-train query encoder</span>
+    <span class="n">query_encoder</span> <span class="o">=</span> <span class="n">pretrain_query_encoder</span><span class="p">(</span><span class="n">synthetic_tasks</span><span class="p">)</span>
+
+    <span class="c1"># Step 3: Pre-train document encoder</span>
+    <span class="n">document_encoder</span> <span class="o">=</span> <span class="n">pretrain_document_encoder</span><span class="p">(</span><span class="n">synthetic_tasks</span><span class="p">)</span>
+
+    <span class="c1"># Step 4: Pre-train matching component</span>
+    <span class="n">matcher</span> <span class="o">=</span> <span class="n">pretrain_matching_component</span><span class="p">(</span><span class="n">synthetic_tasks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">IRModel</span><span class="p">(</span><span class="n">query_encoder</span><span class="p">,</span> <span class="n">document_encoder</span><span class="p">,</span> <span class="n">matcher</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_ir_pretraining_tasks</span><span class="p">(</span><span class="n">documents</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create self-supervised tasks for IR pre-training&quot;&quot;&quot;</span>
+
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Task 1: Document reconstruction (like masked language modeling)</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]:</span>  <span class="c1"># Limit for computation</span>
+        <span class="n">masked_doc</span> <span class="o">=</span> <span class="n">mask_random_tokens</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+        <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;reconstruction&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">masked_doc</span><span class="p">,</span>
+            <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">doc</span>
+        <span class="p">})</span>
+
+    <span class="c1"># Task 2: Next sentence prediction for document pairs</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;next_doc&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">documents</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">documents</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">})</span>
+
+    <span class="c1"># Task 3: Query-document matching (synthetic)</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">[:</span><span class="mi">500</span><span class="p">]:</span>
+        <span class="c1"># Generate synthetic query from document</span>
+        <span class="n">synthetic_query</span> <span class="o">=</span> <span class="n">generate_query_from_document</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+        <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;query_doc_match&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">synthetic_query</span><span class="p">,</span>
+            <span class="s1">&#39;document&#39;</span><span class="p">:</span> <span class="n">doc</span><span class="p">,</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="mi">1</span>  <span class="c1"># Positive example</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Add negative example</span>
+        <span class="n">negative_doc</span> <span class="o">=</span> <span class="n">documents</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="n">negative_doc</span> <span class="o">!=</span> <span class="n">doc</span><span class="p">:</span>
+            <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;query_doc_match&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;query&#39;</span><span class="p">:</span> <span class="n">synthetic_query</span><span class="p">,</span>
+                <span class="s1">&#39;document&#39;</span><span class="p">:</span> <span class="n">negative_doc</span><span class="p">,</span>
+                <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="mi">0</span>  <span class="c1"># Negative example</span>
+            <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">tasks</span>
+</pre></div>
+</div>
+</section>
+<section id="technique-2-active-learning-for-ir">
+<h3>Technique 2: Active Learning for IR<a class="headerlink" href="#technique-2-active-learning-for-ir" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ActiveIRLearner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Active learning framework for IR with minimal annotations&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unlabeled_documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">documents</span> <span class="o">=</span> <span class="n">unlabeled_documents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labeled_queries</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annotator_feedback</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">active_learning_cycle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                            <span class="n">initial_annotations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">budget</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform active learning to minimize annotation requirements&quot;&quot;&quot;</span>
+
+        <span class="c1"># Start with initial annotations (could be 0)</span>
+        <span class="k">if</span> <span class="n">initial_annotations</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labeled_queries</span> <span class="o">=</span> <span class="n">initial_annotations</span>
+
+        <span class="c1"># Iterative active learning</span>
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">budget</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active learning iteration </span><span class="si">{</span><span class="n">iteration</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Step 1: Train current model with available labels</span>
+            <span class="n">current_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_with_current_labels</span><span class="p">()</span>
+
+            <span class="c1"># Step 2: Select most informative queries to label</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_candidate_queries</span><span class="p">()</span>
+            <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_informative_queries</span><span class="p">(</span>
+                <span class="n">current_model</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Step 3: Get human annotations (simulated here)</span>
+            <span class="n">new_annotations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_annotations</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+
+            <span class="c1"># Step 4: Add to labeled set</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labeled_queries</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_annotations</span><span class="p">)</span>
+
+        <span class="c1"># Train final model with all collected labels</span>
+        <span class="n">final_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_with_current_labels</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">final_model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_select_informative_queries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">model</span><span class="p">,</span>
+                                   <span class="n">candidates</span><span class="p">,</span>
+                                   <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select queries with highest uncertainty or diversity&quot;&quot;&quot;</span>
+
+        <span class="n">uncertainties</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="c1"># Get model uncertainty for this query</span>
+            <span class="n">uncertainty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_query_uncertainty</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+            <span class="n">uncertainties</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">query</span><span class="p">,</span> <span class="n">uncertainty</span><span class="p">))</span>
+
+        <span class="c1"># Sort by uncertainty</span>
+        <span class="n">uncertainties</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Select top uncertain queries</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">uncertainties</span><span class="p">[:</span><span class="n">n</span><span class="p">]]</span>
+
+        <span class="c1"># Ensure diversity</span>
+        <span class="n">diverse_selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_diversity</span><span class="p">(</span><span class="n">selected</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">diverse_selected</span>
+</pre></div>
+</div>
+</section>
+<section id="technique-3-multi-task-learning-for-ir">
+<h3>Technique 3: Multi-Task Learning for IR<a class="headerlink" href="#technique-3-multi-task-learning-for-ir" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_task_ir_training</span><span class="p">(</span><span class="n">tasks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train IR model on multiple related tasks simultaneously&quot;&quot;&quot;</span>
+
+    <span class="c1"># Task definitions could include:</span>
+    <span class="c1"># - Document ranking</span>
+    <span class="c1"># - Passage retrieval</span>
+    <span class="c1"># - Answer span prediction</span>
+    <span class="c1"># - Query classification</span>
+    <span class="c1"># - Document classification</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">MultiTaskIRModel</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="c1"># Shared encoder</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shared_encoder</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;text, task_type -&gt; shared_representation&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Task-specific heads</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ranking_head</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;query_repr, doc_repr -&gt; relevance_score&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retrieval_head</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;query_repr, passage_repr -&gt; retrieval_score&quot;</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">classification_head</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+                <span class="s2">&quot;text_repr -&gt; class_label&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">task_type</span><span class="p">):</span>
+            <span class="c1"># Get shared representation</span>
+            <span class="n">shared</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shared_encoder</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],</span>
+                <span class="n">task_type</span><span class="o">=</span><span class="n">task_type</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Route to appropriate task head</span>
+            <span class="k">if</span> <span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;ranking&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranking_head</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">query_repr</span><span class="o">=</span><span class="n">shared</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;retrieval&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieval_head</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">query_repr</span><span class="o">=</span><span class="n">shared</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">task_type</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classification_head</span><span class="p">(</span><span class="n">text_repr</span><span class="o">=</span><span class="n">shared</span><span class="p">)</span>
+
+    <span class="c1"># Train on all tasks simultaneously</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">MultiTaskIRModel</span><span class="p">()</span>
+    <span class="n">trained_model</span> <span class="o">=</span> <span class="n">train_multi_task</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trained_model</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="evaluation-methodology">
+<h2>Evaluation Methodology<a class="headerlink" href="#evaluation-methodology" title="Link to this heading">#</a></h2>
+<section id="ir-evaluation-with-minimal-test-data">
+<h3>IR Evaluation with Minimal Test Data<a class="headerlink" href="#ir-evaluation-with-minimal-test-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_ir_model_minimal_data</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                  <span class="n">test_queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                                  <span class="n">test_relevance</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+                                  <span class="n">confidence_adjusted</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate IR model with minimal test data&quot;&quot;&quot;</span>
+
+    <span class="n">metrics</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Standard IR metrics</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">test_queries</span><span class="p">:</span>
+        <span class="c1"># Get rankings</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="n">all_documents</span><span class="p">)</span>
+        <span class="n">ranked_docs</span> <span class="o">=</span> <span class="n">parse_rankings</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="c1"># Calculate metrics with confidence adjustment</span>
+        <span class="k">if</span> <span class="n">confidence_adjusted</span> <span class="ow">and</span> <span class="s1">&#39;confidence&#39;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="c1"># Weight metrics by confidence</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;confidence&#39;</span><span class="p">]</span>
+            <span class="n">adjusted_ranking</span> <span class="o">=</span> <span class="n">apply_confidence_weights</span><span class="p">(</span>
+                <span class="n">ranked_docs</span><span class="p">,</span> <span class="n">weights</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adjusted_ranking</span> <span class="o">=</span> <span class="n">ranked_docs</span>
+
+        <span class="c1"># Calculate per-query metrics</span>
+        <span class="n">query_metrics</span> <span class="o">=</span> <span class="n">calculate_ir_metrics</span><span class="p">(</span>
+            <span class="n">adjusted_ranking</span><span class="p">,</span>
+            <span class="n">test_relevance</span><span class="p">[</span><span class="n">query</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Aggregate</span>
+        <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">query_metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">metric</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+                <span class="n">metrics</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">metrics</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># Calculate final scores</span>
+    <span class="n">final_metrics</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">metric</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">metric</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">final_metrics</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices-and-guidelines">
+<h2>Best Practices and Guidelines<a class="headerlink" href="#best-practices-and-guidelines" title="Link to this heading">#</a></h2>
+<section id="for-training-with-minimal-data">
+<h3>For Training with Minimal Data<a class="headerlink" href="#for-training-with-minimal-data" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Start Simple</strong>: Begin with simpler models (sparse retrieval) before complex ones</p></li>
+<li><p><strong>Use Pre-training</strong>: Leverage self-supervised pre-training when possible</p></li>
+<li><p><strong>Data Quality</strong>: Ensure every relevance judgment is accurate</p></li>
+<li><p><strong>Active Learning</strong>: Select examples that maximize learning</p></li>
+<li><p><strong>Regular Evaluation</strong>: Continuously evaluate to prevent overfitting</p></li>
+</ol>
+</section>
+<section id="for-production-deployment">
+<h3>For Production Deployment<a class="headerlink" href="#for-production-deployment" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Confidence Estimation</strong>: Always include confidence scores</p></li>
+<li><p><strong>Fallback Mechanisms</strong>: Have simpler models as fallbacks</p></li>
+<li><p><strong>Continuous Learning</strong>: Collect feedback for model improvement</p></li>
+<li><p><strong>Monitoring</strong>: Track performance drift over time</p></li>
+<li><p><strong>A/B Testing</strong>: Test new models before full deployment</p></li>
+</ol>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>IR Models Can Be Trained from Scratch</strong>: Even with 10 relevance judgments</p></li>
+<li><p><strong>Strategy Selection is Crucial</strong>: Different tasks require different approaches</p></li>
+<li><p><strong>Data Efficiency is Possible</strong>: Through prompt optimization and meta-learning</p></li>
+<li><p><strong>Quality Trumps Quantity</strong>: High-quality judgments are more valuable than many poor ones</p></li>
+<li><p><strong>Confidence Estimation is Essential</strong>: When working with minimal training data</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>This section covered training IR models from scratch with minimal data. The concepts here build upon the optimization techniques discussed in earlier chapters and demonstrate practical applications in real-world scenarios.</p>
+<p>For continued learning, explore:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#../05-optimizers/20-prompts-as-hyperparameters.md"><span class="xref myst">Prompt Hyperparameter Optimization</span></a> for deeper optimization techniques</p></li>
+<li><p><a class="reference internal" href="#../04-evaluation/03-defining-metrics.md"><span class="xref myst">Evaluation Strategies</span></a> for comprehensive model evaluation</p></li>
+<li><p><a class="reference internal" href="#../08-case-studies/"><span class="xref myst">Real-world Case Studies</span></a> for production deployment examples</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/06_real_world_applications"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_extreme_few_shot_learning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Extreme Few-Shot Learning: Training with 10 Gold Labels</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="13_lingvarbench_healthcare_synthetic_data.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LingVarBench: Synthetic Healthcare Transcript Generation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ir-model-components">Understanding IR Model Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-ir-architecture">Core IR Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-ir-models">Types of IR Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-ir-models-with-minimal-data">Training IR Models with Minimal Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-zero-to-ir-framework">The Zero-to-IR Framework</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specialized-training-for-different-ir-tasks">Specialized Training for Different IR Tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-1-document-ranking-with-10-relevance-judgments">Task 1: Document Ranking with 10 Relevance Judgments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-2-passage-retrieval-for-qa-systems">Task 2: Passage Retrieval for QA Systems</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-3-cross-lingual-ir-with-minimal-bilingual-data">Task 3: Cross-Lingual IR with Minimal Bilingual Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-training-techniques">Advanced Training Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-1-self-supervised-pre-training-for-ir">Technique 1: Self-Supervised Pre-training for IR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-2-active-learning-for-ir">Technique 2: Active Learning for IR</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#technique-3-multi-task-learning-for-ir">Technique 3: Multi-Task Learning for IR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-methodology">Evaluation Methodology</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ir-evaluation-with-minimal-test-data">IR Evaluation with Minimal Test Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-and-guidelines">Best Practices and Guidelines</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-training-with-minimal-data">For Training with Minimal Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#for-production-deployment">For Production Deployment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

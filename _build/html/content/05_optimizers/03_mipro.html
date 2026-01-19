@@ -1,0 +1,2237 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MIPRO: Multi-step Instruction and Demonstration Optimization &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/05_optimizers/03_mipro';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="KNNFewShot: Similarity-Based Example Selection" href="04_knnfewshot.html" />
+    <link rel="prev" title="COPRO: Chain-of-Thought Prompt Optimization" href="02a_copro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../06_real_world_applications/00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/01_rag_systems.html">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../06_real_world_applications/18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/05_optimizers/03_mipro.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>MIPRO: Multi-step Instruction and Demonstration Optimization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-architecture-dual-component-optimization">Core Architecture: Dual-Component Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-1-instruction-generation">Component 1: Instruction Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-2-demonstration-selection">Component 2: Demonstration Selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-prompting-for-instruction-generation">Meta-Prompting for Instruction Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-meta-prompting-works">How Meta-Prompting Works</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-sampling-for-diversity">Temperature Sampling for Diversity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-reflection-for-instruction-refinement">Self-Reflection for Instruction Refinement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-selection-strategy">Demonstration Selection Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-selection">Data-Driven Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-specific-demonstration-counts">Module-Specific Demonstration Counts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulated-annealing-for-prompt-search">Simulated Annealing for Prompt Search</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-simulated-annealing">Why Simulated Annealing?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-neighbor-generation">Configuration Neighbor Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-stage-pipeline-optimization">Multi-Stage Pipeline Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-coupling-considerations">Module Coupling Considerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-retrieve-generate-pipeline-example">Generate-Retrieve-Generate Pipeline Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-shot-vs-few-shot-trade-offs">Zero-Shot vs Few-Shot Trade-offs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hyperparameter-configuration">Hyperparameter Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-settings">Recommended Settings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-table">Configuration Table</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-mode-configurations">Auto Mode Configurations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benchmarks">Performance Benchmarks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#research-results">Research Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing-benchmarks">Reproducing Benchmarks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-makes-mipro-special">What Makes MIPRO Special?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dual-optimization">Dual Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-process">Multi-Step Process</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-mipro-usage">Basic MIPRO Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-configuration">Advanced Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-mipro-parameters">Customizing MIPRO Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">Multi-Objective Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-optimization-strategies">MIPRO Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instruction-evolution">1. Instruction Evolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-synthesis">2. Demonstration Synthesis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization">3. Joint Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-mipro-with-complex-programs">Using MIPRO with Complex Programs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-module-programs">Multi-Module Programs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-module-optimization">Custom Module Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-parameters-reference">MIPRO Parameters Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-parameters">Core Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-parameters">Advanced Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-auto-modes">MIPRO Auto Modes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#light-mode">Light Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medium-mode">Medium Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#heavy-mode">Heavy Mode</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-mipro-optimization">Monitoring MIPRO Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#progress-tracking">Progress Tracking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-callbacks">Custom Callbacks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-with-good-instructions">1. Start with Good Instructions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-appropriate-temperature">2. Use Appropriate Temperature</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#provide-diverse-training-data">3. Provide Diverse Training Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-progressively">4. Evaluate Progressively</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-1-over-optimization">Pitfall 1: Over-optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-2-inadequate-evaluation-metric">Pitfall 2: Inadequate Evaluation Metric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-3-poor-training-data-quality">Pitfall 3: Poor Training Data Quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-mipro-with-other-optimizers">Comparing MIPRO with Other Optimizers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="mipro-multi-step-instruction-and-demonstration-optimization">
+<h1>MIPRO: Multi-step Instruction and Demonstration Optimization<a class="headerlink" href="#mipro-multi-step-instruction-and-demonstration-optimization" title="Link to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Link to this heading">#</a></h2>
+<p>By the end of this chapter, you will be able to:</p>
+<ul class="simple">
+<li><p>Understand MIPRO’s dual-component optimization approach</p></li>
+<li><p>Implement meta-prompting for instruction generation</p></li>
+<li><p>Configure simulated annealing for efficient prompt search</p></li>
+<li><p>Apply module-specific demonstration selection strategies</p></li>
+<li><p>Optimize multi-stage pipelines effectively</p></li>
+<li><p>Interpret and replicate MIPRO benchmark results</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>MIPRO (Multi-step Instruction and demonstration PRompt Optimization) represents a significant advancement in automated prompt optimization for language model programs. Unlike simpler approaches that only optimize examples, MIPRO simultaneously optimizes both the instructions (prompts) and demonstrations (examples) for each module in a multi-stage pipeline.</p>
+<p>Research demonstrates MIPRO’s effectiveness across diverse benchmarks:</p>
+<ul class="simple">
+<li><p><strong>HotpotQA</strong>: 52.3 F1 vs 32.0 F1 manual prompting (63% improvement)</p></li>
+<li><p><strong>GSM8K</strong>: 33.8% vs 28.5% manual prompting (19% improvement)</p></li>
+<li><p><strong>CodeAlpaca</strong>: 64.8% vs 63.1% manual prompting</p></li>
+</ul>
+<p>These results highlight MIPRO’s ability to discover optimized prompts that generalize better than hand-crafted alternatives, often achieving zero-shot superiority through optimized instructions alone.</p>
+</section>
+<section id="core-architecture-dual-component-optimization">
+<h2>Core Architecture: Dual-Component Optimization<a class="headerlink" href="#core-architecture-dual-component-optimization" title="Link to this heading">#</a></h2>
+<p>MIPRO’s power comes from its dual-component approach that jointly optimizes two key elements:</p>
+<section id="component-1-instruction-generation">
+<h3>Component 1: Instruction Generation<a class="headerlink" href="#component-1-instruction-generation" title="Link to this heading">#</a></h3>
+<p>MIPRO generates candidate instructions using <strong>meta-prompting</strong>, where a language model is prompted to create task-specific instructions conditioned on:</p>
+<ul class="simple">
+<li><p>The program’s overall structure and purpose</p></li>
+<li><p>Individual module signatures and roles</p></li>
+<li><p>Relationships between pipeline stages</p></li>
+<li><p>Dataset characteristics and examples</p></li>
+</ul>
+</section>
+<section id="component-2-demonstration-selection">
+<h3>Component 2: Demonstration Selection<a class="headerlink" href="#component-2-demonstration-selection" title="Link to this heading">#</a></h3>
+<p>For few-shot learning, MIPRO selects demonstrations using:</p>
+<ul class="simple">
+<li><p>Data-driven selection from bootstrapped examples (via BootstrapFewShot)</p></li>
+<li><p>Module-specific demonstration counts</p></li>
+<li><p>Utility scoring based on validation performance</p></li>
+<li><p>Greedy selection algorithms</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌──────────────────────────────────────────────────────────────────┐
+│                     MIPRO Optimization Loop                       │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌────────────────┐      ┌────────────────┐                      │
+│  │  Meta-Prompt   │      │  Demonstration │                      │
+│  │  Generation    │      │  Selection     │                      │
+│  └───────┬────────┘      └───────┬────────┘                      │
+│          │                       │                               │
+│          ▼                       ▼                               │
+│  ┌────────────────────────────────────────┐                      │
+│  │        Candidate Configurations        │                      │
+│  │   (Instruction + Demonstration Pairs)  │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │      Simulated Annealing Search        │                      │
+│  │   - Evaluate on validation set         │                      │
+│  │   - Accept/reject based on temperature │                      │
+│  │   - Gradually reduce temperature       │                      │
+│  └───────────────────┬────────────────────┘                      │
+│                      │                                           │
+│                      ▼                                           │
+│  ┌────────────────────────────────────────┐                      │
+│  │         Best Configuration             │                      │
+│  └────────────────────────────────────────┘                      │
+└──────────────────────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+</section>
+<section id="meta-prompting-for-instruction-generation">
+<h2>Meta-Prompting for Instruction Generation<a class="headerlink" href="#meta-prompting-for-instruction-generation" title="Link to this heading">#</a></h2>
+<p>Meta-prompting is MIPRO’s technique for generating candidate instructions automatically. Instead of requiring human-written prompts, MIPRO uses a language model to generate diverse, task-specific instructions.</p>
+<section id="how-meta-prompting-works">
+<h3>How Meta-Prompting Works<a class="headerlink" href="#how-meta-prompting-works" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MIPROMetaPromptGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates candidate instructions using meta-prompting.</span>
+
+<span class="sd">    Meta-prompts condition on:</span>
+<span class="sd">    1. Program structure (modules and their connections)</span>
+<span class="sd">    2. Dataset characteristics (input/output types, examples)</span>
+<span class="sd">    3. Task description (what the program should accomplish)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_instruction_candidates</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">module_signature</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">program_description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">dataset_summary</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">num_candidates</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate diverse instruction candidates for a module.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_signature: The module&#39;s input/output signature</span>
+<span class="sd">            program_description: Overall program purpose</span>
+<span class="sd">            dataset_summary: Summary of training data characteristics</span>
+<span class="sd">            num_candidates: Number of candidates to generate</span>
+<span class="sd">            temperature: Sampling temperature (0.7 recommended for diversity)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of candidate instruction strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meta_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">You are designing instructions for a language model module in a larger program.</span>
+
+<span class="s2">PROGRAM PURPOSE: </span><span class="si">{</span><span class="n">program_description</span><span class="si">}</span>
+
+<span class="s2">MODULE SIGNATURE: </span><span class="si">{</span><span class="n">module_signature</span><span class="si">}</span>
+
+<span class="s2">DATASET CHARACTERISTICS: </span><span class="si">{</span><span class="n">dataset_summary</span><span class="si">}</span>
+
+<span class="s2">Generate </span><span class="si">{</span><span class="n">num_candidates</span><span class="si">}</span><span class="s2"> diverse instruction variations for this module.</span>
+<span class="s2">Each instruction should:</span>
+<span class="s2">1. Clearly specify the task</span>
+<span class="s2">2. Guide the model toward high-quality outputs</span>
+<span class="s2">3. Be self-contained and unambiguous</span>
+<span class="s2">4. Vary in phrasing, structure, and emphasis</span>
+
+<span class="s2">Instructions:</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_candidates</span><span class="p">):</span>
+            <span class="c1"># Temperature sampling enables diversity</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="p">(</span><span class="n">meta_prompt</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">)</span>
+            <span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">candidates</span>
+</pre></div>
+</div>
+</section>
+<section id="temperature-sampling-for-diversity">
+<h3>Temperature Sampling for Diversity<a class="headerlink" href="#temperature-sampling-for-diversity" title="Link to this heading">#</a></h3>
+<p>MIPRO uses temperature sampling (T=0.7 by default) to generate diverse instruction candidates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Low temperature (T=0.3): More deterministic, similar instructions</span>
+<span class="c1"># Medium temperature (T=0.7): Good diversity while maintaining quality</span>
+<span class="c1"># High temperature (T=1.2): Maximum diversity, may reduce quality</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">your_metric</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span>  <span class="c1"># Controls instruction generation diversity</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="self-reflection-for-instruction-refinement">
+<h3>Self-Reflection for Instruction Refinement<a class="headerlink" href="#self-reflection-for-instruction-refinement" title="Link to this heading">#</a></h3>
+<p>MIPRO can optionally use self-reflection to refine generated instructions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">InstructionRefiner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refines candidate instructions through self-reflection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reflect</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;instruction, task_description, failure_cases -&gt; improved_instruction&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">refine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_desc</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">failures</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Improve an instruction based on observed failures.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reflect</span><span class="p">(</span>
+            <span class="n">instruction</span><span class="o">=</span><span class="n">instruction</span><span class="p">,</span>
+            <span class="n">task_description</span><span class="o">=</span><span class="n">task_desc</span><span class="p">,</span>
+            <span class="n">failure_cases</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">failures</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">improved_instruction</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="demonstration-selection-strategy">
+<h2>Demonstration Selection Strategy<a class="headerlink" href="#demonstration-selection-strategy" title="Link to this heading">#</a></h2>
+<p>MIPRO’s demonstration selection builds on BootstrapFewShot but adds sophisticated selection mechanisms.</p>
+<section id="data-driven-selection">
+<h3>Data-Driven Selection<a class="headerlink" href="#data-driven-selection" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MIPRODemonstrationSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Selects demonstrations using data-driven strategies.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">max_demos_per_module</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainset</span> <span class="o">=</span> <span class="n">trainset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_demos_per_module</span> <span class="o">=</span> <span class="n">max_demos_per_module</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">bootstrap_demonstrations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate candidate demonstrations using BootstrapFewShot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First, bootstrap potential demonstrations</span>
+        <span class="n">bootstrap</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
+            <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_demos_per_module</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="n">bootstrapped</span> <span class="o">=</span> <span class="n">bootstrap</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trainset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bootstrapped</span><span class="o">.</span><span class="n">demos</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">score_demonstration_utility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">demo</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Score a demonstration&#39;s utility for a specific module.</span>
+
+<span class="sd">        Utility is measured by validation set performance improvement</span>
+<span class="sd">        when the demonstration is included.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Test with and without this demonstration</span>
+        <span class="n">score_with</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_with_demo</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">demo</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+        <span class="n">score_without</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_without_demo</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">demo</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">score_with</span> <span class="o">-</span> <span class="n">score_without</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">greedy_select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Greedy selection of top-k demonstrations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            candidates: List of candidate demonstrations</span>
+<span class="sd">            module: The module to optimize</span>
+<span class="sd">            valset: Validation set for scoring</span>
+<span class="sd">            k: Number of demonstrations to select</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of k selected demonstrations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="n">candidates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">remaining</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="c1"># Score each remaining candidate</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="n">demo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_demonstration_utility</span><span class="p">(</span><span class="n">demo</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">valset</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">demo</span> <span class="ow">in</span> <span class="n">remaining</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Select the best</span>
+            <span class="n">best_demo</span><span class="p">,</span> <span class="n">best_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">selected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_demo</span><span class="p">)</span>
+            <span class="n">remaining</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">best_demo</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">selected</span>
+</pre></div>
+</div>
+</section>
+<section id="module-specific-demonstration-counts">
+<h3>Module-Specific Demonstration Counts<a class="headerlink" href="#module-specific-demonstration-counts" title="Link to this heading">#</a></h3>
+<p>Different modules may benefit from different numbers of demonstrations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">determine_demo_count</span><span class="p">(</span><span class="n">module_type</span><span class="p">,</span> <span class="n">context_budget</span><span class="o">=</span><span class="mi">16000</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine optimal demonstration count per module.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        module_type: Type of module (e.g., &#39;retrieval&#39;, &#39;reasoning&#39;, &#39;generation&#39;)</span>
+<span class="sd">        context_budget: Available context window in tokens</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Recommended number of demonstrations</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Simple modules need fewer demos</span>
+    <span class="k">if</span> <span class="n">module_type</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">context_budget</span> <span class="o">//</span> <span class="mi">500</span><span class="p">)</span>
+
+    <span class="c1"># Reasoning tasks benefit from more demos</span>
+    <span class="k">elif</span> <span class="n">module_type</span> <span class="o">==</span> <span class="s1">&#39;reasoning&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">context_budget</span> <span class="o">//</span> <span class="mi">1000</span><span class="p">)</span>
+
+    <span class="c1"># Generation tasks need diverse examples</span>
+    <span class="k">elif</span> <span class="n">module_type</span> <span class="o">==</span> <span class="s1">&#39;generation&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">context_budget</span> <span class="o">//</span> <span class="mi">800</span><span class="p">)</span>
+
+    <span class="c1"># Default</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">context_budget</span> <span class="o">//</span> <span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="simulated-annealing-for-prompt-search">
+<h2>Simulated Annealing for Prompt Search<a class="headerlink" href="#simulated-annealing-for-prompt-search" title="Link to this heading">#</a></h2>
+<p>MIPRO uses simulated annealing to efficiently search the space of possible prompt configurations.</p>
+<section id="why-simulated-annealing">
+<h3>Why Simulated Annealing?<a class="headerlink" href="#why-simulated-annealing" title="Link to this heading">#</a></h3>
+<p>The prompt optimization landscape is:</p>
+<ul class="simple">
+<li><p><strong>High-dimensional</strong>: Many modules, each with instruction and demonstration choices</p></li>
+<li><p><strong>Non-convex</strong>: Local optima are common</p></li>
+<li><p><strong>Noisy</strong>: Validation scores have variance</p></li>
+</ul>
+<p>Simulated annealing handles these challenges by:</p>
+<ol class="arabic simple">
+<li><p>Starting with high temperature (accepting many changes)</p></li>
+<li><p>Gradually cooling (becoming more selective)</p></li>
+<li><p>Allowing occasional “uphill” moves to escape local optima</p></li>
+</ol>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SimulatedAnnealingOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulated annealing for prompt configuration search.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">init_temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">cooling_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
+        <span class="n">min_temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_temperature</span> <span class="o">=</span> <span class="n">init_temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cooling_rate</span> <span class="o">=</span> <span class="n">cooling_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_temperature</span> <span class="o">=</span> <span class="n">min_temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">=</span> <span class="n">max_iter</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">initial_config</span><span class="p">,</span>
+        <span class="n">neighbor_fn</span><span class="p">,</span>
+        <span class="n">score_fn</span><span class="p">,</span>
+        <span class="n">valset</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find optimal configuration using simulated annealing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            initial_config: Starting configuration</span>
+<span class="sd">            neighbor_fn: Function to generate neighboring configurations</span>
+<span class="sd">            score_fn: Function to score a configuration</span>
+<span class="sd">            valset: Validation set for evaluation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Best configuration found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_config</span> <span class="o">=</span> <span class="n">initial_config</span>
+        <span class="n">current_score</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">current_config</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+        <span class="n">best_config</span> <span class="o">=</span> <span class="n">current_config</span>
+        <span class="n">best_score</span> <span class="o">=</span> <span class="n">current_score</span>
+
+        <span class="n">temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_temperature</span>
+
+        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
+            <span class="c1"># Generate neighbor configuration</span>
+            <span class="n">neighbor</span> <span class="o">=</span> <span class="n">neighbor_fn</span><span class="p">(</span><span class="n">current_config</span><span class="p">)</span>
+            <span class="n">neighbor_score</span> <span class="o">=</span> <span class="n">score_fn</span><span class="p">(</span><span class="n">neighbor</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+
+            <span class="c1"># Calculate acceptance probability</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">neighbor_score</span> <span class="o">-</span> <span class="n">current_score</span>
+
+            <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Better solution: always accept</span>
+                <span class="n">accept_prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Worse solution: accept with probability</span>
+                <span class="n">accept_prob</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta</span> <span class="o">/</span> <span class="n">temperature</span><span class="p">)</span>
+
+            <span class="c1"># Accept or reject</span>
+            <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">accept_prob</span><span class="p">:</span>
+                <span class="n">current_config</span> <span class="o">=</span> <span class="n">neighbor</span>
+                <span class="n">current_score</span> <span class="o">=</span> <span class="n">neighbor_score</span>
+
+                <span class="c1"># Update best</span>
+                <span class="k">if</span> <span class="n">current_score</span> <span class="o">&gt;</span> <span class="n">best_score</span><span class="p">:</span>
+                    <span class="n">best_config</span> <span class="o">=</span> <span class="n">current_config</span>
+                    <span class="n">best_score</span> <span class="o">=</span> <span class="n">current_score</span>
+
+            <span class="c1"># Cool down</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">min_temperature</span><span class="p">,</span>
+                <span class="n">temperature</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_rate</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Optional: Log progress</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iter </span><span class="si">{</span><span class="n">iteration</span><span class="si">}</span><span class="s2">: Score=</span><span class="si">{</span><span class="n">current_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;Best=</span><span class="si">{</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, T=</span><span class="si">{</span><span class="n">temperature</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">best_config</span><span class="p">,</span> <span class="n">best_score</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-neighbor-generation">
+<h3>Configuration Neighbor Generation<a class="headerlink" href="#configuration-neighbor-generation" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">generate_neighbor</span><span class="p">(</span><span class="n">current_config</span><span class="p">,</span> <span class="n">instruction_pool</span><span class="p">,</span> <span class="n">demo_pool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a neighboring configuration by making small changes.</span>
+
+<span class="sd">    Possible mutations:</span>
+<span class="sd">    1. Change instruction for one module</span>
+<span class="sd">    2. Add/remove/swap demonstration for one module</span>
+<span class="sd">    3. Adjust demonstration count</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">neighbor</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">current_config</span><span class="p">)</span>
+
+    <span class="c1"># Choose mutation type</span>
+    <span class="n">mutation_type</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span>
+        <span class="s1">&#39;change_instruction&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;swap_demo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;add_demo&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;remove_demo&#39;</span>
+    <span class="p">])</span>
+
+    <span class="c1"># Choose random module to mutate</span>
+    <span class="n">module_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mutation_type</span> <span class="o">==</span> <span class="s1">&#39;change_instruction&#39;</span><span class="p">:</span>
+        <span class="c1"># Select new instruction from pool</span>
+        <span class="n">new_instruction</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">instruction_pool</span><span class="p">[</span><span class="n">module_idx</span><span class="p">])</span>
+        <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">instruction</span> <span class="o">=</span> <span class="n">new_instruction</span>
+
+    <span class="k">elif</span> <span class="n">mutation_type</span> <span class="o">==</span> <span class="s1">&#39;swap_demo&#39;</span><span class="p">:</span>
+        <span class="c1"># Swap one demonstration</span>
+        <span class="k">if</span> <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="p">:</span>
+            <span class="n">demo_idx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">new_demo</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">demo_pool</span><span class="p">[</span><span class="n">module_idx</span><span class="p">])</span>
+            <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="p">[</span><span class="n">demo_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_demo</span>
+
+    <span class="k">elif</span> <span class="n">mutation_type</span> <span class="o">==</span> <span class="s1">&#39;add_demo&#39;</span><span class="p">:</span>
+        <span class="c1"># Add a demonstration if under limit</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">MAX_DEMOS</span><span class="p">:</span>
+            <span class="n">new_demo</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">demo_pool</span><span class="p">[</span><span class="n">module_idx</span><span class="p">])</span>
+            <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_demo</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">mutation_type</span> <span class="o">==</span> <span class="s1">&#39;remove_demo&#39;</span><span class="p">:</span>
+        <span class="c1"># Remove a demonstration if any exist</span>
+        <span class="k">if</span> <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="p">:</span>
+            <span class="n">neighbor</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_idx</span><span class="p">]</span><span class="o">.</span><span class="n">demos</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">neighbor</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="multi-stage-pipeline-optimization">
+<h2>Multi-Stage Pipeline Optimization<a class="headerlink" href="#multi-stage-pipeline-optimization" title="Link to this heading">#</a></h2>
+<p>MIPRO excels at optimizing multi-stage pipelines where modules depend on each other.</p>
+<section id="module-coupling-considerations">
+<h3>Module Coupling Considerations<a class="headerlink" href="#module-coupling-considerations" title="Link to this heading">#</a></h3>
+<p>When optimizing pipelines, MIPRO considers how modules interact:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiStagePipelineOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimizes multi-stage pipelines considering module dependencies.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_module_coupling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze how modules in a pipeline are coupled.</span>
+
+<span class="sd">        Returns dependency graph and coupling strength estimates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="n">program</span><span class="o">.</span><span class="n">modules</span>
+        <span class="n">coupling</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">modules</span><span class="p">):</span>
+            <span class="n">coupling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;inputs_from&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;outputs_to&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;coupling_strength&#39;</span><span class="p">:</span> <span class="mf">0.0</span>
+            <span class="p">}</span>
+
+            <span class="c1"># Analyze dataflow</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">other</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">modules</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_dataflow</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+                        <span class="n">coupling</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;outputs_to&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="n">coupling</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;inputs_from&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">coupling</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimize_pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Optimize a multi-stage pipeline.</span>
+
+<span class="sd">        Strategy:</span>
+<span class="sd">        1. Start with later stages (less dependent)</span>
+<span class="sd">        2. Progressively optimize earlier stages</span>
+<span class="sd">        3. Use frozen later stages when optimizing earlier ones</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="n">program</span><span class="o">.</span><span class="n">modules</span>
+        <span class="n">coupling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_module_coupling</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+
+        <span class="c1"># Order modules by dependency depth (later stages first)</span>
+        <span class="n">optimization_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_topological_sort_reverse</span><span class="p">(</span><span class="n">coupling</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">module_idx</span> <span class="ow">in</span> <span class="n">optimization_order</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Optimizing module </span><span class="si">{</span><span class="n">module_idx</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Freeze downstream modules</span>
+            <span class="n">frozen_modules</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">optimization_order</span>
+                           <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">module_idx</span> <span class="ow">and</span>
+                           <span class="n">module_idx</span> <span class="ow">in</span> <span class="n">coupling</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s1">&#39;inputs_from&#39;</span><span class="p">]]</span>
+
+            <span class="c1"># Optimize this module</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_optimize_module</span><span class="p">(</span>
+                <span class="n">program</span><span class="p">,</span>
+                <span class="n">module_idx</span><span class="p">,</span>
+                <span class="n">trainset</span><span class="p">,</span>
+                <span class="n">valset</span><span class="p">,</span>
+                <span class="n">frozen_modules</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">program</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-retrieve-generate-pipeline-example">
+<h3>Generate-Retrieve-Generate Pipeline Example<a class="headerlink" href="#generate-retrieve-generate-pipeline-example" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GRGPipeline</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate-Retrieve-Generate pipeline for complex QA.</span>
+
+<span class="sd">    Stage 1 (Generate): Generate search queries from question</span>
+<span class="sd">    Stage 2 (Retrieve): Retrieve relevant documents</span>
+<span class="sd">    Stage 3 (Generate): Generate answer from retrieved context</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Stage 1: Query generation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_queries</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;question -&gt; search_queries&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Stage 2: Retrieval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="c1"># Stage 3: Answer generation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;question, context -&gt; answer&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Stage 1</span>
+        <span class="n">queries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_queries</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Stage 2</span>
+        <span class="n">all_passages</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="o">.</span><span class="n">search_queries</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">passages</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">.</span><span class="n">passages</span>
+            <span class="n">all_passages</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">passages</span><span class="p">)</span>
+
+        <span class="c1"># Stage 3</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">all_passages</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">rationale</span><span class="p">,</span>
+            <span class="n">passages_used</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">all_passages</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="c1"># Optimize with MIPRO</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">optimize_grg_pipeline</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Optimize GRG pipeline using MIPRO.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">GRGPipeline</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">grg_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Check answer correctness</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;answer&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="n">grg_metric</span><span class="p">,</span>
+        <span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>  <span class="c1"># More candidates for multi-stage</span>
+        <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">pipeline</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+        <span class="n">num_trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">6</span>  <span class="c1"># Per module</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">optimized</span>
+</pre></div>
+</div>
+</section>
+<section id="zero-shot-vs-few-shot-trade-offs">
+<h3>Zero-Shot vs Few-Shot Trade-offs<a class="headerlink" href="#zero-shot-vs-few-shot-trade-offs" title="Link to this heading">#</a></h3>
+<p>MIPRO research reveals important insights about zero-shot vs few-shot optimization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_zeroshot_vs_fewshot</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyze when zero-shot optimized prompts outperform few-shot.</span>
+
+<span class="sd">    Key findings from MIPRO research:</span>
+<span class="sd">    1. Optimized zero-shot can beat manual few-shot</span>
+<span class="sd">    2. Context window savings enable more reasoning</span>
+<span class="sd">    3. Generalization is often better with zero-shot</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Zero-shot optimization</span>
+    <span class="n">mipro_zeroshot</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+        <span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span>
+    <span class="p">)</span>
+    <span class="n">zeroshot_compiled</span> <span class="o">=</span> <span class="n">mipro_zeroshot</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">program</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+        <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">0</span>  <span class="c1"># Zero demonstrations</span>
+    <span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;zeroshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">zeroshot_compiled</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+
+    <span class="c1"># Few-shot optimization</span>
+    <span class="n">mipro_fewshot</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+        <span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span>
+    <span class="p">)</span>
+    <span class="n">fewshot_compiled</span> <span class="o">=</span> <span class="n">mipro_fewshot</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">program</span><span class="p">,</span>
+        <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+        <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span>  <span class="c1"># Include demonstrations</span>
+    <span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;fewshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">fewshot_compiled</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+
+    <span class="c1"># Manual few-shot baseline</span>
+    <span class="n">bootstrap</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">manual_fewshot</span> <span class="o">=</span> <span class="n">bootstrap</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;manual_fewshot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">manual_fewshot</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+
+    <span class="c1"># Analysis</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Zero-Shot vs Few-Shot Analysis:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MIPRO Zero-Shot: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;zeroshot&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MIPRO Few-Shot:  </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;fewshot&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Manual Few-Shot: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;manual_fewshot&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;zeroshot&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;manual_fewshot&#39;</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  &gt; Optimized zero-shot outperforms manual few-shot!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  &gt; This indicates strong instruction optimization.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hyperparameter-configuration">
+<h2>Hyperparameter Configuration<a class="headerlink" href="#hyperparameter-configuration" title="Link to this heading">#</a></h2>
+<section id="recommended-settings">
+<h3>Recommended Settings<a class="headerlink" href="#recommended-settings" title="Link to this heading">#</a></h3>
+<p>Based on MIPRO research, here are recommended hyperparameter configurations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Standard configuration</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">your_metric</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>          <span class="c1"># 10-20 instruction candidates</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>       <span class="c1"># T=0.7 for diverse but quality instructions</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Compile with appropriate settings</span>
+<span class="n">compiled</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">program</span><span class="p">,</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+    <span class="n">num_trials</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>              <span class="c1"># 3-5 optimization trials</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>  <span class="c1"># Up to 8 demos per module</span>
+    <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>       <span class="c1"># Up to 4 labeled demos</span>
+<span class="p">)</span>
+
+<span class="c1"># Context window management (important for large pipelines)</span>
+<span class="c1"># Total context budget: 16k tokens typical</span>
+<span class="c1"># Reserve: ~4k for reasoning</span>
+<span class="c1"># Remaining: ~12k for instructions + demonstrations</span>
+<span class="c1"># With 8 demos at ~300 tokens each: 2.4k tokens</span>
+<span class="c1"># Leaves: ~9.6k for instructions and output</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-table">
+<h3>Configuration Table<a class="headerlink" href="#configuration-table" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num_candidates</span></code></p></td>
+<td><p>10</p></td>
+<td><p>5-30</p></td>
+<td><p>Instruction candidates per module</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">init_temperature</span></code></p></td>
+<td><p>1.0</p></td>
+<td><p>0.5-1.5</p></td>
+<td><p>Meta-prompt sampling temperature</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">num_trials</span></code></p></td>
+<td><p>3</p></td>
+<td><p>1-10</p></td>
+<td><p>Optimization iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_bootstrapped_demos</span></code></p></td>
+<td><p>8</p></td>
+<td><p>0-16</p></td>
+<td><p>Max demonstrations per module</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_labeled_demos</span></code></p></td>
+<td><p>4</p></td>
+<td><p>0-8</p></td>
+<td><p>Max labeled (gold) demonstrations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>None</p></td>
+<td><p>“light”/”medium”/”heavy”</p></td>
+<td><p>Auto-configuration mode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="auto-mode-configurations">
+<h3>Auto Mode Configurations<a class="headerlink" href="#auto-mode-configurations" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Light mode: Quick optimization for simple tasks</span>
+<span class="c1"># Equivalent to: num_candidates=5, init_temperature=0.8</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;light&quot;</span><span class="p">)</span>
+
+<span class="c1"># Medium mode: Balanced optimization (recommended default)</span>
+<span class="c1"># Equivalent to: num_candidates=10, init_temperature=1.0</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">)</span>
+
+<span class="c1"># Heavy mode: Extensive optimization for complex tasks</span>
+<span class="c1"># Equivalent to: num_candidates=20, init_temperature=1.2</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;heavy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-benchmarks">
+<h2>Performance Benchmarks<a class="headerlink" href="#performance-benchmarks" title="Link to this heading">#</a></h2>
+<section id="research-results">
+<h3>Research Results<a class="headerlink" href="#research-results" title="Link to this heading">#</a></h3>
+<p>MIPRO has been extensively benchmarked across diverse tasks:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Dataset</p></th>
+<th class="head"><p>Task Type</p></th>
+<th class="head"><p>Manual Prompt</p></th>
+<th class="head"><p>MIPRO Optimized</p></th>
+<th class="head"><p>Improvement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HotpotQA</p></td>
+<td><p>Multi-hop QA</p></td>
+<td><p>32.0 F1</p></td>
+<td><p>52.3 F1</p></td>
+<td><p>+63.4%</p></td>
+</tr>
+<tr class="row-odd"><td><p>GSM8K</p></td>
+<td><p>Math Reasoning</p></td>
+<td><p>28.5%</p></td>
+<td><p>33.8%</p></td>
+<td><p>+18.6%</p></td>
+</tr>
+<tr class="row-even"><td><p>CodeAlpaca</p></td>
+<td><p>Code Generation</p></td>
+<td><p>63.1%</p></td>
+<td><p>64.8%</p></td>
+<td><p>+2.7%</p></td>
+</tr>
+<tr class="row-odd"><td><p>FEVER</p></td>
+<td><p>Fact Verification</p></td>
+<td><p>71.2%</p></td>
+<td><p>78.9%</p></td>
+<td><p>+10.8%</p></td>
+</tr>
+<tr class="row-even"><td><p>Natural Questions</p></td>
+<td><p>Open-domain QA</p></td>
+<td><p>45.3%</p></td>
+<td><p>54.7%</p></td>
+<td><p>+20.8%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="reproducing-benchmarks">
+<h3>Reproducing Benchmarks<a class="headerlink" href="#reproducing-benchmarks" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">benchmark_mipro_hotpotqa</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reproduce HotpotQA benchmark results.</span>
+
+<span class="sd">    Expected: ~52.3 F1 with MIPRO optimization</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Define multi-hop QA program</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">HotpotQA</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hop1</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question, context -&gt; intermediate_answer&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hop2</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+                <span class="s2">&quot;question, intermediate_answer, context -&gt; final_answer&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+            <span class="c1"># First hop</span>
+            <span class="n">context1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+            <span class="n">hop1_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hop1</span><span class="p">(</span>
+                <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context1</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Second hop (refined query)</span>
+            <span class="n">refined_query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">hop1_result</span><span class="o">.</span><span class="n">intermediate_answer</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">context2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">refined_query</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+            <span class="n">final</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hop2</span><span class="p">(</span>
+                <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+                <span class="n">intermediate_answer</span><span class="o">=</span><span class="n">hop1_result</span><span class="o">.</span><span class="n">intermediate_answer</span><span class="p">,</span>
+                <span class="n">context</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context2</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+                <span class="n">answer</span><span class="o">=</span><span class="n">final</span><span class="o">.</span><span class="n">final_answer</span><span class="p">,</span>
+                <span class="n">reasoning</span><span class="o">=</span><span class="n">final</span><span class="o">.</span><span class="n">rationale</span>
+            <span class="p">)</span>
+
+    <span class="c1"># F1 metric for evaluation</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hotpot_f1</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+        <span class="n">pred_tokens</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">gold_tokens</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="n">common</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">pred_tokens</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">Counter</span><span class="p">(</span><span class="n">gold_tokens</span><span class="p">)</span>
+        <span class="n">num_same</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">common</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">num_same</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">num_same</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_tokens</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">num_same</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_tokens</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">f1</span>
+
+    <span class="c1"># MIPRO optimization</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="n">hotpot_f1</span><span class="p">,</span>
+        <span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">optimized</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="n">HotpotQA</span><span class="p">(),</span>
+        <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+        <span class="n">num_trials</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">6</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Evaluate</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dspy.evaluate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluate</span>
+    <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluate</span><span class="p">(</span><span class="n">devset</span><span class="o">=</span><span class="n">testset</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">hotpot_f1</span><span class="p">)</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="n">evaluator</span><span class="p">(</span><span class="n">optimized</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HotpotQA F1 Score: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">optimized</span><span class="p">,</span> <span class="n">score</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="what-makes-mipro-special">
+<h2>What Makes MIPRO Special?<a class="headerlink" href="#what-makes-mipro-special" title="Link to this heading">#</a></h2>
+<section id="dual-optimization">
+<h3>Dual Optimization<a class="headerlink" href="#dual-optimization" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Instruction Optimization</strong>: Rewrites and refines natural language instructions using meta-prompting</p></li>
+<li><p><strong>Demonstration Optimization</strong>: Selects and generates optimal examples using utility-based scoring</p></li>
+<li><p><strong>Joint Optimization</strong>: Optimizes instructions and examples together using simulated annealing</p></li>
+</ol>
+</section>
+<section id="multi-step-process">
+<h3>Multi-Step Process<a class="headerlink" href="#multi-step-process" title="Link to this heading">#</a></h3>
+<p>MIPRO uses an iterative approach to progressively improve your program:</p>
+<ol class="arabic simple">
+<li><p>Generate diverse instruction candidates via meta-prompting</p></li>
+<li><p>Bootstrap and score potential demonstrations</p></li>
+<li><p>Use simulated annealing to search configuration space</p></li>
+<li><p>Evaluate candidates on validation set</p></li>
+<li><p>Select best configuration based on metric performance</p></li>
+</ol>
+</section>
+</section>
+<section id="basic-mipro-usage">
+<h2>Basic MIPRO Usage<a class="headerlink" href="#basic-mipro-usage" title="Link to this heading">#</a></h2>
+<section id="simple-example">
+<h3>Simple Example<a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">MIPRO</span>
+
+<span class="c1"># 1. Define your program</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AdvancedQA</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># 2. Define evaluation metric</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">answer_em</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+<span class="c1"># 3. Prepare data</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What causes rain?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Condensation of water vapor&quot;</span><span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;Why is the sky blue?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Rayleigh scattering of light&quot;</span><span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># 4. Create MIPRO optimizer</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">answer_em</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>      <span class="c1"># Generate 10 candidate instructions</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.0</span>     <span class="c1"># Start with high creativity</span>
+<span class="p">)</span>
+
+<span class="c1"># 5. Compile the program</span>
+<span class="n">compiled_qa</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">AdvancedQA</span><span class="p">(),</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+    <span class="n">num_trials</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>          <span class="c1"># Run optimization 3 times</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span>
+<span class="p">)</span>
+
+<span class="c1"># 6. Use the optimized program</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">compiled_qa</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;How do airplanes fly?&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-configuration">
+<h2>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading">#</a></h2>
+<section id="customizing-mipro-parameters">
+<h3>Customizing MIPRO Parameters<a class="headerlink" href="#customizing-mipro-parameters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">your_metric</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>          <span class="c1"># More instruction candidates</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>       <span class="c1"># Higher initial creativity</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>               <span class="c1"># Show optimization progress</span>
+    <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">,</span>             <span class="c1"># Auto mode: &quot;light&quot;, &quot;medium&quot;, &quot;heavy&quot;</span>
+    <span class="n">adapt_temperature</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>    <span class="c1"># Adapt temperature during optimization</span>
+    <span class="n">logic_history</span><span class="o">=</span><span class="kc">True</span>         <span class="c1"># Track optimization history</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-objective-optimization">
+<h3>Multi-Objective Optimization<a class="headerlink" href="#multi-objective-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Combines multiple metrics.&quot;&quot;&quot;</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">exact_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">efficiency</span> <span class="o">=</span> <span class="n">length_penalty</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="n">coherence</span> <span class="o">=</span> <span class="n">coherence_score</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+
+    <span class="c1"># Weighted combination</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">accuracy</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">efficiency</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">coherence</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">multi_metric</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mipro-optimization-strategies">
+<h2>MIPRO Optimization Strategies<a class="headerlink" href="#mipro-optimization-strategies" title="Link to this heading">#</a></h2>
+<section id="instruction-evolution">
+<h3>1. Instruction Evolution<a class="headerlink" href="#instruction-evolution" title="Link to this heading">#</a></h3>
+<p>MIPRO evolves instructions through multiple generations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generation 0: Original instruction</span>
+<span class="n">original_inst</span> <span class="o">=</span> <span class="s2">&quot;Answer the question based on your knowledge.&quot;</span>
+
+<span class="c1"># Generation 1: MIPRO variations</span>
+<span class="n">gen1_variations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Carefully analyze the question and provide a precise answer.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Think step by step before giving your final answer.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Consider the context and nuances of the question.&quot;</span><span class="p">,</span>
+    <span class="c1"># ... more variations</span>
+<span class="p">]</span>
+
+<span class="c1"># Generation 2: Refined instructions</span>
+<span class="n">gen2_variations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Analyze the question step-by-step, consider all relevant information, and provide a precise, accurate answer.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Break down the question into components, reason about each, then synthesize a comprehensive answer.&quot;</span><span class="p">,</span>
+    <span class="c1"># ... even better instructions</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="demonstration-synthesis">
+<h3>2. Demonstration Synthesis<a class="headerlink" href="#demonstration-synthesis" title="Link to this heading">#</a></h3>
+<p>MIPRO can create synthetic demonstrations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SyntheticExampleGenerator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lm</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lm</span> <span class="o">=</span> <span class="n">lm</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_example</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instruction</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a new example based on instruction.&quot;&quot;&quot;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Instruction: </span><span class="si">{</span><span class="n">instruction</span><span class="si">}</span>
+
+<span class="s2">        Generate a high-quality example for this instruction about: </span><span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+
+<span class="s2">        Example:</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+
+<span class="c1"># MIPRO uses this internally to create diverse examples</span>
+</pre></div>
+</div>
+</section>
+<section id="joint-optimization">
+<h3>3. Joint Optimization<a class="headerlink" href="#joint-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># MIPRO evaluates instruction-example pairs together</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate_pair</span><span class="p">(</span><span class="n">instruction</span><span class="p">,</span> <span class="n">examples</span><span class="p">,</span> <span class="n">test_set</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate how well instruction and examples work together.&quot;&quot;&quot;</span>
+    <span class="n">temp_program</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">instruction</span><span class="p">)</span>
+    <span class="n">temp_program</span><span class="o">.</span><span class="n">demos</span> <span class="o">=</span> <span class="n">examples</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">test_example</span> <span class="ow">in</span> <span class="n">test_set</span><span class="p">:</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">temp_program</span><span class="p">(</span><span class="o">**</span><span class="n">test_example</span><span class="o">.</span><span class="n">inputs</span><span class="p">())</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="n">evaluate_metric</span><span class="p">(</span><span class="n">test_example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">score</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_set</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-mipro-with-complex-programs">
+<h2>Using MIPRO with Complex Programs<a class="headerlink" href="#using-mipro-with-complex-programs" title="Link to this heading">#</a></h2>
+<section id="multi-module-programs">
+<h3>Multi-Module Programs<a class="headerlink" href="#multi-module-programs" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RAGSystem</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_passages</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">num_passages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;context, question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># MIPRO optimizes both modules</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">answer_em</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">optimized_rag</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="n">RAGSystem</span><span class="p">(),</span>
+    <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-module-optimization">
+<h3>Custom Module Optimization<a class="headerlink" href="#custom-module-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomAnalyzer</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text -&gt; entities, sentiment&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">summarizer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;text, entities, sentiment -&gt; summary&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">extracted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extractor</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">summarizer</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span>
+            <span class="n">entities</span><span class="o">=</span><span class="n">extracted</span><span class="o">.</span><span class="n">entities</span><span class="p">,</span>
+            <span class="n">sentiment</span><span class="o">=</span><span class="n">extracted</span><span class="o">.</span><span class="n">sentiment</span>
+        <span class="p">)</span>
+
+<span class="c1"># MIPRO with custom evaluation</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">analyzer_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">entity_f1</span> <span class="o">=</span> <span class="n">calculate_f1</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">entities</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">entities</span><span class="p">)</span>
+    <span class="n">sentiment_match</span> <span class="o">=</span> <span class="n">example</span><span class="o">.</span><span class="n">sentiment</span> <span class="o">==</span> <span class="n">pred</span><span class="o">.</span><span class="n">sentiment</span>
+    <span class="n">summary_rouge</span> <span class="o">=</span> <span class="n">rouge_score</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span> <span class="n">pred</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="n">entity_f1</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">sentiment_match</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">summary_rouge</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">analyzer_metric</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">analyzer</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">CustomAnalyzer</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mipro-parameters-reference">
+<h2>MIPRO Parameters Reference<a class="headerlink" href="#mipro-parameters-reference" title="Link to this heading">#</a></h2>
+<section id="core-parameters">
+<h3>Core Parameters<a class="headerlink" href="#core-parameters" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metric</span></code></p></td>
+<td><p>Callable</p></td>
+<td><p>Required</p></td>
+<td><p>Evaluation function</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">num_candidates</span></code></p></td>
+<td><p>int</p></td>
+<td><p>10</p></td>
+<td><p>Number of instruction candidates</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">init_temperature</span></code></p></td>
+<td><p>float</p></td>
+<td><p>1.0</p></td>
+<td><p>Initial creativity temperature</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code></p></td>
+<td><p>bool</p></td>
+<td><p>False</p></td>
+<td><p>Show optimization details</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>str</p></td>
+<td><p>None</p></td>
+<td><p>Auto mode: “light”, “medium”, “heavy”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="advanced-parameters">
+<h3>Advanced Parameters<a class="headerlink" href="#advanced-parameters" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">complex_metric</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;heavy&quot;</span><span class="p">,</span>
+    <span class="n">adapt_temperature</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">logic_history</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">breadth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>               <span class="c1"># Search breadth</span>
+    <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>                  <span class="c1"># Search depth</span>
+    <span class="n">max_labeled_demos</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>      <span class="c1"># Max labeled examples</span>
+    <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="c1"># Max generated examples</span>
+    <span class="n">temperature_range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">),</span>  <span class="c1"># Temperature bounds</span>
+    <span class="n">instruction_penalty</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="c1"># Penalize long instructions</span>
+    <span class="n">example_diversity</span><span class="o">=</span><span class="mf">0.2</span>     <span class="c1"># Encourage diverse examples</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mipro-auto-modes">
+<h2>MIPRO Auto Modes<a class="headerlink" href="#mipro-auto-modes" title="Link to this heading">#</a></h2>
+<section id="light-mode">
+<h3>Light Mode<a class="headerlink" href="#light-mode" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Quick optimization for simple tasks</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;light&quot;</span><span class="p">)</span>
+<span class="c1"># Equivalent to:</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">num_candidates</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="medium-mode">
+<h3>Medium Mode<a class="headerlink" href="#medium-mode" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Balanced optimization</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">)</span>
+<span class="c1"># Equivalent to:</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="heavy-mode">
+<h3>Heavy Mode<a class="headerlink" href="#heavy-mode" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extensive optimization for complex tasks</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">auto</span><span class="o">=</span><span class="s2">&quot;heavy&quot;</span><span class="p">)</span>
+<span class="c1"># Equivalent to:</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">num_candidates</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring-mipro-optimization">
+<h2>Monitoring MIPRO Optimization<a class="headerlink" href="#monitoring-mipro-optimization" title="Link to this heading">#</a></h2>
+<section id="progress-tracking">
+<h3>Progress Tracking<a class="headerlink" href="#progress-tracking" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="c1"># Enable detailed logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="c1"># MIPRO will log:</span>
+<span class="c1"># - Generation 1 instructions</span>
+<span class="c1"># - Performance scores</span>
+<span class="c1"># - Best candidates</span>
+<span class="c1"># - Convergence information</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">your_metric</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-callbacks">
+<h3>Custom Callbacks<a class="headerlink" href="#custom-callbacks" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MIPROTracker</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">program</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="n">traces</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">current_score</span> <span class="o">=</span> <span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">current_score</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span> <span class="o">=</span> <span class="n">current_score</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;generation&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span>
+            <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">current_score</span><span class="p">,</span>
+            <span class="s1">&#39;best&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_score</span>
+        <span class="p">})</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gen </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="si">}</span><span class="s2">: Score=</span><span class="si">{</span><span class="n">current_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Best=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">best_score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">tracker</span> <span class="o">=</span> <span class="n">MIPROTracker</span><span class="p">()</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">your_metric</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">tracker</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading">#</a></h2>
+<section id="start-with-good-instructions">
+<h3>1. Start with Good Instructions<a class="headerlink" href="#start-with-good-instructions" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bad: Too vague</span>
+<span class="n">vague_instruction</span> <span class="o">=</span> <span class="s2">&quot;Answer the question.&quot;</span>
+
+<span class="c1"># Good: Specific and clear</span>
+<span class="n">good_instruction</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Analyze the question carefully, break it down into key components,</span>
+<span class="s2">provide a comprehensive answer that addresses all aspects of the question.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Even better: Include examples of desired behavior</span>
+<span class="n">best_instruction</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">When answering questions:</span>
+<span class="s2">1. Identify the core question being asked</span>
+<span class="s2">2. Consider relevant context and background information</span>
+<span class="s2">3. Provide a clear, direct answer</span>
+<span class="s2">4. Include supporting details or explanations when helpful</span>
+<span class="s2">5. Ensure the answer is accurate and complete</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="use-appropriate-temperature">
+<h3>2. Use Appropriate Temperature<a class="headerlink" href="#use-appropriate-temperature" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For well-defined tasks with clear answers</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># For creative or open-ended tasks</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="c1"># For mixed tasks (most common case)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">init_temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="provide-diverse-training-data">
+<h3>3. Provide Diverse Training Data<a class="headerlink" href="#provide-diverse-training-data" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ensure coverage of different question types</span>
+<span class="n">diverse_trainset</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Factual questions</span>
+<span class="n">diverse_trainset</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">factual_questions</span><span class="p">)</span>
+
+<span class="c1"># Reasoning questions</span>
+<span class="n">diverse_trainset</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">reasoning_questions</span><span class="p">)</span>
+
+<span class="c1"># Opinion questions</span>
+<span class="n">diverse_trainset</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">opinion_questions</span><span class="p">)</span>
+
+<span class="c1"># Domain-specific questions</span>
+<span class="n">diverse_trainset</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">domain_questions</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluate-progressively">
+<h3>4. Evaluate Progressively<a class="headerlink" href="#evaluate-progressively" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">progressive_evaluation</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">valset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate at different stages of optimization.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">num_trials</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]:</span>
+        <span class="n">compiled</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="n">program</span><span class="p">,</span>
+            <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">,</span>
+            <span class="n">num_trials</span><span class="o">=</span><span class="n">num_trials</span>
+        <span class="p">)</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">valset</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">num_trials</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trials: </span><span class="si">{</span><span class="n">num_trials</span><span class="si">}</span><span class="s2">, Score: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-pitfalls-and-solutions">
+<h2>Common Pitfalls and Solutions<a class="headerlink" href="#common-pitfalls-and-solutions" title="Link to this heading">#</a></h2>
+<section id="pitfall-1-over-optimization">
+<h3>Pitfall 1: Over-optimization<a class="headerlink" href="#pitfall-1-over-optimization" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Too many candidates leading to diminishing returns</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">num_candidates</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># May overfit</span>
+
+<span class="c1"># Solution: Use reasonable limits and monitor performance</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">num_candidates</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">auto</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pitfall-2-inadequate-evaluation-metric">
+<h3>Pitfall 2: Inadequate Evaluation Metric<a class="headerlink" href="#pitfall-2-inadequate-evaluation-metric" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Metric doesn&#39;t capture important aspects</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">example</span><span class="o">.</span><span class="n">answer</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span>  <span class="c1"># Too simple</span>
+
+<span class="c1"># Solution: Use comprehensive metrics</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">comprehensive_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">exact_match</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">completeness</span> <span class="o">=</span> <span class="n">coverage_score</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">clarity</span> <span class="o">=</span> <span class="n">clarity_score</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">accuracy</span> <span class="o">+</span> <span class="mf">0.3</span> <span class="o">*</span> <span class="n">completeness</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">clarity</span>
+</pre></div>
+</div>
+</section>
+<section id="pitfall-3-poor-training-data-quality">
+<h3>Pitfall 3: Poor Training Data Quality<a class="headerlink" href="#pitfall-3-poor-training-data-quality" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Problem: Inconsistent or incorrect labels</span>
+<span class="n">noisy_data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="s2">&quot;What is 2+2?&quot;</span><span class="p">,</span> <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;5&quot;</span><span class="p">),</span>  <span class="c1"># Wrong!</span>
+    <span class="c1"># ... more noisy examples</span>
+<span class="p">]</span>
+
+<span class="c1"># Solution: Clean and validate data</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">validate_example</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
+            <span class="n">cleaned</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cleaned</span>
+
+<span class="n">clean_trainset</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="comparing-mipro-with-other-optimizers">
+<h2>Comparing MIPRO with Other Optimizers<a class="headerlink" href="#comparing-mipro-with-other-optimizers" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dspy.teleprompter</span><span class="w"> </span><span class="kn">import</span> <span class="n">BootstrapFewShot</span><span class="p">,</span> <span class="n">MIPRO</span>
+
+<span class="c1"># Compare optimizers on same task</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compare_optimizers</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+    <span class="n">optimizers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Baseline&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s1">&#39;BootstrapFewShot&#39;</span><span class="p">:</span> <span class="n">BootstrapFewShot</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">exact_match</span><span class="p">),</span>
+        <span class="s1">&#39;MIPRO&#39;</span><span class="p">:</span> <span class="n">MIPRO</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">exact_match</span><span class="p">,</span> <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">optimizer</span> <span class="ow">in</span> <span class="n">optimizers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">optimizer</span><span class="p">:</span>
+            <span class="n">compiled</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">program</span><span class="p">,</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">compiled</span> <span class="o">=</span> <span class="n">program</span>  <span class="c1"># Baseline</span>
+
+        <span class="n">score</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">compiled</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">compare_optimizers</span><span class="p">(</span><span class="n">my_program</span><span class="p">,</span> <span class="n">trainset</span><span class="p">,</span> <span class="n">testset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimization Results:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>MIPRO optimizes both instructions and examples simultaneously</p></li>
+<li><p>It uses an evolutionary approach to progressively improve programs</p></li>
+<li><p>MIPRO achieves superior performance on complex tasks</p></li>
+<li><p>Proper metric design is crucial for successful optimization</p></li>
+<li><p>Start with good instructions and diverse training data</p></li>
+<li><p>Monitor optimization progress to avoid overfitting</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore KNNFewShot, an optimizer that uses similarity-based example selection for efficient optimization.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/05_optimizers"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02a_copro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">COPRO: Chain-of-Thought Prompt Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_knnfewshot.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">KNNFewShot: Similarity-Based Example Selection</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-architecture-dual-component-optimization">Core Architecture: Dual-Component Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-1-instruction-generation">Component 1: Instruction Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#component-2-demonstration-selection">Component 2: Demonstration Selection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-prompting-for-instruction-generation">Meta-Prompting for Instruction Generation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-meta-prompting-works">How Meta-Prompting Works</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-sampling-for-diversity">Temperature Sampling for Diversity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#self-reflection-for-instruction-refinement">Self-Reflection for Instruction Refinement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-selection-strategy">Demonstration Selection Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-driven-selection">Data-Driven Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-specific-demonstration-counts">Module-Specific Demonstration Counts</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulated-annealing-for-prompt-search">Simulated Annealing for Prompt Search</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-simulated-annealing">Why Simulated Annealing?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-neighbor-generation">Configuration Neighbor Generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-stage-pipeline-optimization">Multi-Stage Pipeline Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-coupling-considerations">Module Coupling Considerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-retrieve-generate-pipeline-example">Generate-Retrieve-Generate Pipeline Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-shot-vs-few-shot-trade-offs">Zero-Shot vs Few-Shot Trade-offs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hyperparameter-configuration">Hyperparameter Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-settings">Recommended Settings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-table">Configuration Table</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-mode-configurations">Auto Mode Configurations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-benchmarks">Performance Benchmarks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#research-results">Research Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing-benchmarks">Reproducing Benchmarks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-makes-mipro-special">What Makes MIPRO Special?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dual-optimization">Dual Optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-process">Multi-Step Process</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-mipro-usage">Basic MIPRO Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-configuration">Advanced Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-mipro-parameters">Customizing MIPRO Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-objective-optimization">Multi-Objective Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-optimization-strategies">MIPRO Optimization Strategies</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instruction-evolution">1. Instruction Evolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demonstration-synthesis">2. Demonstration Synthesis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-optimization">3. Joint Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-mipro-with-complex-programs">Using MIPRO with Complex Programs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-module-programs">Multi-Module Programs</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-module-optimization">Custom Module Optimization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-parameters-reference">MIPRO Parameters Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-parameters">Core Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-parameters">Advanced Parameters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-auto-modes">MIPRO Auto Modes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#light-mode">Light Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#medium-mode">Medium Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#heavy-mode">Heavy Mode</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#monitoring-mipro-optimization">Monitoring MIPRO Optimization</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#progress-tracking">Progress Tracking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-callbacks">Custom Callbacks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-with-good-instructions">1. Start with Good Instructions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-appropriate-temperature">2. Use Appropriate Temperature</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#provide-diverse-training-data">3. Provide Diverse Training Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluate-progressively">4. Evaluate Progressively</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-and-solutions">Common Pitfalls and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-1-over-optimization">Pitfall 1: Over-optimization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-2-inadequate-evaluation-metric">Pitfall 2: Inadequate Evaluation Metric</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfall-3-poor-training-data-quality">Pitfall 3: Poor Training Data Quality</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-mipro-with-other-optimizers">Comparing MIPRO with Other Optimizers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

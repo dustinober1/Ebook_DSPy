@@ -1,0 +1,1312 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>RAG Systems: Building Intelligent Document Q&amp;A &#8212; DSPy: The Complete Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'content/06_real_world_applications/01_rag_systems';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Multi-hop Search: Complex Reasoning Across Documents" href="02_multi_hop_search.html" />
+    <link rel="prev" title="Chapter 6: Building Real-World Applications" href="00_chapter_intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../00_frontmatter/00_preface.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DSPy: The Complete Guide</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/01_how_to_use_this_book.html">How to Use This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/02_prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../00_frontmatter/03_setup_instructions.html">Setup Instructions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 1 - Fundamentals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../01_fundamentals/00_chapter_intro.html">Chapter 1: DSPy Fundamentals</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/01_what_is_dspy.html">What is DSPy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/02_programming_vs_prompting.html">Programming vs. Prompting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/03_installation_setup.html">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/04_first_dspy_program.html">Your First DSPy Program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/05_language_models.html">Language Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../01_fundamentals/06_exercises.html">Chapter 1 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 2 - Signatures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../02_signatures/00_chapter_intro.html">Chapter 2: Signatures</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/01_understanding_signatures.html">Understanding Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/02_signature_syntax.html">Signature Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/03_typed_signatures.html">Typed Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/04_advanced_signatures.html">Advanced Signatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/05_practical_examples.html">Practical Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_signatures/06_exercises.html">Chapter 2 Exercises</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 3 - Modules</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../03_modules/00_chapter_intro.html">Chapter 3: Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/01_module_basics.html">Module Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02_predict_module.html">The Predict Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/02a_typed_predictor.html">TypedPredictor: Type-Safe Language Model Wrappers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/03_chainofthought.html">Chain of Thought Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/04_react_agents.html">ReAct Agents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/05_custom_modules.html">Custom Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/06_composing_modules.html">Composing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/07_exercises.html">Chapter 3 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_modules/08_assertions.html">Assertions Module</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 4 - Evaluation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../04_evaluation/00_chapter_intro.html">Chapter 4: Evaluation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/01_why_evaluation_matters.html">Why Evaluation Matters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/02_creating_datasets.html">Creating Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/03_defining_metrics.html">Defining Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/04_evaluation_loops.html">Evaluation Loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/05_best_practices.html">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/06_exercises.html">Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/07_structured_prompting.html">Structured Prompting for Robust Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/08_llm_as_a_judge.html">LLM-as-a-Judge for Context-Sensitive Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_evaluation/09_human_aligned_evaluation.html">Human-Aligned Evaluation: Capturing What Really Matters</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 5 - Optimizers</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../05_optimizers/00_chapter_intro.html">Chapter 5: Optimizers &amp; Compilation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/01_compilation_concept.html">The Compilation Concept in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02_bootstrapfewshot.html">BootstrapFewShot: Automatic Few-Shot Example Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/02a_copro.html">COPRO: Chain-of-Thought Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/03_mipro.html">MIPRO: Multi-step Instruction and Demonstration Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/04_knnfewshot.html">KNNFewShot: Similarity-Based Example Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/05_finetuning.html">Fine-Tuning Small Language Models in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/06_choosing_optimizers.html">Choosing Optimizers: Decision Guide and Trade-offs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_constraint_driven_optimization.html">Constraint-Driven Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/07_exercises.html">Chapter 5 Exercises: Optimizers &amp; Compilation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/08_reflective_prompt_evolution.html">Reflective Prompt Evolution (RPE): Evolutionary Optimization Without Gradients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09_copa_compiler_method.html">COPA: Compiler and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/09a_copa_method.html">COPA: Combined Fine-Tuning and Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/10_joint_optimization.html">Joint Optimization: Fine-Tuning and Prompt Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/11_monte_carlo_optimization.html">Monte Carlo Optimization in DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/12_bayesian_optimization.html">Bayesian Optimization for Prompt Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/13_comprehensive_examples.html">Comprehensive Examples and Implementation Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/14_multistage_optimization_theory.html">Multi-stage Optimization Theory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/15_instruction_tuning_frameworks.html">Instruction Tuning Frameworks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/16_demonstration_optimization.html">Demonstration Optimization Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/17_multistage_architectures.html">Multi-stage Program Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/18_complex_pipeline_optimization.html">Optimization Strategies for Complex Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/19_instruction_demonstration_interactions.html">Instruction and Demonstration Interaction Effects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/20_prompts_as_hyperparameters.html">Prompts as Auto-Optimized Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/21_minimal_data_pipelines.html">Minimal Data Training Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/22_gepa_genetic_pareto_optimization.html">GEPA: Genetic-Pareto Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/23_state_space_prompt_optimization.html">State-Space Search for Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/24_inpars_plus_synthetic_data_ir.html">InPars+: Advanced Synthetic Data Generation for Information Retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/25_custom_mipro_enhanced_optimization.html">CustomMIPROv2: Enhanced Multi-Stage Prompt Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../05_optimizers/26_automatic_prompt_optimization_research.html">Automatic Prompt Optimization: When AI Outperforms Humans</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 6 - Real-World Applications</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="00_chapter_intro.html">Chapter 6: Building Real-World Applications</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">RAG Systems: Building Intelligent Document Q&amp;A</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_multi_hop_search.html">Multi-hop Search: Complex Reasoning Across Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_classification_tasks.html">Classification Tasks: Building Robust Text Categorization Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_entity_extraction.html">Entity Extraction: Mining Structured Information from Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_intelligent_agents.html">Intelligent Agents: Building Autonomous Problem-Solving Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_code_generation.html">Code Generation: Building Automated Programming Assistants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_exercises.html">Chapter 6 Exercises: Building Real-World Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07a_perspective_driven_research.html">Perspective-Driven Research for Article Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_extreme_multilabel_classification.html">Extreme Multi-Label Classification: Scaling to Millions of Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08a_long_form_generation.html">Long-form Article Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_outline_generation.html">Outline Generation for Structured Article Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_extreme_few_shot_learning.html">Extreme Few-Shot Learning: Training with 10 Gold Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_ir_model_training_scratch.html">IR Model Training from Scratch: Methodology and Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_lingvarbench_healthcare_synthetic_data.html">LingVarBench: Synthetic Healthcare Transcript Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_scientific_figure_caption_generation.html">Scientific Figure Caption Generation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_retrieval_augmented_guardrails.html">Retrieval-Augmented Guardrails for AI Systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_graphrag_wikipedia_tidb_tutorial.html">GraphRAG from Wikipedia: Building with DSPy, OpenAI, and TiDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_framework_comparisons_dspy_ecosystem.html">Framework Comparisons in the DSPy Ecosystem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_multi_agent_rag_systems.html">Multi-Agent RAG Systems with DSPy</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 7 - Advanced Topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../07_advanced_topics/00_chapter_intro.html">Chapter 7: Advanced Topics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/01_adapters_tools.html">Adapters and Tools: Extending DSPy Capabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/02_caching_performance.html">Caching and Performance: Building High-Performance DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/03_async_streaming.html">Async and Streaming: Building Real-Time DSPy Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/04_debugging_tracing.html">Debugging and Tracing: Mastering DSPy Application Diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/05_deployment_strategies.html">Deployment Strategies: Taking DSPy Applications to Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/06_exercises.html">Chapter 7 Exercises: Advanced Topics Mastery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/07_self_refining_pipelines.html">Self-Refining Pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../07_advanced_topics/08_declarative_compilation.html">Declarative Language Model Compilation Techniques</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Part 8 - Case Studies</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../08_case_studies/00_introduction.html">Chapter 8: Case Studies</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01_enterprise_rag_system.html">Case Study 1: Building an Enterprise RAG System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/01a_healthcare_clinical_notes.html">Case Study 1: Clinical Notes Analysis with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/02_customer_support_chatbot.html">Case Study 2: Developing a Customer Support Chatbot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/03_ai_code_assistant.html">Case Study 3: Creating an AI-Powered Code Assistant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/04_automated_data_analysis.html">Case Study 4: Building an Automated Data Analysis Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05_exercises.html">Chapter 8 Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/05a_storm_writing_assistant.html">Case Study 5: STORM - AI-Powered Writing Assistant for Wikipedia-like Articles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/06_assertion_driven_applications.html">Case Study: Assertion-Driven Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/07_databricks_jetblue_llm_optimization.html">Case Study 7: Databricks &amp; JetBlue LLM Pipeline Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/08_replit_code_repair_dspy.html">Case Study 8: Replit Code Repair with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/09_databricks_dspy_platform_integration.html">Case Study 9: Databricks Platform Integration with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/10_ddi_behavioral_simulation_automation.html">Case Study 10: DDI Behavioral Simulation Automation with DSPy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../08_case_studies/11_salomatic_medical_report_generation.html">Case Study 11: Salomatic Medical Report Generation with DSPy and Langtrace</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../09_appendices/00_introduction.html">Chapter 9: Appendices</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/01_api_reference_quick.html">API Reference Quick Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/02_troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/03_resources.html">Additional Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/04_glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../09_appendices/05_community_resources.html">Community Resources and Perspectives</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/content/06_real_world_applications/01_rag_systems.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>RAG Systems: Building Intelligent Document Q&A</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-rag">What is RAG?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rag-architecture">The RAG Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-rag-matters">Why RAG Matters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-basic-rag-system">Building a Basic RAG System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-document-collection">Setting Up Document Collection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-basic-rag-system">Using the Basic RAG System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-rag-techniques">Advanced RAG Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-stage-retrieval">Multi-stage Retrieval</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-understanding-and-expansion">Query Understanding and Expansion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversational-rag">Conversational RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-rag-systems">Optimizing RAG Systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-bootstrapfewshot-for-rag">Using BootstrapFewShot for RAG</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-for-complex-rag">MIPRO for Complex RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-rag-applications">Real-World RAG Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#document-q-a-system">Document Q&amp;A System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legal-document-analysis">Legal Document Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healthcare-information-system">Healthcare Information System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-for-rag-systems">Best Practices for RAG Systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#document-preprocessing">1. Document Preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hybrid-retrieval">2. Hybrid Retrieval</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics">3. Evaluation Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges-and-solutions">Common Challenges and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-hallucination">Challenge 1: Hallucination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-outdated-information">Challenge 2: Outdated Information</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-query-understanding">Challenge 3: Query Understanding</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="rag-systems-building-intelligent-document-q-a">
+<h1>RAG Systems: Building Intelligent Document Q&amp;A<a class="headerlink" href="#rag-systems-building-intelligent-document-q-a" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Retrieval-Augmented Generation (RAG) is one of the most powerful and widely used applications of language models today. RAG systems combine the strengths of information retrieval with language generation to answer questions based on large collections of documents. DSPy provides excellent support for building sophisticated RAG systems that can handle real-world complexity.</p>
+</section>
+<section id="what-is-rag">
+<h2>What is RAG?<a class="headerlink" href="#what-is-rag" title="Link to this heading">#</a></h2>
+<section id="the-rag-architecture">
+<h3>The RAG Architecture<a class="headerlink" href="#the-rag-architecture" title="Link to this heading">#</a></h3>
+<p>RAG systems work in two main phases:</p>
+<ol class="arabic simple">
+<li><p><strong>Retrieval Phase</strong>: Find relevant documents or passages from a knowledge base</p></li>
+<li><p><strong>Generation Phase</strong>: Generate answers using the retrieved context</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Question → Retrieve Documents → Generate Answer → Response
+</pre></div>
+</div>
+</section>
+<section id="why-rag-matters">
+<h3>Why RAG Matters<a class="headerlink" href="#why-rag-matters" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Current Information</strong>: Can answer questions about recent events</p></li>
+<li><p><strong>Verifiable</strong>: Sources are cited and can be checked</p></li>
+<li><p><strong>Customizable</strong>: Works with your specific documents</p></li>
+<li><p><strong>Cost-Effective</strong>: No need to retrain models for new domains</p></li>
+<li><p><strong>Scalable</strong>: Can handle millions of documents</p></li>
+</ul>
+</section>
+</section>
+<section id="building-a-basic-rag-system">
+<h2>Building a Basic RAG System<a class="headerlink" href="#building-a-basic-rag-system" title="Link to this heading">#</a></h2>
+<section id="core-components">
+<h3>Core Components<a class="headerlink" href="#core-components" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dspy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dspy.retrieve</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColBERTv2Retriever</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BasicRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_passages</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">num_passages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;context, question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-up-document-collection">
+<h3>Setting Up Document Collection<a class="headerlink" href="#setting-up-document-collection" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample document collection</span>
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Python is a high-level programming language created by Guido van Rossum.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Machine learning is a subset of artificial intelligence that focuses on algorithms.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Natural Language Processing (NLP) deals with interactions between computers and human language.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Deep learning uses neural networks with multiple layers to learn from data.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DSPy is a framework for programming language models.&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Create retriever (in practice, you&#39;d use a proper vector database)</span>
+<span class="n">retriever</span> <span class="o">=</span> <span class="n">ColBERTv2Retriever</span><span class="p">(</span>
+    <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">collection</span><span class="o">=</span><span class="n">documents</span>
+<span class="p">)</span>
+<span class="n">dspy</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">retriever</span><span class="o">=</span><span class="n">retriever</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-the-basic-rag-system">
+<h3>Using the Basic RAG System<a class="headerlink" href="#using-the-basic-rag-system" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize and use the RAG system</span>
+<span class="n">rag</span> <span class="o">=</span> <span class="n">BasicRAG</span><span class="p">()</span>
+
+<span class="c1"># Ask a question</span>
+<span class="n">question</span> <span class="o">=</span> <span class="s2">&quot;What is Python?&quot;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">rag</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Question: </span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Answer: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sources: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">context</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-rag-techniques">
+<h2>Advanced RAG Techniques<a class="headerlink" href="#advanced-rag-techniques" title="Link to this heading">#</a></h2>
+<section id="multi-stage-retrieval">
+<h3>Multi-stage Retrieval<a class="headerlink" href="#multi-stage-retrieval" title="Link to this heading">#</a></h3>
+<p>For complex queries, use multiple retrieval strategies:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AdvancedRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Initial broad retrieval</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="c1"># Rerank for precision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rerank</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query, documents -&gt; ranked_documents&quot;</span><span class="p">)</span>
+        <span class="c1"># Generate final answer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question, context -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Get initial candidates</span>
+        <span class="n">initial_docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Rerank based on question</span>
+        <span class="n">reranked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rerank</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">documents</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">initial_docs</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Use top documents for context</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">reranked</span><span class="o">.</span><span class="n">ranked_documents</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="c1"># Generate answer</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="query-understanding-and-expansion">
+<h3>Query Understanding and Expansion<a class="headerlink" href="#query-understanding-and-expansion" title="Link to this heading">#</a></h3>
+<p>Improve retrieval by understanding and expanding queries:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SmartQueryRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Understand and expand the query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_processor</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question -&gt; keywords, expanded_query&quot;</span><span class="p">)</span>
+        <span class="c1"># Retrieve with multiple queries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Synthesize results</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">synthesize</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;question, contexts -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Process the query</span>
+        <span class="n">processed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_processor</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve with original and expanded query</span>
+        <span class="n">original_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">expanded_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">expanded_query</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Combine and deduplicate results</span>
+        <span class="n">all_contexts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">original_results</span> <span class="o">+</span> <span class="n">expanded_results</span><span class="p">))</span>
+
+        <span class="c1"># Generate answer from combined context</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthesize</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">contexts</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">all_contexts</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">keywords</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">keywords</span><span class="p">,</span>
+            <span class="n">expanded_query</span><span class="o">=</span><span class="n">processed</span><span class="o">.</span><span class="n">expanded_query</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">all_contexts</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="conversational-rag">
+<h3>Conversational RAG<a class="headerlink" href="#conversational-rag" title="Link to this heading">#</a></h3>
+<p>Handle follow-up questions and maintain context:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ConversationalRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Maintain conversation history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_manager</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;conversation_history, new_question -&gt; contextualized_question&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># RAG for contextualized question</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rag</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;context, question -&gt; answer&quot;</span><span class="p">)</span>
+        <span class="c1"># Track conversation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Add question to history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
+
+        <span class="c1"># Contextualize based on history</span>
+        <span class="n">contextualized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_manager</span><span class="p">(</span>
+            <span class="n">conversation_history</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span><span class="p">),</span>
+            <span class="n">new_question</span><span class="o">=</span><span class="n">question</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Retrieve and generate answer</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)(</span><span class="n">contextualized</span><span class="o">.</span><span class="n">contextualized_question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rag</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">contextualized</span><span class="o">.</span><span class="n">contextualized_question</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add response to history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation_history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;assistant&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">contextualized_question</span><span class="o">=</span><span class="n">contextualized</span><span class="o">.</span><span class="n">contextualized_question</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="optimizing-rag-systems">
+<h2>Optimizing RAG Systems<a class="headerlink" href="#optimizing-rag-systems" title="Link to this heading">#</a></h2>
+<section id="using-bootstrapfewshot-for-rag">
+<h3>Using BootstrapFewShot for RAG<a class="headerlink" href="#using-bootstrapfewshot-for-rag" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;context, question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+<span class="c1"># Training data for optimization</span>
+<span class="n">trainset</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;What are the benefits of Python?&quot;</span><span class="p">,</span>
+        <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Python is known for its simplicity, readability, and large ecosystem.&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Python offers simplicity, readability, and has a large ecosystem of libraries.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">dspy</span><span class="o">.</span><span class="n">Example</span><span class="p">(</span>
+        <span class="n">question</span><span class="o">=</span><span class="s2">&quot;How does machine learning work?&quot;</span><span class="p">,</span>
+        <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Machine learning uses algorithms to find patterns in data and make predictions.&quot;</span><span class="p">,</span>
+        <span class="n">answer</span><span class="o">=</span><span class="s2">&quot;Machine learning works by using algorithms to identify patterns in data and make predictions based on those patterns.&quot;</span>
+    <span class="p">),</span>
+    <span class="c1"># ... more examples</span>
+<span class="p">]</span>
+
+<span class="c1"># Define evaluation metric</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rag_metric</span><span class="p">(</span><span class="n">example</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Check if answer is grounded in context</span>
+    <span class="n">context_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">example</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">answer_words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">context_words</span> <span class="o">&amp;</span> <span class="n">answer_words</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">answer_words</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Check relevance (simplified)</span>
+    <span class="n">relevance</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">word</span> <span class="ow">in</span> <span class="n">pred</span><span class="o">.</span><span class="n">answer</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">overlap</span> <span class="o">*</span> <span class="n">relevance</span>
+
+<span class="c1"># Optimize with BootstrapFewShot</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">BootstrapFewShot</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">rag_metric</span><span class="p">,</span> <span class="n">max_bootstrapped_demos</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">optimized_rag</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">OptimizedRAG</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mipro-for-complex-rag">
+<h3>MIPRO for Complex RAG<a class="headerlink" href="#mipro-for-complex-rag" title="Link to this heading">#</a></h3>
+<p>For sophisticated RAG tasks, MIPRO can optimize both instructions and examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ComplexRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyze_question</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; question_type, key_entities&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;question, context, question_type, key_entities -&gt; answer&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Analyze the question</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyze_question</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve relevant context</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Generate targeted answer</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_answer</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">question_type</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">question_type</span><span class="p">,</span>
+            <span class="n">key_entities</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">key_entities</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">question_type</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">question_type</span><span class="p">,</span>
+            <span class="n">key_entities</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">key_entities</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span>
+        <span class="p">)</span>
+
+<span class="c1"># Optimize with MIPRO for complex reasoning</span>
+<span class="n">mipro_optimizer</span> <span class="o">=</span> <span class="n">MIPRO</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="n">rag_metric</span><span class="p">,</span>
+    <span class="n">num_candidates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">init_temperature</span><span class="o">=</span><span class="mf">0.7</span>
+<span class="p">)</span>
+
+<span class="n">optimized_complex_rag</span> <span class="o">=</span> <span class="n">mipro_optimizer</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">ComplexRAG</span><span class="p">(),</span> <span class="n">trainset</span><span class="o">=</span><span class="n">trainset</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="real-world-rag-applications">
+<h2>Real-World RAG Applications<a class="headerlink" href="#real-world-rag-applications" title="Link to this heading">#</a></h2>
+<section id="document-q-a-system">
+<h3>Document Q&amp;A System<a class="headerlink" href="#document-q-a-system" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DocumentQASystem</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document_collection</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span> <span class="o">=</span> <span class="n">document_collection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_answer</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;context, question -&gt; answer, confidence, evidence&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cite_sources</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;answer, context -&gt; citations&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Retrieve relevant documents</span>
+        <span class="n">retrieved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Extract answer with confidence</span>
+        <span class="n">extraction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_answer</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Generate citations</span>
+        <span class="n">citations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cite_sources</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">extraction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">extraction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">extraction</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">evidence</span><span class="o">=</span><span class="n">extraction</span><span class="o">.</span><span class="n">evidence</span><span class="p">,</span>
+            <span class="n">citations</span><span class="o">=</span><span class="n">citations</span><span class="o">.</span><span class="n">citations</span><span class="p">,</span>
+            <span class="n">sources</span><span class="o">=</span><span class="n">retrieved</span>
+        <span class="p">)</span>
+
+<span class="c1"># Example usage</span>
+<span class="n">doc_qa</span> <span class="o">=</span> <span class="n">DocumentQASystem</span><span class="p">(</span><span class="n">my_document_collection</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">doc_qa</span><span class="p">(</span><span class="s2">&quot;What are the main challenges in implementing RAG?&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Answer: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Confidence: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">confidence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sources: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">citations</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="legal-document-analysis">
+<h3>Legal Document Analysis<a class="headerlink" href="#legal-document-analysis" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LegalRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legal_documents</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legal_analysis</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;question, legal_context -&gt; analysis, relevant_laws, precedents&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">risk_assessment</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span>
+            <span class="s2">&quot;analysis, relevant_laws -&gt; risk_level, recommendations&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legal_question</span><span class="p">):</span>
+        <span class="c1"># Retrieve relevant legal documents</span>
+        <span class="n">legal_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">legal_question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Perform legal analysis</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">legal_analysis</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">legal_question</span><span class="p">,</span>
+            <span class="n">legal_context</span><span class="o">=</span><span class="n">legal_context</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Assess risks</span>
+        <span class="n">assessment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">risk_assessment</span><span class="p">(</span>
+            <span class="n">analysis</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">analysis</span><span class="p">,</span>
+            <span class="n">relevant_laws</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">relevant_laws</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">legal_analysis</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">analysis</span><span class="p">,</span>
+            <span class="n">relevant_laws</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">relevant_laws</span><span class="p">,</span>
+            <span class="n">precedents</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">precedents</span><span class="p">,</span>
+            <span class="n">risk_level</span><span class="o">=</span><span class="n">assessment</span><span class="o">.</span><span class="n">risk_level</span><span class="p">,</span>
+            <span class="n">recommendations</span><span class="o">=</span><span class="n">assessment</span><span class="o">.</span><span class="n">recommendations</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="healthcare-information-system">
+<h3>Healthcare Information System<a class="headerlink" href="#healthcare-information-system" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MedicalRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">medical_documents</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_symptoms</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query -&gt; symptoms, conditions&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">medical_analysis</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span>
+            <span class="s2">&quot;symptoms, medical_context -&gt; possible_conditions, confidence&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disclaimer</span> <span class="o">=</span> <span class="s2">&quot;This is not medical advice. Please consult a healthcare professional.&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patient_query</span><span class="p">):</span>
+        <span class="c1"># Extract symptoms and conditions</span>
+        <span class="n">extracted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_symptoms</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">patient_query</span><span class="p">)</span>
+
+        <span class="c1"># Retrieve medical information</span>
+        <span class="n">medical_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
+            <span class="n">question</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">extracted</span><span class="o">.</span><span class="n">symptoms</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">extracted</span><span class="o">.</span><span class="n">conditions</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Analyze with medical context</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">medical_analysis</span><span class="p">(</span>
+            <span class="n">symptoms</span><span class="o">=</span><span class="n">extracted</span><span class="o">.</span><span class="n">symptoms</span><span class="p">,</span>
+            <span class="n">medical_context</span><span class="o">=</span><span class="n">medical_context</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">symptoms</span><span class="o">=</span><span class="n">extracted</span><span class="o">.</span><span class="n">symptoms</span><span class="p">,</span>
+            <span class="n">possible_conditions</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">possible_conditions</span><span class="p">,</span>
+            <span class="n">confidence</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="n">disclaimer</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">disclaimer</span><span class="p">,</span>
+            <span class="n">reasoning</span><span class="o">=</span><span class="n">analysis</span><span class="o">.</span><span class="n">rationale</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="best-practices-for-rag-systems">
+<h2>Best Practices for RAG Systems<a class="headerlink" href="#best-practices-for-rag-systems" title="Link to this heading">#</a></h2>
+<section id="document-preprocessing">
+<h3>1. Document Preprocessing<a class="headerlink" href="#document-preprocessing" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">preprocess_documents</span><span class="p">(</span><span class="n">documents</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean and prepare documents for retrieval.&quot;&quot;&quot;</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+        <span class="c1"># Remove irrelevant sections</span>
+        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">remove_boilerplate</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+        <span class="c1"># Split into manageable chunks</span>
+        <span class="n">chunks</span> <span class="o">=</span> <span class="n">chunk_document</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="c1"># Add metadata</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">):</span>
+            <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">chunk</span><span class="p">,</span>
+                <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;chunk_id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+                <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;timestamp&quot;</span><span class="p">)</span>
+            <span class="p">})</span>
+    <span class="k">return</span> <span class="n">processed</span>
+</pre></div>
+</div>
+</section>
+<section id="hybrid-retrieval">
+<h3>2. Hybrid Retrieval<a class="headerlink" href="#hybrid-retrieval" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">HybridRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyword_search</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">search_type</span><span class="o">=</span><span class="s2">&quot;keyword&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">semantic_search</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">search_type</span><span class="o">=</span><span class="s2">&quot;semantic&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_results</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;results1, results2 -&gt; merged_results&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="c1"># Get keyword results</span>
+        <span class="n">keyword_docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyword_search</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Get semantic results</span>
+        <span class="n">semantic_docs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">semantic_search</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+
+        <span class="c1"># Merge and rank</span>
+        <span class="n">merged</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_results</span><span class="p">(</span>
+            <span class="n">results1</span><span class="o">=</span><span class="n">keyword_docs</span><span class="p">,</span>
+            <span class="n">results2</span><span class="o">=</span><span class="n">semantic_docs</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">merged</span><span class="o">.</span><span class="n">merged_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluation-metrics">
+<h3>3. Evaluation Metrics<a class="headerlink" href="#evaluation-metrics" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_rag</span><span class="p">(</span><span class="n">rag_system</span><span class="p">,</span> <span class="n">testset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive RAG evaluation.&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">testset</span><span class="p">:</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">rag_system</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="c1"># Answer quality</span>
+        <span class="n">answer_quality</span> <span class="o">=</span> <span class="n">evaluate_answer_quality</span><span class="p">(</span>
+            <span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">example</span><span class="o">.</span><span class="n">expected_answer</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Retrieval quality</span>
+        <span class="n">retrieval_quality</span> <span class="o">=</span> <span class="n">evaluate_retrieval_quality</span><span class="p">(</span>
+            <span class="n">prediction</span><span class="o">.</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">example</span><span class="o">.</span><span class="n">relevant_docs</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Grounding (is answer in context?)</span>
+        <span class="n">grounding_score</span> <span class="o">=</span> <span class="n">check_grounding</span><span class="p">(</span>
+            <span class="n">prediction</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">prediction</span><span class="o">.</span><span class="n">context</span>
+        <span class="p">)</span>
+
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;answer_quality&quot;</span><span class="p">:</span> <span class="n">answer_quality</span><span class="p">,</span>
+            <span class="s2">&quot;retrieval_quality&quot;</span><span class="p">:</span> <span class="n">retrieval_quality</span><span class="p">,</span>
+            <span class="s2">&quot;grounding&quot;</span><span class="p">:</span> <span class="n">grounding_score</span><span class="p">,</span>
+            <span class="s2">&quot;overall&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">answer_quality</span> <span class="o">+</span> <span class="n">retrieval_quality</span> <span class="o">+</span> <span class="n">grounding_score</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="common-challenges-and-solutions">
+<h2>Common Challenges and Solutions<a class="headerlink" href="#common-challenges-and-solutions" title="Link to this heading">#</a></h2>
+<section id="challenge-1-hallucination">
+<h3>Challenge 1: Hallucination<a class="headerlink" href="#challenge-1-hallucination" title="Link to this heading">#</a></h3>
+<p><strong>Problem</strong>: The model generates answers not supported by the retrieved documents.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FactCheckingRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Retrieve</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;context, question -&gt; answer&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;answer, context -&gt; verification, corrections&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+        <span class="n">verification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verification</span><span class="o">.</span><span class="n">verification</span> <span class="o">==</span> <span class="s2">&quot;needs_correction&quot;</span><span class="p">:</span>
+            <span class="n">answer</span><span class="o">.</span><span class="n">answer</span> <span class="o">=</span> <span class="n">verification</span><span class="o">.</span><span class="n">corrections</span>
+
+        <span class="k">return</span> <span class="n">answer</span>
+</pre></div>
+</div>
+</section>
+<section id="challenge-2-outdated-information">
+<h3>Challenge 2: Outdated Information<a class="headerlink" href="#challenge-2-outdated-information" title="Link to this heading">#</a></h3>
+<p><strong>Problem</strong>: Information in the knowledge base becomes outdated.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TimelyRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_recency</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query -&gt; needs_current_info&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_web</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;query -&gt; current_info&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rag</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">ChainOfThought</span><span class="p">(</span><span class="s2">&quot;context, question, current_info -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">recency_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_recency</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">recency_check</span><span class="o">.</span><span class="n">needs_current_info</span><span class="p">:</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_web</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+            <span class="n">current_info</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">current_info</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_info</span> <span class="o">=</span> <span class="s2">&quot;N/A&quot;</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rag</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">,</span>
+            <span class="n">current_info</span><span class="o">=</span><span class="n">current_info</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">prediction</span>
+</pre></div>
+</div>
+</section>
+<section id="challenge-3-query-understanding">
+<h3>Challenge 3: Query Understanding<a class="headerlink" href="#challenge-3-query-understanding" title="Link to this heading">#</a></h3>
+<p><strong>Problem</strong>: Ambiguous or poorly formed queries lead to poor retrieval.</p>
+<p><strong>Solution</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">QueryClarificationRAG</span><span class="p">(</span><span class="n">dspy</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clarify</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;question -&gt; clarified_question, assumptions&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rag</span> <span class="o">=</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Predict</span><span class="p">(</span><span class="s2">&quot;context, clarified_question -&gt; answer&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">):</span>
+        <span class="n">clarification</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clarify</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">question</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">question</span><span class="o">=</span><span class="n">clarification</span><span class="o">.</span><span class="n">clarified_question</span><span class="p">)</span><span class="o">.</span><span class="n">passages</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rag</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span>
+            <span class="n">clarified_question</span><span class="o">=</span><span class="n">clarification</span><span class="o">.</span><span class="n">clarified_question</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dspy</span><span class="o">.</span><span class="n">Prediction</span><span class="p">(</span>
+            <span class="n">answer</span><span class="o">=</span><span class="n">answer</span><span class="o">.</span><span class="n">answer</span><span class="p">,</span>
+            <span class="n">assumptions</span><span class="o">=</span><span class="n">clarification</span><span class="o">.</span><span class="n">assumptions</span><span class="p">,</span>
+            <span class="n">clarified_question</span><span class="o">=</span><span class="n">clarification</span><span class="o">.</span><span class="n">clarified_question</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="key-takeaways">
+<h2>Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>RAG combines retrieval and generation</strong> for knowledge-intensive tasks</p></li>
+<li><p><strong>Context quality is crucial</strong>—better retrieval leads to better answers</p></li>
+<li><p><strong>Optimization significantly improves</strong> RAG performance</p></li>
+<li><p><strong>Real-world RAG systems</strong> handle complexity through multiple stages</p></li>
+<li><p><strong>Evaluation must be comprehensive</strong>—check retrieval, generation, and grounding</p></li>
+<li><p><strong>Common challenges</strong> include hallucination, outdated info, and query ambiguity</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next section, we’ll explore <strong>Multi-hop Search</strong>, which extends RAG concepts to handle complex queries that require reasoning across multiple documents and information sources.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./content/06_real_world_applications"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="00_chapter_intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 6: Building Real-World Applications</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_multi_hop_search.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Multi-hop Search: Complex Reasoning Across Documents</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-rag">What is RAG?</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rag-architecture">The RAG Architecture</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-rag-matters">Why RAG Matters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-a-basic-rag-system">Building a Basic RAG System</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components">Core Components</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-document-collection">Setting Up Document Collection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-basic-rag-system">Using the Basic RAG System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-rag-techniques">Advanced RAG Techniques</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-stage-retrieval">Multi-stage Retrieval</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#query-understanding-and-expansion">Query Understanding and Expansion</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversational-rag">Conversational RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizing-rag-systems">Optimizing RAG Systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-bootstrapfewshot-for-rag">Using BootstrapFewShot for RAG</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mipro-for-complex-rag">MIPRO for Complex RAG</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#real-world-rag-applications">Real-World RAG Applications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#document-q-a-system">Document Q&amp;A System</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legal-document-analysis">Legal Document Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#healthcare-information-system">Healthcare Information System</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices-for-rag-systems">Best Practices for RAG Systems</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#document-preprocessing">1. Document Preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hybrid-retrieval">2. Hybrid Retrieval</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics">3. Evaluation Metrics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-challenges-and-solutions">Common Challenges and Solutions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-1-hallucination">Challenge 1: Hallucination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-2-outdated-information">Challenge 2: Outdated Information</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#challenge-3-query-understanding">Challenge 3: Query Understanding</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">Key Takeaways</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dustin Ober
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
