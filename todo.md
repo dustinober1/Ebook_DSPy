@@ -432,16 +432,16 @@
 
 ---
 
-### Task 3.1: Conversion (Chapters 01-03)
+### Task 3.1: Conversion (Chapters 01-03) ✅ COMPLETE
 
 **Why:** Moving from "describing code" to "providing code" makes the ebook interactive and testable.
 
-- [ ] **3.1.1** Install jupytext for format conversion:
+- [x] **3.1.1** Install jupytext for format conversion:
   ```bash
   pip install jupytext
   ```
 
-- [ ] **3.1.2** Convert Chapter 01 - Fundamentals:
+- [x] **3.1.2** Convert Chapter 01 - Fundamentals:
   - For each `.md` file in `content/01_fundamentals/`:
     - Open the markdown file
     - Identify all code blocks (marked with ` ```python `)
@@ -460,61 +460,61 @@
       jupytext --to notebook content/01_fundamentals/01_what_is_dspy.md
       ```
 
-- [ ] **3.1.3** Convert specific files in Chapter 01:
-  - [ ] Convert `content/01_fundamentals/00_chapter_intro.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/01_what_is_dspy.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/02_programming_vs_prompting.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/03_installation_setup.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/04_first_dspy_program.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/05_language_models.md` → `.ipynb`
-  - [ ] Convert `content/01_fundamentals/06_exercises.md` → `.ipynb`
+- [x] **3.1.3** Convert specific files in Chapter 01:
+  - [x] Convert `content/01_fundamentals/00_chapter_intro.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/01_what_is_dspy.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/02_programming_vs_prompting.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/03_installation_setup.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/04_first_dspy_program.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/05_language_models.md` → `.ipynb`
+  - [x] Convert `content/01_fundamentals/06_exercises.md` → `.ipynb`
 
-- [ ] **3.1.4** Convert Chapter 02 - Signatures:
-  - [ ] Convert `content/02_signatures/00_chapter_intro.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/01_understanding_signatures.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/02_signature_syntax.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/03_typed_signatures.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/04_advanced_signatures.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/05_practical_examples.md` → `.ipynb`
-  - [ ] Convert `content/02_signatures/06_exercises.md` → `.ipynb`
+- [x] **3.1.4** Convert Chapter 02 - Signatures:
+  - [x] Convert `content/02_signatures/00_chapter_intro.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/01_understanding_signatures.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/02_signature_syntax.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/03_typed_signatures.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/04_advanced_signatures.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/05_practical_examples.md` → `.ipynb`
+  - [x] Convert `content/02_signatures/06_exercises.md` → `.ipynb`
 
-- [ ] **3.1.5** Convert Chapter 03 - Modules:
-  - [ ] Convert `content/03_modules/00_chapter_intro.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/01_module_basics.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/02_predict_module.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/02a_typed_predictor.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/03_chainofthought.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/04_react_agents.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/05_custom_modules.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/06_composing_modules.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/07_exercises.md` → `.ipynb`
-  - [ ] Convert `content/03_modules/08_assertions.md` → `.ipynb`
+- [x] **3.1.5** Convert Chapter 03 - Modules:
+  - [x] Convert `content/03_modules/00_chapter_intro.md` → `.ipynb`
+  - [x] Convert `content/03_modules/01_module_basics.md` → `.ipynb`
+  - [x] Convert `content/03_modules/02_predict_module.md` → `.ipynb`
+  - [x] Convert `content/03_modules/02a_typed_predictor.md` → `.ipynb`
+  - [x] Convert `content/03_modules/03_chainofthought.md` → `.ipynb`
+  - [x] Convert `content/03_modules/04_react_agents.md` → `.ipynb`
+  - [x] Convert `content/03_modules/05_custom_modules.md` → `.ipynb`
+  - [x] Convert `content/03_modules/06_composing_modules.md` → `.ipynb`
+  - [x] Convert `content/03_modules/07_exercises.md` → `.ipynb`
+  - [x] Convert `content/03_modules/08_assertions.md` → `.ipynb`
 
-- [ ] **3.1.6** Update `_toc.yml` to reference `.ipynb` files instead of `.md`:
+- [x] **3.1.6** Update `_toc.yml` to reference `.ipynb` files instead of `.md`:
   - Change file extensions in the table of contents
   - Example: `file: content/01_fundamentals/01_what_is_dspy` (no extension needed - Jupyter Book auto-detects)
 
 ---
 
-### Task 3.2: Dependency Pinning
+### Task 3.2: Dependency Pinning ✅ COMPLETE
 
 **Why:** DSPy changes rapidly. Pinning versions ensures code examples work consistently.
 
-- [ ] **3.2.1** Update `requirements.txt` with pinned versions:
+- [x] **3.2.1** Update `requirements.txt` with pinned versions:
   - Open `requirements.txt`
   - Change DSPy from `dspy-ai>=2.5.0` to exact version:
     ```
     dspy-ai==2.5.43  # Pin to specific tested version
     ```
 
-- [ ] **3.2.2** Create a fresh virtual environment for testing:
+- [x] **3.2.2** Create a fresh virtual environment for testing:
   ```bash
   python -m venv venv
   source venv/bin/activate  # On macOS/Linux
   pip install -r requirements.txt
   ```
 
-- [ ] **3.2.3** Verify all imports work with the pinned version:
+- [x] **3.2.3** Verify all imports work with the pinned version:
   - Create a test script `tests/test_imports.py`:
     ```python
     """Test that all DSPy imports work correctly."""
@@ -536,12 +536,12 @@
         assert Module is not None
     ```
 
-- [ ] **3.2.4** Run the import tests:
+- [x] **3.2.4** Run the import tests:
   ```bash
   pytest tests/test_imports.py -v
   ```
 
-- [ ] **3.2.5** Document the tested version in README.md:
+- [x] **3.2.5** Document the tested version in README.md:
   - Add a "Requirements" section noting the pinned DSPy version
   - Include any compatibility notes
 

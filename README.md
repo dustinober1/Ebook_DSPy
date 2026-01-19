@@ -10,16 +10,16 @@ This ebook takes you from the absolute fundamentals of DSPy to advanced optimiza
 
 The book is organized into the following chapters:
 
-- **[Chapter 0: Frontmatter](ebook/Chapter%2000%20-%20Frontmatter)** - Prerequisites and setup.
-- **[Chapter 1: Fundamentals](ebook/Chapter%2001%20-%20Fundamentals)** - Introduction to DSPy and the "Programming vs. Prompting" paradigm.
-- **[Chapter 2: Signatures](ebook/Chapter%2002%20-%20Signatures)** - Defining input/output behavior structurally.
-- **[Chapter 3: Modules](ebook/Chapter%2003%20-%20Modules)** - Building blocks like `Predict`, `ChainOfThought`, and custom modules.
-- **[Chapter 4: Evaluation](ebook/Chapter%2004%20-%20Evaluation)** - Metrics, datasets, and systematic evaluation loops.
-- **[Chapter 5: Optimizers](ebook/Chapter%2005%20-%20Optimizers)** - Compiling and optimizing your DSPy programs (BootstrapFewShot, MIPRO, etc.).
-- **[Chapter 6: Real-World Applications](ebook/Chapter%2006%20-%20Real-World%20Applications)** - RAG systems, agents, classification, and more.
-- **[Chapter 7: Advanced Topics](ebook/Chapter%2007%20-%20Advanced%20Topics)** - Caching, async execution, and deployment.
-- **[Chapter 8: Case Studies](ebook/Chapter%2008%20-%20Case%20Studies)** - Deep dives into enterprise and research use cases.
-- **[Chapter 9: Appendices](ebook/Chapter%2009%20-%20Appendices)** - API references, glossary, and resources.
+- **[Chapter 0: Frontmatter](content/00_frontmatter)** - Prerequisites and setup.
+- **[Chapter 1: Fundamentals](content/01_fundamentals)** - Introduction to DSPy and the "Programming vs. Prompting" paradigm.
+- **[Chapter 2: Signatures](content/02_signatures)** - Defining input/output behavior structurally.
+- **[Chapter 3: Modules](content/03_modules)** - Building blocks like `Predict`, `ChainOfThought`, and custom modules.
+- **[Chapter 4: Evaluation](content/04_evaluation)** - Metrics, datasets, and systematic evaluation loops.
+- **[Chapter 5: Optimizers](content/05_optimizers)** - Compiling and optimizing your DSPy programs (BootstrapFewShot, MIPRO, etc.).
+- **[Chapter 6: Real-World Applications](content/06_real_world_applications)** - RAG systems, agents, classification, and more.
+- **[Chapter 7: Advanced Topics](content/07_advanced_topics)** - Caching, async execution, and deployment.
+- **[Chapter 8: Case Studies](content/08_case_studies)** - Deep dives into enterprise and research use cases.
+- **[Chapter 9: Appendices](content/09_appendices)** - API references, glossary, and resources.
 
 ## 🚀 Getting Started
 
@@ -28,6 +28,7 @@ The book is organized into the following chapters:
 - Python 3.9+
 - A basic understanding of Python programming.
 - API keys for LLM providers (e.g., OpenAI, Anthropic, or local models via Ollama).
+- **DSPy Version**: This book is tested with `dspy-ai==2.5.43`.
 
 ### Installation
 
@@ -50,15 +51,16 @@ The book is organized into the following chapters:
 
 ## 📂 Repository Structure
 
-```text
 Ebook_DSPy/
-├── ebook/          # Markdown content for all chapters
-├── src/            # Source assets, datasets, and summary files
-│   └── assets/     # Images, diagrams, and example datasets
-├── requirements.txt # Python dependencies for running examples
+├── content/        # Content (Notebooks & Markdown)
+├── src/            # Python source code and utilities
+├── tests/          # Test suite
+├── planning/       # Planning and administrative documents
+├── requirements.txt # Python dependencies (pinned versions)
+├── _config.yml     # Jupyter Book configuration
+├── _toc.yml        # Table of Contents
 ├── CONTRIBUTING.md # Guidelines for contributors
 └── LICENSE         # Project license
-```
 
 ## 🤝 Contributing
 
